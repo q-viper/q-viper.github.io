@@ -1,5 +1,5 @@
 (This site is generated using Minimal Mistakes theme.)
-<h1 align="center">Hi 👋, I'm [Ramkrishna](https://acharyaramkrishna.com.np)(Quassarian Viper)</h1>
+<h1 align="center">Hi 👋, I'm <a href = "https://acharyaramkrishna.com.np">Ramkrishna</a>(Quassarian Viper)</h1>
 <h3 align="center">A passionate ML learner from Nepal.</h3>
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=q-viper" alt="q-viper" /> </p>
