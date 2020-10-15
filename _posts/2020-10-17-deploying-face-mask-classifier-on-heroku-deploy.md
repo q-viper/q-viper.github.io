@@ -225,12 +225,12 @@ enableCORS = false
 
 You need to have active heroku account. Then go to new app or create new app.
 
-![image]({{site.url}}/assets/face-mask-images/heroku-dashboard.png)
+![image]({{site.url}}/assets/face-mask-images/heroku-dashboard.PNG)
 
 * Give your app a proper name.
 * Then you might see the web page like below.
 
-![image]({{site.url}}/assets/face-mask-images/heroku-git.png)
+![image]({{site.url}}/assets/face-mask-images/heroku-git.PNG)
 
 * Now download the Heroku cli and install it.
 * Login to the Heroku.
@@ -239,7 +239,7 @@ You need to have active heroku account. Then go to new app or create new app.
     git init
     heroku git:remote -a proj_name_used_on_heroku
     ```
-* Add everythin on repository and commit it and push it.
+* Add everything on repository and commit it and push it.
     ```shell
     git add .
     git commit -am "make it better"
@@ -258,8 +258,8 @@ Sometimes lots of errors occurs while deploying and one of popular is file size 
 
 ## Demo
 
-![image]({{site.url}}/assets/face-mask-images/heroku-test.png)
-![image]({{site.url}}/assets/face-mask-images/heroku-test2.png)
+![image]({{site.url}}/assets/face-mask-images/heroku-test.PNG)
+![image]({{site.url}}/assets/face-mask-images/heroku-test2.PNG)
 
 
 
