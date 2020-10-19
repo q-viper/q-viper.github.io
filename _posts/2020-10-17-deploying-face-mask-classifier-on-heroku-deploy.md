@@ -38,11 +38,14 @@ Heroku is a platform as a service (PaaS) that enables developers to build, run, 
 * [Make Virtual Environment and activate it](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/). For easier, make a main root folder and underthere make a virtual environment.
 * Install streamlit, opencv, tensorflow, numpy, matplotlib.
 
-```pip install tensorflow==2.0.0 
+```
+pip install tensorflow==2.0.0 
 pip install streamlit==0.62.0
 pip install numpy==1.16.5
 pip install pillow==6.2.0
-pip install opencv-python-==4.2.0.32```
+pip install opencv-python-==4.2.0.32
+```
+
 * Make a project folder under root folder and add face haarcascade to project folder. It usually is under the `dir_to_venv\Lib\site-packages\cv2\data`
 * Add face mask classifier model to project folder.
 * Make a file named main.py under project folder.
