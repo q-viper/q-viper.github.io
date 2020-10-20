@@ -21,7 +21,7 @@ tags:
 <!-- /wp:paragraph -->
 
 <!-- wp:image {"id":177,"width":582,"height":38,"sizeSlug":"large","linkDestination":"custom"} -->
-<figure class="wp-block-image size-large is-resized"><a href="learn.unity.com"><img src="{{site.url}}/wp-content/uploads/2020/02/Opera-Snapshot_2020-02-27_085951_learn.unity_.com_.png" alt="" class="wp-image-177" width="582" height="38"/></a><figcaption>Unity Learn Premium</figcaption></figure>
+<figure class="wp-block-image size-large is-resized"><a href="learn.unity.com"><img src="{{site.url}}/assets/wp-content/uploads/2020/02/Opera-Snapshot_2020-02-27_085951_learn.unity_.com_.png" alt="" class="wp-image-177" width="582" height="38"/></a><figcaption>Unity Learn Premium</figcaption></figure>
 <!-- /wp:image -->
 
 <!-- wp:paragraph -->
@@ -53,7 +53,7 @@ tags:
 <!-- /wp:paragraph -->
 
 <!-- wp:image {"id":179,"sizeSlug":"large"} -->
-<figure class="wp-block-image size-large"><img src="{{site.url}}/wp-content/uploads/2020/02/Opera-Snapshot_2020-02-27_091625_learn.unity_.com_-1024x334.png" alt="" class="wp-image-179"/><figcaption>AI for Beginners</figcaption></figure>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/assets/wp-content/uploads/2020/02/Opera-Snapshot_2020-02-27_091625_learn.unity_.com_-1024x334.png" alt="" class="wp-image-179"/><figcaption>AI for Beginners</figcaption></figure>
 <!-- /wp:image -->
 
 <!-- wp:paragraph -->
