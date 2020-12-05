@@ -610,12 +610,8 @@ E = \frac{1}{m} \sum_{i=1}^m(t_i - o_i)^2
 where `o` is output of model and `t` is target or true label.
 
 * CSE(Cross Entropy):- Good for penalizing bad prediction more. 
+\[\large \begin{equation} E = \frac{1}{m} \sum_{i=1}^{m} -y*log(h_{(\theta)}(x^i)) - (1-y)*log(1-h_{(\theta)}(x^i)) \end{equation}\]
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=\begin{equation}&space;E&space;=&space;\frac{1}{m}&space;\sum_{i=1}^{m}&space;-y*log(h_{(\theta)}(x^i))&space;-&space;(1-y)*log(1-h_{(\theta)}(x^i))&space;\end{equation}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\begin{equation}&space;E&space;=&space;\frac{1}{m}&space;\sum_{i=1}^{m}&space;-y*log(h_{(\theta)}(x^i))&space;-&space;(1-y)*log(1-h_{(\theta)}(x^i))&space;\end{equation}" title="\begin{equation} E = \frac{1}{m} \sum_{i=1}^{m} -y*log(h_{(\theta)}(x^i)) - (1-y)*log(1-h_{(\theta)}(x^i)) \end{equation}" /></a>
-
-\begin{equation}
-E = \frac{1}{m} \sum_{i=1}^m - y*\log(h_{(\theta)}(x^i)) - (1-y)*\log(1-h_{(\theta)}(x^i))
-\end{equation}
 
 The loss value returned from above equation is the term required for gradient descent. It will be clear by viewing Gradient Descent.
 
