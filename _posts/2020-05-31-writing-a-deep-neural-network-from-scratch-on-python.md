@@ -641,7 +641,7 @@ ii. CSE
 I am skipping long derivatives but note that `d(log(x))/d(x)` = `1/x`.
 
 \begin{equation}
-E = \frac{1}{m} \sum_{i=1}^{m} -t_i*log(o_i) - (1-t_i)*log(1-o_i)\\
+E = \frac{1}{m} \sum_{i=1}^{m} -y*log(h_{(\theta)}(x^i)) - (1-y)*log(1-h_{(\theta)}(x^i))
 \end{equation}
 
 \begin{equation}
