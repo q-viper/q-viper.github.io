@@ -612,7 +612,7 @@ where `o` is output of model and `t` is target or true label.
 * CSE(Cross Entropy):- Good for penalizing bad prediction more. 
 
 \begin{equation}
-E = \frac{1}{m} \sum_{i=1}^{m} -y*log(h_{(\theta)}(x^i) - (1-y)*log(1-h_{(\theta)}(x^i)
+E = \frac{1}{m} \sum_{i=1}^m - y*\log(h_{(\theta)}(x^i)) - (1-y)*\log(1-h_{(\theta)}(x^i))
 \end{equation}
 
 The loss value returned from above equation is the term required for gradient descent. It will be clear by viewing Gradient Descent.
