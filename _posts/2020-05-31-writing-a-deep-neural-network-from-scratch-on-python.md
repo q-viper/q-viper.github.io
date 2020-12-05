@@ -20,7 +20,7 @@ tags:
 
 
 # 1. Writing a Multi Layer Feedforward Neural Network from Scratch
-All hail to the pandemic Corona virus, without it, we would not have lockdown and i won't have been stuck on village without internet to write these codes. I am not using <i>gist</i> for codes, so don't panic if you find unfriendly text formats. Also i have written this blog on `Markdown` of `Jupyter Notebook` so the formats are bit different. But truth is, the class we will be building will be just like `keras`. Yes Keras! 
+All hail to the pandemic Corona virus, without it, we would not have lockdown and i won't have been stuck on village without internet to write these codes. I am not using <i>gist</i> for codes, so don't panic if you find unfriendly text formats. Also i have written this blog on `Markdown` of `Jupyter Notebook` so the formats are bit different. But truth is, the class we will be building will be just like `keras`. Yes Keras! Entire codes can be found in [this repository](https://github.com/q-viper/ML-from-Basics/tree/master/quark). I have also written about [Convolutional Neurl Network From Scratch](https://q-viper.github.io/2020/06/05/convolutional-neural-networks-from-scratch-on-python/) and the codes are also present on same repository.
 
 ## 1.1 What i am covering on this blog?
 * Honestly, a scary and another blog about writing a Neural Network from scratch but i am leaving all the complex mathematics(also giving links to them on last). 
