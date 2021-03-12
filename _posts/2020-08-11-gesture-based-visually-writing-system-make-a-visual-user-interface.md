@@ -20,7 +20,7 @@ tags:
 
 ## Before Everything Starts
 Well, before proceeding further, it is very important that you follow the previous blog where every concepts and codes are described from scratch level. I am adding a new feature here on the existing project so it will be a very great idea to understand the working mechanism of the existing system. Please go through below article if you have not read it.
-* [Gesture Based Visually Writing System Using OpenCV and Python](https://acharyaramkrishna.com.np/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
+* [Gesture Based Visually Writing System Using OpenCV and Python]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
 
 ## Credits
 I want to give full credits to the readers (even if 1 person have read it) of previous blog and the current readers like you. 
@@ -37,7 +37,7 @@ The introduction dates back to the previous article, where i did some basic writ
 
 Now i want to try something new here. <b> As for writing this blog, i have not done any coding on this topic but if you read further you might be able to know what did i accomplish throughout the end.</b> I want the system to run without the need of keyboard(i am just assuming here). 
 
-Last time i wrote a system that can perform above tasks and on bonus topic, i passed the drawn character to [Devanagari Handwritten Character/Word Detector](https://acharyaramkrishna.com.np/2020/02/25/building-ocr-for-devanagari-handwritten-character/) and showed the predicted text. 
+Last time i wrote a system that can perform above tasks and on bonus topic, i passed the drawn character to [Devanagari Handwritten Character/Word Detector]({{site.url}}/2020/02/25/building-ocr-for-devanagari-handwritten-character/) and showed the predicted text. 
 ## How am i here?
 How i got the idea to perform this project? I don't know but something like, "Once i was writing something on my paper and then ink on the pen finished, and i was not able to write more because i had no spare pens. Also shop is far from village. Then i got an idea, can i replace the pen just for some moments?" Well it is just a funny story. But truth is, me and my friend was about to do some academic research. We have to think many topics and one of mine choice is here. This topic is rejected so i am here, to make it work.
 
@@ -1153,12 +1153,12 @@ I am not satisfied with current result of this system because i continously have
 Thank you everyone so much for finding this interesting and coming up to the end (even if anyone found this useful). I am highly excited to work more on this system so collaboration will be highly welcomed. If you have any queries then i will be glad to help. So leave the comment or find me at Twitter as <b>[QuassarianViper](https://twitter.com/QuassarianViper)</b>.
 
 ### Why not read more?
-* [Linear Regression from Scratch](https://acharyaramkrishna.com.np/2020/08/07/writing-a-linear-regression-class-from-scratch-using-python/)
-* [Writing Popular ML Optimizers from Scratch](https://acharyaramkrishna.com.np/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
-* [Feed Forward Neural Network from Scratch](https://acharyaramkrishna.com.np/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/)
-* [Convolutional Neural Networks from Scratch](https://acharyaramkrishna.com.np/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
-* [Writing a Simple Image Processing Class from Scratch](https://acharyaramkrishna.com.np/2020/05/31/image-processing-class-from-scratch-on-python/)
-* [Deploying a RASA Chatbot on Android using Unity3d](https://acharyaramkrishna.com.np/2020/08/04/deploying-a-simple-rasa-chatbot-on-unity3d-project-to-make-a-chatbot-for-android-devices/)
-* [Gesture Based Visually Writing System Using OpenCV and Python](https://acharyaramkrishna.com.np/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
-* [Naive Bayes for text classifications: Scratch to Framework](https://acharyaramkrishna.com.np/2020/03/04/text-classification-using-naive-bayes-scratch-to-the-framework/)
-* [Simple OCR for Devanagari Handwritten Text](https://acharyaramkrishna.com.np/2020/02/25/building-ocr-for-devanagari-handwritten-character/)
+* [Linear Regression from Scratch]({{site.url}}/2020/08/07/writing-a-linear-regression-class-from-scratch-using-python/)
+* [Writing Popular ML Optimizers from Scratch]({{site.url}}/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
+* [Feed Forward Neural Network from Scratch]({{site.url}}/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/)
+* [Convolutional Neural Networks from Scratch]({{site.url}}/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
+* [Writing a Simple Image Processing Class from Scratch]({{site.url}}/2020/05/31/image-processing-class-from-scratch-on-python/)
+* [Deploying a RASA Chatbot on Android using Unity3d]({{site.url}}/2020/08/04/deploying-a-simple-rasa-chatbot-on-unity3d-project-to-make-a-chatbot-for-android-devices/)
+* [Gesture Based Visually Writing System Using OpenCV and Python]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
+* [Naive Bayes for text classifications: Scratch to Framework]({{site.url}}/2020/03/04/text-classification-using-naive-bayes-scratch-to-the-framework/)
+* [Simple OCR for Devanagari Handwritten Text]({{site.url}}/2020/02/25/building-ocr-for-devanagari-handwritten-character/)

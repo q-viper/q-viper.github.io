@@ -22,7 +22,7 @@ tags:
 # Theory Part
 
 ## Before Starting
-Huge credit goes to the pandemic COVID19 and without it, i would have not been another unemployed and the thoughts of writing this blog won't have appeare. Also the climate change, due to which i usually have blackouts.
+Huge credit goes to the pandemic COVID19 and without it, i would have not been another unemployed and the thoughts of writing this blog won't have appear. Also the climate change, due to which i usually have blackouts.
 
 ## Motivations
 We have seen decades of AI revolutions and from Deep Blue chess to Dota playing agents. We are on the competition of achievements. Years ago, there was HOG methods and there was nothing like YOLO or RCNN and the world of Computer Vision today is hungry to find new methods. There are many researchers and academics working continously to make more AI based systems and the world of Cloud Services has granted huge advantages. The world of Open Source has been so great that we can almost get everything's code. Now the program can complete our sentence, drawings, can itself talk and many more. The list goes on.
@@ -219,7 +219,7 @@ while True: # loop while everything is true
 ```
 
 Since we have chosed our device camera from `cv2.VideoCapture(0)`, we will read the frames next. When the camera is not working properly, the `ret` becomes `False`. Also we want our system to continously check for user input, so we will do `cv2.waitKey(1) & 0xFF`. The original frames will have to be flipped in order to make it realistic. We can do that by flipping on x axis using `cv2.flip(frame, 1)`. Then we crop the ROI from given box and convert it into Grayscale. Grayscale is much more efficient on doing thresholding processes. Then we added some Gaussian blur of shape (7, 7). Some kind of Convolution Operation happens inside that function. If you want to learn about Convolution operation from Scratch then follow below link.
-* [Convolutional Neural Networks from Scratch on Python](https://acharyaramkrishna.com.np/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
+* [Convolutional Neural Networks from Scratch on Python]({{site.url}}/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
 
 
 

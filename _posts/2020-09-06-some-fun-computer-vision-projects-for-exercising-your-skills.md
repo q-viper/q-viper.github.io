@@ -31,7 +31,7 @@ Are you a tech student trying to do something cool and share it to your friends?
 
 ><b>So how can one find a job oppertunity that has never existed?</b>
 
-This is possible to find a job oppertunity that has never existed by finding a right audience of your work. Do anything, any project and if you are able to share it to right audience then there is high chance that people will be interested to your work. I am still officially unemployed but i have got some offers on projects to work, i also gave one interview (waiting their response) after i published a blog [Gesture Based Visually Writing System: Adding Virtual Animationn, New Mode and New VUI](https://acharyaramkrishna.com.np/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/). [This post](https://www.linkedin.com/posts/ramkrishna-acharya-91a217183_opencv-computervision-python-activity-6699919193124548608-bJI-) on LinkedIn has also gained huge popularity that i myself is still on shock.
+This is possible to find a job oppertunity that has never existed by finding a right audience of your work. Do anything, any project and if you are able to share it to right audience then there is high chance that people will be interested to your work. I am still officially unemployed but i have got some offers on projects to work, i also gave one interview (waiting their response) after i published a blog [Gesture Based Visually Writing System: Adding Virtual Animationn, New Mode and New VUI]({{site.url}}/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/). [This post](https://www.linkedin.com/posts/ramkrishna-acharya-91a217183_opencv-computervision-python-activity-6699919193124548608-bJI-) on LinkedIn has also gained huge popularity that i myself is still on shock.
 
 ### Credits
 I would like to give credits to everyone who supported me on social media about my projects and readers like you.
@@ -43,8 +43,8 @@ The motivation due to which i am writing this blog is nothing more than thought 
 I am going to write down my ideas onto this blogs and i will also try to explain a simple procedure about completion of this projects. I will try to minimise the use of high requirements. 
 
 ## Contour Based Game: Break The Bricks
-When i posted a blog [Gesture Based Visually Writing System: Adding Virtual Animationn, New Mode and New VUI](https://acharyaramkrishna.com.np/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/), i got high attention from lots of tech people. Then i did something more cool. I was learning Game Development using Unity and C#, then i had to pause learning because of pandemic and now i wrote a simple game on Python. It is not that cool but you can check it on below link.
-* [Contour Based Game: Break The Bricks](https://acharyaramkrishna.com.np/2020/08/16/contour-based-game-break-the-bricks/)
+When i posted a blog [Gesture Based Visually Writing System: Adding Virtual Animationn, New Mode and New VUI]({{site.url}}/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/), i got high attention from lots of tech people. Then i did something more cool. I was learning Game Development using Unity and C#, then i had to pause learning because of pandemic and now i wrote a simple game on Python. It is not that cool but you can check it on below link.
+* [Contour Based Game: Break The Bricks]({{site.url}}/2020/08/16/contour-based-game-break-the-bricks/)
 
 I have introuduced a simple way of making a game that can be played by moving finger in front of the camera. Please follow the link above to know more about how to write a python code for this.
 
@@ -57,11 +57,11 @@ The system i wrote by publish this day has very little features. You can do anyt
 
 ## Contour Based Writing
 This is the system where i have been working since month. I have started from a simple idea and then features and then the deployment on the latest version. View them serially so that you can learn how an idea was implemented onto the system.
-* [Gesture Based Visually Writing System Using OpenCV and Python](https://acharyaramkrishna.com.np/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
-* [Gesture Based Visually Writing System: Adding Visual User Interface](https://acharyaramkrishna.com.np/2020/08/11/gesture-based-visually-writing-system-make-a-visual-user-interface/)
-* [Gesture Based Visually Writing System: Adding Virtual Animationn, New Mode and New VUI](https://acharyaramkrishna.com.np/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/)
-* [Gesture Based Visually Writing System: Add Slider, More Colors and Optimized OOP code](https://acharyaramkrishna.com.np/2020/08/21/gesture-based-visually-writing-system-add-slider-more-colors-and-optimized-code/)
-* [Gesture Based Visually Writing System: A Web App](https://acharyaramkrishna.com.np/2020/08/29/gesture-based-visually-writing-system-web-app/)
+* [Gesture Based Visually Writing System Using OpenCV and Python]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
+* [Gesture Based Visually Writing System: Adding Visual User Interface]({{site.url}}/2020/08/11/gesture-based-visually-writing-system-make-a-visual-user-interface/)
+* [Gesture Based Visually Writing System: Adding Virtual Animationn, New Mode and New VUI]({{site.url}}/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/)
+* [Gesture Based Visually Writing System: Add Slider, More Colors and Optimized OOP code]({{site.url}}/2020/08/21/gesture-based-visually-writing-system-add-slider-more-colors-and-optimized-code/)
+* [Gesture Based Visually Writing System: A Web App]({{site.url}}/2020/08/29/gesture-based-visually-writing-system-web-app/)
 
 ### What next?
 * Try to add a different mode, a write and a draw. 
@@ -75,7 +75,7 @@ This is the system where i have been working since month. I have started from a 
 
 ## Devanagari Handwritten Character Detection
 I did this project with my friends while i was on 7th semester of my BSC. This system is very old and i have not much time to improve it. But good thing is i have tried to write a blog where i have explained a system. Also my supportive friends made a documentation awesome. Follow the blow link for that project.
-* [Simple OCR for Devanagari Handwritten Text](https://acharyaramkrishna.com.np/2020/02/25/building-ocr-for-devanagari-handwritten-character/)
+* [Simple OCR for Devanagari Handwritten Text]({{site.url}}/2020/02/25/building-ocr-for-devanagari-handwritten-character/)
 
 ### What next?
 * I have used keras for CNN and gianed 99.29% accuracy, but model itself is not trained by generators so training a model using generators will help to improve the overfitting of model.
@@ -91,7 +91,7 @@ This is just an idea i am presenting and i have also started to work on this one
 * user can view, save this filtered image.
 
 Customized filters means we can use any real values on the filter. And filter shape can also vary. If you are new to convolution or want to learn more about it then please follow my blogpost where i described how can one make a simple image processing class to perform convolution and other stuffs.
-* [Writing a Simple Image Processing Class from Scratch](https://acharyaramkrishna.com.np/2020/05/31/image-processing-class-from-scratch-on-python/)
+* [Writing a Simple Image Processing Class from Scratch]({{site.url}}/2020/05/31/image-processing-class-from-scratch-on-python/)
 
 Deploying this system on phone might be a great attraction. 
 
@@ -159,19 +159,19 @@ For face comparision and other face recognition operations, we can use `face_rec
 Thank you very much for reading this blog and i hope to get feedbacks. Find me on Twitter as [QuassarianViper](https://twitter.com/QuassarianViper) and on LinkedIn as [Ramkrishna Acharya](https://www.linkedin.com/in/ramkrishna-acharya-91a217183/). On the mean time why not read more of my blogs?
 
 ### Why not read more?
-* [Gesture Based Visually Writing System Using OpenCV and Python](https://acharyaramkrishna.com.np/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
-* [Gesture Based Visually Writing System: Adding Visual User Interface](https://acharyaramkrishna.com.np/2020/08/11/gesture-based-visually-writing-system-make-a-visual-user-interface/)
-* [Gesture Based Visually Writing System: Adding Virtual Animationn, New Mode and New VUI](https://acharyaramkrishna.com.np/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/)
-* [Gesture Based Visually Writing System: Add Slider, More Colors and Optimized OOP code](https://acharyaramkrishna.com.np/2020/08/21/gesture-based-visually-writing-system-add-slider-more-colors-and-optimized-code/)
-* [Gesture Based Visually Writing System: A Web App](https://acharyaramkrishna.com.np/2020/08/29/gesture-based-visually-writing-system-web-app/)
-* [Contour Based Game: Break The Bricks](https://acharyaramkrishna.com.np/2020/08/16/contour-based-game-break-the-bricks/)
-* [Linear Regression from Scratch](https://acharyaramkrishna.com.np/2020/08/07/writing-a-linear-regression-class-from-scratch-using-python/)
-* [Writing Popular ML Optimizers from Scratch](https://acharyaramkrishna.com.np/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
-* [Feed Forward Neural Network from Scratch](https://acharyaramkrishna.com.np/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/)
-* [Convolutional Neural Networks from Scratch](https://acharyaramkrishna.com.np/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
-* [Writing a Simple Image Processing Class from Scratch](https://acharyaramkrishna.com.np/2020/05/31/image-processing-class-from-scratch-on-python/)
-* [Deploying a RASA Chatbot on Android using Unity3d](https://acharyaramkrishna.com.np/2020/08/04/deploying-a-simple-rasa-chatbot-on-unity3d-project-to-make-a-chatbot-for-android-devices/)
-* [Naive Bayes for text classifications: Scratch to Framework](https://acharyaramkrishna.com.np/2020/03/04/text-classification-using-naive-bayes-scratch-to-the-framework/)
-* [Simple OCR for Devanagari Handwritten Text](https://acharyaramkrishna.com.np/2020/02/25/building-ocr-for-devanagari-handwritten-character/)
+* [Gesture Based Visually Writing System Using OpenCV and Python]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
+* [Gesture Based Visually Writing System: Adding Visual User Interface]({{site.url}}/2020/08/11/gesture-based-visually-writing-system-make-a-visual-user-interface/)
+* [Gesture Based Visually Writing System: Adding Virtual Animationn, New Mode and New VUI]({{site.url}}/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/)
+* [Gesture Based Visually Writing System: Add Slider, More Colors and Optimized OOP code]({{site.url}}/2020/08/21/gesture-based-visually-writing-system-add-slider-more-colors-and-optimized-code/)
+* [Gesture Based Visually Writing System: A Web App]({{site.url}}/2020/08/29/gesture-based-visually-writing-system-web-app/)
+* [Contour Based Game: Break The Bricks]({{site.url}}/2020/08/16/contour-based-game-break-the-bricks/)
+* [Linear Regression from Scratch]({{site.url}}/2020/08/07/writing-a-linear-regression-class-from-scratch-using-python/)
+* [Writing Popular ML Optimizers from Scratch]({{site.url}}/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
+* [Feed Forward Neural Network from Scratch]({{site.url}}/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/)
+* [Convolutional Neural Networks from Scratch]({{site.url}}/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
+* [Writing a Simple Image Processing Class from Scratch]({{site.url}}/2020/05/31/image-processing-class-from-scratch-on-python/)
+* [Deploying a RASA Chatbot on Android using Unity3d]({{site.url}}/2020/08/04/deploying-a-simple-rasa-chatbot-on-unity3d-project-to-make-a-chatbot-for-android-devices/)
+* [Naive Bayes for text classifications: Scratch to Framework]({{site.url}}/2020/03/04/text-classification-using-naive-bayes-scratch-to-the-framework/)
+* [Simple OCR for Devanagari Handwritten Text]({{site.url}}/2020/02/25/building-ocr-for-devanagari-handwritten-character/)
 
 

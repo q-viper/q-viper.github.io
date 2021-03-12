@@ -13,13 +13,18 @@ tags:
   - opencv
   - python computer vision
 ---
+**Contents**
+* TOC
+{:toc}
+
+
 # Making Simple Geometrical Shapes on Python using NumPy and Matplotlib
 Now on this series of task i am going to tackle some of interesting image processing concepts from scratch using Python and then will compare it with popular OpenCV framework. Last time i did Convolution operation from Scratch and RGB to GrayScale conversion, etc. Now is the time to draw circle, rectangle, ellipse and get the flashback of childhood. I am highly inspired by the book named <b>Image Operators: Image Processing in Python by Jason M. Kinser.</b> In fact i am going to use some simple geometrical concepts to draw these basic shapes using only NumPy and Matplotlib.
 
 Also i have to mention the awesome book named <b> The Journey of X: A Guided Tour of Mathematics by Steven Strogatz.</b> Author really have a great way of describing the mathematical terms and i have learned lot of concepts on Mathematics from there. And author also introduced to the awesome book named <b>The House Keeper and the Professor</b>.
 
 The method i am including here will be added to the previous Image Processing Class (which is also given below) i have used to do Convolution and Colorspace changes. So it will be helpful to view that one also.
-* [Writing a Image Processing Class from Scratch on Python](https://acharyaramkrishna.com.np/2020/05/31/image-processing-class-from-scratch-on-python/)
+* [Writing a Image Processing Class from Scratch on Python]({{site.url}}/2020/05/31/image-processing-class-from-scratch-on-python/)
 
 ## What will i do here?
 * Using primary grade mathematics, i will create a simple methods to draw/create a simple geometric shapes and compare them with OpenCV's own methods.
@@ -1085,12 +1090,12 @@ Thank you so much for reading this and if you find it interesting why not share 
 
 In the meantime how about looking over some of mine works?
 ### Why not read more?
-* [Linear Regression from Scratch](https://acharyaramkrishna.com.np/2020/08/07/writing-a-linear-regression-class-from-scratch-using-python/)
-* [Writing Popular ML Optimizers from Scratch](https://acharyaramkrishna.com.np/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
-* [Feed Forward Neural Network from Scratch](https://acharyaramkrishna.com.np/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/)
-* [Convolutional Neural Networks from Scratch](https://acharyaramkrishna.com.np/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
-* [Writing a Simple Image Processing Class from Scratch](https://acharyaramkrishna.com.np/2020/05/31/image-processing-class-from-scratch-on-python/)
-* [Deploying a RASA Chatbot on Android using Unity3d](https://acharyaramkrishna.com.np/2020/08/04/deploying-a-simple-rasa-chatbot-on-unity3d-project-to-make-a-chatbot-for-android-devices/)
-* [Gesture Based Visually Writing System Using OpenCV and Python](https://acharyaramkrishna.com.np/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
-* [Naive Bayes for text classifications: Scratch to Framework](https://acharyaramkrishna.com.np/2020/03/04/text-classification-using-naive-bayes-scratch-to-the-framework/)
-* [Simple OCR for Devanagari Handwritten Text](https://acharyaramkrishna.com.np/2020/02/25/building-ocr-for-devanagari-handwritten-character/)
+* [Linear Regression from Scratch]({{site.url}}/2020/08/07/writing-a-linear-regression-class-from-scratch-using-python/)
+* [Writing Popular ML Optimizers from Scratch]({{site.url}}/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
+* [Feed Forward Neural Network from Scratch]({{site.url}}/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/)
+* [Convolutional Neural Networks from Scratch]({{site.url}}/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
+* [Writing a Simple Image Processing Class from Scratch]({{site.url}}/2020/05/31/image-processing-class-from-scratch-on-python/)
+* [Deploying a RASA Chatbot on Android using Unity3d]({{site.url}}/2020/08/04/deploying-a-simple-rasa-chatbot-on-unity3d-project-to-make-a-chatbot-for-android-devices/)
+* [Gesture Based Visually Writing System Using OpenCV and Python]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
+* [Naive Bayes for text classifications: Scratch to Framework]({{site.url}}/2020/03/04/text-classification-using-naive-bayes-scratch-to-the-framework/)
+* [Simple OCR for Devanagari Handwritten Text]({{site.url}}/2020/02/25/building-ocr-for-devanagari-handwritten-character/)

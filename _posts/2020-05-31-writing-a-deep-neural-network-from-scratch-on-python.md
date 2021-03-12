@@ -13,6 +13,12 @@ tags:
   - neural networks
   - python
 ---
+
+**Contents**
+* TOC
+{:toc}
+
+
 # 1. Writing a Multi Layer Feedforward Neural Network from Scratch
 All hail to the pandemic Corona virus, without it, we would not have lockdown and i won't have been stuck on village without internet to write these codes. I am not using <i>gist</i> for codes, so don't panic if you find unfriendly text formats. Also i have written this blog on `Markdown` of `Jupyter Notebook` so the formats are bit different. But truth is, the class we will be building will be just like `keras`. Yes Keras! 
 

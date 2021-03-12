@@ -12,13 +12,18 @@ tags:
   - machine learning
   - optimization
 ---
+**Contents**
+* TOC
+{:toc}
+
+
 # 1. Writing popular Machine Learning Optimizers from scratch on Python
 
 This blog will include some mathematical and theoritical representation along with Python codes from scratch. Most of the codes and formulas are taken from different resources and i have given links to them also.
 
 This post is related to below posts(these posts depends on this post):
-* [Writing a Feed forward Neural Network from Scratch on Python](https://acharyaramkrishna.com.np/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/)
-* [Convolutional Neural Networks from Scratch on Python](https://acharyaramkrishna.com.np/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
+* [Writing a Feed forward Neural Network from Scratch on Python]({{site.url}}/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/)
+* [Convolutional Neural Networks from Scratch on Python]({{site.url}}/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
 
 ## Before begining,
 If you want to check the files first, then please follow this link [ML From Basics](https://github.com/q-viper/ML-from-Basics).
@@ -288,10 +293,10 @@ Where `gt` is the gradient term.
 ```
 
 # My other blogs:-
-* [Writing Popular Machine Learning Optimizers from Scratch on Python](https://acharyaramkrishna.com.np/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
-* [Writing Image Processing Class From Scratch on Python](https://acharyaramkrishna.com.np/2020/05/31/image-processing-class-from-scratch-on-python/)
-* [Writing a Deep Neural Network from Scratch on Python](https://acharyaramkrishna.com.np/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/)
-* [Convolutional Neural Networks from Scratch on Python](https://acharyaramkrishna.com.np/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
+* [Writing Popular Machine Learning Optimizers from Scratch on Python]({{site.url}}/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
+* [Writing Image Processing Class From Scratch on Python]({{site.url}}/2020/05/31/image-processing-class-from-scratch-on-python/)
+* [Writing a Deep Neural Network from Scratch on Python]({{site.url}}/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/)
+* [Convolutional Neural Networks from Scratch on Python]({{site.url}}/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
 
 # References
 * Tensorflow for Dummies by Matthew Scarpino

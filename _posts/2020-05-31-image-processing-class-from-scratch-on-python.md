@@ -11,6 +11,12 @@ categories:
   - Machine Learning
   - Programming
 ---
+
+**Contents**
+* TOC
+{:toc}
+
+
 # 1 Writing a Image Processing Codes from Python on Scratch
 
 What will you do when you suddenly think about `Convolutional Neural Networks from Scratch` while serving cows? For me, i wrote some codes for image processing before thinking about those codes. Once again i am not going to write another `OpenCV` here.

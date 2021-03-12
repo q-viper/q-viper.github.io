@@ -12,6 +12,12 @@ tags:
   - python
   - scratch
 ---
+
+**Contents**
+* TOC
+{:toc}
+
+
 # Linear Regression
 Before there was any ML algorithms, there was a concept and that was regression.
 
@@ -19,11 +25,6 @@ Linear Regression is considered as the process of finding the value or guessing 
 
 There are frameworks like `scikit-learn` which can perform a linear regression on a moment but lets get it from the scratch.
 
-## Contains
-* LR with single variable
-* LR with multiple Variables
-* LR from Scratch
-* Bonus Topic
 
 # Credits
 Credits goes to the author of below repository from where, i have learned the most important concepts of ML and i am using some modified version of codes present there and then i will be using my own version of codes to play with LR from Scratch. 

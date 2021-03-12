@@ -20,7 +20,7 @@ tags:
 <!-- /wp:paragraph -->
 
 <!-- wp:image {"id":199,"sizeSlug":"large"} -->
-<figure class="wp-block-image size-large"><img src="https://acharyaramkrishna.com.np/wp-content/uploads/2020/03/image.png" alt="" class="wp-image-199"/></figure>
+<figure class="wp-block-image size-large"><img src="{{site.url}}/wp-content/uploads/2020/03/image.png" alt="" class="wp-image-199"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:paragraph -->

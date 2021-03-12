@@ -1,7 +1,7 @@
 ---
 title: Building OCR For Devanagari Handwritten Character
 date: 2020-02-25T07:46:33+05:45
-comments_id: 9
+comments_id: 2
 header:
     teaser: assets/wp-content/uploads/2020/02/dcr.png
 categories:
@@ -18,6 +18,10 @@ tags:
 <!-- wp:heading {"level":4} -->
 <h4>Using Keras, OpenCv, Numpy build a simple&nbsp;OCR.</h4>
 <!-- /wp:heading -->
+
+**Contents**
+* TOC
+{:toc}
 
 <!-- wp:heading {"level":4} -->
 <h4>Inspiration</h4>

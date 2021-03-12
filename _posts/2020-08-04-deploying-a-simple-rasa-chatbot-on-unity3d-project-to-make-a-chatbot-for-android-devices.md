@@ -16,17 +16,12 @@ tags:
   - unity3d
 ---
 # Creating a Chatbot on Android Using Unity3d and RASA
-## Contents
-* Introduction
-* Preparing System
-* Preparing RASA
-* Training RASA
-* Preparing Unity3d
-* Creating Simple GUI on Unity
-* Scripting Unity
-* Combining Unity and RASA
-* Build It
-* Finally
+
+**Contents**
+* TOC
+{:toc}
+
+
 
 ## Credits
 The credit goes to higly motivating friends who taught me what they learned about RASA.
@@ -474,7 +469,7 @@ Thank you so much for reading out. And i am still unsure that this blog has some
 * Handling buttons, images, carousels etc.
 
 # Don't forget to check out
-* [Gesture Based Visually Writing System Usin OpenCv and Python](https://acharyaramkrishna.com.np/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
-* [Convolutional Neural Networks from Scratch Usin Python](https://acharyaramkrishna.com.np/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
+* [Gesture Based Visually Writing System Usin OpenCv and Python]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
+* [Convolutional Neural Networks from Scratch Usin Python]({{site.url}}/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
 
 

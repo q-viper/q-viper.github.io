@@ -14,7 +14,7 @@ tags:
   - maya
 ---
 <!-- wp:image {"id":205,"width":264,"height":264,"sizeSlug":"large"} -->
-<figure class="wp-block-image size-large is-resized"><img src="https://acharyaramkrishna.com.np/wp-content/uploads/2020/03/image.jpeg" alt="autodesk mayaको लागि तस्बिर परिणाम" class="wp-image-205" width="264" height="264"/></figure>
+<figure class="wp-block-image size-large is-resized"><img src="{{site.url}}/wp-content/uploads/2020/03/image.jpeg" alt="autodesk mayaको लागि तस्बिर परिणाम" class="wp-image-205" width="264" height="264"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:paragraph -->
@@ -45,8 +45,8 @@ tags:
 <p>If you like to begin the journey on game development but stuck nowhere then follow the article below. </p>
 <!-- /wp:paragraph -->
 
-<!-- wp:core-embed/wordpress {"url":"https://acharyaramkrishna.com.np/2020/03/19/unity-has-provided-3-months-of-unity-learning-premium-free-for-all/","type":"wp-embed","providerNameSlug":"ramkrishna-acharya","className":""} -->
+<!-- wp:core-embed/wordpress {"url":"{{site.url}}/2020/03/19/unity-has-provided-3-months-of-unity-learning-premium-free-for-all/","type":"wp-embed","providerNameSlug":"ramkrishna-acharya","className":""} -->
 <figure class="wp-block-embed-wordpress wp-block-embed is-type-wp-embed is-provider-ramkrishna-acharya"><div class="wp-block-embed__wrapper">
-https://acharyaramkrishna.com.np/2020/03/19/unity-has-provided-3-months-of-unity-learning-premium-free-for-all/
+{{site.url}}/2020/03/19/unity-has-provided-3-months-of-unity-learning-premium-free-for-all/
 </div></figure>
 <!-- /wp:core-embed/wordpress -->

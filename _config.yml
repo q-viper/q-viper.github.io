@@ -20,7 +20,7 @@ description: >- # this means to ignore newlines until "baseurl:"
 twitter_username: QuassarianViper
 github_username: q-viper
 search: true
-repository: "q-viperd/q-viper.github.io"
+repository: "q-viper/q-viper.github.io"
 issues_repo: "q-viper/q-viper.github.io"
 # Build settings
 markdown: kramdown
@@ -31,9 +31,16 @@ syntax_highlighter_opts:
     block:
         line_numbers: true
 google-site-verification: "-NAJsggtItjDHz0RXX60dTYYgfPzcfBp-oUg34Gf2wQ"
+analytics:
+  provider: "google-gtag"
+  google:
+    tracking_id: "UA-159044949-2"
+    anonymize_ip: true # default
+
 logo: "/assets/images/pp.jpg"
 teaser: "/assets/images/project.jpg"
-remote_theme: mmistakes/minimal-mistakes
+# remote_theme: mmistakes/minimal-mistakes
+theme: minimal-mistakes-jekyll
 # Outputting
 # permalink: /:categories/:title/
 permalink: /:year/:month/:day/:title/
@@ -121,8 +128,8 @@ defaults:
 comments:
   provider: "utterances"
   utterances:
-    theme: "github-light" # "github-dark"
-    issue_term: "https://github.com/q-viper/q-viper.github.io/issues/4"
+    theme:  "github-dark" #"github-light"
+    issue_term:
 category_archive:
   type: liquid
   path: /categories/
