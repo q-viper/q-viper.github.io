@@ -13,7 +13,7 @@ tags:
   - python 
   - web development
 header:
-  teaser: Assets/messing-with-cnn/l_ab/output_32_31.png
+  teaser: assets/messing-with-cnn/l_ab/output_32_31.png
 ---
 # Messing Up with CNN
 CNN has been so famous and popular in last few years and these days many state of the art techniques are here to do amazing things on computer vision. One can not stop by listing the names of those researchs. In first few notebooks, I am thinking about Grayscale to RGB conversion. My work might not be complete but I intend to update it and add more concepts too. **I am only messing up with CNN**. 
@@ -50,7 +50,7 @@ show(img)
 
 ```
 
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_4_0.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_4_0.png)
 
 ### Prepare Dataset
 For this problem, we need plenty of dataset and I am going to use dataset available publicly on Kaggle and other sources. For ease of hardware requirements, I am using google colab because I can have large storage and RAM along with GPU for training. Only main thing I am concerned about is the architecture and weight of the model file. So all the images downloaded on COLAB kernel are not necessarily saved on drive.
@@ -367,25 +367,25 @@ for i in range(2):
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_25_0.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_25_0.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_25_1.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_25_1.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_25_2.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_25_2.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_25_3.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_25_3.png)
     
 
 * Keras Datagenerator allows us to write our own custom data generator and do our own stuffs inside it. 
@@ -625,14 +625,14 @@ history = model.fit(train_generator,
     881/881 [==============================] - 324s 350ms/step - loss: 0.0196 - val_loss: 0.0080    
     Epoch 00001: saving model to /content/drive/MyDrive/Messing Up With CNN/GRAY2RGB_01.h5
 
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_1.png)
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_2.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_1.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_2.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_3.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_3.png)
     
 
 
@@ -644,19 +644,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_5.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_5.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_6.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_6.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_7.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_7.png)
     
 
 
@@ -668,19 +668,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_9.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_9.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_10.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_10.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_11.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_11.png)
     
 
 
@@ -692,19 +692,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_13.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_13.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_14.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_14.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_15.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_15.png)
     
 
 
@@ -716,19 +716,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_17.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_17.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_18.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_18.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_19.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_19.png)
     
 
 
@@ -740,19 +740,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_21.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_21.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_22.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_22.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_23.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_23.png)
     
 
 
@@ -764,19 +764,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_25.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_25.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_26.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_26.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_27.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_27.png)
     
 
 
@@ -788,19 +788,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_29.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_29.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_30.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_30.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_31.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_31.png)
     
 
 
@@ -814,19 +814,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_33.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_33.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_34.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_34.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_35.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_35.png)
     
 
 
@@ -838,19 +838,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_37.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_37.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_38.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_38.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_39.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_39.png)
     
 
 
@@ -862,19 +862,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_41.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_41.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_42.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_42.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_43.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_43.png)
     
 
 
@@ -886,19 +886,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_45.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_45.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_46.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_46.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_47.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_47.png)
     
 
 
@@ -910,19 +910,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_49.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_49.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_50.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_50.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_51.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_51.png)
     
 
 
@@ -934,19 +934,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_53.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_53.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_54.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_54.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_55.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_55.png)
     
 
 
@@ -960,19 +960,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_57.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_57.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_58.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_58.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_59.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_59.png)
     
 
 
@@ -984,19 +984,19 @@ history = model.fit(train_generator,
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_61.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_61.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_62.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_62.png)
     
 
 
 
     
-![]({{site.url}}/Assets/messing-with-cnn/gray_rgb/output_34_63.png)
+![]({{site.url}}/assets/messing-with-cnn/gray_rgb/output_34_63.png)
     
 
 
@@ -1119,25 +1119,25 @@ for i in range(2):
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_24_0.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_24_0.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_24_1.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_24_1.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_24_2.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_24_2.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_24_3.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_24_3.png)
     
 * The maximum value in LAB is 128 and hence we divide by that value for normalization.
 
@@ -1351,19 +1351,19 @@ history = model.fit(train_generator,
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_1.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_1.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_2.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_2.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_3.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_3.png)
     
 
 
@@ -1375,19 +1375,19 @@ history = model.fit(train_generator,
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_5.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_5.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_6.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_6.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_7.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_7.png)
     
 
 
@@ -1399,19 +1399,19 @@ history = model.fit(train_generator,
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_9.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_9.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_10.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_10.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_11.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_11.png)
     
 
 
@@ -1423,19 +1423,19 @@ history = model.fit(train_generator,
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_13.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_13.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_14.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_14.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_15.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_15.png)
     
 
 
@@ -1447,19 +1447,19 @@ history = model.fit(train_generator,
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_17.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_17.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_18.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_18.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_19.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_19.png)
     
 
 
@@ -1471,19 +1471,19 @@ history = model.fit(train_generator,
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_21.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_21.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_22.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_22.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_23.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_23.png)
     
 
 
@@ -1495,19 +1495,19 @@ history = model.fit(train_generator,
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_25.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_25.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_26.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_26.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_27.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_27.png)
     
 
 
@@ -1519,19 +1519,19 @@ history = model.fit(train_generator,
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_29.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_29.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_30.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_30.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_31.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_31.png)
     
 
 
@@ -1543,19 +1543,19 @@ history = model.fit(train_generator,
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_33.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_33.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_34.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_34.png)
     
 
 
 
     
-![png]({{site.url}}/Assets/messing-with-cnn/l_ab/output_32_35.png)
+![png]({{site.url}}/assets/messing-with-cnn/l_ab/output_32_35.png)
     
 
 

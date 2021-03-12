@@ -308,7 +308,7 @@ streamlit run nepse.py
 ```
 
 If everything is okay then streamlit will provide us a local link with unique port number. By clicking it, we can visualize our first ever NEPSE data visualizer. It should look like below.
-![image]({{site.url}}/Assets/nepse/custom_df.png)
+![image]({{site.url}}/assets/nepse/custom_df.png)
 
 ## View Company Details
 
@@ -350,7 +350,7 @@ The method above is used to visualize the company details.
 * Return the Symbol Number.
 
 The result must be something like below.
-![img]({{site.url}}/Assets/nepse/company_detail.png)
+![img]({{site.url}}/assets/nepse/company_detail.png)
 
 ## Visualize Data of some time period
 First we need to get that data. As I stated earlier, sometimes scraping data of entire history will not be feasible and last time I tried that, my laptop crashed so scrapping part by part will be great idea.
@@ -412,7 +412,7 @@ if show_df:
 ```
 
 The result must be like below:
-![img]({{site.url}}/Assets/nepse/progress_year.png)
+![img]({{site.url}}/assets/nepse/progress_year.png)
 
 ## Do Real Visualization
 Now is the time for doing visualization of our time series data. We have already scrapped the data of our interest now is the time to use image to tell story.
@@ -458,7 +458,7 @@ visualise_broker()
 * Use the figure made by plotly to view it on web app using streamlit's `plotly_chart`.
 
 Our result must be like below.
-![img]({{site.url}}/Assets/nepse/date_vs_buyer.png)
+![img]({{site.url}}/assets/nepse/date_vs_buyer.png)
 
 **If you have came this far then congratulations, you have just made your streamlit app to visualize NEPSE data. Now is the time to make it live on Heroku.**
 
@@ -489,10 +489,10 @@ Assume that your main file name is `nepse.py`. I am not going to explain in deta
 After making all files then make one Git repository and push all the changes to it because we will be integrating our repository to Heroku and Heroku itself will process our files but beware of free version because we have limited number of build number available.
 
 * Make sure you are selecting GitHub on Deployement Method.
-![img]({{site.url}}/Assets/nepse/github_repo.png)
+![img]({{site.url}}/assets/nepse/github_repo.png)
 
 * Then select the repository you are using to visualize on App Connected to GitHub.
-![img]({{site.url}}/Assets/nepse/repo_select.png)
+![img]({{site.url}}/assets/nepse/repo_select.png)
 
 * Chose the right branch.
 * If you want automatic deploys, i.e re deploy whenever changes found. Using manual deploy will be best for free version.
