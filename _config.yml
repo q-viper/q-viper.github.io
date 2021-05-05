@@ -75,7 +75,7 @@ plugins:
 author:
   name   : "Quassarian Viper"
   avatar : "/assets/images/pp.jpg"
-  bio    : "Alter ego of Ramkrishna Acharya. Pile of Quarks as Homo Sapiens."
+  bio    : "Pile of Quarks as Homo Sapiens."
   links:
     - label: "Website"
       icon: "fas fa-fw fa-link"

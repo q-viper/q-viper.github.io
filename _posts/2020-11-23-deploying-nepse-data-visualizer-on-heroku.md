@@ -26,7 +26,7 @@ If you are from Nepal then you already know what Nepal Stock Exchange means. Hon
 
 <figure>
 <video src = "{{site.url}}/assets/nepse/streamlit_nepse.webm" width="100%" controls autoplay loop> </video>
-<figcaption style = "text-align:left; font-style:italic">VoTT</figcaption>
+<figcaption style = "text-align:left; font-style:italic">Demo</figcaption>
 </figure>
 
 ### Where was I lost?
