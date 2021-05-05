@@ -68,7 +68,7 @@ Installing OpenCV is very hard task because of various things like build error a
 
 ## Create and Run first OpenCV program in C++.
 * Head over to the `main.cpp`. Copy below and replace the codes.
- ```C++
+ ```cpp
     #include <iostream> //handeling input/output
     #include <stdio.h> // standard i/o?
     #include <opencv2/opencv.hpp> // main opencv
