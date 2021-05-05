@@ -44,7 +44,9 @@ Installing OpenCV is very hard task because of various things like build error a
 * On `CMakeLists.txt` we have to give some build information and informations about OpenCV directories.
     * We have to tell that, find the required package OpenCV and include the directory too.
     * Then add target_link_libraries, i.e. link the libraries to our project.
-    * ```
+* CMakeLists.txt:
+     
+     ```text
         cmake_minimum_required(VERSION 3.0.0)
         project(opencv-test VERSION 0.1.0)
 
@@ -59,12 +61,14 @@ Installing OpenCV is very hard task because of various things like build error a
 
         set(CPACK_PROJECT_NAME ${PROJECT_NAME})
         set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-        include(CPack)```
+        include(CPack)
+    ```
+
 * If everything goes okay, then after saving a file, on the output console, it will be shown. If no error is shown then we can proceed.
 
 ## Create and Run first OpenCV program in C++.
 * Head over to the `main.cpp`. Copy below and replace the codes.
-    * ```
+ ```C++
     #include <iostream> //handeling input/output
     #include <stdio.h> // standard i/o?
     #include <opencv2/opencv.hpp> // main opencv
@@ -89,8 +93,10 @@ Installing OpenCV is very hard task because of various things like build error a
         cv::waitKey(0);
         return 0;
 
-    }```
-    * Make sure to change the `impath` variable!
+    }
+```
+
+* Make sure to change the `impath` variable!
 * Now press on play button on the bottom, it will take few seconds to build it then if everything is okay, it will show our image.
 
 
