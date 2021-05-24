@@ -77,9 +77,9 @@ author:
   avatar : "/assets/images/pp.jpg"
   bio    : "Pile of Quarks as Homo Sapiens."
   links:
-    - label: "Website"
-      icon: "fas fa-fw fa-link"
-      url: "https://acharyaramkrishna.com.np"
+    # - label: "Website"
+    #   icon: "fas fa-fw fa-link"
+    #   url: "https://acharyaramkrishna.com.np"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
       url: "https://twitter.com/QuassarianViper"
