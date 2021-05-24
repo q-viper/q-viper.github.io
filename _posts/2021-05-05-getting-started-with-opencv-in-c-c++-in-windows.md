@@ -4,7 +4,6 @@ date:   2021-05-05 01:29:17 +0545
 categories:
   - Computer Vision
   - Image Processing
-  - Project
   - Programming
 tags:
   - Computer Vision

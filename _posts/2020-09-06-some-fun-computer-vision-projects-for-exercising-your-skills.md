@@ -7,7 +7,7 @@ categories:
   - Computer Vision
   - Game Development
   - Programming
-  - Projects
+  - Project
 tags:
   - computer vision
   - deep learning

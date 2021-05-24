@@ -3,7 +3,6 @@ title:  "Building Data Apps Faster With dstack.ai"
 date:   2020-12-26 01:29:17 +0545
 categories:
   - Data Science
-  - Project
   - Programming
 tags:
   - data science
