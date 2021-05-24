@@ -39,8 +39,8 @@ analytics:
 
 logo: "/assets/images/pp.jpg"
 teaser: "/assets/images/project.jpg"
-remote_theme: mmistakes/minimal-mistakes
-# theme: minimal-mistakes-jekyll
+# remote_theme: mmistakes/minimal-mistakes
+theme: minimal-mistakes-jekyll
 # Outputting
 # permalink: /:categories/:title/
 permalink: /:year/:month/:day/:title/
