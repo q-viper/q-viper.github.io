@@ -2,7 +2,7 @@
 title:  "Deploying Face Mask Classifier on Flask App"
 date:   2020-10-14 01:29:17 +0545
 categories:
-  - Project
+  # - Project
   - Computer Vision
   - Programming
 tags:

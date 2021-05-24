@@ -64,7 +64,7 @@ For running this system, i had to modify this system little bit. Only modificati
 * `final_window`: A image that will tell user that average is being taken.
 * `detected_text`: What has been detected by passing on detector?
 Final window looks like below:
-![png]({{site.url}}/assets/taking_avg.png)
+![png]({{site.url}}/assets/contour-writing/taking_avg.png)
 
 ### Method: `__del__`
 There are default constructor made along with object creation on Python and `__del__` is a destructor called upon when all the references of an object is deleted.

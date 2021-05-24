@@ -9,7 +9,7 @@ This page is under developement.
 <ul>
 {%- for post in site.posts -%}
 {% assign catg =  post.categories %}
- {% if catg contains "Project" %}
+ {% if catg contains "Project"%}
     {%- unless post.hidden -%}
         {% if post.header.teaser %}
         {% capture teaser %}{{ post.header.teaser }}{% endcapture %}

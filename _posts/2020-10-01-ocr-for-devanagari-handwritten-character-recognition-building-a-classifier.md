@@ -5,6 +5,7 @@ categories:
   - Project
   - Computer Vision
   - Programming
+  - Project
 tags:
   - ocr
   - mathematics

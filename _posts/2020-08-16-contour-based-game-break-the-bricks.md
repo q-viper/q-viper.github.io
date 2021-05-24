@@ -7,7 +7,7 @@ categories:
   - Computer Vision
   - Game Development
   - Games
-  - Projects
+  - Project
 tags:
   - computer vision
   - Game Development

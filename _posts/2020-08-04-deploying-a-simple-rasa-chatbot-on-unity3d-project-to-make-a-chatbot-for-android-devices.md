@@ -9,6 +9,7 @@ categories:
   - Games
   - Machine Learning
   - Programming
+  - Project
 tags:
   - chatbot
   - Game Development

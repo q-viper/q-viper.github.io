@@ -6,6 +6,7 @@ header:
 categories:
   - Computer Vision
   - Programming
+  - Project
 tags:
   - geometry
   - mathematics

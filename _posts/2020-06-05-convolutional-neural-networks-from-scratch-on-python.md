@@ -8,6 +8,7 @@ categories:
   - Computer Vision
   - Machine Learning
   - Programming
+  - Project
 tags:
   - computer vision
   - Convolutional neural network

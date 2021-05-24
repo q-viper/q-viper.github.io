@@ -2,7 +2,7 @@
 title:  "OCR For Devanagari Handwritten Character: Segmentation, Localization using NumPy"
 date:   2020-10-02 05:29:17 +0545
 categories:
-  - Project
+#   - Project
   - Computer Vision
   - Programming
 tags:

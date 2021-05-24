@@ -6,7 +6,7 @@ header:
 categories:
   - Computer Vision
   - Programming
-  - Projects
+  - Project
 tags:
   - computer vision
   - gesture recognition
@@ -20,6 +20,13 @@ tags:
 {:toc}
 
 # Theory Part
+
+This is the first part of [Gesture Based Visually Writing System](https://github.com/q-viper/Contour-Based-Writing/).
+* * [Gesture Based Visually Writing System Using OpenCV and Python]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
+* [Gesture Based Visually Writing System: Adding Visual User Interface]({{site.url}}/2020/08/11/gesture-based-visually-writing-system-make-a-visual-user-interface/)
+* [Gesture Based Visually Writing System: Adding Virtual Animationn, New Mode and New VUI]({{site.url}}/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/)
+* [Gesture Based Visually Writing System: Add Slider, More Colors and Optimized OOP code]({{site.url}}/2020/08/21/gesture-based-visually-writing-system-add-slider-more-colors-and-optimized-code/)
+* [Gesture Based Visually Writing System: Building a Web App Using Flask]({{site.url}}/2020/08/28/gesture-based-visually-writing-system-web-app/)
 
 ## Before Starting
 Huge credit goes to the pandemic COVID19 and without it, i would have not been another unemployed and the thoughts of writing this blog won't have appear. Also the climate change, due to which i usually have blackouts.

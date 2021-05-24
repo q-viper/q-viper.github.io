@@ -8,6 +8,7 @@ categories:
   - Artificial Intelligence
   - Computer Vision
   - Machine Learning
+  - Project
 tags:
   - computer vision
   - devanagari character recognition
