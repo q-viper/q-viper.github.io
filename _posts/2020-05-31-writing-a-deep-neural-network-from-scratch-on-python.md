@@ -1,6 +1,6 @@
 ---
 title: Writing a Deep Neural Network from Scratch on Python
-date: 2020-05-31T00:17:27+05:45
+date: 2020-05-30T00:17:27+05:45
 header:
   teaser: assets/wp-content/uploads/2020/05/summary-last-pic.png
 categories:

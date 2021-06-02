@@ -1,6 +1,6 @@
 ---
 title: Image Processing Class from Scratch on Python
-date: 2020-05-31T01:45:00+05:45
+date: 2020-05-30T01:45:00+05:45
 comments_id: 5
 header:
   teaser: assets/wp-content/uploads/2020/05/download-1.png

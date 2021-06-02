@@ -25,12 +25,12 @@ What will you do when you stuck on village with blackout for 4 days and you only
 I am sorry for not using a single image here on this blog because i was low on data and this entire blog is written on markdown(sometimes latex) only so text format might seem little disturbing also.
 
 <b>If you are here, then you are encouraged to look at the below 3 blog posts(serially) of mine(most of the concept on this blog are taken from below posts):</b>
-* [Writing a Feed forward Neural Network from Scratch on Python]({{site.url}}/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/)
+* [Writing a Feed forward Neural Network from Scratch on Python]({{site.url}}/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/)
     * This post gives a brief introduction to a OOP concept of making a simple Keras like ML library.
     * A gentle introduction to the backpropagation and gradient descent from scratch.
 * [Writing top Machine Learning Optimizers from scratch on Python]({{site.url}}/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
     * Gives introduction and python code to optimizers like `GradientDescent`, `ADAM`.
-* [Writing a Image Processing Codes from Scratch on Python]({{site.url}}/2020/05/31/image-processing-class-from-scratch-on-python/)
+* [Writing a Image Processing Codes from Scratch on Python]({{site.url}}/2020/05/30/image-processing-class-from-scratch-on-python/)
     * This post gives a brief introduction to convolution operation and RGB to grayscale conversion from scratch.
     * We will be using same convolution concept here on this blog.
 
@@ -72,7 +72,7 @@ Testing a model will require huge time, my system is Dell I5 with 8gb RAM and 25
 ## 3.1 Prepare Layers
 
 ### 3.1.1 Feedforward Layer
-I am not going to explain much more here because a previous post about [Writing a Feed forward Neural Network from Scratch on Python]({{site.url}}/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/) has explained already.
+I am not going to explain much more here because a previous post about [Writing a Feed forward Neural Network from Scratch on Python]({{site.url}}/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/) has explained already.
 
 ```python
    class FFL():
@@ -1663,8 +1663,8 @@ for l in mm.layers:
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="7-You-might-like-to-view:-">7 You might like to view:-<a class="anchor-link" href="#7-You-might-like-to-view:-">&#182;</a></h1><ul>
 <li><a href="{{site.url}}/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/">Writing Popular Machine Learning Optimizers from Scratch on Python</a></li>
-<li><a href="{{site.url}}/2020/05/31/image-processing-class-from-scratch-on-python/">Writing Image Processing Class From Scratch on Python</a></li>
-<li><a href="{{site.url}}/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/">Writing a Deep Neural Network from Scratch on Python</a></li>
+<li><a href="{{site.url}}/2020/05/30/image-processing-class-from-scratch-on-python/">Writing Image Processing Class From Scratch on Python</a></li>
+<li><a href="{{site.url}}/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/">Writing a Deep Neural Network from Scratch on Python</a></li>
 <li><a href="{{site.url}}/2020/06/05/convolutional-neural-networks-from-scratch-on-python/">Convolutional Neural Networks from Scratch on Python</a></li>
 </ul>
 <p>For the production phase, it is always best idea to use frameworks but for the learning phase, starting from the scratch is a great idea. I also got suggestions from friends that, prof. Adrew Ng's contents drives us through the scratch but i never got chance to watch one. I am sharing a notebook and repository link also. On next blog i will try to do <strong>RNN</strong> from scratch. Please leave a feedback, and if you find this good content then sharing is caring. Thank you for your time and please ping me on **[twitter](https://twitter.com/Quassarianviper)**. You can find all these files under <a href="https://github.com/q-viper/ML-from-Basics">ML From Basics</a>.</p>

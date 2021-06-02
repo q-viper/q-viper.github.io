@@ -22,7 +22,7 @@ tags:
 This blog will include some mathematical and theoritical representation along with Python codes from scratch. Most of the codes and formulas are taken from different resources and i have given links to them also.
 
 This post is related to below posts(these posts depends on this post):
-* [Writing a Feed forward Neural Network from Scratch on Python]({{site.url}}/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/)
+* [Writing a Feed forward Neural Network from Scratch on Python]({{site.url}}/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/)
 * [Convolutional Neural Networks from Scratch on Python]({{site.url}}/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
 
 ## Before begining,
@@ -294,8 +294,8 @@ Where `gt` is the gradient term.
 
 # My other blogs:-
 * [Writing Popular Machine Learning Optimizers from Scratch on Python]({{site.url}}/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
-* [Writing Image Processing Class From Scratch on Python]({{site.url}}/2020/05/31/image-processing-class-from-scratch-on-python/)
-* [Writing a Deep Neural Network from Scratch on Python]({{site.url}}/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/)
+* [Writing Image Processing Class From Scratch on Python]({{site.url}}/2020/05/30/image-processing-class-from-scratch-on-python/)
+* [Writing a Deep Neural Network from Scratch on Python]({{site.url}}/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/)
 * [Convolutional Neural Networks from Scratch on Python]({{site.url}}/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
 
 # References
