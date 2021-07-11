@@ -198,7 +198,7 @@ cv2.destroyAllWindows()
 
 **Output**
 <figure>
-<video src = "{{site.url}}/assets/realtime-bg-change/exmp1.mp4" width="100%" controls loop> </video>
+<video src = "{{site.url}}/assets/realtime-bg-change/exmp1.mp4" width="100%" controls > </video>
 <figcaption style = "text-align:left; font-style:italic">Using Running Average</figcaption>
 </figure> 
 
@@ -281,7 +281,7 @@ cv2.destroyAllWindows()
 Instead of using entire frame as a background image, I an selecting only some portion of a plain background. And the result is not that bad.
 
 <figure>
-<video src = "{{site.url}}/assets/realtime-bg-change/exmp2.mp4" width="100%" controls loop> </video>
+<video src = "{{site.url}}/assets/realtime-bg-change/exmp2.mp4" width="100%" controls > </video>
 <figcaption style = "text-align:left; font-style:italic">Using Running Average on ROI</figcaption>
 </figure> 
 
@@ -350,7 +350,7 @@ cv2.destroyAllWindows()
 Above code is fast but it does have many problems like it can not work with dynamic background, there is not a distinct identification of foreground and a background image.
 
 <figure>
-<video src = "{{site.url}}/assets/realtime-bg-change/exmp3.mp4" width="100%" controls loop> </video>
+<video src = "{{site.url}}/assets/realtime-bg-change/exmp3.mp4" width="100%" controls > </video>
 <figcaption style = "text-align:left; font-style:italic">Using Thresholding</figcaption>
 
 </figure> 
@@ -459,7 +459,7 @@ cv2.destroyAllWindows()
 
 
 <figure>
-<video src = "{{site.url}}/assets/realtime-bg-change/exmp4.mp4" width="100%" controls loop> </video>
+<video src = "{{site.url}}/assets/realtime-bg-change/exmp4.mp4" width="100%" controls > </video>
 <figcaption style = "text-align:left; font-style:italic">Using Selfie Segmentation</figcaption>
 </figure> 
 
