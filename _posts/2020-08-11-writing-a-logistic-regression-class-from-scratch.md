@@ -81,7 +81,9 @@ plotData()
 ```
 
 
+    
 ![png]({{site.url}}/assets/logistic-regression/output_7_0.png)
+    
 
 
 ### Implementation
@@ -101,7 +103,9 @@ plt.grid(True)
 ```
 
 
+    
 ![png]({{site.url}}/assets/logistic-regression/output_9_0.png)
+    
 
 
 
@@ -116,7 +120,9 @@ plt.grid(True)
 ```
 
 
+    
 ![png]({{site.url}}/assets/logistic-regression/output_10_0.png)
+    
 
 
 ### Hypothesis function
@@ -132,9 +138,16 @@ J(\theta) = \frac{1}{m}\sum_{i=1}^{m} -y*log(h_{(\theta)}(x^i) - (1-y)*log(1-h_{
 \end{equation}
 
 ### Parameter Update
+The derivative of cost function with respect to theta will be:
 \begin{equation}
 \theta_j = \theta_j - \alpha \frac{1}{m} \sum_{i=1}^m (h_\theta (x^{(i)}) - y^{(i)}) x_j^{(i)}
 \end{equation}
+
+If we use square loss and its derivative for the parameter update.
+\begin{equation}
+\theta_j = \theta_j - \alpha \frac{1}{m} \sum_{i=1}^m (h_\theta (x^{(i)}) - y^{(i)})* h_\theta (x^{(i)}) * (1-h_\theta (x^{(i)})) * x_j^{(i)}
+\end{equation}
+
 
 Where, 𝜃 is parameters of regression.
 
@@ -174,7 +187,7 @@ computeCost(initial_theta,X,y)
 
 
 
-    0.6931471805599453
+    0.6931471805599452
 
 
 
@@ -208,11 +221,12 @@ initial_theta = np.zeros((X.shape[1],1))
 theta, theta_history, costs = gradient_descent(X, initial_theta)
 ```
 
-    C:\ProgramData\Anaconda3\lib\site-packages\ipykernel_launcher.py:2: RuntimeWarning: overflow encountered in exp
-      
-    C:\ProgramData\Anaconda3\lib\site-packages\ipykernel_launcher.py:16: RuntimeWarning: divide by zero encountered in log
-      app.launch_new_instance()
-    C:\ProgramData\Anaconda3\lib\site-packages\ipykernel_launcher.py:19: RuntimeWarning: divide by zero encountered in log
+    <ipython-input-6-34a8b12c216c>:2: RuntimeWarning: overflow encountered in exp
+      return 1 / (1+np.exp(-x))
+    <ipython-input-7-8faf9999c78e>:16: RuntimeWarning: divide by zero encountered in log
+      term1 = np.dot(-np.array(myy).T, np.log(h(mytheta, myX)))
+    <ipython-input-7-8faf9999c78e>:19: RuntimeWarning: divide by zero encountered in log
+      term2 = np.dot((1-np.array(myy)).T, np.log(1-h(mytheta, myX)))
     
 
 
@@ -232,12 +246,14 @@ plt.legend()
 
 
 
-    <matplotlib.legend.Legend at 0x1b5b4b86f08>
+    <matplotlib.legend.Legend at 0x254f0a1f490>
 
 
 
 
+    
 ![png]({{site.url}}/assets/logistic-regression/output_15_1.png)
+    
 
 
 # Lets do it from scratch
@@ -325,7 +341,11 @@ class LogisticRegression:
         temp_theta = self.parameters
         # for each theta
         for j in range(len(temp_theta)):
-            grad = np.sum((self.hypothesis(self.X) - self.y)*np.array(self.X[:,j]).reshape(self.m, 1))
+            # if used square loss
+            yp = self.hypothesis(self.X)
+            grad = np.sum((yp - self.y)*yp*(1-yp)*np.array(self.X[:,j]).reshape(self.m, 1))
+            # if used crossentropy  derivative
+#             grad = np.sum((self.hypothesis(self.X) - self.y)*np.array(self.X[:,j]).reshape(self.m, 1))
             temp_theta[j] = self.parameters[j] - (self.alpha / self.m) * grad
         self.parameters = temp_theta
         self.all_parameters.append(temp_theta.flatten())
@@ -518,20 +538,20 @@ lr.fit(normalized_x[:, :], y, iterations=1500)
 ```
 
     Step: 0 Cost: 0.6931.
-    Step: 100 Cost: 0.5724.
-    Step: 200 Cost: 0.4961.
-    Step: 300 Cost: 0.4452.
-    Step: 400 Cost: 0.4091.
-    Step: 500 Cost: 0.3824.
-    Step: 600 Cost: 0.3619.
-    Step: 700 Cost: 0.3455.
-    Step: 800 Cost: 0.3322.
-    Step: 900 Cost: 0.3211.
-    Step: 1000 Cost: 0.3118.
-    Step: 1100 Cost: 0.3038.
-    Step: 1200 Cost: 0.2968.
-    Step: 1300 Cost: 0.2907.
-    Step: 1400 Cost: 0.2853.
+    Step: 100 Cost: 0.6574.
+    Step: 200 Cost: 0.6259.
+    Step: 300 Cost: 0.5984.
+    Step: 400 Cost: 0.5741.
+    Step: 500 Cost: 0.5529.
+    Step: 600 Cost: 0.5341.
+    Step: 700 Cost: 0.5174.
+    Step: 800 Cost: 0.5026.
+    Step: 900 Cost: 0.4893.
+    Step: 1000 Cost: 0.4773.
+    Step: 1100 Cost: 0.4665.
+    Step: 1200 Cost: 0.4566.
+    Step: 1300 Cost: 0.4476.
+    Step: 1400 Cost: 0.4394.
     
 
 
@@ -540,7 +560,9 @@ lr.visualize(thing="boundary")
 ```
 
 
+    
 ![png]({{site.url}}/assets/logistic-regression/output_20_0.png)
+    
 
 
 # Lets use Sklearn now
@@ -564,20 +586,14 @@ model = LogisticRegression()
 model.fit(X, y)
 ```
 
-    C:\ProgramData\Anaconda3\lib\site-packages\sklearn\linear_model\logistic.py:432: FutureWarning: Default solver will be changed to 'lbfgs' in 0.22. Specify a solver to silence this warning.
-      FutureWarning)
-    C:\ProgramData\Anaconda3\lib\site-packages\sklearn\utils\validation.py:724: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
-      y = column_or_1d(y, warn=True)
+    C:\ProgramData\Anaconda3\lib\site-packages\sklearn\utils\validation.py:72: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+      return f(**kwargs)
     
 
 
 
 
-    LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
-                       intercept_scaling=1, l1_ratio=None, max_iter=100,
-                       multi_class='warn', n_jobs=None, penalty='l2',
-                       random_state=None, solver='warn', tol=0.0001, verbose=0,
-                       warm_start=False)
+    LogisticRegression()
 
 
 
@@ -591,12 +607,12 @@ mp
 
 
 
-    array([0., 0., 0., 1., 1., 0., 1., 1., 1., 1., 1., 0., 1., 1., 0., 1., 1.,
-           0., 1., 1., 0., 1., 0., 0., 1., 1., 1., 1., 0., 0., 1., 1., 0., 1.,
-           0., 0., 1., 1., 1., 0., 1., 0., 1., 1., 0., 0., 1., 1., 1., 1., 1.,
+    array([0., 0., 0., 1., 1., 0., 1., 0., 1., 1., 1., 0., 1., 1., 0., 1., 0.,
+           0., 1., 1., 0., 1., 0., 0., 1., 1., 1., 1., 0., 0., 1., 1., 0., 0.,
+           0., 0., 1., 1., 0., 0., 1., 0., 1., 1., 0., 0., 1., 1., 1., 1., 1.,
            1., 1., 0., 0., 0., 1., 1., 1., 1., 1., 0., 0., 0., 0., 0., 1., 0.,
            1., 1., 0., 1., 1., 1., 1., 1., 1., 1., 0., 1., 1., 1., 1., 0., 1.,
-           1., 1., 1., 1., 0., 1., 1., 0., 1., 1., 1., 1., 1., 1., 1.])
+           1., 0., 1., 1., 0., 1., 1., 0., 1., 1., 1., 1., 1., 0., 1.])
 
 
 
@@ -631,15 +647,15 @@ mse
 
 
 
-    0.07
+    0.01
 
 
 
 
 ```python
 # get mse between our model and true y
-mse = np.mean((y-op[0])**2)
-mse
+mse1 = np.mean((y-op[0])**2)
+mse1
 
 ```
 
@@ -653,33 +669,45 @@ mse
 
 ```python
 # get mse between sklearn model and true y
-mse = np.mean((y-mp)**2)
-mse
+mse2 = np.mean((y-mp)**2)
+mse2
 
 ```
 
 
 
 
-    0.466
+    0.478
 
 
 
 
 ```python
 # the mse are not that far in fact the difference on error is  little
-abs(0.48-0.466)
+abs(mse1-mse2)
 ```
 
 
 
 
-    0.013999999999999957
+    0.0020000000000000018
 
 
 
 ## Finally
 The class we proposed is not that bad and when comparing the mse of our scratch model and the mse of sklearn's model, difference on mse is little. But on the production level, using frameworks is a best way.
+
+### Why not read more?
+* [Linear Regression from Scratch](https://acharyaramkrishna.com.np/2020/08/07/writing-a-linear-regression-class-from-scratch-using-python/)
+* [Writing Popular ML Optimizers from Scratch](https://acharyaramkrishna.com.np/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
+* [Feed Forward Neural Network from Scratch](https://acharyaramkrishna.com.np/2020/05/31/writing-a-deep-neural-network-from-scratch-on-python/)
+* [Convolutional Neural Networks from Scratch](https://acharyaramkrishna.com.np/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
+* [Writing a Simple Image Processing Class from Scratch](https://acharyaramkrishna.com.np/2020/05/31/image-processing-class-from-scratch-on-python/)
+* [Deploying a RASA Chatbot on Android using Unity3d](https://acharyaramkrishna.com.np/2020/08/04/deploying-a-simple-rasa-chatbot-on-unity3d-project-to-make-a-chatbot-for-android-devices/)
+* [Gesture Based Visually Writing System Using OpenCV and Python](https://acharyaramkrishna.com.np/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
+* [Naive Bayes for text classifications: Scratch to Framework](https://acharyaramkrishna.com.np/2020/03/04/text-classification-using-naive-bayes-scratch-to-the-framework/)
+* [Simple OCR for Devanagari Handwritten Text](https://acharyaramkrishna.com.np/2020/02/25/building-ocr-for-devanagari-handwritten-character/)
+
 
 ### Why not read more?
 * [Linear Regression from Scratch]({{site.url}}/2020/08/07/writing-a-linear-regression-class-from-scratch-using-python/)

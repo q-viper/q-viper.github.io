@@ -8,8 +8,8 @@ categories:
 tags:
   - Computer Vision
   - C++
-header:
-  teaser: assets/messing-with-cnn/l_ab/output_32_31.png
+# header:
+#   teaser: assets/messing-with-cnn/l_ab/output_32_31.png
 ---
 
 # How to configure OpenCV for C/C++ in Windows?
