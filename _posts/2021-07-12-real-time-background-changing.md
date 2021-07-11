@@ -467,9 +467,9 @@ cv2.destroyAllWindows()
 ## Conclusion
 These were just some experiments and tricks of image processing to do cool thing like changing background on real-time. My own version of experiments were not that good but the Mediapipe result is just awesome. There are other interesting topics and features provided by mediapipe and in the next part, I will be trying them. 
 
-The code and the YouTube video is on the below link.
-* Code: [GitHub]()
-* YouTube Video: [YouTube]()
+The code and the YouTube video are on the below link.
+* Code: [GitHub](https://github.com/data-coil/7-Days-Of-Computer-Vision-Projects/tree/main/1.%20Realtime%20Background%20Changing)
+* YouTube Video: [YouTube](https://youtu.be/JZ9cIAlCh7c)
 
 
 
