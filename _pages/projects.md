@@ -39,7 +39,7 @@ This page is under developement.
         </article>
         {% if  teaser %}
             <div class="archive__item-teaser">
-                <img src="{{ teaser | relative_url }}" alt="" width="200" height="100">
+                <img src="{{ teaser | relative_url }}" alt="" width="50" height="50">
             </div>
         {% endif %}
             

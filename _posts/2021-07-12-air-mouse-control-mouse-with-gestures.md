@@ -9,10 +9,20 @@ tags:
   - Computer Vision
   - Image Processing
 header:
-  teaser: assets/air-mouse/gesture.jpg
+  teaser: assets/air-mouse/thumbnail.png
 ---
 # Air Mouse: Doing Mouse Operations Using Finger Gestures
-Hey surfer, in this blog, I am going to write about how can we do basic mouse operations like move pointer, click, double click and right click using only finger gestures. There is also a video version of this blog at [YouTube](). 
+Hey surfer, in this blog, I am going to write about how can we do basic mouse operations like move pointer, click, double click and right click using only finger gestures. 
+
+This blog is the part of the series [#7DaysOfComputerVisionProjects](https://www.youtube.com/playlist?list=PLUqDn7JaCwaTbqegRNfRZmBZSxiTtL8bE). Links to the blogs and videos of each projects are:
+1. **Real-time Background Changing**: [Video](https://www.youtube.com/watch?v=JZ9cIAlCh7c&list=PLUqDn7JaCwaTbqegRNfRZmBZSxiTtL8bE&index=2) | [Blog]({{site.url}}/2021/07/11/real-time-background-changing/)
+2. **Air Mouse: Control Mouse with Gestures** [Video](https://www.youtube.com/playlist?list=PLUqDn7JaCwaTbqegRNfRZmBZSxiTtL8bE) | [Blog]({{site.url}}/2021/07/12/air-mouse-control-mouse-with-gestures/)
+3. **Play Trex Game With Gesture** [Video](https://www.youtube.com/watch?v=70VjkDus22g&list=PLUqDn7JaCwaTbqegRNfRZmBZSxiTtL8bE&index=4) | [Blog]({{site.url}}/2021/07/13/playing-chrome-trex-game-with-gestures/)
+4. **Auto Dino: Play Trex Game Automatically** [Video](https://www.youtube.com/watch?v=73lSzQcXRLg&list=PLUqDn7JaCwaTbqegRNfRZmBZSxiTtL8bE&index=5) | [Blog]({{site.url}}/2021/07/14/play-trex-with-image-processing/)
+5. **Gesture Based Writing** [Video](https://www.youtube.com/watch?v=hjiaAv6zYVY&list=PLUqDn7JaCwaTbqegRNfRZmBZSxiTtL8bE&index=6) | [Blog]({{site.url}}/2021/07/15/gesture-based-visually-writing-system/)
+6. **Game: Kill The Fly** [Video](https://www.youtube.com/playlist?list=PLUqDn7JaCwaTbqegRNfRZmBZSxiTtL8bE) | [Blog]({{site.url}}/2021/07/16/game-kill-a-fly/)
+7. **Gesture Based Calculator** [Video](https://www.youtube.com/playlist?list=PLUqDn7JaCwaTbqegRNfRZmBZSxiTtL8bE) | [Blog]({{site.url}}/2021/07/17/gesture-based-calculator/)
+
 
 ## Introduction
 As the project name Air Mouse, it is a Computer Mouse except working by the Gestures of fingers. We will be using 2 python libraries, mouse and Mediapipe. Mouse is a library to do mouse operations like click, drag, release and so on. We will be using [Hand Module of Mediapipe](https://google.github.io/mediapipe/solutions/hands.html) a OpenSource tool to extract the landmarks of hand and fingers. But it have multiple modules like selfie segmentation, pose estimation, face detection etc.
@@ -64,11 +74,8 @@ ssize
 
 ```python
 def frame_pos2screen_pos(frame_size=(480, 640), screen_size=(768, 1366), frame_pos=None):
-    
-    x,y = screen_size[1]/frame_size[0], screen_size[0]/frame_size[1]
-    
+    x,y = screen_size[1]/frame_size[0], screen_size[0]/frame_size[1]    
     screen_pos = [frame_pos[0]*x, frame_pos[1]*y]
-    
     return screen_pos
 
 def euclidean(pt1, pt2):
@@ -77,17 +84,7 @@ def euclidean(pt1, pt2):
 euclidean((4, 3), (0, 0))
 ```
 
-
-
-
     5.0
-
-
-
-
-```python
-
-```
 
 ## Writing a Code
 
@@ -581,11 +578,5 @@ cv2.destroyAllWindows()
 
 ## Finally
 The above code works but it is hard to get to the come point and do the desired operation within a while so it is still a bad system. I will be working on above system to try make it more efficient. If you found this blog helpful then please leave us a comment on our YouTube video and don't forget to subscribe us. The code is available on GitHub.
-* [Code Link]()
-* [YouTube Video Link]()
-
-
-
-```python
-
-```
+* [Code Link](https://github.com/data-coil/7-Days-Of-Computer-Vision-Projects/tree/main/2.%20Air%20Mouse)
+* [YouTube Video Link](https://youtu.be/V-F94Pl8Bf0)
