@@ -286,8 +286,6 @@ Instead of using entire frame as a background image, I an selecting only some po
 </figure> 
 
 ## Experiment 2: Use Thresholding Concept
-
-
 ```python
 # read camera feed
 cam = cv2.VideoCapture(0)
