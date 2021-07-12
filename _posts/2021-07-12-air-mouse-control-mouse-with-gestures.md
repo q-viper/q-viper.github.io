@@ -1,6 +1,6 @@
 ---
 title:  "Air Mouse: Controlling Mouse With Gestures in Air"
-date:   2021-06-12 10:29:17 +0545
+date:   2021-07-12 10:29:17 +0545
 categories:
   - Computer Vision
   - Image Processing
