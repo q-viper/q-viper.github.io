@@ -20,7 +20,7 @@ tags:
 
 
 # 1. Writing a Multi Layer Feedforward Neural Network from Scratch
-All hail to the pandemic Corona virus, without it, we would not have lockdown and i won't have been stuck on village without internet to write these codes. I am not using <i>gist</i> for codes, so don't panic if you find unfriendly text formats. Also i have written this blog on `Markdown` of `Jupyter Notebook` so the formats are bit different. But truth is, the class we will be building will be just like `keras`. Yes Keras! 
+All hail to the pandemic Corona virus, without it, we would not have lockdown and i won't have been stuck on village without internet to write these codes. I am not using <i>gist</i> for codes, so don't panic if you find unfriendly text formats. Also i have written this blog on `Markdown` of `Jupyter Notebook` so the formats are bit different. But truth is, the class we will be building will be just like `keras`. Yes Keras! Entire codes can be found in [this repository](https://github.com/q-viper/ML-from-Basics/tree/master/quark). I have also written about [Convolutional Neurl Network From Scratch](https://q-viper.github.io/2020/06/05/convolutional-neural-networks-from-scratch-on-python/) and the codes are also present on same repository.
 
 ## 1.1 What i am covering on this blog?
 * Honestly, a scary and another blog about writing a Neural Network from scratch but i am leaving all the complex mathematics(also giving links to them on last). 
@@ -610,9 +610,8 @@ E = \frac{1}{m} \sum_{i=1}^m(t_i - o_i)^2
 where `o` is output of model and `t` is target or true label.
 
 * CSE(Cross Entropy):- Good for penalizing bad prediction more. 
-\begin{equation}
-E = \frac{1}{m}\sum_{i=1}^{m} -y*log(h_{(\theta)}(x^i) - (1-y)*log(1-h_{(\theta)}(x^i)
-\end{equation}
+<a href="https://www.codecogs.com/eqnedit.php?latex=\dpi{150}&space;\bg_black&space;\fn_cm&space;\large&space;E&space;=&space;\frac{1}{m}&space;\sum_{i=1}^{m}&space;-y*\log(h_{(\theta)}(x^i))&space;-&space;(1-y)*\log(1-h_{(\theta)}(x^i))" target="_blank"><img src="https://latex.codecogs.com/png.latex?\dpi{150}&space;\bg_black&space;\fn_cm&space;\large&space;E&space;=&space;\frac{1}{m}&space;\sum_{i=1}^{m}&space;-y*\log(h_{(\theta)}(x^i))&space;-&space;(1-y)*\log(1-h_{(\theta)}(x^i))" title="\large E = \frac{1}{m} \sum_{i=1}^{m} -y*\log(h_{(\theta)}(x^i)) - (1-y)*\log(1-h_{(\theta)}(x^i))" /></a>
+
 The loss value returned from above equation is the term required for gradient descent. It will be clear by viewing Gradient Descent.
 
 
@@ -637,9 +636,9 @@ above\ term\ is\ 0\ for\ all\ except\ i=j\\
 
 ii. CSE
 I am skipping long derivatives but note that `d(log(x))/d(x)` = `1/x`.
-\begin{equation}
-E = \frac{1}{m}\sum_{i=1}^{m} -t_i*log(o_i) - (1-t_i)*log(1-o_i)\\
-\end{equation}
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\dpi{150}&space;\bg_black&space;\fn_cm&space;\large&space;E&space;=&space;\frac{1}{m}&space;\sum_{i=1}^{m}&space;-y*\log(h_{(\theta)}(x^i))&space;-&space;(1-y)*\log(1-h_{(\theta)}(x^i))" target="_blank"><img src="https://latex.codecogs.com/png.latex?\dpi{150}&space;\bg_black&space;\fn_cm&space;\large&space;E&space;=&space;\frac{1}{m}&space;\sum_{i=1}^{m}&space;-y*\log(h_{(\theta)}(x^i))&space;-&space;(1-y)*\log(1-h_{(\theta)}(x^i))" title="\large E = \frac{1}{m} \sum_{i=1}^{m} -y*\log(h_{(\theta)}(x^i)) - (1-y)*\log(1-h_{(\theta)}(x^i))" /></a>
+
 \begin{equation}
 \ now\ term\ \frac{d(E_j)}{d(o_j)} = - \frac{t_i}{o_i} + \frac{1-t_i}{1-o_i} will\ be\ calculated.
 \end{equation}
