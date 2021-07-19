@@ -88,7 +88,7 @@ euclidean((4, 3), (0, 0))
 ### Step By Step
 It is necessary to view the landmark position before making a gesture assumptions. Please follow the below image.
 
-![img](landmarks.png)
+![img]({{site.url}}/assets/air-mouse/landmarks.png)
 Source: [Official Hands Page](https://google.github.io/mediapipe/solutions/hands.html)
 
 * Start by beginning a camera.
