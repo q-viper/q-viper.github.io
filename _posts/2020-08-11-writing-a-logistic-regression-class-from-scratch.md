@@ -19,7 +19,7 @@ tags:
 # Logistic Regression
 Logistic Regression is not exactly a regression but it performs a classification. As the name suggests, it uses the logistic function.
 
-<b>This notebook is inspired by the github repo of Tarry Singh and i have referenced most of the codes from that repo. Please leave a star on it.</b>
+<b>This notebook is inspired by the github repo of Tarry Singh and I have referenced most of the codes from that repo. Please leave a star on it.</b>
 * [Artificial Intelligence Deep Learning Machine Learning Tutorials](https://www.github.com/TarrySingh/Artificial-Intelligence-Deep-Learning-Machine-Learning-Tutorials)(Most awesome repository.)
 * Dataset is inside `machine-learning/Logistic Regression/data` folder
 

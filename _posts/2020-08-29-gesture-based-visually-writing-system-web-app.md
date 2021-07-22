@@ -19,7 +19,7 @@ tags:
 {:toc}
 
 ## Introduction
-If i have to write about part, then this is the 5th part or 4th version of <b>Gesture Based Visually Writing System</b>. If you have read my previous blogs on this same topic then you probably know that how much have i progressed from the early version. <b><i>Once my employer suggested me on interview that you must know how to make your code usable by non coder/public only then your skill can be useful.</i></b> I am applying same concept. What he meant was i must learn how to deploy my system to non coder. I am not a pro here but i am writing this deployment code while learning so i am expecting feedbacks, suggestions from readers. On 4th version of system, i wrote a code that was more organized by the concept of OOP. Now i want this system to be deployed. It all starts with what if and if you tried to work on what if, you always will learn new things. On this version, i did wrote some Flask Code for deployment of this project on Web App. I will try to make it simple here as much as possible. For the better understanding of this project requires <b>primary prerequisite to understand the concepts and algorithms used on this blog are to view my previous blogs</b>. Because i am explaining little this time. Follow the [Before Anything](#Before-Anything) section for more information.
+If I have to write about part, then this is the 5th part or 4th version of <b>Gesture Based Visually Writing System</b>. If you have read my previous blogs on this same topic then you probably know that how much have I progressed from the early version. <b><i>Once my employer suggested me on interview that you must know how to make your code usable by non coder/public only then your skill can be useful.</i></b> I am applying same concept. What he meant was I must learn how to deploy my system to non coder. I am not a pro here but I am writing this deployment code while learning so I am expecting feedbacks, suggestions from readers. On 4th version of system, I wrote a code that was more organized by the concept of OOP. Now I want this system to be deployed. It all starts with what if and if you tried to work on what if, you always will learn new things. On this version, I did wrote some Flask Code for deployment of this project on Web App. I will try to make it simple here as much as possible. For the better understanding of this project requires <b>primary prerequisite to understand the concepts and algorithms used on this blog are to view my previous blogs</b>. Because I am explaining little this time. Follow the [Before Anything](#Before-Anything) section for more information.
 
 ### What Now?
 * I will write a code using Flask to deploy previous system on Web App.
@@ -30,18 +30,18 @@ A simple work flow will be something like below.
 I will write a class that will communicate with our existing system and then on every time returns the frames, canvas and detected text to routes.
 
 ### Before Anything
-Before anything, i am requesting you to view my previous blogs and only then return to this blog. Because the blogs below are the earlier version of the codes and concepts. I am still using same concepts and also you will be amazed to see how much i have progressed. I am only going to describe what is happening here on very little. Hence, if you are new to this project then it is best idea to view them. Please view them serially.
+Before anything, I am requesting you to view my previous blogs and only then return to this blog. Because the blogs below are the earlier version of the codes and concepts. I am still using same concepts and also you will be amazed to see how much I have progressed. I am only going to describe what is happening here on very little. Hence, if you are new to this project then it is best idea to view them. Please view them serially.
 * [Gesture Based Visually Writing System Using OpenCV and Python]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
 * [Gesture Based Visually Writing System: Adding Visual User Interface]({{site.url}}/2020/08/11/gesture-based-visually-writing-system-make-a-visual-user-interface/)
 * [Gesture Based Visually Writing System: Adding Virtual Animationn, New Mode and New VUI]({{site.url}}/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/)
 * [Gesture Based Visually Writing System: Add Slider, More Colors and Optimized OOP code]({{site.url}}/2020/08/21/gesture-based-visually-writing-system-add-slider-more-colors-and-optimized-code/)
 
 ### How Come?
-If you are here, then you either are fed up or curious with my posts on LinkedIn or Twitter about Gesture Based Writing System. But however you are here, i am here because of the support people gave me. 
-Many people have suggesting me to share these blogs on Medium, reditt to get more feedbacks and support. But i have very limited amount of cellular data to use hence i publish it on my site then share on LinkedIn and Twitter.
+If you are here, then you either are fed up or curious with my posts on LinkedIn or Twitter about Gesture Based Writing System. But however you are here, I am here because of the support people gave me. 
+Many people have suggesting me to share these blogs on Medium, reditt to get more feedbacks and support. But I have very limited amount of cellular data to use hence I publish it on my site then share on LinkedIn and Twitter.
 
 ## Credits
-I want to give credits of this blogs to everyone on [LinkedIn](https://linkedin.com/in/ramkrishna-acharya-91a217183/) who reacted, shared and commented my previous blog and on [Twitter](https://twitter.com/QuassarianViper) also (most of retweets was from bots lol). I am very grateful that my [this LinkedIn post about previous version](https://www.linkedin.com/posts/ramkrishna-acharya-91a217183_opencv-computervision-python-activity-6699919193124548608-bJI-) got more than 4k reactions and nearly 60k views. I never thought that this will gain so much attention and here i am improving it again. Also my friend [Dip](#) keeps asking me about my next work because he always supports me.
+I want to give credits of this blogs to everyone on [LinkedIn](https://linkedin.com/in/ramkrishna-acharya-91a217183/) who reacted, shared and commented my previous blog and on [Twitter](https://twitter.com/QuassarianViper) also (most of retweets was from bots lol). I am very grateful that my [this LinkedIn post about previous version](https://www.linkedin.com/posts/ramkrishna-acharya-91a217183_opencv-computervision-python-activity-6699919193124548608-bJI-) got more than 4k reactions and nearly 60k views. I never thought that this will gain so much attention and here I am improving it again. Also my friend [Dip](#) keeps asking me about my next work because he always supports me.
 
 ## Motivation
 I am highly motivated by the support people gave me on [LinkedIn](https://www.linkedin.com/posts/ramkrishna-acharya-91a217183_opencv-computervision-python-activity-6699919193124548608-bJI-). 
@@ -52,7 +52,7 @@ I am highly motivated by the support people gave me on [LinkedIn](https://www.li
 
 
 ## Contour Writing: Modifications
-For running this system, i had to modify this system little bit. Only modification needed was on class `ContourWriting` and i am including it below.
+For running this system, I had to modify this system little bit. Only modification needed was on class `ContourWriting` and I am including it below.
 
 ### Initialization
 ```python
@@ -85,7 +85,7 @@ When an object of our ContourWriting is deleted, we want to close our camera and
 Nothing strange happened here, only detected text is assigned to attribute.
 
 ### Method: `main`
-I had modified this method by some lines only. You can see the [codes here too](#Current-Contour-Writing). To make our system run without any possible errors, i tried to wrap codes inside try/except block. Main focus must be given on the try/except block near bottom of the below code.
+I had modified this method by some lines only. You can see the [codes here too](#Current-Contour-Writing). To make our system run without any possible errors, I tried to wrap codes inside try/except block. Main focus must be given on the try/except block near bottom of the below code.
 ```python
     def main(self): 
         try:
@@ -768,7 +768,7 @@ class ContourWriting:
 ```
 
 ## Flask App
-I don't know how to begin about Flask because i have done only few projects on Flask. If you have not installed Flask, then please install it using you package installer conda/pip. I will try to explain little bit of Flask codes but if you are new to flask, try to learn some basics about it too. I am learning Flask from e-books.
+I don't know how to begin about Flask because I have done only few projects on Flask. If you have not installed Flask, then please install it using you package installer conda/pip. I will try to explain little bit of Flask codes but if you are new to flask, try to learn some basics about it too. I am learning Flask from e-books.
 
 ### Project Structure
 * icons
@@ -851,7 +851,7 @@ This method is actually a generator method. This method calls the `main` method 
 * Then we yield the corresponding value (frame or VUI).
 
 ## Index File: index.html
-I want this file to show running feed and the VUI side by side on same page. Hence i must find a way to stack then horizontally. I got help from stackoverflow's comment sections. I am not going to explain the CSS/HTML here because i am not good at them. 
+I want this file to show running feed and the VUI side by side on same page. Hence I must find a way to stack then horizontally. I got help from stackoverflow's comment sections. I am not going to explain the CSS/HTML here because I am not good at them. 
 
 {% raw %}
 ```HTML
@@ -904,7 +904,7 @@ I want this file to show running feed and the VUI side by side on same page. Hen
 
 ```
 {% endraw %}
-To view video feed from camera, we will use image instead of video. It may seem like the video by use but truth is, combination of photos is also a video. So i used image as frame, we won't know that it is image but we feel like a realtime video. And the speed of feed on web app is same as of camera. The `video_feed` is a route that returns the frame as Response object. I am not going to explain much because i am also learning. We have distinct route for distinct image, for frame or live feed we have `video_feed` and for canvas we have `get_canvas` and the Jinja has made it possible. So basically, we will have live feed on left side and our drawing canvas on right side.
+To view video feed from camera, we will use image instead of video. It may seem like the video by use but truth is, combination of photos is also a video. So I used image as frame, we won't know that it is image but we feel like a realtime video. And the speed of feed on web app is same as of camera. The `video_feed` is a route that returns the frame as Response object. I am not going to explain much because I am also learning. We have distinct route for distinct image, for frame or live feed we have `video_feed` and for canvas we have `get_canvas` and the Jinja has made it possible. So basically, we will have live feed on left side and our drawing canvas on right side.
 
 To show the detected text, we have `detection.html` file. We are showing it on the bottom of our page and we are using it on same page by `iframe` tag.
 
@@ -959,7 +959,7 @@ We want to render the `index.html` when user enters the main url. And we want to
 
 
 ### Route: `video_feed`
-As i stated earlier on the `index.html` there were 2 sources defined inside a `img` tag of each image. One of them is `video_feed`. 
+As I stated earlier on the `index.html` there were 2 sources defined inside a `img` tag of each image. One of them is `video_feed`. 
 
 ```python
 @app.route('/video_feed')
@@ -970,7 +970,7 @@ def video_feed():
 On above code, `gw.frame_gen(gw.camera, kind="frame")`, `gw` is object of GestureWeb. The method `frame_gen` is generator. We are passing the object of `ContourWriting` and the kind of thing we are expecting on return. Finally we return the response type via object of Response.
 
 ### Route: `get_canvas`
-As i stated earlier on the `index.html` there were 2 sources defined inside a `img` tag of each image. One of them is `get_canvas`. 
+As I stated earlier on the `index.html` there were 2 sources defined inside a `img` tag of each image. One of them is `get_canvas`. 
 
 ```python
 @app.route('/get_canvas')
@@ -1097,13 +1097,13 @@ if __name__=='__main__':
 
 
 ## Finally
-The result of entire code should look like below. From any terminal run the `app.py` file. I am using VS Code and i have r
+The result of entire code should look like below. From any terminal run the `app.py` file. I am using VS Code and I have r
 <figure>
 <video src = "{{site.url}}/assets/contour-writing/web app.mp4" width="100%" controls autoplay loop> </video>
 <figcaption style = "text-align:left; font-style:italic">Gesture writing on Web App</figcaption>
 </figure> 
 
-This was just a simple deployment on web app. There are numerous system where user can write on their canvas by clicking mouse button and predicting what has been written. Also some people were telling me that we can do this by simple addons also. But i am not trying to prove my methods are best one and should be widely used. I applied what i thought and i implemented ideas onto codes. Now i deployed implementation code to web app. There are still number of problems that i have not found and i hope someone will find it soon. I am eagerly waiting to reply every queries here not only on the LinkedIn. 
+This was just a simple deployment on web app. There are numerous system where user can write on their canvas by clicking mouse button and predicting what has been written. Also some people were telling me that we can do this by simple addons also. But I am not trying to prove my methods are best one and should be widely used. I applied what I thought and I implemented ideas onto codes. Now I deployed implementation code to web app. There are still number of problems that I have not found and I hope someone will find it soon. I am eagerly waiting to reply every queries here not only on the LinkedIn. 
 
 I am going to point out features and shortcomings of this system now. 
 
@@ -1127,7 +1127,7 @@ Shortcomings are most helpful to find new feature on next version. Well here are
 * What if we made a drawing model that can auto complete our drawing.
 
 ## What Next?
-I will try to solve shortcomings on next time. But i am interested to make this system run on mobile phones too. As per now, i am thinking of taking frames from device camera and process it. Then use some API call to get those frame. I might use Unity. I am highly excited to try using LSTMs and other state of the art Deep Learning Algorithms to make this system more awesome but i don't have internet access (other than cellular data) to do broad research.
+I will try to solve shortcomings on next time. But I am interested to make this system run on mobile phones too. As per now, I am thinking of taking frames from device camera and process it. Then use some API call to get those frame. I might use Unity. I am highly excited to try using LSTMs and other state of the art Deep Learning Algorithms to make this system more awesome but I don't have internet access (other than cellular data) to do broad research.
 
 ### Why not read more?
 * [Gesture Based Visually Writing System Using OpenCV and Python]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)

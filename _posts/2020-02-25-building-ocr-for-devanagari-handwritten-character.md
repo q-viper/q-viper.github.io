@@ -49,7 +49,7 @@ tags:
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Devanagari is the national font of Nepal and is used widely throughout the India also. It contains 10 numerals(०, १, २, ३, ४, ५, ६, ७, ८, ९) and 36 consonants (क, ख, ग, घ, ङ, च, छ, ज, झ, ञ, ट, ठ, ड, ढ, ण, त, थ, द, ध,न, प,फ, ब, भ, म, य, र, ल, व, श, ष, स, ह, क्ष, त्र, ज्ञ). Some consonants are complex and made by combine some other. However, throughout this project i considered them as single character.</p>
+<p>Devanagari is the national font of Nepal and is used widely throughout the India also. It contains 10 numerals(०, १, २, ३, ४, ५, ६, ७, ८, ९) and 36 consonants (क, ख, ग, घ, ङ, च, छ, ज, झ, ञ, ट, ठ, ड, ढ, ण, त, थ, द, ध,न, प,फ, ब, भ, म, य, र, ल, व, श, ष, स, ह, क्ष, त्र, ज्ञ). Some consonants are complex and made by combine some other. However, throughout this project I considered them as single character.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
@@ -114,11 +114,11 @@ tags:
 <!-- /wp:html -->
 
 <!-- wp:paragraph -->
-<p>First we will copy the BGR(OpenCv reads on BGR) image and then convert it to Binary Image using OpenCv’s threshold function. Thresholding the image always reduces the complexity of tasks because we will be working on only 2 pixel values 0 and 255. Another important thing is we have to find the background and foreground pixels. This is really tricky part because there will be a case where our text will be white and background be black and vice versa so we need to do some trick to always find foreground and background pixels. Here i checked only 5 pixels from the top left corner. This idea will not always work but for some time it will be good approach.</p>
+<p>First we will copy the BGR(OpenCv reads on BGR) image and then convert it to Binary Image using OpenCv’s threshold function. Thresholding the image always reduces the complexity of tasks because we will be working on only 2 pixel values 0 and 255. Another important thing is we have to find the background and foreground pixels. This is really tricky part because there will be a case where our text will be white and background be black and vice versa so we need to do some trick to always find foreground and background pixels. Here I checked only 5 pixels from the top left corner. This idea will not always work but for some time it will be good approach.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Next we need to find the ROI. Because the text might be situated on any side of the image. So we must find the exact image position and crop it to do further processing. Next We will do segmentation. Here i used only <strong>Numpy for image cropping and segmenting. </strong>This sounds funny but it is <em>true.</em></p>
+<p>Next we need to find the ROI. Because the text might be situated on any side of the image. So we must find the exact image position and crop it to do further processing. Next We will do segmentation. Here I used only <strong>Numpy for image cropping and segmenting. </strong>This sounds funny but it is <em>true.</em></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
@@ -134,7 +134,7 @@ tags:
 <!-- /wp:image -->
 
 <!-- wp:paragraph -->
-<p>Finding the real position of text is another problem. Because on realtime, image can consists lot of noise and there is always a chance of finding the false shapes. To handle this i have wrote some formula. Here i set the some pixel values to be noise and neglect them. Then we keep checking from the top of the image. Whenever we find the foreground pixels more than the noise value, we crop the image from the position <em>current_row — noise_value.</em> We do same for other 3 sides also.</p>
+<p>Finding the real position of text is another problem. Because on realtime, image can consists lot of noise and there is always a chance of finding the false shapes. To handle this I have wrote some formula. Here I set the some pixel values to be noise and neglect them. Then we keep checking from the top of the image. Whenever we find the foreground pixels more than the noise value, we crop the image from the position <em>current_row — noise_value.</em> We do same for other 3 sides also.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:image -->
@@ -150,7 +150,7 @@ tags:
 <!-- /wp:html -->
 
 <!-- wp:paragraph -->
-<p>Now more crazy part is image segmentation using Numpy. We take the copy of cropped image and remove the top most part of the text. On our Nepali, we call it ‘Dika’. By doing this we can actually get some space between characters. So i wrote a general formula which will work for all images.</p>
+<p>Now more crazy part is image segmentation using Numpy. We take the copy of cropped image and remove the top most part of the text. On our Nepali, we call it ‘Dika’. By doing this we can actually get some space between characters. So I wrote a general formula which will work for all images.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:image -->
@@ -174,7 +174,7 @@ tags:
 <!-- /wp:html -->
 
 <!-- wp:paragraph -->
-<p>Localization is the concept of finding the exact image position and showing the border. We use the previous segments and pass them as template and using OpenCv’s template matching method we find the exact position where that segment matched. Of course the template will match 100% but i’ve set the threshold value to 0.8 here. Whenever a template matches, i’ve drawn a rectangle around the matched portion on original image. For this, i have used OpenCv’s rectangle drawing.</p>
+<p>Localization is the concept of finding the exact image position and showing the border. We use the previous segments and pass them as template and using OpenCv’s template matching method we find the exact position where that segment matched. Of course the template will match 100% but i’ve set the threshold value to 0.8 here. Whenever a template matches, i’ve drawn a rectangle around the matched portion on original image. For this, I have used OpenCv’s rectangle drawing.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:image -->
@@ -214,7 +214,7 @@ tags:
 <!-- /wp:html -->
 
 <!-- wp:paragraph -->
-<p>No matter how hard we code there will be always a false positive predictions. But we can try to reduce them. Problem of false positive can happen when the image quality is low and entire text is taken as single character. On that case, we take that as true only if prediction is more than 80%. But on final code to prevent localization of false segments, i have done localization after finding if segment is true. If the prediction is less than 80%, the entire text will be treated as single character and done prediction.</p>
+<p>No matter how hard we code there will be always a false positive predictions. But we can try to reduce them. Problem of false positive can happen when the image quality is low and entire text is taken as single character. On that case, we take that as true only if prediction is more than 80%. But on final code to prevent localization of false segments, I have done localization after finding if segment is true. If the prediction is less than 80%, the entire text will be treated as single character and done prediction.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:image -->
@@ -230,7 +230,7 @@ tags:
 <!-- /wp:html -->
 
 <!-- wp:paragraph -->
-<p>OCR needs camera to work. So i used the OpenCv’s camera methods for doing realtime image capture. Here on above code, i wrote plenty of codes to do some interesting things. The camera will show a rectangular box and we can actually manipulate its shape also. The portion of image lying inside the box will be sent to the recognition process. Here i used some keys like spacebar for capture image, enter key for relatime video, etc.</p>
+<p>OCR needs camera to work. So I used the OpenCv’s camera methods for doing realtime image capture. Here on above code, I wrote plenty of codes to do some interesting things. The camera will show a rectangular box and we can actually manipulate its shape also. The portion of image lying inside the box will be sent to the recognition process. Here I used some keys like spacebar for capture image, enter key for relatime video, etc.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":4} -->
@@ -250,7 +250,7 @@ tags:
 <!-- /wp:image -->
 
 <!-- wp:paragraph -->
-<p>I have tried to do Android App development by using TensorflowLite also but it is still paused. And i am planning to write a code for web app.</p>
+<p>I have tried to do Android App development by using TensorflowLite also but it is still paused. And I am planning to write a code for web app.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->

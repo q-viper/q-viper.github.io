@@ -17,12 +17,12 @@ subtitle: A CNN clasifier using Keras.
 ## Introduction
 Here on this blog, I will be giving a gentle introduction about how to do Region Based Detection project on python from scratch. The scratch means from image capturing to the model release. We have seen lots of computer vision progress but most of them are state of the art and only few of them are helping our Agriculture and Farming.
 
-### How am i here?
+### How am I here?
 My first idea of a project was to create a Computer Vision system that can detect the dead hen from the healthy one but data preparation was not done hence it never started. But when on this lockdown, I was at dad's corn field then I saw infections on corn leaves. Not only ours but entire village's corn leaves were infected/eaten by some pest American fall armyworm (Nepali name <i>American Fauji Kira</i>). So I decided to do something about it. I took images and then tried to find the portion where possibly the infection might have been. 
 Note that this entire project is nowhere to be completed yet by me because of my internet problems but I have managed to work little bit and the entire progress file is provided on the [GitHub link](https://github.com/q-viper/Corn-Infection-Detection/blob/master/Progress.md) about how this project completed and how much time did it take. I am also going to request you to look over the [dataset](https://www.kaggle.com/qramkrishna/corn-leaf-infection-dataset) and then try your own solution. 
 
 ## Credits
-I am living on village and my option of internet is cellular data. From the help of Vikram Krishna, I am using larger data packs these days. I want to give him huge credits. <strike>And also i will transfer these dataset to public domain soon.</strike> These dataset are available.
+I am living on village and my option of internet is cellular data. From the help of Vikram Krishna, I am using larger data packs these days. I want to give him huge credits. <strike>And also I will transfer these dataset to public domain soon.</strike> These dataset are available.
 
 ## Image Acquistion
 Images are taken by myself from the ground using my phone Samsung Galaxy J2 and Samsung Galaxy A30, average image dimension is 3000 by 3500. I have collected 2k+ for each infected/non-infected leaves images. Sample images are given below.
@@ -55,7 +55,7 @@ Annotation of Image can be done by many open source softwares and most popular o
 
 To make our annotation fit with our real image stored on a system, we have to rotate image to 90 degree. Which can be done by numpy's rot90 method.
 
-I am not going to start a tutorial on Annotating images. But i might later write one so keep notified. But below is a simple demo.
+I am not going to start a tutorial on Annotating images. But I might later write one so keep notified. But below is a simple demo.
 <figure>
 <video src = "{{site.url}}\assets\corn-infection-detection/vott use.mp4" width="100%" controls autoplay loop> </video>
 <figcaption style = "text-align:left; font-style:italic">VoTT</figcaption>
@@ -66,13 +66,13 @@ I am not going to start a tutorial on Annotating images. But i might later write
 * I am using only one label i.e. infected. You can change it later too.
 
 ## Image Manipulation
-As i stated earlier, annotation is incorrect. May be this is the problem with my camera or my Vott version but i highly recommend you to check if annotation and your image is aligned right. You can follow [Check Bounding Box](#Check-Bounding-Box) section. hence we have to rotate our image to 90 degree. It is easy to do this using Numpy's rot90. 
+As I stated earlier, annotation is incorrect. May be this is the problem with my camera or my Vott version but I highly recommend you to check if annotation and your image is aligned right. You can follow [Check Bounding Box](#Check-Bounding-Box) section. hence we have to rotate our image to 90 degree. It is easy to do this using Numpy's rot90. 
 
 ## Image Agumentation
 Agumentation of image is tricky because of the Annotation. If we were dealing with classification problem then it would have been lot easier but instead, we are dealing with annotated image and the label is a value of Bounding Box. So while agumenting image, we also have to agument our annotation values too. This problem has taken my days. I will share the codes later.
 
 ## Image Feeding
-Image now has to be feed onto some model inorder to train it. But first i am going to train a simple Region Network which will classify a given patch into one of infected/non-infected class. Because the architectures like RCNN are based on this same idea whether the current part of image is background or foreground. The problem of Region Proposal on this Corn Infection is hard and i am trying to figure it out soon.
+Image now has to be feed onto some model inorder to train it. But first I am going to train a simple Region Network which will classify a given patch into one of infected/non-infected class. Because the architectures like RCNN are based on this same idea whether the current part of image is background or foreground. The problem of Region Proposal on this Corn Infection is hard and I am trying to figure it out soon.
 
 # Implementation
 First make our helper functions ready along with some default directory values.
@@ -229,7 +229,7 @@ for img in os.listdir(images_dir):
 ![png]({{site.url}}\assets\corn-infection-detection\output_12_5.png)
 
 
-Which is clear that our annotation is not doing good so if we rotated them to 90 degree and apply the annotation, it will work. Only problem i had was i was not able to draw rectangle on it and show at the same time. But writing image and re-reading worked.
+Which is clear that our annotation is not doing good so if we rotated them to 90 degree and apply the annotation, it will work. Only problem I had was I was not able to draw rectangle on it and show at the same time. But writing image and re-reading worked.
 
 
 ```python
@@ -282,7 +282,7 @@ Now the annnotations are working as we expected it to work.
 <strong>It became clear that for me, image had to be rotated 90 degree before feeding it to anywhere.</strong>
 
 ## Agumentation Of Image
-Since i had very few images, i thought of making 10 images out of 1 image. Agumentation of data always helps to solve our problem of having less data. Techniques of Agumentation are given below:-
+Since I had very few images, I thought of making 10 images out of 1 image. Agumentation of data always helps to solve our problem of having less data. Techniques of Agumentation are given below:-
 * Flip x
 * Flip y
 * Flip xy
@@ -703,7 +703,7 @@ for i in range(1):
     Total 4000 examples.
     
 
-In above RegionDataGenerator, I have not used images that were agumented. Because agumentation takes time and i am running low on my storage. What we can do is agument image on the time of generating patch image.
+In above RegionDataGenerator, I have not used images that were agumented. Because agumentation takes time and I am running low on my storage. What we can do is agument image on the time of generating patch image.
 
 ## Fit a Classifier
 

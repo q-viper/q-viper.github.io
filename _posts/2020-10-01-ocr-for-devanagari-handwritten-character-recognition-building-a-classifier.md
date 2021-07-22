@@ -32,20 +32,20 @@ This is a part 1 of a blogging series.
 
 
 ## Introduction
-This has been more than a year i did this project and i have already written a blog about it on medium, and my personal blogs also. Looking back to those algorithms i applied on that project makes me still fell proud about it but if i looked over the codes, then i have to step back. Those codes were totally messy and i am thinking of improving the code and entire system. Then i will add a new feature to this project. I will add a Web App.
+This has been more than a year I did this project and I have already written a blog about it on medium, and my personal blogs also. Looking back to those algorithms I applied on that project makes me still fell proud about it but if I looked over the codes, then I have to step back. Those codes were totally messy and I am thinking of improving the code and entire system. Then I will add a new feature to this project. I will add a Web App.
 
 >Devanagari is the national font of Nepal and is used widely throughout the India also. It contains 10 numerals(०, १, २, ३, ४, ५, ६, ७, ८, ९) and 36 consonants (क, ख, ग, घ, ङ, च, छ, ज, झ, ञ, ट, ठ, ड, ढ, ण, त, थ, द, ध,न, प,फ, ब, भ, म, य, र, ल, व, श, ष, स, ह, क्ष, त्र, ज्ञ). 
 
-Some consonants are complex and made by combine some other. However, throughout this project i considered them as single character.
+Some consonants are complex and made by combine some other. However, throughout this project I considered them as single character.
 
 ### Motivation
-This project was done by me on early 2019 but i had a plan of doing it on 2018 then to complete our academic project of BSc.CSIT, i did it. 
+This project was done by me on early 2019 but I had a plan of doing it on 2018 then to complete our academic project of BSc.CSIT, I did it. 
 
 ### Credits
-I would like to give huge credits to the authors of dataset and of course my friends with whom i defended this project.
+I would like to give huge credits to the authors of dataset and of course my friends with whom I defended this project.
 
 ### How?
-The classifier model i used initially was trained on Google Colab, but now for writing of this blog, i am doing it on my own laptop because i am lacking internet access. **Using Colab is always a great idea.**
+The classifier model I used initially was trained on Google Colab, but now for writing of this blog, I am doing it on my own laptop because I am lacking internet access. **Using Colab is always a great idea.**
 
 
 ## Dataset Preparation
@@ -126,7 +126,7 @@ plt.show()
 
 
 ## Model Preparation
-For a classifier model, we will be using a CNN. If you are new to CNN then i have written another blog about this topic. Please follow below.
+For a classifier model, we will be using a CNN. If you are new to CNN then I have written another blog about this topic. Please follow below.
 * CNN from scratch
 * Convolution
 
@@ -202,7 +202,7 @@ model.summary()
     
 
 ### Compile Model
-Using ADAM has many advantages and one of them is learning rate decay. Our dataset is converted into Categorical and hence the softmax activation function will perform better along with categorical loss. If you are interested on knowing more about optimizers, then i have written a blog about [how to write popular ML Optimizers from scratch]().
+Using ADAM has many advantages and one of them is learning rate decay. Our dataset is converted into Categorical and hence the softmax activation function will perform better along with categorical loss. If you are interested on knowing more about optimizers, then I have written a blog about [how to write popular ML Optimizers from scratch]().
 
 
 ```python
@@ -378,10 +378,10 @@ plt.show()
 ![png]({{site.url}}/assets/dcr/output_23_0.png)
 
 
-Seems model is doing alright. I don't have any intentions to do other evaluations right now. So i am heading over to next step.
+Seems model is doing alright. I don't have any intentions to do other evaluations right now. So I am heading over to next step.
 
 ## What next?
-Well this was just a begining part about training a simple classifier but on next blog i will be writing about cropping a text from image. In the meantime you can check my other blogs.
+Well this was just a begining part about training a simple classifier but on next blog I will be writing about cropping a text from image. In the meantime you can check my other blogs.
 
 ### Why not read more?
 * [Gesture Based Visually Writing System Using OpenCV and Python]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)

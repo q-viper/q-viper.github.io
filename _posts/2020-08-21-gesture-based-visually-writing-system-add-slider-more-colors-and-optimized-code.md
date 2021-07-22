@@ -19,13 +19,13 @@ tags:
 {:toc}
 
 ## Introduction
-If i have to write about part, then this is the 4th part or 4th version of <b>Gesture Based Visually Writing System</b>. If you have read my previous blogs on this same topic then you probably know that how much have i progressed from the early version. <b><i>The first best version of anything will be the imporvements of shortcoming.</i></b> I am applying same concept. On previous versions, there were lots of problems, one of them is the structured way of the code. Now on this version, i am using the Object Oriented Way, any concept of OOP will be enough to understand the codes following. And minor image processing concept along with beginner OpenCV knowledge will be enough to know everything about on this blog. But for the better understanding of this project requires <b>primary prerequisite to understand the concepts and algorithms used on this blog are to view my previous blogs</b>. Because i am explaining little this time. Follow the [Before Anything](#Before-Anything) section for more information.
+If I have to write about part, then this is the 4th part or 4th version of <b>Gesture Based Visually Writing System</b>. If you have read my previous blogs on this same topic then you probably know that how much have I progressed from the early version. <b><i>The first best version of anything will be the imporvements of shortcoming.</i></b> I am applying same concept. On previous versions, there were lots of problems, one of them is the structured way of the code. Now on this version, I am using the Object Oriented Way, any concept of OOP will be enough to understand the codes following. And minor image processing concept along with beginner OpenCV knowledge will be enough to know everything about on this blog. But for the better understanding of this project requires <b>primary prerequisite to understand the concepts and algorithms used on this blog are to view my previous blogs</b>. Because I am explaining little this time. Follow the [Before Anything](#Before-Anything) section for more information.
 
 ### What now?
-* Now on this blog, i will be sharing new and more optimized and scalable way of writing codes to perform this task. I am introducing the OOP way.
+* Now on this blog, I will be sharing new and more optimized and scalable way of writing codes to perform this task. I am introducing the OOP way.
 * I will also add new mode. And that mode is the most essential one. A slider to change size of a pointer.
 
-The entire system can be divided onto 3 parts. And if i have to make a diagram then it will be something like below.
+The entire system can be divided onto 3 parts. And if I have to make a diagram then it will be something like below.
 ![png]({{site.url}}/assets/contour-writing/oop.png)
 
 ### VUI
@@ -38,14 +38,14 @@ A class representing writing place. Contour writing sends thep pointer location 
 A class that handles all other classes and performs contour extraction task using OpenCV. This class is responsible for many things and one of them is pointer assignment.
 
 ### Before Anything
-Before anything, i am requesting you to view my previous blogs and only then return to this blog. Because the blogs below are the earlier version of the codes and concepts. I am still using same concepts and also you will be amazed to see how much i have progressed. I am only going to describe what is happening here on very little. Hence, if you are new to this project then it is best idea to view them. Please view them serially.
+Before anything, I am requesting you to view my previous blogs and only then return to this blog. Because the blogs below are the earlier version of the codes and concepts. I am still using same concepts and also you will be amazed to see how much I have progressed. I am only going to describe what is happening here on very little. Hence, if you are new to this project then it is best idea to view them. Please view them serially.
 * [Gesture Based Visually Writing System Using OpenCV and Python]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
 * [Gesture Based Visually Writing System: Adding Visual User Interface]({{site.url}}/2020/08/11/gesture-based-visually-writing-system-make-a-visual-user-interface/)
 * [Gesture Based Visually Writing System: Adding Virtual Animationn, New Mode and New VUI]({{site.url}}/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/)
 
 ## Credits
-I want to give credits of this blogs to everyone on [LinkedIn](https://linkedin.com/in/ramkrishna-acharya-91a217183/) who reacted, shared and commented my previous blog and on [Twitter](https://twitter.com/QuassarianViper) also (most of retweets was from bots lol). I am very grateful that my [this LinkedIn post about previous version](https://www.linkedin.com/posts/ramkrishna-acharya-91a217183_opencv-computervision-python-activity-6699919193124548608-bJI-) got more than 2.2k reactions and nearly 30k views. I never thought that this will gain so much attention and here i am improving it again. 
-If i have to take a name and reason for credits:-
+I want to give credits of this blogs to everyone on [LinkedIn](https://linkedin.com/in/ramkrishna-acharya-91a217183/) who reacted, shared and commented my previous blog and on [Twitter](https://twitter.com/QuassarianViper) also (most of retweets was from bots lol). I am very grateful that my [this LinkedIn post about previous version](https://www.linkedin.com/posts/ramkrishna-acharya-91a217183_opencv-computervision-python-activity-6699919193124548608-bJI-) got more than 2.2k reactions and nearly 30k views. I never thought that this will gain so much attention and here I am improving it again. 
+If I have to take a name and reason for credits:-
 * [Sagar Dhungel](https://www.linkedin.com/in/sagardhungel/): Who motivates me to write more.
 * [Suraj Bista](https://www.linkedin.com/in/suraj-bista-282830126): Who motivates me to write more.
 * [Pitambar Mahato](https://www.linkedin.com/in/pitambar-mahato-245621140/): Who reads my all blogs and gives feedbacks.
@@ -73,7 +73,7 @@ def show(img, figsize=(10, 10)):
 ```
 
 ## VUI: Visual User Interface
-I don't know if the term VUI for Visual User Interface is already used and if this term is right one now to use. But i am using it anyway on the purpose that we are interacting with video frames. This time instead of a simple variable, i am using a new and robust way of defining VUI. A VUI Class.
+I don't know if the term VUI for Visual User Interface is already used and if this term is right one now to use. But I am using it anyway on the purpose that we are interacting with video frames. This time instead of a simple variable, I am using a new and robust way of defining VUI. A VUI Class.
 
 ### Initialize Class
 The class is initialized with default parameters and setting useful parameters ahead of program run.
@@ -153,7 +153,7 @@ class VUI:
 * `colors`: list of colors in RGB for chosing colors
 * `icons`: value set by method `prepare_icons`.
 
-Each and every attribute has its own usecase and i tried to make it lesser. Some variables like count, current/previous are important to change modes/colors so they must be tuned properly. 
+Each and every attribute has its own usecase and I tried to make it lesser. Some variables like count, current/previous are important to change modes/colors so they must be tuned properly. 
 
 
 
@@ -360,7 +360,7 @@ This method is called from the main class of writing. Method performs too many t
 * Return the output of `get_window` method.
 
 ### Test Class: VUI
-To test the class, we will call the method `update_vui` by passing it a pointer. To make sure our dropdown is working fine i will set pointer to color's region. And to show animating like effect, i will call it multiple times. See the result below.
+To test the class, we will call the method `update_vui` by passing it a pointer. To make sure our dropdown is working fine I will set pointer to color's region. And to show animating like effect, I will call it multiple times. See the result below.
 
 
 ```python
@@ -611,7 +611,7 @@ plt.show()
 ![png]({{site.url}}/assets/contour-writing/output_20_9.png)
 
 
-The test above is done on draw mode and erase with different pointer size. What have i done?
+The test above is done on draw mode and erase with different pointer size. What have I done?
 * Made a figure and subplots for 6 images.
 * Draw a color on canvas at pointer position at different position.
 * Make pointer position at slider region and made it move.
@@ -624,7 +624,7 @@ Test passed.
 A class to perform overall operation using contours. I have worked hard to maintain the codes here by updating previous codes.
 
 ### Initialize: Contour Writing
-Instead of using a distinct variable for each ROIs, i thought of using dictionaries to store particular property only. The keys of a dictionary will be ROI name and value will be the type of data to store.
+Instead of using a distinct variable for each ROIs, I thought of using dictionaries to store particular property only. The keys of a dictionary will be ROI name and value will be the type of data to store.
 ```python
 class ContourWriting:
     """
@@ -937,7 +937,7 @@ I have used 9 modes total. Until now, draw, erase, move, color have been used bu
 * If running mode is detect, then change running mode to move and call detector method.
 
 ### Method: Detector
-A method that takes current canvas and performs detection using detection model like OCR. For now, i am using Tesseract.
+A method that takes current canvas and performs detection using detection model like OCR. For now, I am using Tesseract.
 ```python
     def detector(self):
         img = self.canvas.canvas.astype(np.uint8)
@@ -1617,7 +1617,7 @@ Shortcomings are most helpful to find new feature on next version. Well here are
 * What if we can create a model that can classify gesture and we can define a certain gesture for certain mode?
 
 ## What Next?
-I will try to solve shortcomings on next time. But i am interested to make this system run on mobile phones too. As per now, i am thinking of taking frames from device camera and process it. Then use some API call to get those frame. I might use Unity. I am highly excited to try using LSTMs and other state of the art Deep Learning Algorithms to make this system more awesome but i don't have internet access (other than cellular data) to do broad research.
+I will try to solve shortcomings on next time. But I am interested to make this system run on mobile phones too. As per now, I am thinking of taking frames from device camera and process it. Then use some API call to get those frame. I might use Unity. I am highly excited to try using LSTMs and other state of the art Deep Learning Algorithms to make this system more awesome but I don't have internet access (other than cellular data) to do broad research.
 
 ### Why not read more?
 * [Deploying a RASA Chatbot on Android using Unity3d]({{site.url}}/2020/08/04/deploying-a-simple-rasa-chatbot-on-unity3d-project-to-make-a-chatbot-for-android-devices/)

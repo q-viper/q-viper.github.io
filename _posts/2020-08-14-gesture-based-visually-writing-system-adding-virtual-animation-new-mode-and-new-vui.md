@@ -19,7 +19,7 @@ tags:
 {:toc}
 
 ## Introduction
-From last some weeks, i have been busy with some simple yet hard task of writing anything on canvas just by moving fingers (still is writable by moving anything) in front of the camera. Initially i got huge help to extract contours from [this article](https://gogul.dev/software/hand-gesture-recognition-p1). Then i was on my own to think something new and try to make it happen. Up to this point, a user can work with different modes and these modes are accessible by either keyboard or from the VUI region of the frame. But why to use keys when one can perform task using only waving fingers on the air?
+From last some weeks, I have been busy with some simple yet hard task of writing anything on canvas just by moving fingers (still is writable by moving anything) in front of the camera. Initially I got huge help to extract contours from [this article](https://gogul.dev/software/hand-gesture-recognition-p1). Then I was on my own to think something new and try to make it happen. Up to this point, a user can work with different modes and these modes are accessible by either keyboard or from the VUI region of the frame. But why to use keys when one can perform task using only waving fingers on the air?
 * exit:- Exit from system.
 * save:- Save current drawing(excluding pointer).
 * move:- Idle mode(move only pointer).
@@ -29,7 +29,7 @@ From last some weeks, i have been busy with some simple yet hard task of writing
 * restart:- Restart the average and canvas.
 
 ### What now?
-* Now on this blog, i will try to add some new features. When a user moves pointer on canvas above the modes icon, i want to make it look like animated. It can happen just by scaling that icon image little bit.
+* Now on this blog, I will try to add some new features. When a user moves pointer on canvas above the modes icon, I want to make it look like animated. It can happen just by scaling that icon image little bit.
 * I will add new option to change color.
 
 This blog will be divided on to 3 parts. Simple to harder.
@@ -39,22 +39,22 @@ This blog will be divided on to 3 parts. Simple to harder.
 
 
 ## Before Anything
-Before anything, i recommend you to view previous 2 parts from the beginning to make it easier to understand here. 
+Before anything, I recommend you to view previous 2 parts from the beginning to make it easier to understand here. 
 
 * [Gesture Based Visually Writing System Using OpenCV and Python]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
 * [Gesture Based Visually Writing System: Adding Visual User Interface]({{site.url}}/2020/08/11/gesture-based-visually-writing-system-make-a-visual-user-interface/)
 
-Also while begining this blog, i only had idea on the mind so there is not much chance of being this system best but i will try to make it work. I have not proceeded to do codes yet but will figure out the ways later.
+Also while begining this blog, I only had idea on the mind so there is not much chance of being this system best but I will try to make it work. I have not proceeded to do codes yet but will figure out the ways later.
 
 ## Credits
-I want to give credits of this blogs to everyone on [LinkedIn](https://linkedin.com/in/ramkrishna-acharya-91a217183/) who reacted, shared and commented my previous blog and on twitter also (most of retweets was from bots lol). My journey on AI was inspired by [mr.Pujan Thapa](#), (i have met him only once but he doesn't knows the truth) so i want to give him huge credits.
+I want to give credits of this blogs to everyone on [LinkedIn](https://linkedin.com/in/ramkrishna-acharya-91a217183/) who reacted, shared and commented my previous blog and on twitter also (most of retweets was from bots lol). My journey on AI was inspired by [mr.Pujan Thapa](#), (i have met him only once but he doesn't knows the truth) so I want to give him huge credits.
 
 
 ## New Mode
-New VUI is need for working with multi color. First i will make it work by keyboard. Then by contours. For simplicity, i will use 3 colors, Red, Green and Blue. So this new mode will be color mode. 
+New VUI is need for working with multi color. First I will make it work by keyboard. Then by contours. For simplicity, I will use 3 colors, Red, Green and Blue. So this new mode will be color mode. 
 
 ### Concepts
-Again, it will be very helpful if someone finds a better way of doing this task on lesser computation but i am writing an idea. From the last system, i am going to use the variable `vui` which is stackked horizontally before showing it to user. Now on this `vui`, we only stackked top part of it but we rejected the bottom part i.e. ```python new_canvas = np.vstack([vui[:100], drawn_new]).astype(np.uint8) ```. But now, we will use the other parts also on the case when we have to choose the color from virtual dropdown menu. What i mean by virtual is, it will act like a dropdown but in real, it will be just an horizontally stackked arrays. 
+Again, it will be very helpful if someone finds a better way of doing this task on lesser computation but I am writing an idea. From the last system, I am going to use the variable `vui` which is stackked horizontally before showing it to user. Now on this `vui`, we only stackked top part of it but we rejected the bottom part i.e. ```python new_canvas = np.vstack([vui[:100], drawn_new]).astype(np.uint8) ```. But now, we will use the other parts also on the case when we have to choose the color from virtual dropdown menu. What I mean by virtual is, it will act like a dropdown but in real, it will be just an horizontally stackked arrays. 
 * Take a final `vui` and when the mode is color, 
     * Find where our pointer lies
     * If pointer lies within the dropdown area then take the coordinate and the color related to the dropdown's that part.
@@ -110,7 +110,7 @@ show(colors_holder)
 
 
 ### Attach colors image on VUI
-I am using the Icons panel or VUI ROI above the Draw ROI. Also i have modified little bit of `run_system` method.
+I am using the Icons panel or VUI ROI above the Draw ROI. Also I have modified little bit of `run_system` method.
 ```python
 def run_system(count_mode=5):
     #accumulate weight variable
@@ -260,9 +260,9 @@ And finally, and the codes where `erase==None` was present, it must be slightly 
 ```
 
 #### What is happening?
-* Initially, i prepared icons for colors and also prepared image for it.
-* Then i added new variable `current_color`, which will be responsible for changing color.
-* Then i added new variable to store RGB values for 3 colors.
+* Initially, I prepared icons for colors and also prepared image for it.
+* Then I added new variable `current_color`, which will be responsible for changing color.
+* Then I added new variable to store RGB values for 3 colors.
 * When pressing key `v` or going to the mode named `color`, we will change our running mode to `color`.
 * When running mode is `color` then, show the `vui` image with dropdown like colors panel (look at `erase==None`)
 * On running mode, we find the current position of pointer on ROI, then compare it with Drawing canvas. Because `vui` and drawing canvas are same sized.
@@ -278,7 +278,7 @@ The final code must show the result like below.
 </figure> 
 
 ## Adding Animation Effect
-The term animation will be nothing but a fake animation here. I have only one thing on mind to do as animation. I have never used Animation on OpenCV but used with Matplotlib many times. But here i have few ideas with performing animation like features.
+The term animation will be nothing but a fake animation here. I have only one thing on mind to do as animation. I have never used Animation on OpenCV but used with Matplotlib many times. But here I have few ideas with performing animation like features.
 * Resize the portion/box which holds the icon. It makes look like scaled.
 * Rotate the portion/box which holds the icon. It makes look like spinning.
 * Change the color.
@@ -286,7 +286,7 @@ The term animation will be nothing but a fake animation here. I have only one th
 Among these, easiest one is to chane the color. I will start with this one.
 
 ### Animation Effect: Change Color
-One thing a clever man (performer or magician) always tries to take an attention of everyone by guessing what might surprise the audience. There is nothing like a magic but all is the since used to fool people. And here i will use the term Animation but everything i will be doing is change the color. Why does it looks like animating? Well lets see on the output. How to make a box/icon change its color when a pointer is above it? Lets write it on steps:-
+One thing a clever man (performer or magician) always tries to take an attention of everyone by guessing what might surprise the audience. There is nothing like a magic but all is the since used to fool people. And here I will use the term Animation but everything I will be doing is change the color. Why does it looks like animating? Well lets see on the output. How to make a box/icon change its color when a pointer is above it? Lets write it on steps:-
 * Since we have 9 icons, we will have 9 boxes on both the ROI and VUI. So divide the VUI's icon panel on 9 boxes. (note that we need 10 cuts to make 9 sticks from 1)
 * We already have used the box from ROI to find the current mode. Now we need to find the index of current mode.
 * Since current mode and boxes are indexed in same order, we can use index of current mode to get index of box on VUI.
@@ -353,7 +353,7 @@ The result must look like below.
 The color is changing rapidly, which is not helping that much so we can use less value of pixels to add.
 
 ### Animation Effect: Scale
-Again, i am going to use simple technique to perform scale like feature.
+Again, I am going to use simple technique to perform scale like feature.
 
 ```python
                     ## Change color on current box
@@ -420,7 +420,7 @@ Now the result should look like below:-
 Currently, the scaling happens real fast. Tuning the values will make it smoother.
 
 ## Bonus Topic
-For the bonus topic, i am willing to make little easier vui. I want this system to be able to run with dual hand but only move/draw is usable by left hand. Doing this way, i can do other things like choose color from right hand and move/draw mode by left. And the final code looks like below. Honestly, i can not even understand the codes below after a day because it is so messy. I hope i can make it more factored.
+For the bonus topic, I am willing to make little easier vui. I want this system to be able to run with dual hand but only move/draw is usable by left hand. Doing this way, I can do other things like choose color from right hand and move/draw mode by left. And the final code looks like below. Honestly, I can not even understand the codes below after a day because it is so messy. I hope I can make it more factored.
 
 
 
@@ -856,13 +856,13 @@ def run_system(count_mode=5, avg_frames=100, hroi=[250, 400, 480, 681],
 run_system(avg_frames=30)
 ```
 
-To make it work from left and right side, i have added new ROI on left. 
+To make it work from left and right side, I have added new ROI on left. 
 * When there is more than 50 contour points detected then one of move/draw is chosen.
 * We are dividing the box of move/draw on 2 equal parts, left part for moving cursor and right for draw mode.
 * Then we re assigned `vui`, else the color dropdown will be visible whenever we draw.
-* Also i have made few modifications inside each condition of `erase`, to save the drawn image.
+* Also I have made few modifications inside each condition of `erase`, to save the drawn image.
 
-The output of above code should look like below. <b> Note that i have disabled some modes to make it fast and easier to show demo. Because my room was having frequent light change due to rainy day and blackout.</b>
+The output of above code should look like below. <b> Note that I have disabled some modes to make it fast and easier to show demo. Because my room was having frequent light change due to rainy day and blackout.</b>
 
 ### Final Result
 <figure>
@@ -890,7 +890,7 @@ Shortcomings are most helpful to find new feature on next version. Well here are
 * The background has to be taken many times to take average.
 
 ## What Next?
-I will try to solve shortcomings on next time. But i am interested to make this system run on mobile phones to. As per now, i am thinking of taking frames from device camera and process it. Then use some API call to get those frame. I might use Unity. I am highly excited to try using LSTMs and other state of the art Deep Learning Algorithms to make this system more awesome but i don't have internet access (other than cellular data) to do broad research.
+I will try to solve shortcomings on next time. But I am interested to make this system run on mobile phones to. As per now, I am thinking of taking frames from device camera and process it. Then use some API call to get those frame. I might use Unity. I am highly excited to try using LSTMs and other state of the art Deep Learning Algorithms to make this system more awesome but I don't have internet access (other than cellular data) to do broad research.
 
 ### Why not read more?
 * [Deploying a RASA Chatbot on Android using Unity3d]({{site.url}}/2020/08/04/deploying-a-simple-rasa-chatbot-on-unity3d-project-to-make-a-chatbot-for-android-devices/)

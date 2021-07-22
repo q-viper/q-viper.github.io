@@ -24,7 +24,7 @@ subtitle: A CNN clasifier using Keras.
 ## Introduction
 Flask is a microservices providing framework on python flask is run on server side and it has great benefits of this.
 
-I For the requirement of this blog, it is essential to have trained model. And i have already written a easy blog about that. I have a 2 blog series where i have written from preprocessing to production of Face Mask Detection using Tensorflow, OpenCV, Streamlit and Heroku. To train a classifier, you only have to follow first part.
+I For the requirement of this blog, it is essential to have trained model. And I have already written a easy blog about that. I have a 2 blog series where I have written from preprocessing to production of Face Mask Detection using Tensorflow, OpenCV, Streamlit and Heroku. To train a classifier, you only have to follow first part.
 
 * [Part 1: Deploying Face Mask Classifier on Heroku: Building a Classifier]({{site.url}}/2020/10/14/deploying-face-mask-classifier-on-heroku-classifier/)
 * [Part 2: Deploying Face Mask Classifier on Heroku: Deploy It]({{site.url}}/2020/10/14/deploying-face-mask-classifier-on-heroku-deploy/)

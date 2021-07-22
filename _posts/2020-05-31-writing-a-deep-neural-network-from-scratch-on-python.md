@@ -20,15 +20,15 @@ tags:
 
 
 # 1. Writing a Multi Layer Feedforward Neural Network from Scratch
-All hail to the pandemic Corona virus, without it, we would not have lockdown and i won't have been stuck on village without internet to write these codes. I am not using <i>gist</i> for codes, so don't panic if you find unfriendly text formats. Also i have written this blog on `Markdown` of `Jupyter Notebook` so the formats are bit different. But truth is, the class we will be building will be just like `keras`. Yes Keras! 
+All hail to the pandemic Corona virus, without it, we would not have lockdown and I won't have been stuck on village without internet to write these codes. I am not using <i>gist</i> for codes, so don't panic if you find unfriendly text formats. Also I have written this blog on `Markdown` of `Jupyter Notebook` so the formats are bit different. But truth is, the class we will be building will be just like `keras`. Yes Keras! 
 
-## 1.1 What i am covering on this blog?
-* Honestly, a scary and another blog about writing a Neural Network from scratch but i am leaving all the complex mathematics(also giving links to them on last). 
-* This blog will also act as <b>prerequisites concept for Convolutional Neural Network from scratch</b> which i will write on next blog.
+## 1.1 What I am covering on this blog?
+* Honestly, a scary and another blog about writing a Neural Network from scratch but I am leaving all the complex mathematics(also giving links to them on last). 
+* This blog will also act as <b>prerequisites concept for Convolutional Neural Network from scratch</b> which I will write on next blog.
 * Doing MNIST classification using `softmax crossentropy` and `GD` optimizer.
 * Saving and loading model.
 
-For this code, i will be using:
+For this code, I will be using:
 * `numpy`
 * `matplotlib` for plotting
 * `pandas` for just summary
@@ -231,10 +231,10 @@ Total parameters of a layer is total number of weights plus total biases.
         self.get_parameters()
 ```
 
-This method will be called from the stackking class. And i have made this method to be identical to the `CNN` layers.
+This method will be called from the stackking class. And I have made this method to be identical to the `CNN` layers.
 
 ### 3.1.8 Finally, last but not least, a backpropagation method of this layer. 
-<b> Note that every layer have different way of passing error backwards. I have done CNN from scratch hence i am making this article to support that one also.</b>
+<b> Note that every layer have different way of passing error backwards. I have done CNN from scratch hence I am making this article to support that one also.</b>
 ```python
     def backpropagate(self, nx_layer):
         self.error = np.dot(nx_layer.weights, nx_layer.delta)
@@ -487,7 +487,7 @@ And the weight update term for all units is:-
 w_{ji} = w_{ji} -  \triangle w_{ji}\\
 \end{equation}
 
-<b> The Gradient Descent algorithm will be easier to understand after we specify the activation function and loss function. Which i will be covering on below parts.</b>
+<b> The Gradient Descent algorithm will be easier to understand after we specify the activation function and loss function. Which I will be covering on below parts.</b>
 
 ### 3.2.5 Training Method
 ```python
@@ -830,7 +830,7 @@ The pseudo code or explation of above code is:
 * If validation data is given on `val_x, val_y` then check their trainnable also.
 * Else, we will split the prepared indices of data for train and validation.
 * First we get number of indices for validation, then get indices for them and data too.
-* We will also edit `curr_ind` Instead of using actual data, i am using only indices because of memory.
+* We will also edit `curr_ind` Instead of using actual data, I am using only indices because of memory.
 * Then train just as above processes.
 * For `show_every`, We do pass entire train data and get accuracy, loss. And do similar for vlaidation set.
 
@@ -867,7 +867,7 @@ The pseudo code or explation of above code is:
 Nothing strange happening here. We are only using the keys and values of previously stored train/val acc/loss. If we set `show_every=1` then, graph will be shown great.
 
 # 5 Finally
-My version of final Feedforward Deep Neural Network will be given on the link and at the meantime, i am gonna share my results.
+My version of final Feedforward Deep Neural Network will be given on the link and at the meantime, I am gonna share my results.
 
 ```python
     from keras.datasets import mnist

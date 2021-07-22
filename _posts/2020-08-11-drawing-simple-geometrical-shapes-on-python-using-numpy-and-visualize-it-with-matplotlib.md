@@ -20,15 +20,15 @@ tags:
 
 
 # Making Simple Geometrical Shapes on Python using NumPy and Matplotlib
-Now on this series of task i am going to tackle some of interesting image processing concepts from scratch using Python and then will compare it with popular OpenCV framework. Last time i did Convolution operation from Scratch and RGB to GrayScale conversion, etc. Now is the time to draw circle, rectangle, ellipse and get the flashback of childhood. I am highly inspired by the book named <b>Image Operators: Image Processing in Python by Jason M. Kinser.</b> In fact i am going to use some simple geometrical concepts to draw these basic shapes using only NumPy and Matplotlib.
+Now on this series of task I am going to tackle some of interesting image processing concepts from scratch using Python and then will compare it with popular OpenCV framework. Last time I did Convolution operation from Scratch and RGB to GrayScale conversion, etc. Now is the time to draw circle, rectangle, ellipse and get the flashback of childhood. I am highly inspired by the book named <b>Image Operators: Image Processing in Python by Jason M. Kinser.</b> In fact I am going to use some simple geometrical concepts to draw these basic shapes using only NumPy and Matplotlib.
 
-Also i have to mention the awesome book named <b> The Journey of X: A Guided Tour of Mathematics by Steven Strogatz.</b> Author really have a great way of describing the mathematical terms and i have learned lot of concepts on Mathematics from there. And author also introduced to the awesome book named <b>The House Keeper and the Professor</b>.
+Also I have to mention the awesome book named <b> The Journey of X: A Guided Tour of Mathematics by Steven Strogatz.</b> Author really have a great way of describing the mathematical terms and I have learned lot of concepts on Mathematics from there. And author also introduced to the awesome book named <b>The House Keeper and the Professor</b>.
 
-The method i am including here will be added to the previous Image Processing Class (which is also given below) i have used to do Convolution and Colorspace changes. So it will be helpful to view that one also.
+The method I am including here will be added to the previous Image Processing Class (which is also given below) I have used to do Convolution and Colorspace changes. So it will be helpful to view that one also.
 * [Writing a Image Processing Class from Scratch on Python]({{site.url}}/2020/05/30/image-processing-class-from-scratch-on-python/)
 
-## What will i do here?
-* Using primary grade mathematics, i will create a simple methods to draw/create a simple geometric shapes and compare them with OpenCV's own methods.
+## What will I do here?
+* Using primary grade mathematics, I will create a simple methods to draw/create a simple geometric shapes and compare them with OpenCV's own methods.
 
 
 ```python
@@ -186,7 +186,7 @@ ip.show(img)
 
 
 ## Circle
-Everyone knows what is circle but only few cares how did it originated? Thanks to Euclid and his contribution to the modern Mathematics. Circle on simple term can be thought of as a shape where infinite points are present and the distance between two consecutive two points is infinitesimally small. The Computer Graphics doesn't cares about that what it needs is a number. So if we zoom the shapes we start to see the pixels crystal clear. Here i will be using a simple concept of drawing a circle. I will be using the concept of polar form. If i have to write it on steps then:-
+Everyone knows what is circle but only few cares how did it originated? Thanks to Euclid and his contribution to the modern Mathematics. Circle on simple term can be thought of as a shape where infinite points are present and the distance between two consecutive two points is infinitesimally small. The Computer Graphics doesn't cares about that what it needs is a number. So if we zoom the shapes we start to see the pixels crystal clear. Here I will be using a simple concept of drawing a circle. I will be using the concept of polar form. If I have to write it on steps then:-
 * Read an input image, get a radius for circle, get a center point, get a border, get a smoothness value and get a color value for it.
 * Prepare smoothness * 360 angles for circle (of course 0 to 360).
 * For each angle:
@@ -330,7 +330,7 @@ Let me explain little bit of the code above.
 Before comparing with OpenCV, lets have a clear understanding of 2d graph plane and image plane. Image plane starts from the top left side but 2d graph plane starts from the center to upwards. Hence in order to compare our circle, we have to change the center value (in this case).
 ![png]({{site.url}}/assets/drawing-scratch/planes.png)
 
-And on this case, i am just swapping center values (i.e. `(x, y)` for OpenCV and `(y, x)` for ours).
+And on this case, I am just swapping center values (i.e. `(x, y)` for OpenCV and `(y, x)` for ours).
 
 * Draw circle on image using OpenCV
 * Draw circle on same image using our method.
@@ -756,7 +756,7 @@ diff * 100 / (shape[0] * shape[1])
 The difference of OpenCV's and our method's output is not that bad. But as always, the difference depends on the size of the shape.
 
 ## Finally
-We have written simple methods to perform basic geometric shapes drawing. Now on bonus topic i will add these methods on our Image Processing class.
+We have written simple methods to perform basic geometric shapes drawing. Now on bonus topic I will add these methods on our Image Processing class.
 
 ## Bonus Topic
 

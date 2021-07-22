@@ -19,9 +19,9 @@ categories:
 
 # 1 Writing a Image Processing Codes from Python on Scratch
 
-What will you do when you suddenly think about `Convolutional Neural Networks from Scratch` while serving cows? For me, i wrote some codes for image processing before thinking about those codes. Once again i am not going to write another `OpenCV` here.
+What will you do when you suddenly think about `Convolutional Neural Networks from Scratch` while serving cows? For me, I wrote some codes for image processing before thinking about those codes. Once again I am not going to write another `OpenCV` here.
 
-## 1.1 What am i using?
+## 1.1 What am I using?
 * `Numpy` for array operations
 * `imageio` builtin library for reading image
 * `warnings` to show warning
@@ -66,7 +66,7 @@ class ImageProcessing:
         return img
 ```
 
-* This method only wraps the `imageio`, but i am applying a concept of `RGB` to `GRAYSCALE` conversion.
+* This method only wraps the `imageio`, but I am applying a concept of `RGB` to `GRAYSCALE` conversion.
 * By default, imageio reads on RGB format.
 * A typical `RGB` to `GRAYSCALE` can be done on below concepts ([taken from](https://www.tutorialspoint.com/dip/grayscale_to_rgb_conversion.htm)):-
     * Average Method:
@@ -79,7 +79,7 @@ class ImageProcessing:
         Grayscale = 0.3*R + 0.59*G + 0.11*B
         \end{equation}
         Red channel have 30%, Green have 59 and Blue have 11% contribution.\
-        But i am using different version of method ([taken from](https://www.johndcook.com)).
+        But I am using different version of method ([taken from](https://www.johndcook.com)).
 * If user enter different mode, then raise error.
 
 

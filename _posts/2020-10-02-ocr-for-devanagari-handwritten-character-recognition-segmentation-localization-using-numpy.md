@@ -29,7 +29,7 @@ This is a part 2 of a blogging series.
 {:toc}
 
 ## Introduction
-This is the part where most of my efforts were used. Image Segmentation using NumPy sounds stupid idea but it actually is very interesting to work on. So here on this blog i will try to make a segmentation faster and easier than the previous project also i will try to make this OOP styled.
+This is the part where most of my efforts were used. Image Segmentation using NumPy sounds stupid idea but it actually is very interesting to work on. So here on this blog I will try to make a segmentation faster and easier than the previous project also I will try to make this OOP styled.
 
 ## Dummy Image
 Go to paint and draw a text just like below or for the best practice download the image below.
@@ -367,7 +367,7 @@ classifier(segments[0])
 Now most of methods are done well. Now is the time to wrap our all methods inside a class.
 
 ## Class: Devanagari Handwritten Character OCR
-I am not going to explain much about this class because i have already explained most of the methods above. But i have modified some methods and added some other methods too. I encourage you to look from the `main` method.
+I am not going to explain much about this class because I have already explained most of the methods above. But I have modified some methods and added some other methods too. I encourage you to look from the `main` method.
 
 
 ```python

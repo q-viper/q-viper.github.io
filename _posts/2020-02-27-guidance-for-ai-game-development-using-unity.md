@@ -17,7 +17,7 @@ tags:
 {:toc}
 
 <!-- wp:paragraph -->
-<p>As becoming a Machine Learning enthusiast, i searched for some resources where i can learn Reinforcement Learning. Then at the same time i found about Unity. Unity is a good platform for new comers on the field of Game Development and which myself found as great resource for learning.  Plus i will guide through to getting Unity Learning Premium.</p>
+<p>As becoming a Machine Learning enthusiast, I searched for some resources where I can learn Reinforcement Learning. Then at the same time I found about Unity. Unity is a good platform for new comers on the field of Game Development and which myself found as great resource for learning.  Plus I will guide through to getting Unity Learning Premium.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:image {"id":177,"width":582,"height":38,"sizeSlug":"large","linkDestination":"custom"} -->

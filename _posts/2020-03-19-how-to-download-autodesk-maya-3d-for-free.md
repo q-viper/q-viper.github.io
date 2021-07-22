@@ -14,7 +14,7 @@ tags:
   - maya
 ---
 <!-- wp:image {"id":205,"width":264,"height":264,"sizeSlug":"large"} -->
-<figure class="wp-block-image size-large is-resized"><img src="{{site.url}}/wp-content/uploads/2020/03/image.jpeg" alt="autodesk mayaको लागि तस्बिर परिणाम" class="wp-image-205" width="264" height="264"/></figure>
+<figure class="wp-block-image size-large is-resized"><img src="{{site.url}}/wp-content/uploads/2020/03/image.jpeg" alt="autodesk maya" class="wp-image-205" width="264" height="264"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:paragraph -->

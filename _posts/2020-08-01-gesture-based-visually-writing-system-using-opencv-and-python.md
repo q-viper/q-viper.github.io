@@ -29,15 +29,15 @@ This is the first part of [Gesture Based Visually Writing System](https://github
 * [Gesture Based Visually Writing System: Building a Web App Using Flask]({{site.url}}/2020/08/28/gesture-based-visually-writing-system-web-app/)
 
 ## Before Starting
-Huge credit goes to the pandemic COVID19 and without it, i would have not been another unemployed and the thoughts of writing this blog won't have appear. Also the climate change, due to which i usually have blackouts.
+Huge credit goes to the pandemic COVID19 and without it, I would have not been another unemployed and the thoughts of writing this blog won't have appear. Also the climate change, due to which I usually have blackouts.
 
 ## Motivations
 We have seen decades of AI revolutions and from Deep Blue chess to Dota playing agents. We are on the competition of achievements. Years ago, there was HOG methods and there was nothing like YOLO or RCNN and the world of Computer Vision today is hungry to find new methods. There are many researchers and academics working continously to make more AI based systems and the world of Cloud Services has granted huge advantages. The world of Open Source has been so great that we can almost get everything's code. Now the program can complete our sentence, drawings, can itself talk and many more. The list goes on.
 
 ## How come?
-<strong>Lets describe how am i writing this article now?</strong>
+<strong>Lets describe how am I writing this article now?</strong>
 
-I was stuck at village with no internet and electricity and i was planning on Region Based method for Corn Infection detection then i started to write using paper and pen. Please follow below links about how am i doing(or will be did?) it. The thought of <b>what if?</b> came. What if we can just move our hand on air and we can actually be able to write something? Then rest is on this blog.
+I was stuck at village with no internet and electricity and I was planning on Region Based method for Corn Infection detection then I started to write using paper and pen. Please follow below links about how am I doing(or will be did?) it. The thought of <b>what if?</b> came. What if we can just move our hand on air and we can actually be able to write something? Then rest is on this blog.
 
 I am doing below tasks currently but some unpredicted electricity problems are affecting me. 
 * [Corn Infection Classification](#): Took 3k+ corn images and doing classification using some standard models.
@@ -47,7 +47,7 @@ I am doing below tasks currently but some unpredicted electricity problems are a
 * [A Simple Autoencoder From Scratch](#): Using FFNN from scratch to create Autoencoder.
 
 ## Inspiration
-This blog post is inspired by the following articles and i have copied some contents also, so i am giving credits to the authors. 
+This blog post is inspired by the following articles and I have copied some contents also, so I am giving credits to the authors. 
 * [Hand Gesture Recognition using Python and OpenCv](https://gogul.dev/software/hand-gesture-recognition-p1)
     The author of this article has made gesture recognition so simple that made me complete the drawing system within few hours. Honestly the part of hand contour extraction is inspired from this blog.
 
@@ -59,7 +59,7 @@ For understanding the things going one here, basic Image Processing concepts can
 Computer Vision has been the area of interest from years. Different competitions and has given us new concepts and ideas. Also there has been lots of work on Gesture Recognition and Sign Language Recognition. The Gesture Recognition is not a easy task because of the complexity of image formation and the noise on image. The extraction of hand from the image is another problem. There has been various researchs to do segmentation of image and one method to do so is `selective search`(Used on RCNN Family and I using this method to do Region Proposal on another blogs.)
 
 ## Problem Statement
-We need to extract the hand gesture from the image first and then checkout for the movement of the hand. (For simplicity i am making this blog work for any object movements. But for advanced and more robustness, we must recognise hand and do draw only then.) The problem is so simple that it can be divided onto below steps:-
+We need to extract the hand gesture from the image first and then checkout for the movement of the hand. (For simplicity I am making this blog work for any object movements. But for advanced and more robustness, we must recognise hand and do draw only then.) The problem is so simple that it can be divided onto below steps:-
 1. Read frame from image and extract hand region. 
 2. Draw pointer on the top of hand region and draw the pointer on canvas along with the pixels.
 3. When the character is drawn on the canvas, send the character to classification model.
@@ -106,7 +106,7 @@ The result of this code will not be great but lets see them on image.
 ![image-title-here]({{site.url}}/assets/wp-content/uploads/2020/08/background-1024x418.png){:class="img-responsive"}
 
 
-The only difference i am using on these image is the pamplet on the wall. The final difference image doesn't look like any difference but some noises. This is because of the image quality and noise effect, we can always remove these noise by some factor later. OpenCV reads image on BGR format and it still is on BGR. The difference on image shows that the object on the wall was not on background image but is present on new image hence its color will be different than others and it will be easy to recognize them. Hence the object is foreground and the result will be called the mask.
+The only difference I am using on these image is the pamplet on the wall. The final difference image doesn't look like any difference but some noises. This is because of the image quality and noise effect, we can always remove these noise by some factor later. OpenCV reads image on BGR format and it still is on BGR. The difference on image shows that the object on the wall was not on background image but is present on new image hence its color will be different than others and it will be easy to recognize them. Hence the object is foreground and the result will be called the mask.
 
 For better performance, we will use concept of running average. We will run our system idle for some frames and then take average from it. We will make an average background. Then will do the absolute subtract. Also using RGB/BGR image on background subtraction only increase the complexity, so we will use the Grayscale image or ROI.
 
@@ -146,7 +146,7 @@ show(imgs[0])
 
 ![image-title-here]({{site.url}}/assets/wp-content/uploads/2020/08/contour.png){:class="img-responsive"}
 
-Well, so far so goood. Please ignore the color channel on this image because i am using BGR color space. But we did pretty great job or OpenCV did?
+Well, so far so goood. Please ignore the color channel on this image because I am using BGR color space. But we did pretty great job or OpenCV did?
 
 
 # Writing Canvas Generation
@@ -156,7 +156,7 @@ The canvas is something where we can write here. So for simplicity, it will be l
 
 The pixel values of black is `[0, 0, 0]` so we can do addition without affecting any pixels. The addition here will be what we call writing. Complete black image is like `addition identity` image. Thanks to NumPy we can make complete black image into white just by adding 255.
 
-The basic idea behind writing is to find the top of our contour. Draw a pointer on that position on frame(it will be like we are seeing where our hand is moving). And on the canvas, also make a pointer on same position, change the color on the place where pointer is present. The image we will use for operations is black but what we will show is white so we will do some weird operations.  Also using OpenCV we can control camera with our keys, so we can make different modes of pointer. For simplicity, i am making some modes:
+The basic idea behind writing is to find the top of our contour. Draw a pointer on that position on frame(it will be like we are seeing where our hand is moving). And on the canvas, also make a pointer on same position, change the color on the place where pointer is present. The image we will use for operations is black but what we will show is white so we will do some weird operations.  Also using OpenCV we can control camera with our keys, so we can make different modes of pointer. For simplicity, I am making some modes:
 * <b>Write</b>:- It will add pixels on the canvas.
 * <b>Erase</b>:- It will remove the written pixels from the canvas. It is tricky but works fine. Since our background is white, we will make every pixel white where the pointer resides on this mode. 
 * <b>Idle</b>:- Neither write nor erase.
@@ -544,11 +544,11 @@ When the key `r` is pressed, `take_average` becomes true and the averaging strat
 When the key `e` is pressed, `drawn` is made white. And canvas is restarted.
 
 # Bonus Part
-I am going to do Character Recognition on the characters written on the canvas. For that, i will be using Devanagari Handwritten dataset. For simple Devanagari Handwritten character, i have wrote a Detection/Localization or OCR like system years ago using NumPy, Keras and OpenCv. Please follow the bellow blogpost for full contents. The codes and algorithms are not good and i have not got time to improve it. But i used imagination on the coding so years after i still feel proud of that work.
+I am going to do Character Recognition on the characters written on the canvas. For that, I will be using Devanagari Handwritten dataset. For simple Devanagari Handwritten character, I have wrote a Detection/Localization or OCR like system years ago using NumPy, Keras and OpenCv. Please follow the bellow blogpost for full contents. The codes and algorithms are not good and I have not got time to improve it. But I used imagination on the coding so years after I still feel proud of that work.
 * [Devanagari Handwritten Characters/word Detection](#)
 * [GitHub Repository](#)
 
-On that repository, contatins a file `recognition.py`, which is responsible for lots of things. So, here i am also using same that file, and it contains the module recognition inside it. Importantly, i am naming that folder as dcr. While doing some works, i am encountering some errors. Those errors are newbie errors telling about not finding saved model directory. Looking into `predictor.py` file and doing some path correction solves the problem. In my case, i did:-
+On that repository, contatins a file `recognition.py`, which is responsible for lots of things. So, here I am also using same that file, and it contains the module recognition inside it. Importantly, I am naming that folder as dcr. While doing some works, I am encountering some errors. Those errors are newbie errors telling about not finding saved model directory. Looking into `predictor.py` file and doing some path correction solves the problem. In my case, I did:-
 
 ```python
 .......................
@@ -580,7 +580,7 @@ Next let our system fire recognition while pressing `s` key.
 
 ![image-title-here]({{site.url}}/assets/wp-content/uploads/2020/08/detection-1024x385.png){:class="img-responsive"}
 
-The porblem with combination of DCR(Devanagari Character Recognition) and Gesture Writing is only that, it doesn't quite works with words. The reason is the thickness of our writing. So in near future i will work on that.
+The porblem with combination of DCR(Devanagari Character Recognition) and Gesture Writing is only that, it doesn't quite works with words. The reason is the thickness of our writing. So in near future I will work on that.
 
 # Where From Here?
 * What about combining this with some LSTMS or RNN models to predict what is user's next draw might be?

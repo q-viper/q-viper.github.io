@@ -18,27 +18,27 @@ tags:
 {:toc}
 
 ## Introduction
-From some weeks, i am working with OpenCV to make something fun on Computer Vision area. Now i want to try something new. I love to write blog along with coding. May be it feels like code along sessions? On this blog, i will try to make a simple `Break The Bricks` game using OpenCV and NumPy only. And yes, user will use only fingers instead of the keys or mouse cursor. I will make one cursor if required. I highly recommend you to view my previous works on Contour Based Drawing methods because i am using concepts from there.
+From some weeks, I am working with OpenCV to make something fun on Computer Vision area. Now I want to try something new. I love to write blog along with coding. May be it feels like code along sessions? On this blog, I will try to make a simple `Break The Bricks` game using OpenCV and NumPy only. And yes, user will use only fingers instead of the keys or mouse cursor. I will make one cursor if required. I highly recommend you to view my previous works on Contour Based Drawing methods because I am using concepts from there.
 * [Gesture Based Visually Writing System Using OpenCV and Python: An initial Approach]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
 * [Gesture Based Visually Writing System: Adding Visual User Interface]({{site.url}}/2020/08/11/gesture-based-visually-writing-system-make-a-visual-user-interface/)
 * [Gesture Based Visually Writing System:- Adding Virtual Animation, Color Mode and New VUI]({{site.url}}/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/)
  
 
-### How am i here?
-Yesterday was August 14, 2020, and the day i felt too much positivity at the same time. The reason of being so glad is that i wrote a blog how to write anything on canvas just by moving fingers in front of camera. It was not a hard task to think on the concept level but on the implementation and coding level, it was time consuming. I worked hard and i got lots of views on LinkedIn, lots (at least for me) of reactions and comments. I was thinking that i could work more on that system and refactor the code, make it more professional and share it back after adding few features but here i am to do Contour Based Game. 
+### How am I here?
+Yesterday was August 14, 2020, and the day I felt too much positivity at the same time. The reason of being so glad is that I wrote a blog how to write anything on canvas just by moving fingers in front of camera. It was not a hard task to think on the concept level but on the implementation and coding level, it was time consuming. I worked hard and I got lots of views on LinkedIn, lots (at least for me) of reactions and comments. I was thinking that I could work more on that system and refactor the code, make it more professional and share it back after adding few features but here I am to do Contour Based Game. 
 
 ## Credits
 * I am very grateful that wonderful people on [LinkedIn](https://linkedin.com/in/ramkrishna-acharya-91a217183/) have gave me many comments and also my connections has increased rapidly. 
-* I only know very little on Game Development but when it comes to the credits, [mr. Alex](https://www.linkedin.com/in/alex-tuduran) is the one who inspired me. He has very wonderful way of making Game Development easier, and honestly i have never met anyone who have so simpler way of explaining the codes. He once gifted me a Raspberry Pi 3b to Nepal. 
+* I only know very little on Game Development but when it comes to the credits, [mr. Alex](https://www.linkedin.com/in/alex-tuduran) is the one who inspired me. He has very wonderful way of making Game Development easier, and honestly I have never met anyone who have so simpler way of explaining the codes. He once gifted me a Raspberry Pi 3b to Nepal. 
 * And my friend [Indra Poudel](https://indra-poudel.github.io) has helped me to find the issues with my blog pages.
 
 ## Motivation
-I am doing this fun project with nothing but a passion. I have to rely on Agriculture totally for survival but i stayed coding while mom called me to harvest corn. Nothing motivates me more than the struggle of my parents.
+I am doing this fun project with nothing but a passion. I have to rely on Agriculture totally for survival but I stayed coding while mom called me to harvest corn. Nothing motivates me more than the struggle of my parents.
 
 ## Concepts
-I only have ideas what to do next. But not how to do. It is 8am of the August 15th morning, lets see how progress can i make. 
+I only have ideas what to do next. But not how to do. It is 8am of the August 15th morning, lets see how progress can I make. 
 
-When i was learning Unity Game Development, i attended premium courses from GitHub Student account there i learned lots about Game Development. One of them is Game Concepts.
+When I was learning Unity Game Development, I attended premium courses from GitHub Student account there I learned lots about Game Development. One of them is Game Concepts.
 
 ### Game Concepts
 * There will be a horizontal pad on bottom of the window which is the only thing interactable by user.
@@ -48,7 +48,7 @@ When i was learning Unity Game Development, i attended premium courses from GitH
 * When brick breaks, points is gained will be reflected to some direction.
 
 Lets work on above ideas.
-I worked from 10:30am on the code and this is 7pm. I can feel my back pain but finally i have a glimpse of smile on face because i made it. For the demo please view below video and for the code, follow more.
+I worked from 10:30am on the code and this is 7pm. I can feel my back pain but finally I have a glimpse of smile on face because I made it. For the demo please view below video and for the code, follow more.
 
 <figure>
 <video src = "{{site.url}}/assets/contour-game/brick1.mp4" width="100%" controls autoplay loop> </video>
@@ -58,7 +58,7 @@ I worked from 10:30am on the code and this is 7pm. I can feel my back pain but f
 
 
 ## Prepare Helper Functions
-Same as usual Contour Based methods, i will be using the running average and contour extraction concepts. Again i have to request you to view those 3 blogs i stated earlier specially the first one to understand about these two functions. 
+Same as usual Contour Based methods, I will be using the running average and contour extraction concepts. Again I have to request you to view those 3 blogs I stated earlier specially the first one to understand about these two functions. 
 
 
 ```python
@@ -97,7 +97,7 @@ def show(img, figsize=(10, 10)):
 ```
 
 ## Prepare The Ball
-Before preparing the ball i had an idea whether to use real image or not. Then i realise why to use real image when i can still use circular shape from OpenCV's circle. So i decided to make one. I will use the class instead of functions because i am regretting that i used functions on previous codes and i am having hard times to refactor it. 
+Before preparing the ball I had an idea whether to use real image or not. Then I realise why to use real image when I can still use circular shape from OpenCV's circle. So I decided to make one. I will use the class instead of functions because I am regretting that I used functions on previous codes and I am having hard times to refactor it. 
 
 
 
@@ -247,10 +247,10 @@ This method returns the ball window.
 ### Test all
 I have shared the test result above. Please check it again.
 
-I couldn't complete my blog because climate became wrong and i slept at 11pm. So i started from 6 am again.
+I couldn't complete my blog because climate became wrong and I slept at 11pm. So I started from 6 am again.
 
 ## Prepare the Pad
-Again, instead of real image, i will use NumPy array. The current version of pad class is given below.
+Again, instead of real image, I will use NumPy array. The current version of pad class is given below.
 
 
 
@@ -423,7 +423,7 @@ Method takes nothing but does lot of thing. I will write it on steps.
     * Loop through columns of each row:
         * Take this brick's extreme positions.
         * `bricks_group` is a list to store ((top row, bottom row), (left col, right col)). Some interesting thing happened there to store brick as a list. We have enumerated the rows, hence we know at which row are we now, we have enumerated column hence we know whic column is this. Now to get the coordinate of current brick, we have to find top, bottom, left and right side. Top can  be found by multiplying `brick_height` with current row number and bottom by multiplying with next row. One brick's top is another's bottom. For the left, right, we take the bricks up to this column and sum their lengths, then the begining of current brick starts from that sum. The right side of brick will be starting position plus brick length.
-        * To store colors, i made an dictionary. My be it is more easy to use JSON later. But the value `c` is increased with each brick.
+        * To store colors, I made an dictionary. My be it is more easy to use JSON later. But the value `c` is increased with each brick.
 * Convert `brick_group` to array.
 * Make blank image with shape equal to total rows by total columns used by total bricks by 3.
 * Again to make an brick like image, we have to loop through the `bricks_group`. It will be best idea to not use many loops while we can do same with few. I could have used this operation on above loop also.
@@ -434,7 +434,7 @@ Method takes nothing but does lot of thing. I will write it on steps.
 * We set some attributes. Important one is `current_bricks` which is changed when brick is hit.
 
 ### Method: `check_hit`
-This method takes current position of ball and the ball object. My be only the ball object will be enough but i used both anyway.
+This method takes current position of ball and the ball object. My be only the ball object will be enough but I used both anyway.
 * Initialize score as 0. Initialize `new_bricks` as empty.
 * For each row in current_bricks:
     * Initialize new row
@@ -458,7 +458,7 @@ This method returns `current_bricks` list.
 I have tested it and share the result on above block.
 
 ## Game
-This class is the main class which uses all the above described classes and shows each frame. This class is very important and i have worked long to make it look good. Lets start with initialization.
+This class is the main class which uses all the above described classes and shows each frame. This class is very important and I have worked long to make it look good. Lets start with initialization.
 
 
 
@@ -679,7 +679,7 @@ Class is initialized with some default parameters. Follow the docstring for more
  * When the ball goes inside the brick_part area of `Brick` object, then there is chance that brick might hit. So we call `check_hit` on brick. When brick is hitted, score is gained and summed. At last score is summed to game score.
 
 ### Test All
-While running above code, i was able to succesfully play the game. You can see the full code below.
+While running above code, I was able to succesfully play the game. You can see the full code below.
 
 
 ```python
@@ -1056,7 +1056,7 @@ The result of above code should look like below. There are issues when striking 
 This blog will be uploaded after 11pm using Nepal Telicom's Unilimited (so called) night data pack.
 
 ## About Current System
-This current system is not very good there are many shortcomings and i am not working on bonus topic for this one because i am planning on doing mushroom farming. 
+This current system is not very good there are many shortcomings and I am not working on bonus topic for this one because I am planning on doing mushroom farming. 
 
 ### Features
 * Ball returns to some direction after striking with boundary, brick, pad.
@@ -1064,14 +1064,14 @@ This current system is not very good there are many shortcomings and i am not wo
 * Score is increased when brick is broken.
 
 ### Shortcomings
-* The bounce like effect is very glitchy, so i must rather use better idea to make it work good.
+* The bounce like effect is very glitchy, so I must rather use better idea to make it work good.
 * When striking with wall, direction is not set properly. 
 * There is not GUI or UI.
 
 ## What next?
 The current version of codes and blogs are available on GitHub repository below:
 * [Contour Based Game](https://github.com/q-viper/Contour-Based-Games)
-For this system, i might try to solve above shortcomings but possible next move can be:
+For this system, I might try to solve above shortcomings but possible next move can be:
 * Adding highscore system.
 * Adding VUI.
 * Adding bouncy effect(can be done by ellipse).

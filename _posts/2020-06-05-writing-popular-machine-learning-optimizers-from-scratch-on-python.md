@@ -19,7 +19,7 @@ tags:
 
 # 1. Writing popular Machine Learning Optimizers from scratch on Python
 
-This blog will include some mathematical and theoritical representation along with Python codes from scratch. Most of the codes and formulas are taken from different resources and i have given links to them also.
+This blog will include some mathematical and theoritical representation along with Python codes from scratch. Most of the codes and formulas are taken from different resources and I have given links to them also.
 
 This post is related to below posts(these posts depends on this post):
 * [Writing a Feed forward Neural Network from Scratch on Python]({{site.url}}/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/)
@@ -63,7 +63,7 @@ Let me take some notation form the book Tensorflow for Dummies by Matthew Scarpi
 * The	loss,	which	is	a	mathematical	relationship	containing	the	model’s variables,	is	denoted	J(θ).	The	gradient	of	the	loss	is	∇J(θ). 
 * The	learning	rate,	denoted	η,	is	a	value	that	affects	how	much	θj	changes from	step	to	step.
 
-Before diving into algorithm and comparing it with code, let us understand that, i have done addition with all delta terms because i have already taken `minus` of delta terms.
+Before diving into algorithm and comparing it with code, let us understand that, I have done addition with all delta terms because I have already taken `minus` of delta terms.
 
 ## Gradient Descent
 Weight update term for all units is:-

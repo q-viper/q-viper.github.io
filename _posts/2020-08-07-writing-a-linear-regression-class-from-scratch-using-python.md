@@ -27,8 +27,8 @@ There are frameworks like `scikit-learn` which can perform a linear regression o
 
 
 # Credits
-Credits goes to the author of below repository from where, i have learned the most important concepts of ML and i am using some modified version of codes present there and then i will be using my own version of codes to play with LR from Scratch. 
-<b>This notebook is inspired by the github repo of Tarry Singh and i have referenced most of the codes from that repo. Please leave a star on it.</b>
+Credits goes to the author of below repository from where, I have learned the most important concepts of ML and I am using some modified version of codes present there and then I will be using my own version of codes to play with LR from Scratch. 
+<b>This notebook is inspired by the github repo of Tarry Singh and I have referenced most of the codes from that repo. Please leave a star on it.</b>
 * [Artificial Intelligence Deep Learning Machine Learning Tutorials](https://www.github.com/TarrySingh/Artificial-Intelligence-Deep-Learning-Machine-Learning-Tutorials)(Most awesome repository.)
 * Dataset is inside `machine-learning/Linear Regression/data` folder
 

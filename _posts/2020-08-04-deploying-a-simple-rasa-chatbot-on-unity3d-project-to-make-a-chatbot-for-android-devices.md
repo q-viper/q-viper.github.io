@@ -33,15 +33,15 @@ The credit goes to higly motivating friends who taught me what they learned abou
 
 ## Introduction
 
-### How am i here?
-Back on early 2020 i was learning Unity3d from its premium subscription and i was suddenly more interested on it. Also while i was doing internship, i learned how to make a commercial chatbots using RASA and deploy it on various platforms. Then i also got interested on text based game where there will be multiple choices and different stories that a player can have. I have not completed(but doing some) any Unity projects yet but i am sharing something useful here and i surely will use these concepts later on real world applications.
+### How am I here?
+Back on early 2020 I was learning Unity3d from its premium subscription and I was suddenly more interested on it. Also while I was doing internship, I learned how to make a commercial chatbots using RASA and deploy it on various platforms. Then I also got interested on text based game where there will be multiple choices and different stories that a player can have. I have not completed(but doing some) any Unity projects yet but I am sharing something useful here and I surely will use these concepts later on real world applications.
 
 ### What will this blog be?
-This blog will be a gentle introduction to the Unity3d and RASA to make chatbot. <b>Or importantly, deploying a simple RASA chatbot on Android using Unity.</b> I will also give gentle introduction to building Android installation(APK file). <b>Importantly, i am not going to make next Alexa or Siri here.</b> If you are here, then you probably know that Unity is a popular Game Development Platform. And Unity3d is C# based and i heard JavaScript can also be used. Unity3d has very great functionalities and the dev community so learning it will be easier than you think. If you are the one who wanted to learn game development for free but doesn't know where? Then you can follow my below blog for guidance. I am not a pro here but a learner who shares what learns.
+This blog will be a gentle introduction to the Unity3d and RASA to make chatbot. <b>Or importantly, deploying a simple RASA chatbot on Android using Unity.</b> I will also give gentle introduction to building Android installation(APK file). <b>Importantly, I am not going to make next Alexa or Siri here.</b> If you are here, then you probably know that Unity is a popular Game Development Platform. And Unity3d is C# based and I heard JavaScript can also be used. Unity3d has very great functionalities and the dev community so learning it will be easier than you think. If you are the one who wanted to learn game development for free but doesn't know where? Then you can follow my below blog for guidance. I am not a pro here but a learner who shares what learns.
 * [Unity Learn Premium](#)
 
-### What will i built?
-I will test the RASA chatbot framework with Unity's powerful Game Development platform. I will be using Unity's Networking concept on C#, i will only send a single message and then show the sent and received message on a Canvas. The testing will be done on <b>Android Device</b>, but first i will test it on <b>Unity Remote</b>. Unity Remote is a wonderful application available for Android Device, where we can test our developing aplications on UnityEditor.
+### What will I built?
+I will test the RASA chatbot framework with Unity's powerful Game Development platform. I will be using Unity's Networking concept on C#, I will only send a single message and then show the sent and received message on a Canvas. The testing will be done on <b>Android Device</b>, but first I will test it on <b>Unity Remote</b>. Unity Remote is a wonderful application available for Android Device, where we can test our developing aplications on UnityEditor.
 
 ## Preparing System
 My system is Intel I5 with 8GB RAM and Nvidia Geforce 720M, 250GB SSD. It will be very painful to run Unity on low specifications so the proper hardware is <b>essential</b> for this. 
@@ -51,7 +51,7 @@ I am using:-
 * [Python 3.7.4](https://python.org)
 * [RASA 1.3.3](https://rasa.com)
 
-I am using old version of RASA because it is more stable and this current blog doesn't requires much functionalities. If i have to write on steps then below steps will be best idea to prepare RASA.
+I am using old version of RASA because it is more stable and this current blog doesn't requires much functionalities. If I have to write on steps then below steps will be best idea to prepare RASA.
 * Install Python from [Anaconda.org](https://anaconda.org)
 * Install Virtual Environment usng `venv` (Read Here [Creation of Virtual Environments](https://docs.python.org/3/library/venv.html)
 * Activate the environment (Please follow the steps stated on above link to activate it)
@@ -76,7 +76,7 @@ The files structures created by rasa is:-
     * domain.yml
     * endpoints.yml
     
-Currently, we don't need to understand any of these so i am heading towards next step.
+Currently, we don't need to understand any of these so I am heading towards next step.
 
 ### Start RASA server
 Starting a RASA server is essential for us because we will be sending a request from Unity's event. So the only way to make listen our message is by webhooks/api.
@@ -88,7 +88,7 @@ Starting a RASA server is essential for us because we will be sending a request 
 The rasa server will be running on `localhost:5005` we can change this but for now leave it as it is. 
 
 ## Preparing Unity3d
-Please download UnityHub from its [official website](https://unity3d.com). Then it will allow us to add UnityEditor by adding, i am suggesting `Unity 2018.3.17f1` to download. While installing Unity, please don't forget to click on checkboxes like below. Installing MS Visual Studio is very helpful which is by default checked.
+Please download UnityHub from its [official website](https://unity3d.com). Then it will allow us to add UnityEditor by adding, I am suggesting `Unity 2018.3.17f1` to download. While installing Unity, please don't forget to click on checkboxes like below. Installing MS Visual Studio is very helpful which is by default checked.
 ![image-title-here]({{site.url}}/assets/wp-content/uploads/2020/08/install-unity.png){:class="img-responsive"}
 
 
@@ -112,7 +112,7 @@ When opened the Unity window,
 * Switch to 2d Mode by clicking on 2D
  ![image-title-here]({{site.url}}/assets/wp-content/uploads/2020/08/2d-switch.png){:class="img-responsive"}
 
-<b>The window and project structure i have is new, but i am writing this blog on existing project on new scene. So only focus you should make is on the things i stated. This Unity project i am working is a game named `Roll a Ball` which is still being developed. Also i am working on new Scene named as HTTPTest. SO you have to edit your Scene to HTTPTest from Main.</b>
+<b>The window and project structure I have is new, but I am writing this blog on existing project on new scene. So only focus you should make is on the things I stated. This Unity project I am working is a game named `Roll a Ball` which is still being developed. Also I am working on new Scene named as HTTPTest. SO you have to edit your Scene to HTTPTest from Main.</b>
 
 
 ## Creating Simple GUI on Unity
@@ -238,7 +238,7 @@ This class will handle incoming message sent by RASA channel.
 
 
 ### Posting a Web Request
-Note that the format of post must match with what a RASA webhook expects to be. Its format is available on RASA's website but for simplification i am using below approach.
+Note that the format of post must match with what a RASA webhook expects to be. Its format is available on RASA's website but for simplification I am using below approach.
 `{sender:sender_id, message: message text}`
 
 ```c#
@@ -362,7 +362,7 @@ IEnumerator PostRequest(string uri, string json)
     
 ```
 
- Parsing the text string to JSON string was hard for me on C# so i manually tried to get the only part that contains the message. I did that by looking onto the response of webhook and counting where the key `text`, `message` lies. And also i deserialzed the attributes of Message. Some slicing, indexing, searching completes this operations. This came onto mind to solve this particular problem and i was stuck for hours due to this problem. So I hope someone finds a better way to do this.
+ Parsing the text string to JSON string was hard for me on C# so I manually tried to get the only part that contains the message. I did that by looking onto the response of webhook and counting where the key `text`, `message` lies. And also I deserialzed the attributes of Message. Some slicing, indexing, searching completes this operations. This came onto mind to solve this particular problem and I was stuck for hours due to this problem. So I hope someone finds a better way to do this.
 
 ## Test on Android device
 Now is the time for us to test it on our phone. So download the application named `Unity Remote 5` and install it on phone. Open that application and follow the written instructions. That should be:-
@@ -370,7 +370,7 @@ Now is the time for us to test it on our phone. So download the application name
 
 ![image-title-here]({{site.url}}/assets/wp-content/uploads/2020/08/on-phone.png){:class="img-responsive"}
 
-When pressing Play button on editor, now Scene must be loaded on phone. If you are testing it on phone, then it will not work for now. Because the keyboard is not shown on phone when clicking on the input field. So what i did instead was typed the message from Editor and pressed the send button from Unity Remote.
+When pressing Play button on editor, now Scene must be loaded on phone. If you are testing it on phone, then it will not work for now. Because the keyboard is not shown on phone when clicking on the input field. So what I did instead was typed the message from Editor and pressed the send button from Unity Remote.
 
 ### Building an APK file
 If any USB Debugging enabled phone is connected then we can directly build and install apk on Android phone, just have to click on `build and run`. But Building an apk file first and then installing on phone can also be done. If the build finishes without any error, then it is fine else, make sure you are on internet (sometimes gradle build tools is expected to download). Build System must be `internal` not a `gradle`. But when we type and send the message, error is shown because we do not have a medium to connect with RASA server from phone. One way to connect RASA server for now is by laptop hotspot. Turning on laptop hotspot and then we have to change the URL on `HTTPTest.cs` file. 
@@ -463,7 +463,7 @@ public class HTTPTest : MonoBehaviour
 }
 ```
 
-Thank you so much for reading out. And i am still unsure that this blog has some errors. SO if you have any query about this project, please leave a comment or you can find me on Twitter as [QuassarianViper](https://www.twitter.com/QuassarianViper). 
+Thank you so much for reading out. And I am still unsure that this blog has some errors. SO if you have any query about this project, please leave a comment or you can find me on Twitter as [QuassarianViper](https://www.twitter.com/QuassarianViper). 
 
 # What next?
 * Building a text based game using Chatbot.

@@ -16,7 +16,7 @@ tags:
   - unity student partner
 ---
 <!-- wp:paragraph -->
-<p> Due to current global threat of  COVID-19, unity is providing free access to all the contents of Unity Learn platform. And as a life long learner, i am writing this article so that it might help others who wants to learn Game Development but don't know where to start. And good news here is, with premium learning we can have lot of awesome assets for free.</p>
+<p> Due to current global threat of  COVID-19, unity is providing free access to all the contents of Unity Learn platform. And as a life long learner, I am writing this article so that it might help others who wants to learn Game Development but don't know where to start. And good news here is, with premium learning we can have lot of awesome assets for free.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:image {"id":199,"sizeSlug":"large"} -->
@@ -24,11 +24,11 @@ tags:
 <!-- /wp:image -->
 
 <!-- wp:paragraph -->
-<p>Unity is a great game development platform which basically uses C# or JavaScript as a scripting language. Most of us have a separate world inside of ourselves and game development is one of the coolest profession on the tech field. To guide out what might you accomplish with these 3 months of Unity, i am writing about awesome courses on Unity Learning.</p>
+<p>Unity is a great game development platform which basically uses C# or JavaScript as a scripting language. Most of us have a separate world inside of ourselves and game development is one of the coolest profession on the tech field. To guide out what might you accomplish with these 3 months of Unity, I am writing about awesome courses on Unity Learning.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>To make it easier, Unity has 3 levels of courses, beginner, intermediate and then Advanced. I was learning Unity since a month and i myself was lost but finally i found a simple track that might be helpful for all. </p>
+<p>To make it easier, Unity has 3 levels of courses, beginner, intermediate and then Advanced. I was learning Unity since a month and I myself was lost but finally I found a simple track that might be helpful for all. </p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
@@ -40,7 +40,7 @@ tags:
 <!-- /wp:list -->
 
 <!-- wp:paragraph -->
-<p>Now your at least 30 days are gone and you are ready to head on to next challenge. Unity provides Intermediate level courses also and i found the Pluralsight courses to be good choice also. Below are the links to those courses. </p>
+<p>Now your at least 30 days are gone and you are ready to head on to next challenge. Unity provides Intermediate level courses also and I found the Pluralsight courses to be good choice also. Below are the links to those courses. </p>
 <!-- /wp:paragraph -->
 
 <!-- wp:list -->

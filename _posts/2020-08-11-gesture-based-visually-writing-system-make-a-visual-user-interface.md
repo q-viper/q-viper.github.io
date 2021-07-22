@@ -26,7 +26,7 @@ Well, before proceeding further, it is very important that you follow the previo
 I want to give full credits to the readers (even if 1 person have read it) of previous blog and the current readers like you. 
 
 ## Introduction
-The introduction dates back to the previous article, where i did some basic writings just by moving fingers in front of the camera. Last time, i was able to do below things with keyboard keys.
+The introduction dates back to the previous article, where I did some basic writings just by moving fingers in front of the camera. Last time, I was able to do below things with keyboard keys.
 * `escape`:- Exit from system.
 * `space`:- Save current drawing(excluding pointer).
 * `z`:- Idle mode(move only pointer).
@@ -35,24 +35,24 @@ The introduction dates back to the previous article, where i did some basic writ
 * `e`:- Erase current canvas but leave the average image.
 * `r`:- Restart the average and canvas.
 
-Now i want to try something new here. <b> As for writing this blog, i have not done any coding on this topic but if you read further you might be able to know what did i accomplish throughout the end.</b> I want the system to run without the need of keyboard(i am just assuming here). 
+Now I want to try something new here. <b> As for writing this blog, I have not done any coding on this topic but if you read further you might be able to know what did I accomplish throughout the end.</b> I want the system to run without the need of keyboard(i am just assuming here). 
 
-Last time i wrote a system that can perform above tasks and on bonus topic, i passed the drawn character to [Devanagari Handwritten Character/Word Detector]({{site.url}}/2020/02/25/building-ocr-for-devanagari-handwritten-character/) and showed the predicted text. 
-## How am i here?
-How i got the idea to perform this project? I don't know but something like, "Once i was writing something on my paper and then ink on the pen finished, and i was not able to write more because i had no spare pens. Also shop is far from village. Then i got an idea, can i replace the pen just for some moments?" Well it is just a funny story. But truth is, me and my friend was about to do some academic research. We have to think many topics and one of mine choice is here. This topic is rejected so i am here, to make it work.
+Last time I wrote a system that can perform above tasks and on bonus topic, I passed the drawn character to [Devanagari Handwritten Character/Word Detector]({{site.url}}/2020/02/25/building-ocr-for-devanagari-handwritten-character/) and showed the predicted text. 
+## How am I here?
+How I got the idea to perform this project? I don't know but something like, "Once I was writing something on my paper and then ink on the pen finished, and I was not able to write more because I had no spare pens. Also shop is far from village. Then I got an idea, can I replace the pen just for some moments?" Well it is just a funny story. But truth is, me and my friend was about to do some academic research. We have to think many topics and one of mine choice is here. This topic is rejected so I am here, to make it work.
 
 ## Derive Concepts
-Now on this blog, i would like to make a simple virtual GUI (i would like to call it <b>Virtual User Interface</b>), that can be controlled by just moving fingers in front of the camera. It will not be a real GUI but it will be shown on some side of the frame. We will move our finger to those part and we can actually perform some tasks. While writing this, i have not proceeded towards code so lets see where the boat takes. 
+Now on this blog, I would like to make a simple virtual GUI (i would like to call it <b>Virtual User Interface</b>), that can be controlled by just moving fingers in front of the camera. It will not be a real GUI but it will be shown on some side of the frame. We will move our finger to those part and we can actually perform some tasks. While writing this, I have not proceeded towards code so lets see where the boat takes. 
 
-I want to make some assumptions here what type of the system i am hoping it to be?
+I want to make some assumptions here what type of the system I am hoping it to be?
 * Current system:
 ![png]({{site.url}}/assets/contour-writing/detection.png)
 
-* Now i want new System to be like below(sketched form)
+* Now I want new System to be like below(sketched form)
 ![png]({{site.url}}/assets/contour-writing/guiconcept.png)
 
 ## Prepare Icons
-I am only working on making GUI like panel for previously completed modes. Which means exit, save current draw, idle, draw, erase, pass to detector, erase canvas, restart system. So to make icons, i am going to work on paint. Make a black background and draw icons on it. As always black color is identity additive on Image Processing world so lets get into it. I am making an folder named `Icons` on working directory and saving all icons there. The image will be 301 by 299 dimension PNG image (originally was trying to make (300, 300) but paint betrayed me).
+I am only working on making GUI like panel for previously completed modes. Which means exit, save current draw, idle, draw, erase, pass to detector, erase canvas, restart system. So to make icons, I am going to work on paint. Make a black background and draw icons on it. As always black color is identity additive on Image Processing world so lets get into it. I am making an folder named `Icons` on working directory and saving all icons there. The image will be 301 by 299 dimension PNG image (originally was trying to make (300, 300) but paint betrayed me).
 * Exit
 ![png]({{site.url}}/assets/contour-writing/icons/exit.png)
 
@@ -122,7 +122,7 @@ show(icons_holder)
 * Finally make that attached image `uint8`, because OpenCV expects this so.
 
 ## Create ROI for VUI on frame
-Lets take codes from previous blog and work here. So we have total 8 icons, we want to divide the total of ROI made for VUI on 8 vertical parts. What i mean is i will divide the ROI parts on equal 8 parts and each parts will be for individual icons. First let me update the code little bit. I am going to wrap everthing under a method here. Method named `run_system` will wrap everything. Below code performs the drawing of ROI for GUI. <b>Note that the code below is little bit modified version of previous blog's.</b>
+Lets take codes from previous blog and work here. So we have total 8 icons, we want to divide the total of ROI made for VUI on 8 vertical parts. What I mean is I will divide the ROI parts on equal 8 parts and each parts will be for individual icons. First let me update the code little bit. I am going to wrap everthing under a method here. Method named `run_system` will wrap everything. Below code performs the drawing of ROI for GUI. <b>Note that the code below is little bit modified version of previous blog's.</b>
 
 
 
@@ -326,7 +326,7 @@ Now the running frame must look like below. May be the color on box is little co
 ## Working on Contours
 Now we have to deal with contours for Draw ROI and GUI ROI. And we have made a GUI ROI just above the Draw ROI hence we have to deal with only one at a time. But problem arises when we try to interact on GUI regions because our hand part will also fall on Draw ROI at the same time. Hence we must define some rule that when contours have been detected on GUI ROI then ignore contours on Draw ROI. Lets first work on that.
 
-To get contours for drawing and interactive VUI(Virtual User Interface), we have to pass the cropped ROI for both. Hence we will check for contours twice. First, check if contours have been detected on VUI if yes then try to change working modes. If not then work on canvas with existing mode. The process of getting contours is same for both. But variable names has been changed and i have tried to make it as friendly as possible. Also don't forget to the part where boxes were defined.
+To get contours for drawing and interactive VUI(Virtual User Interface), we have to pass the cropped ROI for both. Hence we will check for contours twice. First, check if contours have been detected on VUI if yes then try to change working modes. If not then work on canvas with existing mode. The process of getting contours is same for both. But variable names has been changed and I have tried to make it as friendly as possible. Also don't forget to the part where boxes were defined.
 
 ```python
 def run_system():
@@ -355,9 +355,9 @@ def run_system():
 ```
 The ROI boxes has been changed from previous step. <b>Please make sure you make the ROI box exactly same.</b> 
 * I also made rightmost index same as `gleft` because to handle contours appearing on exactly at `681` column. 
-* Then i also prepared icons that we will be using. Variable `icons` will hold all icons as array. 
-* Then i made a list to hold verticle extreme positions of each VUI boxes, in other words, position of opposite breadths. 
-* Then i took the name of mode from the icon names, it is much easier than manually writing. 
+* Then I also prepared icons that we will be using. Variable `icons` will hold all icons as array. 
+* Then I made a list to hold verticle extreme positions of each VUI boxes, in other words, position of opposite breadths. 
+* Then I took the name of mode from the icon names, it is much easier than manually writing. 
 * Then two different dictionaries holds the key as mode name and value as icon image and box's positions.
 
 ### Running Averages
@@ -405,7 +405,7 @@ def run_system():
 ### Getting Contours from VUI
 As usual, we pass our backgroud (averaged) image and then the grayscale current ROI, and take the absolute difference inside method `get_contours`. What is new here is that we are performing two `get_contours` because we have 2 ROIs. 
 
-First, we took contours for VUI by passing `gui_bg` and `gui_gray` to `get_contours` then we did same for `draw`. Then we proceed to check if contours were present on VUI regions. Same as previous code we took contour's extreme position (for drawing, minimum was taken). Then we have to find that on which box was the contour detected. Since each box on VUI ROI has distinctive purpose, it is very necessary to calculate it properly. So to make is more precise, i came up with an idea. If same mode occurs on more than curtain times then work on this mode else don't change the mode. For simplicity i am checking on 5 consecutive frames only.
+First, we took contours for VUI by passing `gui_bg` and `gui_gray` to `get_contours` then we did same for `draw`. Then we proceed to check if contours were present on VUI regions. Same as previous code we took contour's extreme position (for drawing, minimum was taken). Then we have to find that on which box was the contour detected. Since each box on VUI ROI has distinctive purpose, it is very necessary to calculate it properly. So to make is more precise, I came up with an idea. If same mode occurs on more than curtain times then work on this mode else don't change the mode. For simplicity I am checking on 5 consecutive frames only.
 
 ```python
 def run_system(count_mode=5):
@@ -833,13 +833,13 @@ What is happening above?
 Now the VUI Canvas must look like below.
 ![png]({{site.url}}/assets/contour-writing/vuicanvas.png)
 
-I think there are plenty of ideas to perform this operation with lesser line of code and i am really hoping to find it soon.
+I think there are plenty of ideas to perform this operation with lesser line of code and I am really hoping to find it soon.
 
 ## Combining VUI and Draw UI
 Now that we have succesfully made a VUI and can interact with it like a normal buttons (not really) it is time for us to combine VUI and Draw UI. Draw UI and VUI are both of same shape. if we performed addition then there will not be better visualization. So one have to come with better idea. 
 
-### What did i do?
-I used the concept of array stackking. In fact, NumPy's vertical stack came to aid and with its help everything became so easy. But to make it work like a real time, i have modified codes little bit. Please follow your code along with below code.
+### What did I do?
+I used the concept of array stackking. In fact, NumPy's vertical stack came to aid and with its help everything became so easy. But to make it work like a real time, I have modified codes little bit. Please follow your code along with below code.
 
 
 

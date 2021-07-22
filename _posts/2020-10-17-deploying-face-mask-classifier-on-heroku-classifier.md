@@ -130,7 +130,7 @@ print(f"Training Images: {len(train_generator)*batch_size}\nTesting Images: {len
     
 
 ## Model Creation
-Creating a Sequential model is the most simplest way. I have seen many people using Transfer Learning technique to perform the model training but i always run for my own version of model because it will make us exercised about the concept of CNN working. If you are willing to learn more about CNN, then follow the link below, I have written everythig on scratch.
+Creating a Sequential model is the most simplest way. I have seen many people using Transfer Learning technique to perform the model training but I always run for my own version of model because it will make us exercised about the concept of CNN working. If you are willing to learn more about CNN, then follow the link below, I have written everythig on scratch.
 * [CNN from Scratch](https://q-viper.github.io/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
 * [Your own NN Library](https://github.com/q-viper/ML-from-Basics/tree/master/quark)
 
@@ -346,7 +346,7 @@ plt.show()
 ![png]({{site.url}}/assets/face-mask-images/output_18_2.png)
 
 
-The training curve seems to be DNA structure but tuning our model by adding more layers will come into aid. But i am using this model for now.
+The training curve seems to be DNA structure but tuning our model by adding more layers will come into aid. But I am using this model for now.
 
 ## Test It
 Lets try to predict some images.

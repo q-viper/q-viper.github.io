@@ -20,9 +20,9 @@ tags:
 
 
 # 1 Writing a Convolutional Neural Network From Scratch
-What will you do when you stuck on village with blackout for 4 days and you only have pen and paper? For me, i wrote a `CNN from Scratch` on paper. Once again, high credits goes to pandemic Corona Virus, without it, i would not have been lived as farmer once more and the idea of <i>'from scratch'</i> rised.
+What will you do when you stuck on village with blackout for 4 days and you only have pen and paper? For me, I wrote a `CNN from Scratch` on paper. Once again, high credits goes to pandemic Corona Virus, without it, I would not have been lived as farmer once more and the idea of <i>'from scratch'</i> rised.
 
-I am sorry for not using a single image here on this blog because i was low on data and this entire blog is written on markdown(sometimes latex) only so text format might seem little disturbing also.
+I am sorry for not using a single image here on this blog because I was low on data and this entire blog is written on markdown(sometimes latex) only so text format might seem little disturbing also.
 
 <b>If you are here, then you are encouraged to look at the below 3 blog posts(serially) of mine(most of the concept on this blog are taken from below posts):</b>
 * [Writing a Feed forward Neural Network from Scratch on Python]({{site.url}}/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/)
@@ -45,7 +45,7 @@ I am sorry for not using a single image here on this blog because i was low on d
 * Test Cases with different architectures(4 of them) on `MNIST` dataset
 * Bonus Topics
 
-Testing a model will require huge time, my system is Dell I5 with 8gb RAM and 256gb SSD. And i had tested these models on my local machine. It had taken nearly week to find the test cases and imporve the overall concepts. Sometimes, i had to sleep my laptop for saving battery power so some epoch might be seen taken 4+hours of time. And yes, i used mobile data to post this blog.
+Testing a model will require huge time, my system is Dell I5 with 8gb RAM and 256gb SSD. And I had tested these models on my local machine. It had taken nearly week to find the test cases and imporve the overall concepts. Sometimes, I had to sleep my laptop for saving battery power so some epoch might be seen taken 4+hours of time. And yes, I used mobile data to post this blog.
 
 
 # 2 Preliminary Concept
@@ -425,7 +425,7 @@ It is clear that, if a layer have 5 filters then the output of this layer will h
         layer.delta = layer.activation_dfn(layer.delta)
 ```
     
-Backpropagating error from Convolution layer is really hard and challenging task. I have tried my best to do right way of backpropagation but i still have doubt about it. Some really awesome articles like below can help to understand these things:-
+Backpropagating error from Convolution layer is really hard and challenging task. I have tried my best to do right way of backpropagation but I still have doubt about it. Some really awesome articles like below can help to understand these things:-
 * [Convolutional Neural Network from Ground Up](https://towardsdatascience.com/convolutional-neural-network-from-ground-up-c67bb41454e1)
 * [A Gentle Introduction to CNN](https://sefiks.com/2017/11/03/a-gentle-introduction-to-convolutional-neural-networks/)
 * [Training a Convolutional Neural Network](https://victorzhou.com/blog/intro-to-cnns-part-2/)
@@ -438,7 +438,7 @@ For understanding how to pass errors and find the delta terms for parameters:
     * Get the chunk or part of image and multiply it with the delta term of next layer to get delta filter(weight)
         * i.e. `layer.delta_weights[:, :, :, f] += chunk * nx_layer.delta[i, j, f]` a trick to understand the delta of next layer is by revisiting the input and output shape of layer. For a layer with 5 filters, output will have 5 channels. And the delta term of next layer will have same number of channels. Hence we are giving `[i, j, f]`. Note that for every step on input image(i.e step on row and col), `i`, `j` will increase by 1. Initially, `layer.delta_weights[:, :, :, f]` will be all 0s but it will change by visiting every chunks. Since we have filter of shape `(row, col, channels, num_filters)`, delta_weights is updated for each filter by adding it with multiplication of each chunk with corresponding next layer's delta.
         * Delta term of this layer will have shape of `(input_rows, input_cols, channels)` i.e equal to input shape. Hence we will set the delta term using the number of channels on this layer's filters. We will add the delta term for that chunk using each filters. Because each filters are responsible for the error and the contribution of each filter must be taken equally. The `layer.delta[rv:r, cv:c, :] += nx_layer.delta[i, j, f] * layer.weights[:, :, :, f]` is here to do this task.
-        * We increase i after completing row and j after completing column. `i` and `j` are used to get values from delta of next layer.
+        * We increase I after completing row and j after completing column. `i` and `j` are used to get values from delta of next layer.
     * We sum the delta term of this filter to get `delta_biases` due to this filter.
 * Finally, we get delta of this layer by applying derivative of activation function of this layer.
 
@@ -504,7 +504,7 @@ class Dropout:
         self.delta[self.output == 0] = 0
 ```
 
-* Some of parameters like `weights`, `biases` are actually not available on the Dropout layer but i am using this for the sake of simplicity while working with stack of layers.
+* Some of parameters like `weights`, `biases` are actually not available on the Dropout layer but I am using this for the sake of simplicity while working with stack of layers.
 * The input shape and output shape of Dropout layer will be same, what differs is the value. Where some will be set to 0 i.e forgotten randomly.
 * The method `apply_activation` performs the dropout operation. 
     * The easier way is to first convert it to 1d vector(by numpy's `flatten`) and take random indices from given probability. 
@@ -573,7 +573,7 @@ class Pool2d:
 
 Most of attributes are common to the `Convolution layer`.
 * Just like Keras, we will set the `stride` to `kernel_size` if nothing is given.
-* The pools is a list of available pooling type. Currently, i have only included 3.
+* The pools is a list of available pooling type. Currently, I have only included 3.
 
 #### 3.1.4.2 Method `set_output_shape`
 As always, this method will always be called from the stackking class.
@@ -1176,7 +1176,7 @@ m.summary()
 ```
 
 ### 4.2.1 Train model
-For the sake of simplicity i am using only 1000 samples from our this test. Additionally we will use 100 of testing samples too.
+For the sake of simplicity I am using only 1000 samples from our this test. Additionally we will use 100 of testing samples too.
 
 ```python
 m.train(x[:1000], y[:1000], epochs=100, batch_size=32, val_x=xt[:100], val_y=yt[:100])
@@ -1248,7 +1248,7 @@ m.summary()
 m.train(x[:5000], y[:5000], epochs=100, batch_size=32, val_x=xt[:500], val_y=yt[:500]) 
 ```
 
-<b> Note that, since this model is huge(have many layers) the time to perform single epoch migh be huge so i am taking only `5000` of training examples and `500` of testing samples.</b>
+<b> Note that, since this model is huge(have many layers) the time to perform single epoch migh be huge so I am taking only `5000` of training examples and `500` of testing samples.</b>
 
 The result on my machine is:-
 
@@ -1299,7 +1299,7 @@ Val Loss: 2358.6877 Val Accuracy: 76.2%
 Similar model on `keras` gives 90+ accuracy within 5th epoch but good think about our model is, it is training.
 
 ## 4.5 Test 4:- A complex model
-Our model doesn't seem to do great on previous complex architecture. But what if we modified it little bit? I am using my days to train these model and i have also done lots of hit and trial also.
+Our model doesn't seem to do great on previous complex architecture. But what if we modified it little bit? I am using my days to train these model and I have also done lots of hit and trial also.
 
 ```python
 m = CNN()
@@ -1460,7 +1460,7 @@ m.predict(x[0]) == mm.predict(x[0])
 On above block of code, we tried to load a model. I am not going to describe much here but we are printing summary and then checking if the prediction from original model and loaded model is right or wrong. If our model is loaded properly, then the array of all `True` will be printed.
 
 ## Upsample Layer
-Note that, `Pooling Layer` can be called as downsampling layer because it takes samples of pixels and returns new image with shape lesser than original image. And the opposite of this layer is `Upsample Layer`. Upsample layer generally increase the size of shape, in more simple words, it zooms the image. And if we see to the configuration of `YOLO(You Only Look Once)` authors have used multiple times `Upsample Layer`. For simpler case, i am doing the pixels expansion. 
+Note that, `Pooling Layer` can be called as downsampling layer because it takes samples of pixels and returns new image with shape lesser than original image. And the opposite of this layer is `Upsample Layer`. Upsample layer generally increase the size of shape, in more simple words, it zooms the image. And if we see to the configuration of `YOLO(You Only Look Once)` authors have used multiple times `Upsample Layer`. For simpler case, I am doing the pixels expansion. 
 Lets take an example(on my case):
 
 $$
@@ -1479,7 +1479,7 @@ $$
 101 & 101 & 88 & 88\end{pmatrix}
 $$
 
-This is just a simple case of Upsampling, and i haven not done much research about it.
+This is just a simple case of Upsampling, and I haven not done much research about it.
 
 ```python
 class Upsample:
@@ -1646,7 +1646,7 @@ for l in mm.layers:
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="6-References:">6 References:<a class="anchor-link" href="#6-References:">&#182;</a></h1><p>I have not done all these codes by myself. I have tried to give credits and references whenever i borrowed concepts and codes. I got help from googling and mostly stackoverflow. However i have to mentions some of great resources at last:-</p>
+<h1 id="6-References:">6 References:<a class="anchor-link" href="#6-References:">&#182;</a></h1><p>I have not done all these codes by myself. I have tried to give credits and references whenever I borrowed concepts and codes. I got help from googling and mostly stackoverflow. However I have to mentions some of great resources at last:-</p>
 <ul>
 <li><a href="https://www.github.com/ShivamShrirao/dnn_from_scratch">Optimizers code were referenced from here</a></li>
 <li><a href="https://ruder.io/optimizing-gradient-descent/index.html">An Overview of Gradient Descent Optimization Algorithms</a></li>
@@ -1667,7 +1667,7 @@ for l in mm.layers:
 <li><a href="{{site.url}}/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/">Writing a Deep Neural Network from Scratch on Python</a></li>
 <li><a href="{{site.url}}/2020/06/05/convolutional-neural-networks-from-scratch-on-python/">Convolutional Neural Networks from Scratch on Python</a></li>
 </ul>
-<p>For the production phase, it is always best idea to use frameworks but for the learning phase, starting from the scratch is a great idea. I also got suggestions from friends that, prof. Adrew Ng's contents drives us through the scratch but i never got chance to watch one. I am sharing a notebook and repository link also. On next blog i will try to do <strong>RNN</strong> from scratch. Please leave a feedback, and if you find this good content then sharing is caring. Thank you for your time and please ping me on **[twitter](https://twitter.com/Quassarianviper)**. You can find all these files under <a href="https://github.com/q-viper/ML-from-Basics">ML From Basics</a>.</p>
+<p>For the production phase, it is always best idea to use frameworks but for the learning phase, starting from the scratch is a great idea. I also got suggestions from friends that, prof. Adrew Ng's contents drives us through the scratch but I never got chance to watch one. I am sharing a notebook and repository link also. On next blog I will try to do <strong>RNN</strong> from scratch. Please leave a feedback, and if you find this good content then sharing is caring. Thank you for your time and please ping me on **[twitter](https://twitter.com/Quassarianviper)**. You can find all these files under <a href="https://github.com/q-viper/ML-from-Basics">ML From Basics</a>.</p>
 
 </div>
 </div>
