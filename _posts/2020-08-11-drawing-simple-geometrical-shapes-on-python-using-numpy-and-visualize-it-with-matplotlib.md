@@ -204,20 +204,29 @@ But what we need is the coordinate values of `p1`. We can do that by thinking as
 
 \begin{equation}
 cos(\theta) = \frac{b}{h}\\
+\end{equation}
+\begin{equation}
 x = b = cos(\theta) * h
 \end{equation}
 
 Similarly,
+
 \begin{equation}
 sin(\theta) = \frac{p}{h}\\
+\end{equation}
+\begin{equation}
 y = p = sin(\theta) * h
 \end{equation}
 
 And on our case, when the circle is not on center then our `(x, y)` coordinate or `p1` will be `(h, k)` far from plane's center.
 
 Hence, coordinate value for `p1` will be:
+
 \begin{equation}
 x = h + cos(\theta) * r\\
+\end{equation}
+\begin{equation}
+
 y = k + sin(\theta) * r
 \end{equation}
 
@@ -226,14 +235,16 @@ And on image plane, the coordinate starts from (0, 0) and we don't have -ve quad
 
 All the stories given above is already found on the polar form.
 
-\begin{equation}
+<!-- \begin{equation} -->
+$$
 x = cos(\theta) * r\\
 y = sin(\theta) * r\\
 and,\\
 r = \sqrt{x^2 + y^2}\\
 and,\\
 \theta = tan^{-1}(\frac{y}{x})
-\end{equation}
+$$
+% \end{equation}
 
 
 
