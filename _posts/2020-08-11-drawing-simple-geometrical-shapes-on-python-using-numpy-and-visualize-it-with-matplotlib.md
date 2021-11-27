@@ -226,7 +226,6 @@ Hence, coordinate value for `p1` will be:
 
 $$
 % \begin{equation}
-
 x = h + cos(\theta) * r\\
 % \end{equation}
 % \begin{equation}
@@ -247,7 +246,7 @@ r = \sqrt{x^2 + y^2}\\
 and,\\
 \theta = tan^{-1}(\frac{y}{x})
 $$
-% \end{equation}
+<!-- % \end{equation} -->
 
 
 
