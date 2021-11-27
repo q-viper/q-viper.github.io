@@ -202,42 +202,31 @@ Lets take an example of above circle on 2d plane. Circle's center is on `(h, k)`
 
 But what we need is the coordinate values of `p1`. We can do that by thinking as `c` is on origin. then the x coordinate of `p1` will be equal to x coordinate of `p3`. And to find x-coordinate of `p3` we can solve.
 
-<!-- \begin{equation} -->
+
 $$
 cos(\theta) = \frac{b}{h}\\
-% \end{equation}
-% \begin{equation}
 x = b = cos(\theta) * h
-% \end{equation}
 $$
 Similarly,
 
 $$
-<!-- \begin{equation} -->
 sin(\theta) = \frac{p}{h}\\
-% \end{equation}
-% \begin{equation}
 y = p = sin(\theta) * h
-% \end{equation}
 $$
+
 And on our case, when the circle is not on center then our `(x, y)` coordinate or `p1` will be `(h, k)` far from plane's center.
 
 Hence, coordinate value for `p1` will be:
 
 $$
-% \begin{equation}
 x = h + cos(\theta) * r\\
-% \end{equation}
-% \begin{equation}
 y = k + sin(\theta) * r
-% \end{equation}
 $$
 
 And on image plane, the coordinate starts from (0, 0) and we don't have -ve quadrant. Hence we ignore all (x, y) values that lies other than first quadrant. Enough of this theory, lets write that on code.
 
 All the stories given above is already found on the polar form.
 
-<!-- \begin{equation} -->
 $$
 x = cos(\theta) * r\\
 y = sin(\theta) * r\\
@@ -246,7 +235,6 @@ r = \sqrt{x^2 + y^2}\\
 and,\\
 \theta = tan^{-1}(\frac{y}{x})
 $$
-<!-- % \end{equation} -->
 
 
 
@@ -595,10 +583,10 @@ The comparison with OpenCV seems to be great because we have 0 difference. You c
 ## Ellipse
 Ellipse is a modified version of circle but it is well described as the portion that lies on a 2d plane when a plane is inclined inside a cone. Please search about this to see the bunch of images. I will again be using the polar form of ellipse. It is just as simple as the circle's except we use axis instead of radius. 
 
-\begin{equation}
+$$
 x = h + cos(\theta) * a\\
 y = k + sin(\theta) * b
-\end{equation}
+$$
 
 A simple example can be done using Matplotlib's plot.
 
