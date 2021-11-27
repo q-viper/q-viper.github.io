@@ -202,34 +202,37 @@ Lets take an example of above circle on 2d plane. Circle's center is on `(h, k)`
 
 But what we need is the coordinate values of `p1`. We can do that by thinking as `c` is on origin. then the x coordinate of `p1` will be equal to x coordinate of `p3`. And to find x-coordinate of `p3` we can solve.
 
-\begin{equation}
+<!-- \begin{equation} -->
+$$
 cos(\theta) = \frac{b}{h}\\
-\end{equation}
-\begin{equation}
+% \end{equation}
+% \begin{equation}
 x = b = cos(\theta) * h
-\end{equation}
-
+% \end{equation}
+$$
 Similarly,
 
-\begin{equation}
+$$
+<!-- \begin{equation} -->
 sin(\theta) = \frac{p}{h}\\
-\end{equation}
-\begin{equation}
+% \end{equation}
+% \begin{equation}
 y = p = sin(\theta) * h
-\end{equation}
-
+% \end{equation}
+$$
 And on our case, when the circle is not on center then our `(x, y)` coordinate or `p1` will be `(h, k)` far from plane's center.
 
 Hence, coordinate value for `p1` will be:
 
-\begin{equation}
+$$
+% \begin{equation}
+
 x = h + cos(\theta) * r\\
-\end{equation}
-\begin{equation}
-
+% \end{equation}
+% \begin{equation}
 y = k + sin(\theta) * r
-\end{equation}
-
+% \end{equation}
+$$
 
 And on image plane, the coordinate starts from (0, 0) and we don't have -ve quadrant. Hence we ignore all (x, y) values that lies other than first quadrant. Enough of this theory, lets write that on code.
 
