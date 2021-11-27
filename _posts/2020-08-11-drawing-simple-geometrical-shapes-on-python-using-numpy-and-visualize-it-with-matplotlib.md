@@ -207,6 +207,7 @@ $$
 cos(\theta) = \frac{b}{h}\\
 x = b = cos(\theta) * h
 $$
+
 Similarly,
 
 $$
