@@ -196,10 +196,10 @@ Get variable via, `Variable.get()`. To make it secret, add `_secret` on the last
 ```
 
 To see this task in action,
- 
-    * Re-run scheduler and see the DAG with name `my_dag` then enable it. 
-    * Go inside the DAG and hit the trigger by clicking on play icon.
-    * To see the output, go to the log by clicking on the green rectangle. And then logs.
+
+* Re-run scheduler and see the DAG with name `my_dag` then enable it. 
+* Go inside the DAG and hit the trigger by clicking on play icon.
+* To see the output, go to the log by clicking on the green rectangle. And then logs.
 
     ![PNG]({{site.url}}/assets/airflow_blog/run_dag.PNG)
 
