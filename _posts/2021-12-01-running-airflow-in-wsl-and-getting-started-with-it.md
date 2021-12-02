@@ -1,7 +1,7 @@
 ---
 title:  "Running Airflow in Windows with WSL"
 date:   2021-12-01 10:29:17 +0545
-update_date: 2021-12-02 12:29:17 +0545
+last_modified_at: 2021-12-02 12:29:17 +0545
 categories:
     - airflow
     - data engineering
