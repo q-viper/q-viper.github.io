@@ -113,7 +113,7 @@ with DAG(..) as dag:
 ```
 ### Way 2
 
-```
+```python
 dag = DAG(..)
 DummyOperator(dag=dag)
 ```
@@ -178,6 +178,7 @@ Get variable via, `Variable.get()`. To make it secret, add `_secret` on the last
 #### Examples
 * Create 3 variables from UI. `data_folder`, `test_df` and `user_info` then pass values accordingly. Make sure `user_info` is in JSON format i.e. '{"uname":"admin","password":"password"}'.
 * Create a function outside DAG,
+
     ```python
     def _extract():
         file_path = Variable.get("data_folder") + "/" + Variable.get("test_df")
@@ -186,6 +187,7 @@ Get variable via, `Variable.get()`. To make it secret, add `_secret` on the last
         print(uinfo["uname"], uinfo["password"])
     ```
 * Inside a DAG create a task,
+
     ```python
         extract = PythonOperator(
                 task_id="extract", 
@@ -206,11 +208,12 @@ To see this task in action,
 
 * Using `{{var.json.variable_name.variable_key}}`. Alternatively, we could do `{{var.value.variable_name}}. Outside DAG.
     
-    ```python
+```python
     def _extract2(uname):
         print(f"Username: {uname}")
     ```
 * Inside DAG.
+
     ```python
         extract2 = PythonOperator(
                 task_id="extract2", 
@@ -228,12 +231,14 @@ Insert line `export AIRFLOW_VAR_USER_INFO2='{"uname":"admin","password":"passwor
 
 #### Examples
 * Outside DAG.
+
     ```python 
     def _extract_env():
         print(Variable.get("user_info2", deserialize_json=True))
     
     ```
 * Inside DAG.
+
     ```python 
         extract_env = PythonOperator(
                     task_id="extract_env", 
@@ -243,6 +248,7 @@ Insert line `export AIRFLOW_VAR_USER_INFO2='{"uname":"admin","password":"passwor
     ```
     
 ## Final Codes
+
     ```python
     
     from airflow import DAG
