@@ -26,13 +26,13 @@ Using airflow in Windows machine is hard way to go but with the use of Docker on
 (Referenced from [here](https://towardsdatascience.com/run-apache-airflow-on-windows-10-without-docker-3c5754bb98b4).)
 * Open the Ubuntu.
 * Update system packages.
-    ```
+    ```bash
     sudo apt update
     sudo apt upgrade
     ```
 
 * Installing PIP.
-    ```
+    ```bash
     sudo apt-get install software-properties-common
     sudo apt-add-repository universe
     sudo apt-get update
@@ -173,7 +173,7 @@ Get variable via, `Variable.get()`. To make it secret, add `_secret` on the last
 ### Properly Fetch Variable
 * Never use `Variable.get()` outside a Task. Else we would be making a useless connection everytime our DAG is parsed. We will be making tons of useless variables.
 * How to retreive multiple relative variables? Instead of making connection request for each of variables, use JSON as value in Variable and pass deserialize_json=True to access json as dictionary. 
-* Passing variable only once. Instead of passing `Variable.get()` in `op_args`, we could pass "{{ var.json.variable_name.variable_key}}". Doing this, we wont be making fetch more than once.
+* Passing variable only once. Instead of passing `Variable.get()` in `op_args`, we could pass `"{{ var.json.variable_name.variable_key}}"`. Doing this, we wont be making fetch more than once.
 
 #### Examples
 * Create 3 variables from UI. `data_folder`, `test_df` and `user_info` then pass values accordingly. Make sure `user_info` is in JSON format i.e. `'{"uname":"admin","password":"password"}'`.
@@ -185,7 +185,7 @@ Get variable via, `Variable.get()`. To make it secret, add `_secret` on the last
         uinfo = Variable.get("user_info", deserialize_json=True)
         print(uinfo, file_path)
         print(uinfo["uname"], uinfo["password"])
-    ```
+```
 
 * Inside a DAG create a task,
 ```python
@@ -221,7 +221,7 @@ To see this task in action,
                 task_id="extract2", 
                 python_callable=_extract2,
                 op_args = ["{{ var.json.user_info.uname}}"])
-    ```
+```
 
 ### Environment Variable
 Why do we need environment variable? Well, first reason is that we will be hiding our variables from unwanted users and second reason is that we won't have to make database connection everytime we want to access this variable.
@@ -234,24 +234,24 @@ Insert line `export AIRFLOW_VAR_USER_INFO2='{"uname":"admin","password":"passwor
 #### Examples
 * Outside DAG.
 
-    ```python 
+```python 
     def _extract_env():
         print(Variable.get("user_info2", deserialize_json=True))
     
-    ```
+```
 * Inside DAG.
 
-    ```python 
+```python 
         extract_env = PythonOperator(
                     task_id="extract_env", 
                     python_callable=_extract_env
                     )
             
-    ```
+```
     
 ## Final Codes
 
-    ```python
+```python
     
     from airflow import DAG
     from datetime import datetime, timedelta
@@ -296,5 +296,5 @@ Insert line `export AIRFLOW_VAR_USER_INFO2='{"uname":"admin","password":"passwor
                 python_callable=_extract_env
                 )
         
-    ```
+```
     
