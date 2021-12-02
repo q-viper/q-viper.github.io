@@ -179,7 +179,7 @@ Get variable via, `Variable.get()`. To make it secret, add `_secret` on the last
 * Create 3 variables from UI. `data_folder`, `test_df` and `user_info` then pass values accordingly. Make sure `user_info` is in JSON format i.e. '{"uname":"admin","password":"password"}'.
 * Create a function outside DAG,
 
-    ```python
+```python
     def _extract():
         file_path = Variable.get("data_folder") + "/" + Variable.get("test_df")
         uinfo = Variable.get("user_info", deserialize_json=True)
@@ -188,14 +188,15 @@ Get variable via, `Variable.get()`. To make it secret, add `_secret` on the last
     ```
 * Inside a DAG create a task,
 
-    ```python
+```python
         extract = PythonOperator(
                 task_id="extract", 
                 python_callable=_extract
                 )
-    ```
+```
 
-To see this task in action, 
+To see this task in action,
+ 
     * Re-run scheduler and see the DAG with name `my_dag` then enable it. 
     * Go inside the DAG and hit the trigger by clicking on play icon.
     * To see the output, go to the log by clicking on the green rectangle. And then logs.
@@ -206,16 +207,16 @@ To see this task in action,
 
     ![PNG]({{site.url}}/assets/airflow_blog/log_op.PNG)
 
-* Using `{{var.json.variable_name.variable_key}}`. Alternatively, we could do `{{var.value.variable_name}}. Outside DAG.
+* Using `{{var.json.variable_name.variable_key}}`. Alternatively, we could do `{{var.value.variable_name}}`. Outside DAG.
     
 ```python
     def _extract2(uname):
         print(f"Username: {uname}")
-    ```
+```
 
 * Inside DAG.
 
-    ```python
+```python
         extract2 = PythonOperator(
                 task_id="extract2", 
                 python_callable=_extract2,
