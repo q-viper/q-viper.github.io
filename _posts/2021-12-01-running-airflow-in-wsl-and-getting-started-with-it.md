@@ -26,19 +26,19 @@ Using airflow in Windows machine is hard way to go but with the use of Docker on
 (Referenced from [here](https://towardsdatascience.com/run-apache-airflow-on-windows-10-without-docker-3c5754bb98b4).)
 * Open the Ubuntu.
 * Update system packages.
-```
-sudo apt update
-sudo apt upgrade
-```
+    ```
+    sudo apt update
+    sudo apt upgrade
+    ```
 
 * Installing PIP.
-```
-sudo apt-get install software-properties-common
-sudo apt-add-repository universe
-sudo apt-get update
-sudo apt-get install python-setuptools
-sudo apt install python3-pip
-```
+    ```
+    sudo apt-get install software-properties-common
+    sudo apt-add-repository universe
+    sudo apt-get update
+    sudo apt-get install python-setuptools
+    sudo apt install python3-pip
+    ```
 
 * Run `sudo nano /etc/wsl.conf` then, insert the block below, save and exit with `ctrl+s` `ctrl+x`
 ```
@@ -49,49 +49,60 @@ options = "metadata"
 
 * To setup a airflow home, first make sure where to install it. Run `nano ~/.bashrc`, insert the line below, save and exit with `ctrl+s` `ctrl+x`
 
-```export AIRFLOW_HOME=c/users/YOURNAME/airflowhome```
+    ```export AIRFLOW_HOME=c/users/YOURNAME/airflowhome```
 
-Mine is, `/mnt/c/users/dell/myName/documents/airflow`
+    Mine is, `/mnt/c/users/dell/myName/documents/airflow`
+
 * Install virtualenv to create environment.
-```
-sudo apt install python3-virtualenv
-```
+    ```
+    sudo apt install python3-virtualenv
+    ```
+
 * Create and activate environment.
-```
-virtualenv airflow_env
-source airflow_env/bin/activate
-```
+    ```
+    virtualenv airflow_env
+    source airflow_env/bin/activate
+    ```
+
 * Install airflow
-```
-install apache-airflow
-```
+    ```
+    install apache-airflow
+    ```
+
 * Make sure if Airflow is installed properly.
-```
-airflow info
-```
-If no error pops up, proceed else install missing packages.
+    ```
+    airflow info
+    ```
+
+    If no error pops up, proceed else install missing packages.
 
 * Initialize DB. By default, sqlite is used.
-```
-airflow db init
-```
+    ```
+    airflow db init
+    ```
+
 * Create airflow user.
-```
-airflow users create [-h] -e EMAIL -f FIRSTNAME -l LASTNAME [-p PASSWORD] -r
-                     ROLE [--use-random-password] -u USERNAME
-```
+    ```
+    airflow users create [-h] -e EMAIL -f FIRSTNAME -l LASTNAME [-p PASSWORD] -r
+                         ROLE [--use-random-password] -u USERNAME
+    ```
+
 * Start webserver.
-```
-airflow webserver
-```
+    ```
+    airflow webserver
+    ```
+    * Go to URL `http://localhost:8080/`. If error pops up, check what is missing. Below page will be seen.
+
+        ![img]({{site.url}}/assets/airflow_blog/login.png)
+
+    * Next page might be something like below.
+
+        ![img]({{site.url}}/assets/airflow_blog/dags.png)
+
 * In another terminal, enable virtual environment and then start scheduler.
-```
-airflow scheduler
-```
-* Go to URL `http://localhost:8080/`. If error pops up, check what is missing. Below page will be seen.
-    ![img]({{site.url}}/assets/airflow_blog/login.png)
-* Next page might be something like below.
-    ![img]({{site.url}}/assets/airflow_blog/dags.png)
+    ```
+    airflow scheduler
+    ```
 
 ## Ways to Define a DAG
 ### Way 1 
@@ -139,8 +150,8 @@ Interval of time from min(start_date) at which DAG is triggered. It waits for st
 
 #### Task's Rule
 All task should be:
-* Idempotence: If excuted multiple times, it should always have same side effect. If tried to create SQL table twice, error comes so to make idempothence, create if not exists".
-* Determinism: If task run with same input, output should always be same. If 
+* **Idempotence**: If excuted multiple times, it should always have same side effect. If tried to create SQL table twice, error comes so to make idempothence, create if not exists".
+* **Determinism**: If task run with same input, output should always be same. If 
 
 #### Backfilling:
 How to run on the previous date i.e past dates?
