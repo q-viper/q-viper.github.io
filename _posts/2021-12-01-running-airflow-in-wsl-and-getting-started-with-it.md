@@ -176,9 +176,9 @@ Get variable via, `Variable.get()`. To make it secret, add `_secret` on the last
 * Passing variable only once. Instead of passing `Variable.get()` in `op_args`, we could pass "{{ var.json.variable_name.variable_key}}". Doing this, we wont be making fetch more than once.
 
 #### Examples
-* Create 3 variables from UI. `data_folder`, `test_df` and `user_info` then pass values accordingly. Make sure `user_info` is in JSON format i.e. '{"uname":"admin","password":"password"}'.
-* Create a function outside DAG,
+* Create 3 variables from UI. `data_folder`, `test_df` and `user_info` then pass values accordingly. Make sure `user_info` is in JSON format i.e. `'{"uname":"admin","password":"password"}'`.
 
+* Create a function outside DAG,
 ```python
     def _extract():
         file_path = Variable.get("data_folder") + "/" + Variable.get("test_df")
@@ -186,8 +186,8 @@ Get variable via, `Variable.get()`. To make it secret, add `_secret` on the last
         print(uinfo, file_path)
         print(uinfo["uname"], uinfo["password"])
     ```
-* Inside a DAG create a task,
 
+* Inside a DAG create a task,
 ```python
         extract = PythonOperator(
                 task_id="extract", 
