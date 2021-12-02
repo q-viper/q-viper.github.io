@@ -191,7 +191,7 @@ To see this task in action,
 
     * Logs output will be something like below
 
-    ![png]("{{site.url}}/assets/airflow_blog/log_op.png")
+    ![png]({{site.url}}/assets/airflow_blog/log_op.png)
 
 * Using `{{var.json.variable_name.variable_key}}`. Alternatively, we could do `{{var.value.variable_name}}. Outside DAG.
     
