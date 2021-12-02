@@ -9,7 +9,7 @@ tags:
     - data pipelining
     - wsl
 header:
-  teaser: assets/airflow_blog/scheduler.png
+  teaser: assets/airflow_blog/scheduler.PNG
 ---
 
 # Getting Started With Airflow in WSL
@@ -93,11 +93,11 @@ options = "metadata"
     ```
     * Go to URL `http://localhost:8080/`. If error pops up, check what is missing. Below page will be seen.
 
-        ![img]({{site.url}}/assets/airflow_blog/login.png)
+        ![img]({{site.url}}/assets/airflow_blog/login.PNG)
 
     * Next page might be something like below.
 
-        ![img]({{site.url}}/assets/airflow_blog/dags.png)
+        ![img]({{site.url}}/assets/airflow_blog/dags.PNG)
 
 * In another terminal, enable virtual environment and then start scheduler.
     ```
@@ -200,11 +200,11 @@ To see this task in action,
     * Go inside the DAG and hit the trigger by clicking on play icon.
     * To see the output, go to the log by clicking on the green rectangle. And then logs.
 
-    ![png]({{site.url}}/assets/airflow_blog/run_dag.png)
+    ![PNG]({{site.url}}/assets/airflow_blog/run_dag.PNG)
 
     * Logs output will be something like below
 
-    ![png]({{site.url}}/assets/airflow_blog/log_op.png)
+    ![PNG]({{site.url}}/assets/airflow_blog/log_op.PNG)
 
 * Using `{{var.json.variable_name.variable_key}}`. Alternatively, we could do `{{var.value.variable_name}}. Outside DAG.
     
@@ -212,6 +212,7 @@ To see this task in action,
     def _extract2(uname):
         print(f"Username: {uname}")
     ```
+
 * Inside DAG.
 
     ```python
@@ -225,8 +226,8 @@ To see this task in action,
 Why do we need environment variable? Well, first reason is that we will be hiding our variables from unwanted users and second reason is that we won't have to make database connection everytime we want to access this variable.
 
 Any airflow environment variable will start with `AIRFLOW_VAR_` and will be in JSON format. ex
-`AIRFLOW_VAR_VARNAME='{"uname":"admin","password":"password"}'`. To setup this variable, we have to create an environment variable first.
-to do so, `export AIRFLOW_VAR_USER_INFO2='{"uname":"admin","password":"password"}'`. The variable will not be permanent though so we need to insert it into `.bashrc` by `nano ~/.bashrc`. 
+`AIRFLOW_VAR_VARNAME='{"uname":"admin","password":"password"}'`. To setup this variable, we have to create an environment variable first. To do so, `export AIRFLOW_VAR_USER_INFO2='{"uname":"admin","password":"password"}'`. The variable will not be permanent though so we need to insert it into `.bashrc` by `nano ~/.bashrc`. 
+
 Insert line `export AIRFLOW_VAR_USER_INFO2='{"uname":"admin","password":"password"}'` in bashrc file.
 
 #### Examples
