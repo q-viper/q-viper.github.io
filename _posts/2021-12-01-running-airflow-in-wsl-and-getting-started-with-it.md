@@ -1,7 +1,7 @@
 ---
 title:  "Running Airflow in Windows with WSL"
 date:   2021-12-01 10:29:17 +0545
-modified_date: 2021-12-02 12:29:17 +0545
+update_date: 2021-12-02 12:29:17 +0545
 categories:
     - airflow
     - data engineering
@@ -89,9 +89,9 @@ airflow webserver
 airflow scheduler
 ```
 * Go to URL `http://localhost:8080/`. If error pops up, check what is missing. Below page will be seen.
-![img]("{{site.url}}/assets/airflow_blog/login.png")
+    ![img]({{site.url}}/assets/airflow_blog/login.png)
 * Next page might be something like below.
-![img]("{{site.url}}/assets/airflow_blog/dags.png")
+    ![img]({{site.url}}/assets/airflow_blog/dags.png)
 
 ## Ways to Define a DAG
 ### Way 1 
@@ -158,6 +158,7 @@ We can create via:
 * APIs
 
 Get variable via, `Variable.get()`. To make it secret, add `_secret` on the last of variable name.
+
 ### Properly Fetch Variable
 * Never use `Variable.get()` outside a Task. Else we would be making a useless connection everytime our DAG is parsed. We will be making tons of useless variables.
 * How to retreive multiple relative variables? Instead of making connection request for each of variables, use JSON as value in Variable and pass deserialize_json=True to access json as dictionary. 
@@ -166,47 +167,45 @@ Get variable via, `Variable.get()`. To make it secret, add `_secret` on the last
 #### Examples
 * Create 3 variables from UI. `data_folder`, `test_df` and `user_info` then pass values accordingly. Make sure `user_info` is in JSON format i.e. '{"uname":"admin","password":"password"}'.
 * Create a function outside DAG,
-```python
-def _extract():
-    file_path = Variable.get("data_folder") + "/" + Variable.get("test_df")
-    uinfo = Variable.get("user_info", deserialize_json=True)
-    print(uinfo, file_path)
-    print(uinfo["uname"], uinfo["password"])
-```
+    ```python
+    def _extract():
+        file_path = Variable.get("data_folder") + "/" + Variable.get("test_df")
+        uinfo = Variable.get("user_info", deserialize_json=True)
+        print(uinfo, file_path)
+        print(uinfo["uname"], uinfo["password"])
+    ```
 * Inside a DAG create a task,
-
-```python
-    extract = PythonOperator(
-            task_id="extract", 
-            python_callable=_extract
-            )
-```
+    ```python
+        extract = PythonOperator(
+                task_id="extract", 
+                python_callable=_extract
+                )
+    ```
 
 To see this task in action, 
     * Re-run scheduler and see the DAG with name `my_dag` then enable it. 
     * Go inside the DAG and hit the trigger by clicking on play icon.
     * To see the output, go to the log by clicking on the green rectangle. And then logs.
 
-    ![png]("{{site.url}}/assets/airflow_blog/run_dag.png")
+    ![png]({{site.url}}/assets/airflow_blog/run_dag.png)
 
     * Logs output will be something like below
 
     ![png]("{{site.url}}/assets/airflow_blog/log_op.png")
 
 * Using `{{var.json.variable_name.variable_key}}`. Alternatively, we could do `{{var.value.variable_name}}. Outside DAG.
-
-```python
-def _extract2(uname):
-    print(f"Username: {uname}")
-```
+    
+    ```python
+    def _extract2(uname):
+        print(f"Username: {uname}")
+    ```
 * Inside DAG.
-```python
-    extract2 = PythonOperator(
-            task_id="extract2", 
-            python_callable=_extract2,
-            op_args = ["{{ var.json.user_info.uname}}"])
-```
-
+    ```python
+        extract2 = PythonOperator(
+                task_id="extract2", 
+                python_callable=_extract2,
+                op_args = ["{{ var.json.user_info.uname}}"])
+    ```
 
 ### Environment Variable
 Why do we need environment variable? Well, first reason is that we will be hiding our variables from unwanted users and second reason is that we won't have to make database connection everytime we want to access this variable.
@@ -218,65 +217,65 @@ Insert line `export AIRFLOW_VAR_USER_INFO2='{"uname":"admin","password":"passwor
 
 #### Examples
 * Outside DAG.
-```python 
-def _extract_env():
-    print(Variable.get("user_info2", deserialize_json=True))
-
-```
+    ```python 
+    def _extract_env():
+        print(Variable.get("user_info2", deserialize_json=True))
+    
+    ```
 * Inside DAG.
-```python 
-    extract_env = PythonOperator(
+    ```python 
+        extract_env = PythonOperator(
+                    task_id="extract_env", 
+                    python_callable=_extract_env
+                    )
+            
+    ```
+    
+## Final Codes
+    ```python
+    
+    from airflow import DAG
+    from datetime import datetime, timedelta
+    from airflow.operators.python import PythonOperator
+    from airflow.models import Variable
+    
+    
+    def _extract():
+        """[summary]
+        """
+        file_path = Variable.get("data_folder") + "/" + Variable.get("test_df")
+        uinfo = Variable.get("user_info", deserialize_json=True)
+        # print(uinfo, file_path)
+        print(uinfo["uname"], uinfo["password"])
+    
+    def _extract2(uname):
+        """[summary]
+        """
+        print(f"Username: {uname}")
+    
+    def _extract_env():
+        """[summary]
+        """
+        print(Variable.get("user_info2", deserialize_json=True))
+    
+    with DAG(dag_id="my_dag", description="DAG for showing nothinig.", 
+             start_date=datetime(2021, 1, 1), schedule_interval=timedelta(minutes=5),
+             dagrun_timeout=timedelta(minutes=10), tags=["learning_dag"], catchup=False) as dag:
+        
+        extract = PythonOperator(
+                task_id="extract", 
+                python_callable=_extract
+                )
+        
+        extract2 = PythonOperator(
+                task_id="extract2", 
+                python_callable=_extract2,
+                op_args = ["{{ var.json.user_info.uname}}"])
+        
+        extract_env = PythonOperator(
                 task_id="extract_env", 
                 python_callable=_extract_env
                 )
         
-```
-
-## Final Codes
-```python
-
-from airflow import DAG
-from datetime import datetime, timedelta
-from airflow.operators.python import PythonOperator
-from airflow.models import Variable
-
-
-def _extract():
-    """[summary]
-    """
-    file_path = Variable.get("data_folder") + "/" + Variable.get("test_df")
-    uinfo = Variable.get("user_info", deserialize_json=True)
-    # print(uinfo, file_path)
-    print(uinfo["uname"], uinfo["password"])
-
-def _extract2(uname):
-    """[summary]
-    """
-    print(f"Username: {uname}")
-
-def _extract_env():
-    """[summary]
-    """
-    print(Variable.get("user_info2", deserialize_json=True))
-
-with DAG(dag_id="my_dag", description="DAG for showing nothinig.", 
-         start_date=datetime(2021, 1, 1), schedule_interval=timedelta(minutes=5),
-         dagrun_timeout=timedelta(minutes=10), tags=["learning_dag"], catchup=False) as dag:
+    ```
     
-    extract = PythonOperator(
-            task_id="extract", 
-            python_callable=_extract
-            )
-    
-    extract2 = PythonOperator(
-            task_id="extract2", 
-            python_callable=_extract2,
-            op_args = ["{{ var.json.user_info.uname}}"])
-    
-    extract_env = PythonOperator(
-            task_id="extract_env", 
-            python_callable=_extract_env
-            )
-    
-```
-
