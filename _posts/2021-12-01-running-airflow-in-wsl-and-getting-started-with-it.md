@@ -145,8 +145,8 @@ Interval of time from min(start_date) at which DAG is triggered. It waits for st
 * `catchup`: Should we run all the schedules that we missed? If True, scheduler will automatically trigger all the previous task runs that are available between this date and start date.
 
 #### Cron Expression vs timedelta in `schedule_interval`
-* Cron Expn: Stateless. Trigger according to the expression. 0 0 * * * is for each day's 00:00:00 AM. 
-* timedelta: Stateful. Trigger according to previous execution date.
+* **Cron Expression**: Stateless. Trigger according to the expression. 0 0 * * * is for each day's 00:00:00 AM. 
+* **timedelta**: Stateful. Trigger according to previous execution date.
 
 #### Task's Rule
 All task should be:
@@ -203,7 +203,7 @@ To see this task in action,
 
     ![PNG]({{site.url}}/assets/airflow_blog/run_dag.PNG)
 
-    * Logs output will be something like below
+    Logs output will be something like below
 
     ![PNG]({{site.url}}/assets/airflow_blog/log_op.PNG)
 
