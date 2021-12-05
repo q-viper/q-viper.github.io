@@ -388,336 +388,336 @@ Again, NumPy came to the aid.
     [Here is the problem link.](https://adventofcode.com/2021/day/5)
     
 ### Part 1
-    ```python
-    import numpy as np    
-    data,data1 = get_data(day=5)
+```python
+import numpy as np    
+data,data1 = get_data(day=5)
+
+# get(x1, y1, x2, y2)
+coordinates = []
+for d in data:
+    x1, y1, x2, y2 = list(map(int, d.replace(" -> ", ",").split(",")))
+    coordinates.append((x1, y1, x2, y2))
     
-    # get(x1, y1, x2, y2)
-    coordinates = []
-    for d in data:
-        x1, y1, x2, y2 = list(map(int, d.replace(" -> ", ",").split(",")))
-        coordinates.append((x1, y1, x2, y2))
-        
-    coordinates = np.array(coordinates)   
-    mxx,mxy = coordinates[[0, 2]].max(), coordinates[[1, 3]].max()
-    
-    board = np.zeros((mxx*2, mxy*2))
-    
-    # check only horizontal or vertical line
-    m1 = coordinates[:, 0]==coordinates[:, 2]
-    m2 = coordinates[:, 1]==coordinates[:, 3]
-    m = m1 | m2
-    
-    masked = coordinates[m]  
-    for co in masked:    
-        for x in range(min(co[0], co[2]), max(co[0], co[2])+1):
-            for y in range(min(co[1], co[3]), max(co[1], co[3])+1):
-                board[x, y] += 1
-    print((board.flatten()>1).sum())    
-    ```
+coordinates = np.array(coordinates)   
+mxx,mxy = coordinates[[0, 2]].max(), coordinates[[1, 3]].max()
+
+board = np.zeros((mxx*2, mxy*2))
+
+# check only horizontal or vertical line
+m1 = coordinates[:, 0]==coordinates[:, 2]
+m2 = coordinates[:, 1]==coordinates[:, 3]
+m = m1 | m2
+
+masked = coordinates[m]  
+for co in masked:    
+    for x in range(min(co[0], co[2]), max(co[0], co[2])+1):
+        for y in range(min(co[1], co[3]), max(co[1], co[3])+1):
+            board[x, y] += 1
+print((board.flatten()>1).sum())    
+```
 
 The output will be 5 for above code where test data was used. Should use `data1` for real output.
     
-    ### Part 2
-    ```python
+### Part 2
+```python
+
+# diagonal line
+m1 = coordinates[:, 0]!=coordinates[:, 2]
+m2 = coordinates[:, 1]!=coordinates[:, 3]
+m=m1*m2
+masked = coordinates[m]
+
+for co in masked:
+    # add or sub to x1?
+    dx = int(co[2]>co[0]) or -1
+    dy = int(co[3]>co[1]) or -1
     
-    # diagonal line
-    m1 = coordinates[:, 0]!=coordinates[:, 2]
-    m2 = coordinates[:, 1]!=coordinates[:, 3]
-    m=m1*m2
-    masked = coordinates[m]
-    
-    for co in masked:
-        # add or sub to x1?
-        dx = int(co[2]>co[0]) or -1
-        dy = int(co[3]>co[1]) or -1
+    for dp in range(abs(co[2]-co[0])+1):
+        x = co[0]+dx*dp
+        y = co[1]+dy*dp
+        board[x,y]+=1
         
-        for dp in range(abs(co[2]-co[0])+1):
-            x = co[0]+dx*dp
-            y = co[1]+dy*dp
-            board[x,y]+=1
-            
-    print((board.flatten()>1).sum())    
-    ```
+print((board.flatten()>1).sum())    
+```
 
 The output of above code will be 12 for test data.
     
 
-    ## Day 6
-    [Here is the problem link.](https://adventofcode.com/2021/day/6)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+## Day 6
+[Here is the problem link.](https://adventofcode.com/2021/day/6)
 
-    ## Day 7
-    [Here is the problem link.](https://adventofcode.com/2021/day/7)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+### Part 1
+```python
 
-    ## Day 8
-    [Here is the problem link.](https://adventofcode.com/2021/day/8)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+```
 
-    ## Day 9
-    [Here is the problem link.](https://adventofcode.com/2021/day/9)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+### Part 2
+```python
 
-    ## Day 10
-    [Here is the problem link.](https://adventofcode.com/2021/day/10)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+```
 
-    ## Day 11
-    [Here is the problem link.](https://adventofcode.com/2021/day/11)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
 
-    ## Day 12
-    [Here is the problem link.](https://adventofcode.com/2021/day/12)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+## Day 7
+[Here is the problem link.](https://adventofcode.com/2021/day/7)
 
-    ## Day 13
-    [Here is the problem link.](https://adventofcode.com/2021/day/13)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+### Part 1
+```python
 
-    ## Day 14
-    [Here is the problem link.](https://adventofcode.com/2021/day/14)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+```
 
-    ## Day 15
-    [Here is the problem link.](https://adventofcode.com/2021/day/15)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+### Part 2
+```python
 
-    ## Day 16
-    [Here is the problem link.](https://adventofcode.com/2021/day/16)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+```
 
-    ## Day 17
-    [Here is the problem link.](https://adventofcode.com/2021/day/17)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
 
-    ## Day 18
-    [Here is the problem link.](https://adventofcode.com/2021/day/18)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+## Day 8
+[Here is the problem link.](https://adventofcode.com/2021/day/8)
 
-    ## Day 19
-    [Here is the problem link.](https://adventofcode.com/2021/day/19)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+### Part 1
+```python
 
-    ## Day 20
-    [Here is the problem link.](https://adventofcode.com/2021/day/20)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+```
 
-    ## Day 21
-    [Here is the problem link.](https://adventofcode.com/2021/day/21)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+### Part 2
+```python
 
-    ## Day 22
-    [Here is the problem link.](https://adventofcode.com/2021/day/22)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+```
 
-    ## Day 23
-    [Here is the problem link.](https://adventofcode.com/2021/day/23)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
 
-    ## Day 24
-    [Here is the problem link.](https://adventofcode.com/2021/day/24)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
-    
+## Day 9
+[Here is the problem link.](https://adventofcode.com/2021/day/9)
 
-    ## Day 25
-    [Here is the problem link.](https://adventofcode.com/2021/day/25)
-    
-    ### Part 1
-    ```python
-    
-    ```
-    
-    ### Part 2
-    ```python
-    
-    ```
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 10
+[Here is the problem link.](https://adventofcode.com/2021/day/10)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 11
+[Here is the problem link.](https://adventofcode.com/2021/day/11)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 12
+[Here is the problem link.](https://adventofcode.com/2021/day/12)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 13
+[Here is the problem link.](https://adventofcode.com/2021/day/13)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 14
+[Here is the problem link.](https://adventofcode.com/2021/day/14)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 15
+[Here is the problem link.](https://adventofcode.com/2021/day/15)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 16
+[Here is the problem link.](https://adventofcode.com/2021/day/16)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 17
+[Here is the problem link.](https://adventofcode.com/2021/day/17)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 18
+[Here is the problem link.](https://adventofcode.com/2021/day/18)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 19
+[Here is the problem link.](https://adventofcode.com/2021/day/19)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 20
+[Here is the problem link.](https://adventofcode.com/2021/day/20)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 21
+[Here is the problem link.](https://adventofcode.com/2021/day/21)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 22
+[Here is the problem link.](https://adventofcode.com/2021/day/22)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 23
+[Here is the problem link.](https://adventofcode.com/2021/day/23)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 24
+[Here is the problem link.](https://adventofcode.com/2021/day/24)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
+
+
+## Day 25
+[Here is the problem link.](https://adventofcode.com/2021/day/25)
+
+### Part 1
+```python
+
+```
+
+### Part 2
+```python
+
+```
