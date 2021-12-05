@@ -8,6 +8,8 @@ categories:
 tags:
     - algorithms
     - python
+    - adventofcode 2021
+    - programming challenges
 header:
   teaser: assets/advent_of_code/stars.png
 ---

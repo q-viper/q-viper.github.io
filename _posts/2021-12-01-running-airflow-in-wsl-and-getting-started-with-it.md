@@ -3,11 +3,15 @@ title:  "Running Airflow in Windows with WSL"
 date:   2021-12-01 10:29:17 +0545
 last_modified_at: 2021-12-02 12:29:17 +0545
 categories:
-    - airflow
+    - apache airflow
     - data engineering
+    - data pipelining
 tags:
     - data pipelining
-    - wsl
+    - ubuntu and windows
+    - windows subsystem for linux
+    - airflow for beginners
+    - tutorial
 header:
   teaser: assets/airflow_blog/scheduler.PNG
 ---
