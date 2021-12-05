@@ -13,6 +13,10 @@ header:
 ---
 
 # Getting Started With Airflow in WSL
+## Blog Versions
+This blog will be updated frequently.
+* **2021-12-01**
+    * Written blog.
 
 ## Introduction
 Airflow is a data pipelining tool used for ETL operations. It is a hot requirement in the field of data related jobs.
@@ -297,4 +301,7 @@ Insert line `export AIRFLOW_VAR_USER_INFO2='{"uname":"admin","password":"passwor
                 )
         
 ```
+
+## References
+* [Astronomer Certification Apache Airflow DAG Authoring Preparation](https://academy.astronomer.io/astronomer-certification-apache-airflow-dag-authoring-preparation)
     
