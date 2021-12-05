@@ -31,6 +31,7 @@ syntax_highlighter_opts:
     block:
         line_numbers: true
 google-site-verification: "-NAJsggtItjDHz0RXX60dTYYgfPzcfBp-oUg34Gf2wQ"
+
 analytics:
   provider: "google-gtag"
   google:
