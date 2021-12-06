@@ -446,15 +446,59 @@ The output of above code will be 12 for test data.
 ## Day 6
 [Here is the problem link.](https://adventofcode.com/2021/day/6)
 
+Today's challenge was easy but tricky one. I found 4th day's challenge to be more tough than today's but still I had hard time finding the right way to loop through all days.
+
 ### Part 1
 ```python
+data,data1 = get_data(day=6)
+data = [int(d) for d in data[0].split(",")]
+data1 = [int(d) for d in data1[0].split(",")]
 
+days = {}
+total_days = 81
+curr_data = data1.copy()
+for day in range(1, total_days):    
+    temp_data = []
+    new_fish = []
+    for d in curr_data:
+        if d == 0:
+            new_fish.append(8)
+            d=6
+        else:
+            d-=1
+        temp_data.append(d)
+    temp_data.extend(new_fish)
+    curr_data = temp_data
+print(f"Total Fish: {len(curr_data)}\n")
 ```
+Answer was:
+```
+Total Fish: 388419
+```
+
+It took around 2 seconds to run above code while `total_days` was 81 but when `total_day` was 257, it seemed like loop will be going on forever. And total fish keeps increasing by time. I even tried to make things faster by using NumPy but it did not work out. Thus, I used dictionaries to store lifespans of fish. Since it could be one of the 0 to 8, why bother keeping lifes?
 
 ### Part 2
-```python
 
+```python
+from collections import Counter
+
+lifes = dict(Counter(data1))
+
+days = 256
+for day in range(1, days+1):
+    lifes = {l: (0 if lifes.get(l+1) is None else lifes.get(l+1)) for l in range(-1, 8)}
+    # make all 8s -1 because we create new fish with 8 after it reaches 0
+    lifes[8] = lifes[-1]
+    # add new lifes to that are exhausted
+    lifes[6] += lifes[-1]
+    # reset exhausted lifes
+    lifes[-1] = 0 
+    
+print(sum(lifes.values()))
 ```
+
+
 
 
 ## Day 7

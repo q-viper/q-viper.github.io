@@ -21,6 +21,8 @@ header:
 This blog will be updated frequently.
 * **2021-12-01**
     * Written blog.
+* **2021-12-05**
+    * Updated contents upto TaskFlowAPI
 
 ## Introduction
 Airflow is a data pipelining tool used for ETL operations. It is a hot requirement in the field of data related jobs.
