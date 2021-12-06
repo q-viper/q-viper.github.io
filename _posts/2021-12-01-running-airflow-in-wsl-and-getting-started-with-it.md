@@ -183,7 +183,8 @@ Get variable via, `Variable.get()`. To make it secret, add `_secret` on the last
 ### Properly Fetch Variable
 * Never use `Variable.get()` outside a Task. Else we would be making a useless connection everytime our DAG is parsed. We will be making tons of useless variables.
 * How to retreive multiple relative variables? Instead of making connection request for each of variables, use JSON as value in Variable and pass deserialize_json=True to access json as dictionary. 
-* Passing variable only once. Instead of passing `Variable.get()` in `op_args`, we could pass `"{{ var.json.variable_name.variable_key}}"`. Doing this, we wont be making fetch more than once.
+* Passing variable only once. Instead of passing `Variable.get()` in `op_args`, we could pass `{% raw %}
+"{{ var.json.variable_name.variable_key}}" {% endraw %}`. Doing this, we wont be making fetch more than once.
 
 #### Examples
 * Create 3 variables from UI. `data_folder`, `test_df` and `user_info` then pass values accordingly. Make sure `user_info` is in JSON format i.e. `'{"uname":"admin","password":"password"}'`.
@@ -315,7 +316,7 @@ Insert line `export AIRFLOW_VAR_USER_INFO2='{"uname":"admin","password":"passwor
 ## Fetch data based on date
 Change date according to the date of execution.
 * Using something insde 2 curly braces, we are telling airflow that there is something that has to be executed on runtime.
-* We could inject data at runtime by doing this. Example:- in example of task `extract` we used {{}}.
+* We could inject data at runtime by doing this. Example:- in example of task `extract` we used {% raw %}{{}} {% endraw %}.
 * To get a value of a variable of the task run date from a database, we could use this feature. Example using SqliteOperato:
 
 ```python
@@ -349,13 +350,13 @@ For more info about SqliteOperator please follow this [link](https://registry.as
 For that, we should create a custom operator using SqliteOperator. And use that operator instead of SqliteOperator.
 
 ```python
+{% raw %}
 class CustomSqliteOperator(SqliteOperator):
     template_fields = ('sql', "parameters")
     
 ######
 ######
 
-{% raw %}
 
 fetch_data = CustomSqliteOperator(
     task_id="fetch_data",
