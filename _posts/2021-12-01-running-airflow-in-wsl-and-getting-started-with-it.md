@@ -265,7 +265,7 @@ Insert line `export AIRFLOW_VAR_USER_INFO2='{"uname":"admin","password":"passwor
 ## Codes Upto This Point
 
 ```python
-    
+{% raw %}
     from airflow import DAG
     from datetime import datetime, timedelta
     from airflow.operators.python import PythonOperator
@@ -308,7 +308,8 @@ Insert line `export AIRFLOW_VAR_USER_INFO2='{"uname":"admin","password":"passwor
                 task_id="extract_env", 
                 python_callable=_extract_env
                 )
-        
+
+{% endraw %}
 ```
 
 ## Fetch data based on date
@@ -318,12 +319,16 @@ Change date according to the date of execution.
 * To get a value of a variable of the task run date from a database, we could use this feature. Example using SqliteOperato:
 
 ```python
+{% raw %}
+
 from airflow.providers.sqlite.operators.sqlite import SqliteOperator
 
 fetch_data = SqliteOperator(
         task_id="fetch_data",
         sql = "SELECT uname from user_info where data = {{ ds }}"
     )
+
+{% endraw %}
 ```
 
 `ds`  in above sql statement gives us the date of execution. By saving this file and going to UI, then Graphs and clicking on the task and then rendered, we  could see the sql statement updated. 
@@ -350,6 +355,8 @@ class CustomSqliteOperator(SqliteOperator):
 ######
 ######
 
+{% raw %}
+
 fetch_data = CustomSqliteOperator(
     task_id="fetch_data",
     sql = "sql/GET_USER_INFO.sql",
@@ -359,6 +366,8 @@ fetch_data = CustomSqliteOperator(
         'uname': '{{ var.json.user_info.uname}}'
     }
 )
+
+{% endraw %}
 ```
 In above example, we are sending next runtime execution date in next_ds, previous execution data in prev_ds
 and uname as usual. 
