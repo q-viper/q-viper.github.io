@@ -217,7 +217,7 @@ To see this task in action,
 
     ![png]({{site.url}}/assets/airflow_blog/log_op.png)
 
-* Using `{{var.json.variable_name.variable_key}}`. Alternatively, we could do `{{var.value.variable_name}}`. Outside DAG.
+* Using ```{{var.json.variable_name.variable_key}}```. Alternatively, we could do ```{{var.value.variable_name}}```. Outside DAG.
     
 ```python
     def _extract2(uname):
