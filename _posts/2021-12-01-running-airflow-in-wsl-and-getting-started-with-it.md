@@ -217,7 +217,7 @@ To see this task in action,
 
     ![png]({{site.url}}/assets/airflow_blog/log_op.png)
 
-* Using `{% raw %}"{{var.json.variable_name.variable_key}}" {% endraw %}`. Alternatively, we could do `{% raw %}"{{var.value.variable_name}}"{% endraw %}`. Outside DAG.
+* Using `{% raw %}"{{var.json.variable_name.variable_key}}" {% endraw %}`. Alternatively, we could do `{% raw %}"{{var.value.variable_name}}" {% endraw %}`. Outside DAG.
     
 ```python
     def _extract2(uname):
@@ -232,6 +232,7 @@ To see this task in action,
                 task_id="extract2", 
                 python_callable=_extract2,
                 op_args = ["{{ var.json.user_info.uname}}"])
+
 {% endraw %}
 ```
 
