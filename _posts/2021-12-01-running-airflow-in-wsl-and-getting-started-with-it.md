@@ -857,6 +857,7 @@ def extract():
 `{"uname":uinfo["uname"],"password":uinfo["password"]}` as a distinct XCOMs. Which means, we will have XCOM for `uname` and `password` each automatically.
 * If we go to `Admin>XCOMs` then we could see two keys, uname and password.
 * Alternatively, we could use return type `Dict` of function and not use the `multiple_outputs`.
+
 ```python
 from typing import Dict
 
@@ -865,7 +866,9 @@ def extract() -> Dict[str, str]:
     uinfo = Variable.get("user_info", deserialize_json=True)
     return {"uname":uinfo["uname"],"password":uinfo["password"]}
 ```
+
 * Alternatively, we could extract the XCOM values and pass them in another task.
+
 ```python
 @task.python(task_id="extract_uinfo", multiple_outputs=True)
 def extract():
