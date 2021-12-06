@@ -13,7 +13,7 @@ tags:
     - airflow for beginners
     - tutorial
 header:
-  teaser: assets/airflow_blog/scheduler.PNG
+  teaser: assets/airflow_blog/scheduler.png
 ---
 
 # Getting Started With Airflow in WSL
@@ -103,11 +103,11 @@ options = "metadata"
     ```
     * Go to URL `http://localhost:8080/`. If error pops up, check what is missing. Below page will be seen.
 
-        ![img]({{site.url}}/assets/airflow_blog/login.PNG)
+        ![img]({{site.url}}/assets/airflow_blog/login.png)
 
     * Next page might be something like below.
 
-        ![img]({{site.url}}/assets/airflow_blog/dags.PNG)
+        ![img]({{site.url}}/assets/airflow_blog/dags.png)
 
 * In another terminal, enable virtual environment and then start scheduler.
     ```
@@ -211,11 +211,11 @@ To see this task in action,
 * Go inside the DAG and hit the trigger by clicking on play icon.
 * To see the output, go to the log by clicking on the green rectangle. And then logs.
 
-    ![PNG]({{site.url}}/assets/airflow_blog/run_dag.PNG)
+    ![png]({{site.url}}/assets/airflow_blog/run_dag.png)
 
     Logs output will be something like below
 
-    ![PNG]({{site.url}}/assets/airflow_blog/log_op.PNG)
+    ![png]({{site.url}}/assets/airflow_blog/log_op.png)
 
 * Using `{{var.json.variable_name.variable_key}}`. Alternatively, we could do `{{var.value.variable_name}}`. Outside DAG.
     
