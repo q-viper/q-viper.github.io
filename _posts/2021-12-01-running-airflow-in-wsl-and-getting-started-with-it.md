@@ -217,19 +217,7 @@ To see this task in action,
 
     ![png]({{site.url}}/assets/airflow_blog/log_op.png)
 
-* Using 
-
-```python 
-            {{var.json.variable_name.variable_key}}
-``` 
-
-Alternatively, we could do 
-
-```python 
-        {{var.value.variable_name}}
-```
-
-Outside DAG.
+* Using `{% raw %}"{{var.json.variable_name.variable_key}}" {% endraw %}`. Alternatively, we could do `"{{var.value.variable_name}}"`. Outside DAG.
     
 ```python
     def _extract2(uname):
