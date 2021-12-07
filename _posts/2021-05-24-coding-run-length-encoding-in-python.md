@@ -7,6 +7,8 @@ categories:
 tags:
   - Computer Vision
   - Image Processing
+  - run length encoding
+  - image compression
 header:
   teaser: assets/rle/rle.jpg
 ---
