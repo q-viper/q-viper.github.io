@@ -12,8 +12,9 @@ tags:
     - programming challenges
 header:
   teaser: assets/advent_of_code/stars.png
+toc: true
 ---
-{toc:}
+<!-- {toc:} -->
 
 # Advent of Code 2021: Python Solutions
 I am not good at solving problems fast but I try to do them with best I could. And here in this blog post, I try to show my solutions of all days in one post. For the Jupyter Notebook, please refer to this [repository](https://github.com/q-viper/Adevent-Of-Code.git). The code will be updated once solved but I am preparing headers, code blocks and links before day starts. Also I am not trying to get into any rank.
