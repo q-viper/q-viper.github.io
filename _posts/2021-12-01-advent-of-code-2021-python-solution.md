@@ -504,14 +504,47 @@ print(sum(lifes.values()))
 ## Day 7
 [Here is the problem link.](https://adventofcode.com/2021/day/7)
 
-### Part 1
-```python
+I found today's solution to be easier than previous day's.
 
+### Part 1
+
+```python
+data,data1 = get_data(day=7)
+
+data = [int(d) for d in data[0].split(",")]
+data1 = [int(d) for d in data1[0].split(",")]
+
+l = len(data1)
+f = []
+
+for v in range(l):
+    f.append((sum([abs(d-v) for d in data1])))
+print(min(f))        
+```
+
+#### One Liner Solution
+
+```python
+min([sum([abs(d-v) for d in data1]) for v in range(len(data1))])
 ```
 
 ### Part 2
-```python
 
+```python
+l = len(data1)
+f = []
+
+for v in range(l):
+    diff = [abs(d-v) for d in data1]
+    diffs = sum([sum(list(range(dif+1))) for dif in diff])
+    f.append(diffs)
+print(min(f))        
+```
+
+#### One Liner Solution
+
+```python
+min([sum([sum(list(range(abs(d-v)+1))) for d in data1]) for v in range(len(data1))])
 ```
 
 
