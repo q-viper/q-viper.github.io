@@ -907,6 +907,208 @@ Now, the return_value won't be shown there.
 
 ## Grouping DAGs
 ### SubDAGs: Hard Way to Group DAGs
+It will get harder to understand what is happening inside  once we have lots of DAG Tasks. And at those situations,
+we could group similar tasks in Airflow using either SubDAGs or TaskGroups. To understand grouping, we will use below example.
+
+```python
+@task.python(task_id="extract_uinfo", multiple_outputs=True, do_xcom_push=False)
+def extract():
+    uinfo = Variable.get("user_info", deserialize_json=True)
+    return {"uname":uinfo["uname"],"password":uinfo["password"]}
+
+@task.python
+def authenticate(uname, pwd):
+    print(uname, pwd)
+
+@task.python
+def validate(uname, pwd):
+    print(uname, pwd)
+    
+@dag(description="DAG for showing nothing.", 
+         start_date=datetime(2021, 1, 1), schedule_interval=timedelta(minutes=5),
+         dagrun_timeout=timedelta(minutes=10), tags=["learning_dag"], catchup=False)
+def my_dag():
+    uinfo = extract()
+    uname, pwd = uinfo["uname"], uinfo["password"]
+    validate(uname, pwd)
+    authenticate(uname, pwd)
+    
+md = my_dag()
+```
+
+After re-running the scheduler and going to Graph view, we could see something like below where two tasks `authenticate` and `validate` are depending on `extract_uinfo`.
+![]({{site.url}}/assets/airflow_blog/graph_task.png) 
+
+
+### SubDAGs
+SubDAG is a DAG within a DAG. We need two components (`SubDagOperator` and `subdag_factory`) to use SubDAGs.
+We need to import SubDagOperator and subdag_factory is our own module that we will create next. 
+
+* Create a new folder `subdag`.
+* Create a new file `subdag_factory.py` inside it.
+
+#### Inside `subdag_factory.py`
+```python
+from airflow.models import DAG
+from airflow.decorators import task, dag
+from airflow.models import Variable
+
+@task.python
+def authenticate(uname, pwd):
+    print(uname, pwd)
+
+@task.python
+def validate(uname, pwd):
+    print(uname, pwd)
+
+def subdag_factory(parent_dag_id, subdag_dag_id, default_args, uinfo):
+    with DAG(f"{parent_dag_id}.{subdag_dag_id}", default_args=default_args) as dag:
+
+        uname, pwd = uinfo["uname"], uinfo["password"]
+        
+        validate(uname, pwd)
+        authenticate(uname, pwd)
+        
+    return dag
+```
+#### In our DAG file
+```python
+from airflow import DAG
+from datetime import datetime, timedelta
+from airflow.operators.python import PythonOperator
+from airflow.models import Variable
+from airflow.providers.sqlite.operators.sqlite import SqliteOperator
+from airflow.decorators import task, dag
+from typing import Dict
+from airflow.operators.subdag import SubDagOperator
+from subdag.subdag_factory import subdag_factory
+
+default_args = {
+    "start_date": datetime(2021, 1, 1)
+}
+
+@task.python(task_id="extract_uinfo", multiple_outputs=True, do_xcom_push=False)
+def extract():
+    uinfo = Variable.get("user_info", deserialize_json=True)
+    return {"uname":uinfo["uname"],"password":uinfo["password"]}
+
+@dag(description="DAG for showing nothing.", 
+         default_args=default_args, schedule_interval=timedelta(minutes=5),
+         dagrun_timeout=timedelta(minutes=10), tags=["learning_dag"], catchup=False)
+def my_dag():
+    uinfo = extract()
+    
+    
+    validate_tasks = SubDagOperator(
+        task_id = "validate_tasks",
+        subdag=subdag_factory("my_dag", "validate_tasks", default_args=default_args, uinfo=uinfo)
+    )   
+    
+md = my_dag()
+```
+Few things to note:
+* We are using `default_args` as a default argument in both DAGs. It is defined in the top.
+* We should pass the parent dag id and task dag id CORRECTLY else, error will pop up.
+
+Now restarting a scheduler, we must be seeing a error something like below:
+
+> `airflow.exceptions.AirflowException: Tried to set relationships between tasks in more than one DAG: dict_values([<DAG: my_dag.validate_tasks>, <DAG: my_dag>])`
+
+This is happening because we are using XCOMs in our `extract` task and TaskFlowAPI tries to make a dependencies automatically.
+Now we are trying to setup relationship between task from our DAG and subdag. In simpler way, it is not possible to setup a dependencies 
+between task in different DAGs. What we should instead do is, use `get_current_context`.
+
+#### In our `subdag_factory.py`
+
+```python
+from airflow.models import DAG
+from airflow.decorators import task
+from airflow.models import Variable
+from airflow.operators.python import get_current_context
+
+@task.python
+def authenticate():
+    ti = get_current_context()["ti"]        
+    uname = ti.xcom_pull(key="uname", task_ids = "extract_uinfo", dag_id="my_dag")
+    pwd = ti.xcom_pull(key="password", task_ids = "extract_uinfo", dag_id="my_dag")
+    
+    print(uname, pwd)
+
+@task.python
+def validate():
+    ti = get_current_context()["ti"]
+    uname = ti.xcom_pull(key="uname", task_ids = "extract_uinfo", dag_id="my_dag")
+    pwd = ti.xcom_pull(key="password", task_ids = "extract_uinfo", dag_id="my_dag")
+    
+    print(uname, pwd)
+
+def subdag_factory(parent_dag_id, parent_task_id, default_args):
+    with DAG(dag_id=f"{parent_dag_id}.{parent_task_id}", schedule_interval="@daily", 
+             default_args=default_args) as dag:
+        validate()
+        authenticate()
+        
+    return dag
+```
+
+#### In our DAG file
+```python
+from airflow import DAG
+from datetime import datetime, timedelta
+from airflow.operators.python import PythonOperator
+from airflow.models import Variable
+from airflow.providers.sqlite.operators.sqlite import SqliteOperator
+from airflow.decorators import task, dag
+from typing import Dict
+from airflow.operators.subdag import SubDagOperator
+from learning_project_DAG.subdag.subdag_factory import subdag_factory
+
+
+default_args = {
+    "start_date": datetime(2021, 1, 1)
+}
+
+@task.python(task_id="extract_uinfo", multiple_outputs=True, do_xcom_push=False)
+def extract():
+    # uinfo = Variable.get("user_info", deserialize_json=True)
+    uinfo = {"uname":"John Doe", "password": "abcde"}
+    return {"uname":uinfo["uname"],"password":uinfo["password"]}
+@dag(description="DAG for showing nothing.", 
+         default_args=default_args, schedule_interval="@daily", #timedelta(minutes=5)
+         dagrun_timeout=timedelta(minutes=10), tags=["learning_dag"], catchup=False)
+def my_dag():
+    
+    validate_tasks = SubDagOperator(
+        task_id = "validate_tasks",
+        subdag=subdag_factory(parent_dag_id="my_dag", 
+                              parent_task_id="validate_tasks", 
+                              default_args=default_args),
+        default_args=default_args
+    )
+    
+    extract() >> validate_tasks 
+    
+md = my_dag()
+```
+
+Few changes has been made than the previous steps:
+* Used `get_current_context` to get the XCOM values from the `extract` task.
+* Made each of sub tasks to use `get_current_context` for receiving values.
+* Used `@daily` instead of every 5 minutes in `schedule_interval`
+
+Now we could see something like below in Graph view:
+
+![png]({{site.url}}/assets/airflow_blog/group_task.png)
+
+Click on `validate_task > Zoom Into Sub DAG > Graph`:
+
+![png]({{site.url}}/assets/airflow_blog/group_task2.png)
+
+
+> Using SubDAG will not always run smoothly and this happened to me while writing this blog. Something strange happened, my scheduler was becoming offline and tasks under a sub DAG were frozen at either running or scheduler state. But when I restarted scheduler, stucked tasks were running fine however, new tasks were again stuckked.
+
+For more about SubDAGs, [Astronomer ](https://www.astronomer.io/guides/subdags) has a great content. 
+
 
 ### TaskGroups: Best Way to Group DAGS
 
