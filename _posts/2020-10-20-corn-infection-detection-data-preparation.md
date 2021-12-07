@@ -11,7 +11,7 @@ tags:
   - opencv
   - python computer vision
 header:
-  teaser: assets/face-mask-images/heroku-test.png
+  teaser: assets/corn-infection-detection/output_18_1.png
 subtitle: A CNN clasifier using Keras.
 ---
 ## Introduction
