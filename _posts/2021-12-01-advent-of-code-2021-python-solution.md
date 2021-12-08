@@ -553,15 +553,71 @@ min([sum([sum(list(range(abs(d-v)+1))) for d in data1]) for v in range(len(data1
 ## Day 8
 [Here is the problem link.](https://adventofcode.com/2021/day/8)
 
-### Part 1
-```python
+First part was very easy but for the second part, I took little help from [here](https://github.com/MasterMedo/aoc/blob/master/2021/day/8.py).
 
+### Solution
+```python
+import numpy as np
+from collections import Counter
+
+data,data1 = get_data(day=8)
+
+def permutation(li: list):
+    all_ps = set()
+    psl = np.prod(np.linspace(1,len(li), len(li)).astype(int))
+    
+    
+    while len(all_ps)!=psl:
+        curr_ps = np.random.choice(range(len(li)), len(li), replace=False)
+        curr_ps = "".join([li[i] for i in curr_ps])
+        all_ps.add(curr_ps)
+    return all_ps
+
+all_ps = permutation("abcdefg")
+
+d = {
+    "abcefg": 0,
+    "cf": 1,
+    "acdeg": 2,
+    "acdfg": 3,
+    "bcdf": 4,
+    "abdfg": 5,
+    "abdefg": 6,
+    "acf": 7,
+    "abcdefg": 8,
+    "abcdfg": 9,
+}
+
+cnts = {2:1, 4:4, 3:7, 7:8}
+
+sol1 = 0
+sol2 = 0
+
+
+txtv = {t.strip().split(": ")[0]:int(t.strip().split(": ")[1]) for t in txt.strip().split("\n")}
+for row in data1:
+    signals, output = row.split("|")
+    signals = [s.strip() for s in signals.strip().split(" ")]
+    output = [s.strip() for s in output.strip().split(" ")]    
+    
+    for o in output:
+        l = len(o)
+        if len(ls.get(l))==1:
+            v=ls.get(l)[0]
+            sol1+=1
+        
+    for pr in all_ps:
+        to = str.maketrans("abcdefg", pr)
+        ts = ["".join(sorted(sig.translate(to))) for sig in signals]
+        top = ["".join(sorted(op.translate(to))) for op in output]
+
+        if all(code in d for code in ts):
+            sol2 += int("".join(str(d[code]) for code in top))            
+            break
+sol1, sol2  
 ```
 
-### Part 2
-```python
-
-```
+Later I knew there is actually a python generator `permutation` inside `itertools`.
 
 
 ## Day 9
