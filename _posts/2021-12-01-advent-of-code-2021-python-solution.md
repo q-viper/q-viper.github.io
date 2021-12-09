@@ -623,15 +623,79 @@ Later I knew there is actually a python generator `permutation` inside `itertool
 ## Day 9
 [Here is the problem link.](https://adventofcode.com/2021/day/9)
 
+First part was not much harder to crack but it still took plenty of time. But second part was tricky.
+
 ### Part 1
 ```python
+import numpy as np
+data,data1 = get_data(day=9)
 
+dl = len(data1[0])
+dt = np.array([int(d) for dt in data1 for d in dt])
+dt = dt.reshape(-1, dl)
+
+nums = []
+pos = []
+dc = len(dt[0])
+dr = len(dt)
+for r in range(len(dt)):
+    for c in range(len(dt[0])):
+        if r==0:
+            if c==0:
+                if dt[r,c]<dt[r+1, c] and dt[r,c]<dt[r, c+1]:
+                    nums.append(dt[r,c])
+                    pos.append((r,c))
+            elif c==dc-1:
+                if dt[r,c]<dt[r+1, c] and dt[r,c]<dt[r, c-1]:
+                    nums.append(dt[r,c])
+                    pos.append((r,c))
+            else:
+                if dt[r,c]<dt[r+1, c] and dt[r,c]<dt[r, c+1] and dt[r,c]<dt[r, c-1]:
+                    nums.append(dt[r,c])
+                    pos.append((r,c))
+        elif r==dr-1:
+            if c==0:
+                if dt[r,c]<dt[r-1, c] and dt[r,c]<dt[r, c+1]:
+                    nums.append(dt[r,c])
+                    pos.append((r,c))
+            elif c==dc-1:
+                if dt[r,c]<dt[r-1, c] and dt[r,c]<dt[r, c-1]:
+                    nums.append(dt[r,c])
+                    pos.append((r,c))
+            else:
+                if dt[r,c]<dt[r-1, c] and dt[r,c]<dt[r, c+1] and dt[r,c]<dt[r, c-1]:
+                    nums.append(dt[r,c])
+                    pos.append((r,c))
+        else:
+            if c==0:
+                if dt[r,c]<dt[r-1, c] and dt[r,c]<dt[r, c+1] and dt[r,c]<dt[r+1, c]:
+                    nums.append(dt[r,c])
+                    pos.append((r,c))
+            elif c==dc-1:
+                if dt[r,c]<dt[r-1, c] and dt[r,c]<dt[r, c-1] and dt[r,c]<dt[r+1, c]:
+                    nums.append(dt[r,c])
+                    pos.append((r,c))
+            else:
+                if dt[r,c]<dt[r-1, c] and dt[r,c]<dt[r, c+1] and dt[r,c]<dt[r, c-1] and dt[r,c]<dt[r+1, c]:
+                    nums.append(dt[r,c])
+                    pos.append((r,c))
+                
+                
+nums
 ```
 
 ### Part 2
-```python
+I thought I had to use some sort of Searching algorithm like DFS or BFS but I found a solution on StackOverflow using NumPy.
 
-```
+```python
+from scipy import ndimage
+
+label, num_label = ndimage.label(dt < 9)
+size = np.bincount(label.ravel())
+
+top3 = sorted(size[1:], reverse=True)[:3]
+print(np.prod(top3))
+``` 
 
 
 ## Day 10
