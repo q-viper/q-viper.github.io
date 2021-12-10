@@ -701,14 +701,59 @@ print(np.prod(top3))
 ## Day 10
 [Here is the problem link.](https://adventofcode.com/2021/day/10)
 
-### Part 1
-```python
+I forgot the time of the challenge but still managed to make it done. Stack came to the aid.
 
+### Part 1
+
+```python
+data,data1=get_data(day=10)
+
+
+table = {
+    ")": 3,
+    "]": 57,
+    "}": 1197,
+    ">": 25137}
+
+pair = {"(":")","{":"}", "[":"]", "<":">"}
+
+
+corruptions = []
+rem = []
+for i,r in enumerate(data):
+    stack = []
+    is_corr=False
+    for c in r:
+        if c in pair:
+            stack.append(pair[c])
+        elif stack.pop() != c:
+            print(f"Corrupted {c} at row {i}")
+            corruptions.append(c)
+            is_corr=True
+            break
+    if is_corr==False and len(stack)>0:
+        rem.append(stack)
+            
+            
+corr = dict(Counter(corruptions))
+sum([table[k]*v for k,v in corr.items()])
 ```
 
 ### Part 2
-```python
 
+```python
+mult = {")": 1,
+"]": 2,
+"}": 3,
+">": 4}
+all_total=[]
+for row in rem:
+    s = 0
+    for i,c in enumerate(row):
+        s+=5**i*mult[c]
+    all_total.append(s)
+at = sorted(all_total)
+at[len(at)//2]
 ```
 
 
