@@ -557,11 +557,6 @@ First part was very easy but for the second part, I took little help from [here]
 
 ### Solution
 ```python
-import numpy as np
-from collections import Counter
-
-data,data1 = get_data(day=8)
-
 def permutation(li: list):
     all_ps = set()
     psl = np.prod(np.linspace(1,len(li), len(li)).astype(int))
@@ -593,8 +588,6 @@ cnts = {2:1, 4:4, 3:7, 7:8}
 sol1 = 0
 sol2 = 0
 
-
-txtv = {t.strip().split(": ")[0]:int(t.strip().split(": ")[1]) for t in txt.strip().split("\n")}
 for row in data1:
     signals, output = row.split("|")
     signals = [s.strip() for s in signals.strip().split(" ")]
@@ -602,8 +595,8 @@ for row in data1:
     
     for o in output:
         l = len(o)
-        if len(ls.get(l))==1:
-            v=ls.get(l)[0]
+        if ls.get(l):
+            
             sol1+=1
         
     for pr in all_ps:
@@ -760,14 +753,38 @@ at[len(at)//2]
 ## Day 11
 [Here is the problem link.](https://adventofcode.com/2021/day/11)
 
-### Part 1
+Today's challenge was harder than previous day's.
+
+### Solution
+
 ```python
+adj = [(i,j) for i in range(-1, 2) for j in range(-1,2) if i!=0 or j!=0]
+window = {(i,j):darr[i][j] for i in range(10) for j in range(10)}
 
-```
+flashes = 0
+i=0
+previous = set()
 
-### Part 2
-```python
-
+while len(previous)<len(window):
+    previous = set()
+    window = {k:v+1 for k, v in window.items()}
+    while True:
+        if sum(v>9 for k,v in window.items() if k not in previous)==0:
+            break
+            
+        for k,v in window.items():
+            if k not in previous and v>9:
+                previous.add(k)
+                for ad in [(k[0]+i,k[1]+j) for i,j in adj if (k[0]+i,k[1]+j) in window]:
+                    window[ad]+=1
+    
+    flashes+=len(previous)
+    window.update({k:0 for k in previous})
+    i+=1
+    if i==100:
+        print(f"Part 1: {flashes}")
+    
+print(f"Part 2: {i}")
 ```
 
 
