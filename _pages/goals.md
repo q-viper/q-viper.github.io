@@ -31,3 +31,10 @@ Goals might change or updated according to the priority.
 - [] Remote Control by **Nnedi Okarofor**
 - [] Dune by Frank **Herbert**
 - [] To Sleep in a Sea of Stars by **Christopher Paolini**
+
+### Non-fiction
+- [] The Code Breaker by **Walter Isascon**
+- [] A Promised Land by **Barack Obama**
+- [] Prepared: What Kids Need for a Fulfilled Life by **Diane Tavenner**
+- [] Permanent Record by **Edward Snowden**
+- [] Homo Dues: History of Tomorrow by **Yuval Noah Harari**

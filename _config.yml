@@ -25,6 +25,7 @@ issues_repo: "q-viper/q-viper.github.io"
 # Build settings
 markdown: kramdown
 kramdown:
+   input: GFM
    math_engine: mathjax
    highlighter: rouge
 syntax_highlighter_opts:
