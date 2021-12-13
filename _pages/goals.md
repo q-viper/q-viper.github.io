@@ -19,11 +19,11 @@ Goals might change or updated according to the priority.
 # Year: 2022
 ## Reading Books
 ### Philosophy
-- [] The Trial and Death of Socrates
-- [] The Republic 
-- [] Meno
-- [] Symposium
-- [] Gorgias
+- [x] The Trial and Death of Socrates
+- [ ] The Republic 
+- [ ] Meno
+- [ ] Symposium
+- [ ] Gorgias
 
 ### Science Fiction
 - [] Death's End by **Cixin Liu**
