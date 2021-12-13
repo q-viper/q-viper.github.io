@@ -841,16 +841,70 @@ Search either BFS or DFS comes into the aid.
 ## Day 13
 [Here is the problem link.](https://adventofcode.com/2021/day/13)
 
-### Part 1
-```python
+Today's challenge was fun to do and it was not that hard as well.
 
+### Solution
+
+```python
+import numpy as np
+data1, data = get_data(day=13)
+
+dots = [list(map(int, f.split(","))) for f in data[:data.index("")]]
+folds = data[data.index("")+1:]
+folds = [f.split("along ")[1].split("=") for f in folds]
+folds = [(f[0], int(f[1])) for f in folds]
+
+dots = np.array(dots)
+window = np.zeros(dots.max(axis=0)+3)
+
+for c in dots:
+    window[c[0], c[1]] = 1
+window = window.T
+
+
+tw = window.copy()
+# print(tw)
+for f in folds:
+    print(f)
+    axis,value=f
+    cr,cc = tw.shape
+    print(tw)
+    if axis=="y":
+        #fold y axis
+        chunk = tw[value+1:-2]
+        # print(value-crs,chunk.shape, chunk)
+        crs,ccs = chunk.shape
+        tw[np.abs(value-crs):value] += chunk[::-1]
+        tw = tw[:value]
+        tw = np.append(tw, np.zeros((2, tw.shape[1])), axis=0)
+        #break
+        
+    else:
+        # fold x axis
+        chunk = tw[:, value+1:-2]
+        crs,ccs = chunk.shape
+        print(value-crs,chunk.shape, chunk)
+        tw[:, abs(value-ccs):value] += chunk[:,::-1]
+        tw = tw[:, :value]
+        tw = np.append(tw, np.zeros((tw.shape[0], 2)), axis=1)
+    print(f"Dots: {np.sum(tw>0)}")
+
+print(np.array2string(tw>0, separator='',
+    formatter = {'bool':lambda x: ' █'[x]}))
 ```
 
-### Part 2
+My answer was:
+
 ```python
-
+[[ ██  █  █ ███  ███  ███   ██  █  █ ████   ]
+ [█  █ █  █ █  █ █  █ █  █ █  █ █  █    █   ]
+ [█  █ ████ █  █ █  █ █  █ █  █ █  █   █    ]
+ [████ █  █ ███  ███  ███  ████ █  █  █     ]
+ [█  █ █  █ █    █ █  █    █  █ █  █ █      ]
+ [█  █ █  █ █    █  █ █    █  █  ██  ████   ]
+ [                                          ]
+ [                                          ]]
 ```
-
 
 ## Day 14
 [Here is the problem link.](https://adventofcode.com/2021/day/14)
