@@ -19,22 +19,28 @@ Goals might change or updated according to the priority.
 # Year: 2022
 ## Reading Books
 ### Philosophy
-- [x] The Trial and Death of Socrates
+- [ ] The Trial and Death of Socrates
 - [ ] The Republic 
 - [ ] Meno
 - [ ] Symposium
 - [ ] Gorgias
 
 ### Science Fiction
-- [] Death's End by **Cixin Liu**
-- [] Project Hail Mary by **Andy Weir**
-- [] Remote Control by **Nnedi Okarofor**
-- [] Dune by Frank **Herbert**
-- [] To Sleep in a Sea of Stars by **Christopher Paolini**
+- [ ] Death's End by **Cixin Liu**
+- [ ] Project Hail Mary by **Andy Weir**
+- [ ] Remote Control by **Nnedi Okarofor**
+- [ ] Dune by Frank **Herbert**
+- [ ] To Sleep in a Sea of Stars by **Christopher Paolini**
 
 ### Non-fiction
-- [] The Code Breaker by **Walter Isascon**
-- [] A Promised Land by **Barack Obama**
-- [] Prepared: What Kids Need for a Fulfilled Life by **Diane Tavenner**
-- [] Permanent Record by **Edward Snowden**
-- [] Homo Dues: History of Tomorrow by **Yuval Noah Harari**
+- [ ] The Code Breaker by **Walter Isascon**
+- [ ] A Promised Land by **Barack Obama**
+- [ ] Prepared: What Kids Need for a Fulfilled Life by **Diane Tavenner**
+- [ ] Permanent Record by **Edward Snowden**
+- [ ] Homo Dues: History of Tomorrow by **Yuval Noah Harari**
+
+### Misc
+- [ ] The Rosie Effect by **Graeme Simsion**
+- [ ] The Rosie Result by **Graeme Simsion**
+- [x] The Midnight Library by **Matt Haig**
+- [ ] A Gentleman in Moscow by **Amor Towles**
