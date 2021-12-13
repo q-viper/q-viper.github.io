@@ -1114,6 +1114,187 @@ For more about SubDAGs, [Astronomer ](https://www.astronomer.io/guides/subdags) 
 
 ### TaskGroups: Best Way to Group DAGS
 
+TaskGroups are much more easier that SubDAG to group tasks together in the context of time to create and performance.
+
+#### Differences Between SubDAG and TaskGroup
+* Main difference is that we group our task visually in TaskGroup.
+* We don't have to do anything like SubDAG.
+
+#### Example
+
+```python
+
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.models import Variable
+from airflow.providers.sqlite.operators.sqlite import SqliteOperator
+from airflow.decorators import task, dag
+from airflow.operators.subdag import SubDagOperator
+from airflow.utils.task_group import TaskGroup
+
+from datetime import datetime, timedelta
+from typing import Dict
+
+
+default_args = {
+    "start_date": datetime(2021, 1, 1)
+}
+
+@task.python(task_id="extract_uinfo", multiple_outputs=True, do_xcom_push=False)
+def extract():
+    uinfo = {"uname":"John Doe", "password": "abcde"}
+    return {"uname":uinfo["uname"],"password":uinfo["password"]}
+
+@task.python
+def authenticate(uname, pwd):
+    print(uname, pwd)
+
+@task.python
+def validate(uname, pwd):
+    print(uname, pwd)
+    
+@dag(description="DAG for showing nothing.", 
+         default_args=default_args, schedule_interval="@daily", #timedelta(minutes=5)
+         dagrun_timeout=timedelta(minutes=10), tags=["learning_dag"], catchup=False)
+def my_dag():
+    uinfo = extract()
+    uname = uinfo["uname"]
+    pwd = uinfo["password"]
+    
+    with TaskGroup(group_id="validate_tasks") as validate_tasks:
+        validate(uname, pwd)
+        authenticate(uname, pwd)
+md = my_dag()
+```
+
+Few new things we did are:
+* Imported TaskGroup.
+* Copied and pasted `authenticate` and `validate` function from `subdag_factory.py` and made changes like receiving uname and password.
+* Made an instance of `TaskGroup` and given it `group_id`.
+* Called tasks inside it.
+
+Going over UI then Graph we could see something like below: 
+
+![png]({{site.url}}/assets/airflow_blog/task_group.png)
+
+Then clicking on the `validate_tasks` we could see something like below:
+
+![png]({{site.url}}/assets/airflow_blog/click_validate.png)
+
+If we triggered the DAG, tasks will run smoothly. And our code is much smaller and easier to read.
+
+#### Making DAG more Cleaner
+##### Create `groups` folder and then Create `validate_tasks.py` in `groups` folder.
+```python
+from airflow.utils.task_group import TaskGroup
+from airflow.decorators import task
+
+@task.python
+def authenticate(uname, pwd):
+    print(uname, pwd)
+
+@task.python
+def validate(uname, pwd):
+    print(uname, pwd)
+
+def validate_tasks(uinfo):
+    with TaskGroup(group_id="validate_tasks") as validate_tasks:
+        uname = uinfo["uname"]
+        pwd = uinfo["password"]
+        validate(uname, pwd)
+        authenticate(uname, pwd)
+```
+
+##### In Our DAG file,
+```python
+from airflow.decorators import task
+from validate_tasks import validate_tasks
+
+default_args = {
+    "start_date": datetime(2021, 1, 1)
+}
+
+@task.python(task_id="extract_uinfo", multiple_outputs=True, do_xcom_push=False)
+def extract():
+    # uinfo = Variable.get("user_info", deserialize_json=True)
+    uinfo = {"uname":"John Doe", "password": "abcde"}
+    return {"uname":uinfo["uname"],"password":uinfo["password"]}
+
+@dag(description="DAG for showing nothing.", 
+         default_args=default_args, schedule_interval="@daily", #timedelta(minutes=5)
+         dagrun_timeout=timedelta(minutes=10), tags=["learning_dag"], catchup=False)
+def my_dag():
+    uinfo = extract() 
+    validate_tasks(uinfo)
+
+my_dag()
+```
+
+### Task Group Within a Task Group
+We can achieve this by defining another task group inside a existing task group. In above example, my task group is `validate_tasks`. Now I want to create another task group inside it.
+Call it checks. It will check the value of uname and password before passing it to validate and authenticate.
+
+#### In `validate_taska.py`
+```python
+from airflow.utils.task_group import TaskGroup
+from airflow.decorators import task
+
+@task.python
+def authenticate(uname, pwd):
+    print(uname, pwd)
+
+@task.python
+def validate(uname, pwd):
+    print(uname, pwd)
+    
+@task.python
+def check_uname(uname):
+    print(f"Entered Uname: {uname}")
+
+@task.python
+def check_password(pwd):
+    print(f"Entered Password: {pwd}")
+
+def validate_tasks(uinfo):
+    with TaskGroup(group_id="validate_tasks") as validate_tasks:
+        
+        uname = uinfo["uname"]
+        pwd = uinfo["password"]
+        
+        with TaskGroup(group_id="checks") as checks:
+            check_uname(uname)
+            check_password(pwd)
+        
+        checks >> validate(uname, pwd)
+        checks >> authenticate(uname, pwd)
+    return validate_tasks
+```
+
+Or we could even use `taskgroup` decorator to make a task group. First import `task_group` decorator from decorators. Then use it like below. 
+First we have to remove the `with..` line to create task group and put below code.
+
+```python
+@task_group(group_id="validate_tasks")
+def validate_tasks():
+
+```
+
+
+#### In DAG file
+
+```python
+@dag(description="DAG for showing nothing.", 
+         default_args=default_args, schedule_interval="@daily", #timedelta(minutes=5)
+         dagrun_timeout=timedelta(minutes=10), tags=["learning_dag"], catchup=False)
+def my_dag():
+    uinfo = extract()
+    validate_tasks(uinfo)
+```
+
+And in our Graph view, we could see something like below:
+
+![png]({{site.url}}/assets/airflow_blog/task_task.png)
+
 
 
 ## References
