@@ -19,5 +19,15 @@ Goals might change or updated according to the priority.
 # Year: 2022
 ## Reading Books
 ### Philosophy
-[] The Trial and Death of Socrates
+- [] The Trial and Death of Socrates
+- [] The Republic 
+- [] Meno
+- [] Symposium
+- [] Gorgias
 
+### Science Fiction
+- [] Death's End by **Cixin Liu**
+- [] Project Hail Mary by **Andy Weir**
+- [] Remote Control by **Nnedi Okarofor**
+- [] Dune by Frank **Herbert**
+- [] To Sleep in a Sea of Stars by **Christopher Paolini**
