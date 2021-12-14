@@ -909,16 +909,60 @@ My answer was:
 ## Day 14
 [Here is the problem link.](https://adventofcode.com/2021/day/14)
 
+They know we could fall into a trap. And again I fell. I went full looping mode and got the result of part 1 but the part 2 could take days.
+
 ### Part 1
 ```python
+from collections import Counter
+data,data1 = get_data(day=14)
 
+wdata=data1.copy()
+polymer = wdata[0]
+rule = {v[0]:v[1] for v in [d.split(" -> ") for d in wdata[2:]]}
+
+curr_polymer = polymer
+i=0
+while i< 10:
+    tpoly = curr_polymer
+#     print(i, tpoly)
+    ind = 0
+    added = 0
+    for k, c in enumerate(tpoly):
+        k+=1
+        ch = curr_polymer[k-1:k+1]
+        
+        mc = rule.get(ch)
+        if mc:
+            tpoly = [c for c in tpoly]
+            tpoly.insert(k+added, mc)
+            tpoly = "".join(tpoly)
+            added+=1
+    curr_polymer = tpoly
+    i+=1
+
+res = dict(Counter(curr_polymer))
+res = sorted(res.items(), key=lambda x: x[1], reverse=True)
+res[0][1]-res[-1][1]
 ```
 
 ### Part 2
+Taken hint from [here](https://www.reddit.com/r/adventofcode/comments/rfzq6f/comment/hoib78w/?utm_source=share&utm_medium=web2x&context=3).
+
 ```python
+tmp_poly = Counter(a+b for a,b in zip(polymer, polymer[1:]))
+print(tmp_poly)
+chars = Counter(polymer)
 
+for _ in range(40):
+    tmp = Counter()
+    for (c1,c2),value in tmp_poly.items():
+        mc = rule[c1+c2]
+        tmp[c1+mc] += value
+        tmp[mc+c2] += value
+        chars[mc] += value
+    tmp_poly=tmp
+max(chars.values()) - min(chars.values())
 ```
-
 
 ## Day 15
 [Here is the problem link.](https://adventofcode.com/2021/day/15)
