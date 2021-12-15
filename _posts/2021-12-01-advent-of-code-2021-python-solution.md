@@ -967,14 +967,43 @@ max(chars.values()) - min(chars.values())
 ## Day 15
 [Here is the problem link.](https://adventofcode.com/2021/day/15)
 
-### Part 1
+Once I failed DSA in my bachelor's degree and I never really understood Graphs and Path Finding but each year Advent of Code makes me try it once. Instead I used something easier than Dijkastra from scratch. Skimage have a way to find Minimum Cost Path
+
+### Solution
 ```python
+import numpy as np
+from skimage import graph
 
-```
+data,data1 = get_data(15)
 
-### Part 2
-```python
+data = np.array([int(i) for dt in data for i in dt ]).reshape(-1, len(data[0]))
+data
+data1 = np.array([int(i) for dt in data1 for i in dt ]).reshape(-1, len(data1[0]))
 
+window = data1.copy()
+
+rs,cs = window.shape
+
+cost = graph.MCP(window, fully_connected=False)
+cost.find_costs(starts = [(0,0)])
+
+journey = [window[pos] for pos in  cost.traceback((rs-1,cs-1))[1:]]
+print(f"Part1: {sum(journey)}")
+
+# 5times bigger
+new_window = window.copy()
+nrow = np.hstack([new_window, new_window+1, new_window+2, new_window+3, new_window+4])
+new_window = np.vstack([nrow,nrow+1,nrow+2,nrow+3,nrow+4])
+rs,cs = new_window.shape
+
+new_window%=9
+new_window[new_window==0]=9
+
+cost = graph.MCP(new_window, fully_connected=False)
+cost.find_costs(starts = [(0,0)])
+
+journey = [new_window[pos] for pos in  cost.traceback((rs-1,cs-1))[1:]]
+print(f"Part2: {sum(journey)}")
 ```
 
 
