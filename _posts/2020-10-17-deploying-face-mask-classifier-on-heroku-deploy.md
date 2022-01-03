@@ -16,6 +16,8 @@ header:
   teaser: assets/face-mask-images/heroku-test.png
 subtitle: A CNN clasifier using Keras.
 ---
+I might stop to write new blogs in this site so please visit [dataqoil.com](https://dataqoil.com) for more cool stuffs.
+
 This is a part 2 of a blogging series.
 * [Part 1: Deploying Face Mask Classifier on Heroku: Building a Classifier]({{site.url}}/2020/10/14/deploying-face-mask-classifier-on-heroku-classifier/)
 * [Part 2: Deploying Face Mask Classifier on Heroku: Deploy It]({{site.url}}/2020/10/14/deploying-face-mask-classifier-on-heroku-deploy/)

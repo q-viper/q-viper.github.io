@@ -18,6 +18,7 @@ tags:
 
 
 # 1. Writing popular Machine Learning Optimizers from scratch on Python
+I might stop to write new blogs in this site so please visit [dataqoil.com](https://dataqoil.com) for more cool stuffs.
 
 This blog will include some mathematical and theoritical representation along with Python codes from scratch. Most of the codes and formulas are taken from different resources and I have given links to them also.
 

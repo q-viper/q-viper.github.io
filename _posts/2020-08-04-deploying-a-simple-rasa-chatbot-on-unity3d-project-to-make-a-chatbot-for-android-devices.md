@@ -17,6 +17,7 @@ tags:
   - unity3d
 ---
 # Creating a Chatbot on Android Using Unity3d and RASA
+I might stop to write new blogs in this site so please visit [dataqoil.com](https://dataqoil.com) for more cool stuffs.
 
 **Contents**
 * TOC
@@ -107,7 +108,7 @@ When opened the Unity window,
 ![image-title-here]({{site.url}}/assets/wp-content/uploads/2020/08/proj-settings1.png){:class="img-responsive"}
 
 * Also addd identificaitons
-  ![image-title-here]({{site.url}}/assets/wp-content/uploads/2020/08/proj-settings2.png){:class="img-responsive"}
+  ![image-title-here]({{site.url}}/assets/wp-content/uploads/2020/08/proj-settings-2.png){:class="img-responsive"}
 
 * Switch to 2d Mode by clicking on 2D
  ![image-title-here]({{site.url}}/assets/wp-content/uploads/2020/08/2d-switch.png){:class="img-responsive"}

@@ -18,6 +18,8 @@ subtitle: NEPSE Data visualizer.
 ---
 
 ## Introduction
+I might stop to write new blogs in this site and will actively write in [dataqoil.com](https://dataqoil.com) so, please visit for more cool stuffs.
+
 Visualise Nepal Stock Exchange Data and Deploy it On Heroku Using Streamlit and Plotly.
 
 If you are from Nepal then you already know what Nepal Stock Exchange means. Honestly I don't know how to describe stock market but after watching movie [Pi](https://en.wikipedia.org/wiki/Pi_(film)), I wanted to take a look at NEPSE data by myself. I am not sure about how old data are present on the NEPSE but I think there are data available from 1980. I started to scrap data on 2019 January and it was very difficult task for me to write the right codes. But there are great and kind programmers who shares their great skills on GitHub. So I came across this [repository](https://github.com/rojesh-shikhrakar/NepseCrawler). I started to scrap all the data of past transaction and it was quite frustrating after server hanged up so I found the best way of scrapping is by scrapping data by each year and then write it on CSV file. Please follow [this mine repository](https://github.com/q-viper/NEPSE-Data-Analysis) for more scrapping code but note that **We don't use any of those data so just look that repository for more information only (if available).**  And rest is on this blog.

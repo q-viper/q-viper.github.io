@@ -18,6 +18,7 @@ categories:
 
 
 # 1 Writing a Image Processing Codes from Python on Scratch
+I might stop to write new blogs in this site so please visit [dataqoil.com](https://dataqoil.com) for more cool stuffs.
 
 What will you do when you suddenly think about `Convolutional Neural Networks from Scratch` while serving cows? For me, I wrote some codes for image processing before thinking about those codes. Once again I am not going to write another `OpenCV` here.
 

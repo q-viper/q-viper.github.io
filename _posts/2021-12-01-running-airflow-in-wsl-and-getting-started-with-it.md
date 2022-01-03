@@ -17,6 +17,8 @@ header:
 ---
 
 # Getting Started With Airflow in WSL
+I might stop to write new blogs in this site so please visit [dataqoil.com](https://dataqoil.com) for more cool stuffs.
+
 ## Blog Versions
 This blog will be updated frequently.
 * **2021-12-01**

@@ -20,6 +20,8 @@ tags:
 
 
 # 1. Writing a Multi Layer Feedforward Neural Network from Scratch
+I might stop to write new blogs in this site so please visit [dataqoil.com](https://dataqoil.com) for more cool stuffs.
+
 All hail to the pandemic Corona virus, without it, we would not have lockdown and I won't have been stuck on village without internet to write these codes. I am not using <i>gist</i> for codes, so don't panic if you find unfriendly text formats. Also I have written this blog on `Markdown` of `Jupyter Notebook` so the formats are bit different. But truth is, the class we will be building will be just like `keras`. Yes Keras! 
 
 ## 1.1 What I am covering on this blog?

@@ -16,6 +16,9 @@ header:
   teaser: assets/messing-with-cnn/l_ab/output_32_31.png
 ---
 # Messing Up with CNN
+I might stop to write new blogs in this site so please visit [dataqoil.com](https://dataqoil.com) for more cool stuffs.
+
+
 CNN has been so famous in last few years and these days many state of the art techniques are here to do amazing things on computer vision. One can not stop by listing the names of those researchs. In first few notebooks, I am thinking about Grayscale to RGB conversion. My work might not be complete but I intend to update it and add more concepts too. **I am only messing up with CNN**. 
 
 
