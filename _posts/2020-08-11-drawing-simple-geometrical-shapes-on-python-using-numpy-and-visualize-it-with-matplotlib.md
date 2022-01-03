@@ -20,6 +20,8 @@ tags:
 
 
 # Making Simple Geometrical Shapes on Python using NumPy and Matplotlib
+I might stop to write new blogs in this site so please visit [dataqoil.com](https://dataqoil.com) for more awesome blogs about computer vision projects.
+
 Now on this series of task I am going to tackle some of interesting image processing concepts from scratch using Python and then will compare it with popular OpenCV framework. Last time I did Convolution operation from Scratch and RGB to GrayScale conversion, etc. Now is the time to draw circle, rectangle, ellipse and get the flashback of childhood. I am highly inspired by the book named <b>Image Operators: Image Processing in Python by Jason M. Kinser.</b> In fact I am going to use some simple geometrical concepts to draw these basic shapes using only NumPy and Matplotlib.
 
 Also I have to mention the awesome book named <b> The Journey of X: A Guided Tour of Mathematics by Steven Strogatz.</b> Author really have a great way of describing the mathematical terms and I have learned lot of concepts on Mathematics from there. And author also introduced to the awesome book named <b>The House Keeper and the Professor</b>.
