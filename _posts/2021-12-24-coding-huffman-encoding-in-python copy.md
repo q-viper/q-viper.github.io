@@ -5,10 +5,10 @@ categories:
   - Data Analysis
   - Pandas
 tags:
-  - Computer Vision
-  - Image Processing
-  - huffman encoding
-  - image compression
+  - data project
+  - pandas
+  - resample
+  - groupby
 header:
   teaser: assets/groupby/output_21_0.png
 ---
