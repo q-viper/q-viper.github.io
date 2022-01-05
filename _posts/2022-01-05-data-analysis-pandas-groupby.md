@@ -13,9 +13,6 @@ header:
   teaser: assets/groupby/output_21_0.png
 ---
 
-<h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Data-Analysis-and-Importance-of-Groupby-in-Pandas-but-not-Just-pd.groupby" data-toc-modified-id="Data-Analysis-and-Importance-of-Groupby-in-Pandas-but-not-Just-pd.groupby-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Data Analysis and Importance of Groupby in Pandas but not Just pd.groupby</a></span><ul class="toc-item"><li><span><a href="#Updates" data-toc-modified-id="Updates-1.1"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>Updates</a></span></li><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1.2"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Creating-a-Dummy-Data" data-toc-modified-id="Creating-a-Dummy-Data-1.3"><span class="toc-item-num">1.3&nbsp;&nbsp;</span>Creating a Dummy Data</a></span></li><li><span><a href="#Number-of-Posts-According-to-Category" data-toc-modified-id="Number-of-Posts-According-to-Category-1.4"><span class="toc-item-num">1.4&nbsp;&nbsp;</span>Number of Posts According to Category</a></span></li><li><span><a href="#Number-of-Views-According-to-Category" data-toc-modified-id="Number-of-Views-According-to-Category-1.5"><span class="toc-item-num">1.5&nbsp;&nbsp;</span>Number of Views According to Category</a></span></li><li><span><a href="#Views-and-Count-According-to-Day-Time" data-toc-modified-id="Views-and-Count-According-to-Day-Time-1.6"><span class="toc-item-num">1.6&nbsp;&nbsp;</span>Views and Count According to Day Time</a></span></li><li><span><a href="#Views-According-to-Month" data-toc-modified-id="Views-According-to-Month-1.7"><span class="toc-item-num">1.7&nbsp;&nbsp;</span>Views According to Month</a></span></li><li><span><a href="#Number-of-Views-Per-Month-According-to-Category" data-toc-modified-id="Number-of-Views-Per-Month-According-to-Category-1.8"><span class="toc-item-num">1.8&nbsp;&nbsp;</span>Number of Views Per Month According to Category</a></span></li><li><span><a href="#Rate-of-Views-Change-Per-Month" data-toc-modified-id="Rate-of-Views-Change-Per-Month-1.9"><span class="toc-item-num">1.9&nbsp;&nbsp;</span>Rate of Views Change Per Month</a></span></li><li><span><a href="#Rate-of-Views-Change-Per-Month-According-to-Category" data-toc-modified-id="Rate-of-Views-Change-Per-Month-According-to-Category-1.10"><span class="toc-item-num">1.10&nbsp;&nbsp;</span>Rate of Views Change Per Month According to Category</a></span></li></ul></li></ul></div>
-
 # Data Analysis and Importance of Groupby in Pandas but not Just pd.groupby
 This blog will be continously updated as I find new ways, tricks to make things work faster and easier.
 
@@ -23,7 +20,7 @@ This blog will be continously updated as I find new ways, tricks to make things 
 * January 5 2022
     * Started blog and written up to [**Rate of Views Change Per Month According to Category**](#Rate-of-Views-Change-Per-Month-According-to-Category).
 
-What would you like to become in $y= mx+c$? Please don't say `+`.
+What would you like to become in $y= mx+c$ ? Please don't say `+`.
 
 ## Introduction
 I have been working with Pandas frequently and most of the time I have to do groupby. But I have noticed that `pd.groupby` is not always what I should do. Before diving into hands on experience, I would like to share some scenarios but first lets assume that you are working in a media company:
