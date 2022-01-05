@@ -1,6 +1,6 @@
 ---
 title:  "Data Analysis and Importance of Groupby in Pandas but not Just pd.groupby"
-date:   2022-01-05 09:29:17 +0545
+date:   2022-01-04 09:29:17 +0545
 categories:
   - Data Analysis
   - Pandas
