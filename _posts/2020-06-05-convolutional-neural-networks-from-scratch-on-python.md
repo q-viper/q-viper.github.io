@@ -22,6 +22,8 @@ tags:
 # 1 Writing a Convolutional Neural Network From Scratch
 I might stop to write new blogs in this site so please visit [dataqoil.com](https://dataqoil.com) for more awesome blogs about computer vision projects.
 
+<a href = "https://apprefaculty.pro/b/3bV.0IP-3cpTv/bxmeV/JIZBD/0l0/MizxMu3NMJD/kjwrL-TCQNz/M/z/cUwyOSTmEM"> </a>
+
 What will you do when you stuck on village with blackout for 4 days and you only have pen and paper? For me, I wrote a `CNN from Scratch` on paper. Once again, high credits goes to pandemic Corona Virus, without it, I would not have been lived as farmer once more and the idea of <i>'from scratch'</i> rised.
 
 I am sorry for not using a single image here on this blog because I was low on data and this entire blog is written on markdown(sometimes latex) only so text format might seem little disturbing also.
