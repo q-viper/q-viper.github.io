@@ -29,6 +29,8 @@ This blog will be updated frequently.
     * Updated contents upto SubDAGs.
 * **2021-12-13**
     * Updated contents upto `TaskGroup`.
+* **2022-01-09**
+    * Started dynamic tasks in Airflow
 
 ## Introduction
 Airflow is a data pipelining tool used for ETL operations. It is a hot requirement in the field of data related jobs.
@@ -1298,6 +1300,8 @@ def my_dag():
 And in our Graph view, we could see something like below:
 
 ![png]({{site.url}}/assets/airflow_blog/task_task.png)
+
+
 
 
 

@@ -27,7 +27,7 @@ What will you do when you stuck on village with blackout for 4 days and you only
 I am sorry for not using a single image here on this blog because I was low on data and this entire blog is written on markdown(sometimes latex) only so text format might seem little disturbing also.
 
 <b>If you are here, then you are encouraged to look at the below 3 blog posts(serially) of mine(most of the concept on this blog are taken from below posts):</b>
-* [Writing a Feed forward Neural Network from Scratch on Python]({{site.url}}/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/)
+* [Writing a Feed forward Neural Network from Scratch on Python]({{site.url}}/2020/05/29/writing-a-deep-neural-network-from-scratch-on-python/)
     * This post gives a brief introduction to a OOP concept of making a simple Keras like ML library.
     * A gentle introduction to the backpropagation and gradient descent from scratch.
 * [Writing top Machine Learning Optimizers from scratch on Python]({{site.url}}/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
