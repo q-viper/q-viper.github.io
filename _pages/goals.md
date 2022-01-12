@@ -17,6 +17,8 @@ disallow: true
 
 Goals might change or updated according to the priority.
 
+[2022-Jan-12] Just remembered I made this plan nearly a month ago. Should I delete it or update?
+
 # Year: 2022
 ## Blogging Site
 * Started [dataqoil.com](https://dataqoil.com)
