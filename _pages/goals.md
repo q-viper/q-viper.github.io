@@ -2,6 +2,7 @@
 permalink: /upgrading_everyday/
 title: "Upgrading Myself Everyday"
 layout: "splash"
+disallow: true
 ---
 # Upgrading Myself Everyday 
 [2021-Dec-13] Since the year 2021 is ending within few weeks, I am making few goals for myself to track and codify my life a little bit. Yearly goals includes: 
@@ -17,6 +18,33 @@ layout: "splash"
 Goals might change or updated according to the priority.
 
 # Year: 2022
+## Blogging Site
+* Started [dataqoil.com](https://dataqoil.com)
+* Write atleast 1 blog per week about anything. 
+    * Progress as of 
+        * January 12: [2/52].
+* Reach daily 100 views by the end of year.
+
+## Make a Game
+### SHHHHHHHHH do not share that game idea.
+* Progress as of:
+    * January 12: (not even written a single script.)
+
+## Research Paper
+### Write at least 1 by the end of year.
+* Discussion on going with colleague.
+
+### Read at least 1 paper per week.
+* January 12: Not started yet.
+
+## TV Shows to Watch
+### Better Call Saul 
+* January 12: Season 1 Completed
+
+## Certification to Gain
+### Airflow Certification from Astronomer
+* January 12: Course completed 80%.
+
 ## Reading Books
 ### Philosophy
 - [ ] The Trial and Death of Socrates
