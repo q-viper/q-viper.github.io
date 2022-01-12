@@ -17,7 +17,7 @@ header:
 ---
 
 # Getting Started With Airflow in WSL
-I might stop to write new blogs in this site so please visit [dataqoil.com](https://dataqoil.com) for more cool stuffs.
+This blog will be updated more on [dataqoil.com](https://dataqoil.com/2021/01/01/running-airflow-in-wsl-and-getting-started-with-it/).
 
 ## Blog Versions
 This blog will be updated frequently.
@@ -30,7 +30,7 @@ This blog will be updated frequently.
 * **2021-12-13**
     * Updated contents upto `TaskGroup`.
 * **2022-01-09**
-    * Started dynamic tasks in Airflow
+    * [Started dynamic tasks in Airflow]({{site.url}}/2022/01/09/airflow-dynamic-tasks/)
 
 ## Introduction
 Airflow is a data pipelining tool used for ETL operations. It is a hot requirement in the field of data related jobs.
@@ -1303,7 +1303,7 @@ And in our Graph view, we could see something like below:
 
 
 
-
+To avoid making this blog long, a blog about dynamic tasks is available at [here]({{site.url}}/2022/01/09/airflow-dynamic-tasks/).
 
 ## References
 * [Astronomer Certification Apache Airflow DAG Authoring Preparation](https://academy.astronomer.io/astronomer-certification-apache-airflow-dag-authoring-preparation)

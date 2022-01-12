@@ -16,6 +16,8 @@ header:
   teaser: assets/airflow_blog/scheduler.png
 ---
 
+This blog is a continuation of previous blog **[Getting Started With Airflow in WSL]({{site.url}}/2021/12/01/running-airflow-in-wsl-and-getting-started-with-it/)**.
+
 ## Dynamic Tasks in Airflow
 Sometimes there will be a need to create different task for different purpose within a DAG and those task has to be run dynamically. Not only run but has to be created dynamically also. A simple example could be, we want to connect to different database to pipeline data from different source and we have to connect to them manually. It will not be a much hassle if we are working on few databases but what if there are 100 different sources? Creating a distinct task for each from the scratch is not a right way to do it. And there is a simple solution to it i.e. **Dynamic Task**. One way we could achieve it is by creating a common function that will authenticate and gives us the session and we will pass different credentials to that function via loop. Lets see it in action. (All of the codes will be continued from the previous part.)
 
