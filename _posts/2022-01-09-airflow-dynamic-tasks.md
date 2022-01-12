@@ -13,7 +13,7 @@ tags:
     - airflow for beginners
     - tutorial
 header:
-  teaser: assets/airflow_blog/scheduler.png
+  teaser: assets/airflow_blog/graph_task.png
 ---
 
 This blog is a continuation of previous blog **[Getting Started With Airflow in WSL]({{site.url}}/2021/12/01/running-airflow-in-wsl-and-getting-started-with-it/)**.
