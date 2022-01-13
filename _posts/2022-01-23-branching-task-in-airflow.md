@@ -1,7 +1,7 @@
 ---
 title:  "Branching Tasks in Airflow"
-date:   2022-01-23 10:29:17 +0545
-last_modified_at: 2022-01-15 12:29:17 +0545
+date:   2022-01-13 10:29:17 +0545
+last_modified_at: 2022-01-23 12:29:17 +0545
 categories:
     - apache airflow
     - data engineering
