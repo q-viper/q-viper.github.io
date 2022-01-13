@@ -32,12 +32,22 @@ Goals might change or updated according to the priority.
 * Progress as of:
     * January 12: (not even written a single script.)
 
-## Research Paper
+## Academic
 ### Write at least 1 by the end of year.
 * Discussion on going with colleague.
 
 ### Read at least 1 paper per week.
 * January 12: Not started yet.
+
+## Study Study and Study
+### Probability and Statistics
+* Khan Academy
+
+### Linear Algebra
+*
+
+### Calculus
+*
 
 ## TV Shows to Watch
 ### Better Call Saul 
