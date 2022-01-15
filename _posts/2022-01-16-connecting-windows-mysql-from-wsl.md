@@ -44,7 +44,7 @@ Now try to connect to MySQL from WSL using below command:
 mysql -u wsl_root -p -h 192.168.xxx.xxx
 ```
 
-Please remember that in above command xxx is just a placeholder.
+Please remember that in above command xxx is just a placeholder. Also, `root` is just a username that we tried to login with. **We will get an error right now with above command and we will fix it.**
 
 ### Making New User in MySQL to make a Call from WSL
 
