@@ -131,34 +131,42 @@ In above example, we have given a unique code for each value and it is clear tha
 $$
 L(z) = \sum_{i=1}^{n}{L(a_i)P(a_i)}
 $$
+
 Where L is length of each code and P is a probability.
 
 In our example,
+
 $$
-L = 1*0.4 + 2*0.3 + 3*0.1+4*0.1+5*0.07+5*0.03 =  2.2 bits/symbol
+L = 1*0.4 + 2*0.3 + 3*0.1+4*0.1+5*0.07+5*0.03 \\
+=  2.2 bits/symbol
 $$
 
 
 
 
 **Coding Efficency**
+
 $$
 \nu = \frac{H(z)}{L(z)}
 $$
 
 Where, 
+
 $$
 H(z) = -\sum_{i=1}^{n}{P(a_i) * \log{P(a_i)}}
 $$
 It is also known as Information Entropy.
 
 $$
-H(z) = -(0.4 * log(0.4) + 0.3 * log(0.3) + 0.1 * log(0.1) + 0.1 * log(0.1) + 0.07 * log(0.07) + 0.03 * log(0.03)) = 1.8
+H(z) = -(0.4 * log(0.4) + 0.3 * log(0.3) + 0.1 * log(0.1) + 0.1 * log(0.1) + 0.07 * log(0.07) + 0.03 * log(0.03)) \\
+ = 1.8
 $$
 
 Now,
+
 $$
-\nu = \frac{1.8}{2.2} = 0.81
+\nu = \frac{1.8}{2.2} \\
+= 0.81
 $$
 
 Which means that our Huffman coding is 81% efficent.

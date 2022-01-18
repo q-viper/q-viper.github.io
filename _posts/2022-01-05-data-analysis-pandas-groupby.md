@@ -299,7 +299,7 @@ df.groupby("dtime").views.sum().plot(kind="bar")
 
 ## Views According to Month
 
-Using resample on date according to month. We could use week, quarter and also more flexible times to resample. (More at here)[https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.resample.html#pandas.DataFrame.resample].
+Using resample on date according to month. We could use week, quarter and also more flexible times to resample. [More at here](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.resample.html#pandas.DataFrame.resample)
 
 
 ```python
