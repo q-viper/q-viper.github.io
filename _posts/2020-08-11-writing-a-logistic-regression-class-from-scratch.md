@@ -133,9 +133,7 @@ h_\theta(x) = \sigma(\theta^Tx)
 ### Cost function
 We are using crossentropy here. The beauty of this cost function is that, due to being log loss, the `true negative` and `false positive` values are punished more. In other words, if the prediction is not 100% sure, then model is penalized always.
 
-\begin{equation}
-J(\theta) = \frac{1}{m}\sum_{i=1}^{m} -y*log(h_{(\theta)}(x^i) - (1-y)*log(1-h_{(\theta)}(x^i)
-\end{equation}
+![png]({{site.url}}/assets/logistic-regression/cost.png)
 
 ### Parameter Update
 The derivative of cost function with respect to theta will be:
