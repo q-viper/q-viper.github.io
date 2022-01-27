@@ -1,6 +1,6 @@
 ---
 title:  "Deploying Face Mask Classifier on Heroku: Train Classifier"
-date:   2020-10-14 01:29:17 +0545
+date:   2020-10-12 10:29:17 +0545
 categories:
   - Project
   - Computer Vision
@@ -17,7 +17,7 @@ header:
 subtitle: A CNN clasifier using Keras.
 ---
 This is a part 1 of a blogging series.
-* [Part 1: Deploying Face Mask Classifier on Heroku: Building a Classifier]({{site.url}}/2020/10/14/deploying-face-mask-classifier-on-heroku-classifier/)
+* [Part 1: Deploying Face Mask Classifier on Heroku: Building a Classifier]({{site.url}}/2020/10/12/deploying-face-mask-classifier-on-heroku-classifier/)
 * [Part 2: Deploying Face Mask Classifier on Heroku: Deploy It]({{site.url}}/2020/10/14/deploying-face-mask-classifier-on-heroku-deploy/)
 
 **Contents**
