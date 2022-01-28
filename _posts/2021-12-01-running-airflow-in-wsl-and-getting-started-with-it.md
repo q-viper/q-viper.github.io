@@ -563,7 +563,7 @@ def extract():
 def extract2(sms):
     print(sms)
     
-@dag(description="DAG for showing nothing.", 
+@dag(description="DAG for showing nothing.",
          start_date=datetime(2021, 1, 1), schedule_interval=timedelta(minutes=5),
          dagrun_timeout=timedelta(minutes=10), tags=["learning_dag"], catchup=False)
 def my_dag():
