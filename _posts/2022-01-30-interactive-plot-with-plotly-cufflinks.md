@@ -1,6 +1,6 @@
 ---
 title:  "Plotting interactive plots with Plotly and Cufflinks"
-date:   2022-01-27 10:29:17 +0545
+date:   2022-01-30 10:29:17 +0545
 # last_modified_at: 2022-01-23 12:29:17 +0545
 categories:
     - data visualization
