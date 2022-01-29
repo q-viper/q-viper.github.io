@@ -1,6 +1,6 @@
 ---
 title:  "Installing Julia in Windows and Running in Jupyter Notebook"
-date:   2022-01-28 10:29:17 +0545
+date:   2022-02-06 10:29:17 +0545
 # last_modified_at: 2022-01-23 12:29:17 +0545
 categories:
     - Julia
@@ -20,7 +20,7 @@ header:
 println("hello world")
 ```
 
-  ![png]({{site.url}}/julia_install/cmd.png) 
+  ![png]({{site.url}}/assets/julia_install/cmd.png) 
 
 ## Adding Julia into Jupyter
 * First add package `IJulia` by typing `use Pkg` and then enter.
@@ -118,18 +118,3 @@ CSV.read("country_info_lat.csv",DataFrame, header=1, delim=",")
 ```
 
 ![]({{site.url}}/assets/julia_install/df.png)
-
-### Read Remote CSV
-* Add the package TableReader from command line.
-
-    ```shell
-    Pkg.add(TableReader)
-    ```
-
-* Test it!
-
-```julia
-using TableReader
-
-readcsv("https://covid.ourworldindata.org/data/owid-covid-data.csv")
-``` 
