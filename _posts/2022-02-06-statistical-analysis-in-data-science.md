@@ -1,19 +1,21 @@
 ---
 title:  "Walkthrough of Statistical Analysis in Data Science"
-date:   2022-02-04 10:29:17 +0545
+date:   2022-02-06 10:29:17 +0545
 # last_modified_at: 2022-01-23 12:29:17 +0545
 categories:
-    - Julia
+    - Data Analysis
 tags:
-    - data analysis
-    - jupyter
+    - descriptive
+    - inferential
+    - statistics
+    - statistical test
 header:
-  teaser: assets/plotly/map2.png
+  teaser: assets/statistical_analysis/plot3.png
 ---
 
 # What is Statistical Analysis in Data Science?
 
-This blog starts from defination to explaining and experimenting with different part of statistics.
+This blog starts from definition to explaining and experimenting with different part of statistics.
 
 ## Introduction
 Statistics is very important field and there are lots of definitions and use cases available and noting few.
