@@ -15,7 +15,7 @@ header:
 
 # What is Statistical Analysis in Data Science?
 
-This blog starts from definition to explaining and experimenting with different part of statistics.
+This blog starts from definition to explaining and experimenting with different part of statistics. Originally published at [dataqoil.com](https://dataqoil.com).
 
 ## Introduction
 Statistics is very important field and there are lots of definitions and use cases available and noting few.
