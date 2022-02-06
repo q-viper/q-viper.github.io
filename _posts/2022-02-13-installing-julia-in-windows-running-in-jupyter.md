@@ -1,6 +1,6 @@
 ---
 title:  "Installing Julia in Windows and Running in Jupyter Notebook"
-date:   2022-02-06 10:29:17 +0545
+date:   2022-02-13 10:29:17 +0545
 # last_modified_at: 2022-01-23 12:29:17 +0545
 categories:
     - Julia
