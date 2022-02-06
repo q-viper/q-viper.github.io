@@ -1,6 +1,6 @@
 ---
 title:  "Walkthrough of Statistical Analysis in Data Science"
-date:   2022-02-06 10:29:17 +0545
+date:   2022-02-06 02:29:17 +0545
 # last_modified_at: 2022-01-23 12:29:17 +0545
 categories:
     - Data Analysis
