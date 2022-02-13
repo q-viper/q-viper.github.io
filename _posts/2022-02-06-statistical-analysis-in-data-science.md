@@ -52,8 +52,6 @@ Where as, in Inferential Statistics, we take a step forward from the descriptive
 
 ## Data We Are Using
 We are using most popular dataset in the Machine Learning world, Titanic dataset.
-<!-- The dataset we are going to use is of COVID 19 dataset available on [GitHub](https://github.com/owid/covid-19-data/tree/master/public/data). According to the authors, the data is updated regularly and please remember that, **the result will come different for you than mine**. -->
-
 
 ```python
 import pandas as pd

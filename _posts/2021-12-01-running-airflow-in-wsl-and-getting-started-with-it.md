@@ -121,7 +121,11 @@ options = "metadata"
     ```
     airflow scheduler
     ```
-
+* If an error about not finding a job table is shown, find a section in `airflow.cfg` file where `[webserver]` is written and make sure somethin like below is present:
+```
+[webserver]
+rbac = True
+```
 ## Ways to Define a DAG
 ### Way 1 
 
