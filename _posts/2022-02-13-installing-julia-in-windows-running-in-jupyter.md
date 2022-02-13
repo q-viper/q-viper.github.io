@@ -8,7 +8,7 @@ tags:
     - data analysis
     - jupyter
 header:
-  teaser: assets/plotly/map2.png
+  teaser: assets/install_julia/tmp.gif
 ---
 
 ## Installation of Julia
@@ -99,7 +99,7 @@ end every 10
 
 Once done, a `tmp.gif` file will be stored on the working directory.
 
-![]({{site.url}}/assets/install_julia/tmp.gif)
+<img src = "{{site.url}}/assets/install_julia/tmp.gif">
 
 ## Reading CSV
 ### Reading Local CSV
