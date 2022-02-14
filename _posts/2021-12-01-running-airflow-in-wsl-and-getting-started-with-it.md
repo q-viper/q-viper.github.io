@@ -98,6 +98,11 @@ options = "metadata"
     ```
     airflow db init
     ```
+* If a error comes saying "Operation is not Permitted" make sure you have write access to the $AIRFLOW_HOME folder from WSL.
+
+    ```
+    sudo chmod -R 777 /mnt/c/Users/Dell/Documents/airflow/
+    ```
 
 * Create airflow user.
     ```
