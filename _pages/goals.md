@@ -16,21 +16,30 @@ disallow: true
 * Health (ex. Run KMs)
 
 Goals might change or updated according to the priority.
-
-[2022-Jan-12] Just remembered I made this plan nearly a month ago. Should I delete it or update?
+## Updates
+* [2022-Jan-12] Just remembered I made this plan nearly a month ago. Should I delete it or update?
+* [2022-Feb-14] Lots of things has happened. Earned few bucks from Upwork, continued writing blogs, learning game development.
 
 # Year: 2022
 ## Blogging Site
-* Started [dataqoil.com](https://dataqoil.com)
+* Started [dataqoil.com](https://dataqoil.com). But doing cross-posting on GitHub page also.
 * Write atleast 1 blog per week about anything. 
-    * Progress as of 
-        * January 12: [2/52].
+    * [Data Analysis and Importance of Groupby in Pandas but not Just pd.groupby](https://q-viper.github.io/2022/01/05/data-analysis-pandas-groupby/)
+    * [Dynamic Tasks in Airflow](https://q-viper.github.io/2022/01/09/airflow-dynamic-tasks/)
+    * [Connecting to MySQL Server in Windows Machine from WSL](https://q-viper.github.io/2022/01/13/connecting-windows-mysql-from-wsl/)
+    * [Branching Tasks in Airflow](https://q-viper.github.io/2022/01/23/branching-task-in-airflow/)
+    * [Plotting interactive plots with Plotly and Cufflinks](https://q-viper.github.io/2022/01/29/interactive-plot-with-plotly-cufflinks/)
+    * [Walkthrough of Statistical Analysis in Data Science](https://q-viper.github.io/2022/02/05/statistical-analysis-in-data-science/)
+    * [Installing Julia in Windows and Running in Jupyter Notebook](https://q-viper.github.io/2022/02/13/installing-julia-in-windows-running-in-jupyter/)
+    * [Creating Awesome Data Dashboard with Plotly in Streamlit]()
+
 * Reach daily 100 views by the end of year.
 
 ## Make a Game
 ### SHHHHHHHHH do not share that game idea.
 * Progress as of:
     * January 12: (not even written a single script.)
+    * February 14: Written lots of scripts and still figuring out what did I do?
 
 ## Academic
 ### Write at least 1 by the end of year.
