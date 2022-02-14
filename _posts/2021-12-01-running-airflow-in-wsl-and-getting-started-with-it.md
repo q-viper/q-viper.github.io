@@ -84,7 +84,7 @@ options = "metadata"
 
 * Install airflow
     ```
-    install apache-airflow
+    pip install apache-airflow
     ```
 
 * Make sure if Airflow is installed properly.
