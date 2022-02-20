@@ -46,10 +46,10 @@ streamlit run main.py
 ```
 * We could see something like below on the terminal:
 
-![]({{site.url}}/streamlit_blog/terminal.png)
+![]({{site.url}}/assets/streamlit_blog/terminal.png)
 
 * If the link does not open to the browser by itself, open it. And we could see our markdown text on the web page.
-![]({{site.url}}/streamlit_blog/first_app.png)
+![]({{site.url}}/assets/streamlit_blog/first_app.png)
 
 
 ## First Plotly Plot in Streamlit
@@ -90,7 +90,7 @@ In above code, we did:
 * We plotted a line plot using Pandas iplot attribute. **Cufflinks allowed us to use iplot with Pandas object.**
 * To be able to use that figure in streamlit app, we used `asFigure=True` in `iplot` and then passed figure inside `st.plotly_chart`
 
-![]({{site.url}}/streamlit_blog/first_plot.png)
+![]({{site.url}}/assets/streamlit_blog/first_plot.png)
 
 ## Adding Dropdown for Location
 The above plot was for entire locations and if we look carefully to all the locations, there are values like World, Asia and so on which are aggregated values and if we want to view world's daily trend, we must either filter out rows of locations like World, Asia or we must select rows with those values. But doing filter or selection inside a code will not be much of a good idea so lets make a drop down. Just below the function, we will modify code to look like below:
@@ -123,7 +123,7 @@ What we did is:
 
 We can see something like below:
 
-![]({{site.url}}/streamlit_blog/second_plot.png)
+![]({{site.url}}/assets/streamlit_blog/second_plot.png)
 
 ## Adding A Checkbox to Show Data
 It is even simpler. Add below code just below the markdown to show location selected.
@@ -144,7 +144,7 @@ st.plotly_chart(fig)
 
 We created a checkbox on sidebar and if it is clicked, we will push the data in `st.dataframe`. Below is the result in web app.
 
-![]({{site.url}}/streamlit_blog/data1.png)
+![]({{site.url}}/assets/streamlit_blog/data1.png)
 
 But the data is not much readable. So lets create a new drop down, where we will select the type of trend. But lets first create possible metrics or trend of data that we want visualize:
 1. **Daily Cases**: How many of cases were there on daily level?
@@ -214,11 +214,11 @@ What we did in above code is:
 
 The result should look like below:
 
-![]({{site.url}}/streamlit_blog/show_trend1.png)
+![]({{site.url}}/assets/streamlit_blog/show_trend1.png)
 
 And if we selected all the columns with weekly trend of Afghanistan,
 
-![]({{site.url}}/streamlit_blog/weekly_trend1.png)
+![]({{site.url}}/assets/streamlit_blog/weekly_trend1.png)
 
 
 ## Date Level Trend Visualization
@@ -238,7 +238,7 @@ But remove the code of visualization we added earlier.
 
 We can see something like below:
 
-![]({{site.url}}/streamlit_blog/subplots.png)
+![]({{site.url}}/assets/streamlit_blog/subplots.png)
 
 ## Comparison Between N Countries
 In above plots, we were only plotting plots of a single location but what if we want to compare between two by viewing same on the same figure? This is not possible by default so we will tweak out code little bit.
@@ -499,10 +499,10 @@ if analysis_type=="Multiple":
 
 ### Output
 #### Single
-![]({{site.url}}/streamlit_blog/single.png)
+![]({{site.url}}/assets/streamlit_blog/single.png)
 
 #### Multiple
-![]({{site.url}}/streamlit_blog/multiple.png)
+![]({{site.url}}/assets/streamlit_blog/multiple.png)
 
 
 ```python
