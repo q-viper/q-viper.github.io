@@ -1,6 +1,6 @@
 ---
 title:  "Creating Awesome Data Dashboard with Plotly in Streamlit"
-date:   2022-02-20 10:29:17 +0545
+date:   2022-02-20 09:29:17 +0545
 categories:
     - Data Analysis
     - Streamlit
