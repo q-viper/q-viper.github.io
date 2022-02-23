@@ -302,7 +302,7 @@ fig.show()
 
 ![]({{site.url}}/assets/streamlit_blog/clustering/elbow1.png)
 
-While choosing a best value of clusters or K, we should look into the last plot, an elbow curve. The best optimal value of K is the value from where our inertia starts to decrease slowly. Also, as we can see the colors of markers are not that cool which can be changed with below values. For that purpose, we will select a random color from the list of supported colors by plotly. [Please follow this comment for more about it-(https://community.plotly.com/t/plotly-colours-list/11730/6). A new Python file `colors.py` is created and below code is added on it. And we will use it later on.
+While choosing a best value of clusters or K, we should look into the last plot, an elbow curve. The best optimal value of K is the value from where our inertia starts to decrease slowly. Also, as we can see the colors of markers are not that cool which can be changed with below values. For that purpose, we will select a random color from the list of supported colors by plotly. [Please follow this comment for more about it](https://community.plotly.com/t/plotly-colours-list/11730/6). A new Python file `colors.py` is created and below code is added on it. And we will use it later on.
 
 
 ```python
