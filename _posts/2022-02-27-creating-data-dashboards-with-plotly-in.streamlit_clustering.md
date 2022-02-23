@@ -144,13 +144,13 @@ if analysis_type=="Multiple":
 ## K Means Clustering
  We have created an awesome blog about [K Means clustering from the scratch](https://dataqoil.com/2022/01/28/kmeans-clustering-in-python-from-scratch/) if you would like to implement it. But now we are going to use it from SKlearn.
  
- ### Algorithm 
-Let $P = {p_1,p_2,p_3,...,p_n}$ be the set of data points and $C = {c_1,c_2,c_3,...,c_n}$ be the set of centers.
+### Algorithm 
+Let $$P = {p_1,p_2,p_3,...,p_n}$$ be the set of data points and $$C = {c_1,c_2,c_3,...,c_n}$$ be the set of centers.
 
 1. **Step 1**: Initially randomly select appropriate numbers of "c" cluster center.
-2. **Step 2**: Calculate distance between each data point $P = {p_1,p_2,p_3,...,p_n}$ and cluster center 'c'.
-3. **Step 3**: Keep data points to the cluster center whose distance from the cluster center is minimum of all the cluster centers. Here we calculate the distance using euclidean distance. Mathematically, $  = \sum_{i=1}^n (x_i^2-y_i^2) $
-4. **Step 4**: Now, recalculate the new cluster center using $ \frac{1}{c}\sum_{i=1}^c x_i $ where $c_i$ represent the number of data point in $i^th$ clusters.
+2. **Step 2**: Calculate distance between each data point $$P = {p_1,p_2,p_3,...,p_n}$$ and cluster center 'c'.
+3. **Step 3**: Keep data points to the cluster center whose distance from the cluster center is minimum of all the cluster centers. Here we calculate the distance using euclidean distance. Mathematically, $$  = \sum_{i=1}^n (x_i^2-y_i^2) $$
+4. **Step 4**: Now, recalculate the new cluster center using $$ \frac{1}{c}\sum_{i=1}^c x_i $$ where $$c_i$$ represent the number of data point in $$i^th$$ clusters.
 5. **Step 5**: Again calculate the distance between new cluster centers and each data points.
 6. **Step 6**: If number of data points in a cluster are updated then repeat step 3 otherwise terminate.
 
@@ -446,7 +446,7 @@ from colors import *
 ```python
 @st.cache
 def get_data(url):
-    df = pd.read_csv("owid-covid-data.csv")
+    df = pd.read_csv(url)
     df["date"] = pd.to_datetime(df.date).dt.date
     df['date'] = pd.DatetimeIndex(df.date)
     
@@ -781,7 +781,7 @@ When k-means algorithm is not appropriate to make a objects of cluster to the da
 
 **Manhattan Distance**
 
-Of p1, p2 is: $|(x2-x1)+(y2-y1)|$.
+Of p1, p2 is: $$|(x2-x1)+(y2-y1)|$$.
 
 
 
