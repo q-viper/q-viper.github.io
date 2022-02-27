@@ -228,7 +228,7 @@ ndf
     </tr>
     <tr>
       <th>4</th>
-      <td>adj close</td>
+      <td>adj_close</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>10390.0</td>
@@ -296,7 +296,7 @@ df.describe()
       <th>high</th>
       <th>low</th>
       <th>close</th>
-      <th>adj close</th>
+      <th>adj_close</th>
       <th>volume</th>
     </tr>
   </thead>
@@ -430,7 +430,7 @@ smadf
       <th>high</th>
       <th>low</th>
       <th>close</th>
-      <th>adj close</th>
+      <th>adj_close</th>
       <th>volume</th>
     </tr>
     <tr>
@@ -572,13 +572,13 @@ tdf
       <th>high</th>
       <th>low</th>
       <th>close</th>
-      <th>adj close</th>
+      <th>adj_close</th>
       <th>volume</th>
       <th>sma_open</th>
       <th>sma_high</th>
       <th>sma_low</th>
       <th>sma_close</th>
-      <th>sma_adj close</th>
+      <th>sma_adj_close</th>
       <th>sma_volume</th>
     </tr>
     <tr>
@@ -792,7 +792,7 @@ for s,c in zip(smac,col):
 
 ![]({{site.url}}/assets/stock_analysis/sma_volume.png)
 
-![]({{site.url}}/assets/stock_analysis/sma_adj close.png)
+![]({{site.url}}/assets/stock_analysis/sma_adj_close.png)
 
 
 We can not see the much difference between WMA and SMA and it is because of the level (daily) of our data. Lets try to plot data of last 100 days only.
@@ -870,7 +870,7 @@ emadf
       <th>high</th>
       <th>low</th>
       <th>close</th>
-      <th>adj close</th>
+      <th>adj_close</th>
       <th>volume</th>
     </tr>
     <tr>
@@ -1002,25 +1002,25 @@ tdf
       <th>high</th>
       <th>low</th>
       <th>close</th>
-      <th>adj close</th>
+      <th>adj_close</th>
       <th>volume</th>
       <th>sma_open</th>
       <th>sma_high</th>
       <th>sma_low</th>
       <th>sma_close</th>
-      <th>sma_adj close</th>
+      <th>sma_adj_close</th>
       <th>sma_volume</th>
       <th>wma_open</th>
       <th>wma_high</th>
       <th>wma_low</th>
       <th>wma_close</th>
-      <th>wma_adj close</th>
+      <th>wma_adj_close</th>
       <th>wma_volume</th>
       <th>ema_open</th>
       <th>ema_high</th>
       <th>ema_low</th>
       <th>ema_close</th>
-      <th>ema_adj close</th>
+      <th>ema_adj_close</th>
       <th>ema_volume</th>
     </tr>
     <tr>
@@ -1380,7 +1380,7 @@ for s,c,w,e in zip(smac,col, wmac, emac):
 
 ![]({{site.url}}/assets/stock_analysis/ema_volume.png)
 
-![]({{site.url}}/assets/stock_analysis/ema_adj close.png)
+![]({{site.url}}/assets/stock_analysis/ema_adj_close.png)
 
 
 Looking over the EMA,it seems that it is much more smoother than the other values. But the smoothness depends on the value of the smoothing. Based on EMA, lots of other important metrics are calculated in Stock Market Analysis and to note down few:
@@ -1490,7 +1490,7 @@ for s,c,e in zip(smmc,col,emac):
 
 ![]({{site.url}}/assets/stock_analysis/mma_volume.png)
 
-![]({{site.url}}/assets/stock_analysis/mma_adj close.png)
+![]({{site.url}}/assets/stock_analysis/mma_adj_close.png)
 
 
 
@@ -1531,7 +1531,7 @@ for s,c,e in zip(smmc,col,emac):
 
 ![]({{site.url}}/assets/stock_analysis/mva_volume.png)
 
-![]({{site.url}}/assets/stock_analysis/mva_adj close.png)
+![]({{site.url}}/assets/stock_analysis/mva_adj_close.png)
 
 
 Variance seems to be increasing when there is sudden change in the trend and it seems to be decreasing when the change seems to be normal.
