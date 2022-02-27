@@ -257,7 +257,7 @@ fig.write_image("stock_analysis/dist.png")
 fig.show()
 ```
 
-![]({{site.url}}/stock_analysis/dist.png)
+![]({{site.url}}/assets/stock_analysis/dist.png)
 
 
 
@@ -272,7 +272,7 @@ fig = df.iplot(kind="box",subplots=True, title="Box of All Variables", asFigure=
 fig.write_image("stock_analysis/box.png")
 fig.show()
 ```
-![]({{site.url}}/stock_analysis/box.png)
+![]({{site.url}}/assets/stock_analysis/box.png)
 
 
 It seems that we have too many outliers but it does not matter right now.
@@ -386,7 +386,7 @@ fig.write_image("stock_analysis/trend.png")
 fig.show()
 ```
 
-![]({{site.url}}/stock_analysis/trend.png)
+![]({{site.url}}/assets/stock_analysis/trend.png)
 
 
 As we can see in the above plot that, the trend of the OHLC is in increasing order while Volume is not. The values of share increases/decreases but in overall, it seems to be increasing.
@@ -782,17 +782,17 @@ for s,c in zip(smac,col):
     fig.show()
 ```
 
-![]({{site.url}}/stock_analysis/sma_close.png)
+![]({{site.url}}/assets/stock_analysis/sma_close.png)
 
-![]({{site.url}}/stock_analysis/sma_open.png)
+![]({{site.url}}/assets/stock_analysis/sma_open.png)
 
-![]({{site.url}}/stock_analysis/sma_high.png)
+![]({{site.url}}/assets/stock_analysis/sma_high.png)
 
-![]({{site.url}}/stock_analysis/sma_low.png)
+![]({{site.url}}/assets/stock_analysis/sma_low.png)
 
-![]({{site.url}}/stock_analysis/sma_volume.png)
+![]({{site.url}}/assets/stock_analysis/sma_volume.png)
 
-![]({{site.url}}/stock_analysis/sma_adj close.png)
+![]({{site.url}}/assets/stock_analysis/sma_adj close.png)
 
 
 We can not see the much difference between WMA and SMA and it is because of the level (daily) of our data. Lets try to plot data of last 100 days only.
@@ -805,17 +805,17 @@ for s,c,w in zip(smac,col, wmac):
     fig.show()
 ```
 
-![]({{site.url}}/stock_analysis/sma_close2.png)
+![]({{site.url}}/assets/stock_analysis/sma_close2.png)
 
-![]({{site.url}}/stock_analysis/sma_open2.png)
+![]({{site.url}}/assets/stock_analysis/sma_open2.png)
 
-![]({{site.url}}/stock_analysis/sma_high2.png)
+![]({{site.url}}/assets/stock_analysis/sma_high2.png)
 
-![]({{site.url}}/stock_analysis/sma_low2.png)
+![]({{site.url}}/assets/stock_analysis/sma_low2.png)
 
-![]({{site.url}}/stock_analysis/sma_volume2.png)
+![]({{site.url}}/assets/stock_analysis/sma_volume2.png)
 
-![]({{site.url}}/stock_analysis/sma_adj_close2.png)
+![]({{site.url}}/assets/stock_analysis/sma_adj_close2.png)
 
 Now it is more clearer. Looking over the plot of open,
 * We can clearly see that the default value of the open have some spikes and huge downfalls.
@@ -1370,17 +1370,17 @@ for s,c,w,e in zip(smac,col, wmac, emac):
     fig.show()
 ```
 
-![]({{site.url}}/stock_analysis/ema_close.png)
+![]({{site.url}}/assets/stock_analysis/ema_close.png)
 
-![]({{site.url}}/stock_analysis/ema_open.png)
+![]({{site.url}}/assets/stock_analysis/ema_open.png)
 
-![]({{site.url}}/stock_analysis/ema_high.png)
+![]({{site.url}}/assets/stock_analysis/ema_high.png)
 
-![]({{site.url}}/stock_analysis/ema_low.png)
+![]({{site.url}}/assets/stock_analysis/ema_low.png)
 
-![]({{site.url}}/stock_analysis/ema_volume.png)
+![]({{site.url}}/assets/stock_analysis/ema_volume.png)
 
-![]({{site.url}}/stock_analysis/ema_adj close.png)
+![]({{site.url}}/assets/stock_analysis/ema_adj close.png)
 
 
 Looking over the EMA,it seems that it is much more smoother than the other values. But the smoothness depends on the value of the smoothing. Based on EMA, lots of other important metrics are calculated in Stock Market Analysis and to note down few:
@@ -1450,7 +1450,7 @@ fig.write_image("stock_analysis/candle.png")
 fig.show()
 ```
 
-![]({{site.url}}/stock_analysis/candle.png)
+![]({{site.url}}/assets/stock_analysis/candle.png)
 
 
 ## Moving Median
@@ -1480,17 +1480,17 @@ for s,c,e in zip(smmc,col,emac):
     fig.show()
 ```
 
-![]({{site.url}}/stock_analysis/mma_close.png)
+![]({{site.url}}/assets/stock_analysis/mma_close.png)
 
-![]({{site.url}}/stock_analysis/mma_open.png)
+![]({{site.url}}/assets/stock_analysis/mma_open.png)
 
-![]({{site.url}}/stock_analysis/mma_high.png)
+![]({{site.url}}/assets/stock_analysis/mma_high.png)
 
-![]({{site.url}}/stock_analysis/mma_low.png)
+![]({{site.url}}/assets/stock_analysis/mma_low.png)
 
-![]({{site.url}}/stock_analysis/mma_volume.png)
+![]({{site.url}}/assets/stock_analysis/mma_volume.png)
 
-![]({{site.url}}/stock_analysis/mma_adj close.png)
+![]({{site.url}}/assets/stock_analysis/mma_adj close.png)
 
 
 
@@ -1521,17 +1521,17 @@ for s,c,e in zip(smmc,col,emac):
     fig.show()
 ```
 
-![]({{site.url}}/stock_analysis/mva_close.png)
+![]({{site.url}}/assets/stock_analysis/mva_close.png)
 
-![]({{site.url}}/stock_analysis/mva_open.png)
+![]({{site.url}}/assets/stock_analysis/mva_open.png)
 
-![]({{site.url}}/stock_analysis/mva_high.png)
+![]({{site.url}}/assets/stock_analysis/mva_high.png)
 
-![]({{site.url}}/stock_analysis/mva_low.png)
+![]({{site.url}}/assets/stock_analysis/mva_low.png)
 
-![]({{site.url}}/stock_analysis/mva_volume.png)
+![]({{site.url}}/assets/stock_analysis/mva_volume.png)
 
-![]({{site.url}}/stock_analysis/mva_adj close.png)
+![]({{site.url}}/assets/stock_analysis/mva_adj close.png)
 
 
 Variance seems to be increasing when there is sudden change in the trend and it seems to be decreasing when the change seems to be normal.
