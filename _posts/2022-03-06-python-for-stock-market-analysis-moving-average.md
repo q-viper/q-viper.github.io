@@ -19,6 +19,8 @@ This blog is a part of our series **Python for Stock Market Analysis**.
 
 This blog tries to implement preliminary metrics that are used in the stock market analysis. The dataset we will be using is available via `yahoofinance`. 
 
+[For interactive version of this blog, please visit this link.]({{site.url}}/html_posts/Python for Stock Market Analysis - Moving Average)
+
 ### Preliminary Actions
 #### Install Libraries
 Please install:
