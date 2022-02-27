@@ -1,6 +1,6 @@
 ---
 title:  "Python for Stock Market Analysis: Working with Moving Averages"
-date:   2022-02-27 09:29:17 +0545
+date:   2022-03-06 09:29:17 +0545
 categories:
     - Data Analysis
     - Stock Market
@@ -187,9 +187,6 @@ ndf
 ```
 
 
-
-
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -795,7 +792,7 @@ for s,c in zip(smac,col):
 
 ![]({{site.url}}/stock_analysis/sma_volume.png)
 
-![]({{site.url}}/stock_analysis/sma_adj_close.png)
+![]({{site.url}}/stock_analysis/sma_adj close.png)
 
 
 We can not see the much difference between WMA and SMA and it is because of the level (daily) of our data. Lets try to plot data of last 100 days only.
