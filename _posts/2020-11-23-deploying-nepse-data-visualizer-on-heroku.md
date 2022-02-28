@@ -34,12 +34,6 @@ If you are from Nepal then you already know what Nepal Stock Exchange means. Hon
 ### Where was I lost?
 From nearly a month, I had not written any blogs because we had our huge festival in Nepal, Dashain and Tihar. Also I was playing lots of games like Injustice Gods Among Us. And I have also been busy watching series like Silicon Valley and Mr. Robot. And good news about me must be I have joined [NAAMI](https://www.naamii.com.np) as Junior Unity Software Developer from last week.
 
-## Inspiration
-2020 is not a great year for anyone because of the pandemic and students like me are suffering from hard anxiety of their career and I am one of them. But I have met some awesome people on the web whose work always keeps me inspiring to write more. And I have noticed that [Jithendra's blogs](https://jithendrabsy.me/data-sabbath/about/) and [LinkedIn](https://www.linkedin.com/in/jithendrabsy/) posts are very insightful for learning Data Science.
-
-## Contribution
-If you are looking right into this blog please try to contribute to Agriculture field by finding a model to classify and detect [corn leaf infection](https://www.kaggle.com/qramkrishna/corn-leaf-infection-dataset). I have worked hard to prepare dataset and made it live on kaggle. Also if you are interested in my more awesome work then [Contour Based Writing System](https://q-viper.github.io/2020/08/28/gesture-based-visually-writing-system-web-app/) must be your first choice.
-
 ## Getting Systems Ready
 Of course we need python along with few other libraries. If you are wondering what should be the requirements then please follow the [repository and download](https://github.com/q-viper/NEPSE-Data-Visualizer-with-Streamlit/) all the codes then TADAAAAA!!!! But to describe it on steps, please follow below steps:
 * Make a virtual environment using [venv](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
@@ -91,6 +85,7 @@ import plotly.express as px
 
 ## Method: `company_names() `
 
+As of 2022, some of URLs seems to have changed, thus old lines will be commented out.
 
 ```python
 import streamlit as st
@@ -106,7 +101,9 @@ import plotly.express as px
 def company_names():
     http = urllib3.PoolManager()
     http.addheaders = [('User-agent', 'Mozilla/61.0')]
-    web_page = http.request('GET', "http://www.nepalstock.com.np/company?_limit=500")
+    # url = "http://www.nepalstock.com.np/company?_limit=500"
+    url = "http://www.nepalstock.com/company?_limit=500"
+    web_page = http.request('GET', url)
     soup = BS(web_page.data, 'html5lib')
     table = soup.find('table')
     company=[]
@@ -374,7 +371,8 @@ First we need to get that data. As I stated earlier, sometimes scraping data of 
 ```python
 st.subheader("Check Company's Progress in Years")
 def CompanyStocksTransactions(SymbolNo,startDate, endDate):
-    url="http://www.nepalstock.com.np/company/transactions/%s/0/?startDate=%s&endDate=%s&_limit=9000000"%(SymbolNo,startDate, endDate)
+    # url="http://www.nepalstock.com.np/company/transactions/%s/0/?startDate=%s&endDate=%s&_limit=9000000"%(SymbolNo,startDate, endDate)
+    url="http://www.nepalstock.com/company/transactions/%s/0/?startDate=%s&endDate=%s&_limit=9000000"%(SymbolNo,startDate, endDate)
     #print("Connecting to %s "%url)
     http = urllib3.PoolManager()
     http.addheaders = [('User-agent', 'Mozilla/61.0')]

@@ -427,7 +427,6 @@ dummy = plt.legend()
 ## What is the difference between the histograms of normalized data and original?
 Well, normalized data tends to be more spreaded.
 
-
 ```python
 # how many parameters will there be?
 # for n features, there will be n + 1
