@@ -1543,6 +1543,6 @@ Variance seems to be increasing when there is sudden change in the trend and it 
 In this blog, we have explored some of popular moving average algorithms used in the stock market analysis and in the next blog, we will explore some of the popular metrics that uses Moving Average as the base metric.
 
 ## References
-* https://www.investopedia.com/terms/e/ema.asp
-* https://www.investopedia.com/terms/m/movingaverage.asp
+* [EMA](https://www.investopedia.com/terms/e/ema.asp)
+* [Moving Average](https://www.investopedia.com/terms/m/movingaverage.asp)
 

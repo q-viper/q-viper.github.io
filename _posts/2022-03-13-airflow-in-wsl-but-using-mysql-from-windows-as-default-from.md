@@ -130,7 +130,7 @@ In above query,
 Now running the command `mysql -u wsl_root -p -h 192.168.xxx.xxx` and giving password after it asked, we could connect to the MySQL server.
 
 ### References
-* https://stackoverflow.com/questions/1559955/host-xxx-xx-xxx-xxx-is-not-allowed-to-connect-to-this-mysql-server
+* [StackOverflow](https://stackoverflow.com/questions/1559955/host-xxx-xx-xxx-xxx-is-not-allowed-to-connect-to-this-mysql-server)
 
 ## Install MySQL Connector
 Now we need to [install MySQL Connection Provider](https://airflow.apache.org/docs/apache-airflow-providers-mysql/stable/index.html) for Airflow as:

@@ -1,5 +1,5 @@
 ---
-title:  "Python for Stock Market Analysis: Exploring Technical Indicators"
+title:  "Python for Stock Market Analysis: Exploring Technical Trend Indicators"
 date:   2022-03-01 09:29:17 +0545
 categories:
     - Data Analysis
@@ -12,12 +12,8 @@ tags:
 header:
   teaser: assets/stock_analysis/ppo.png
 ---
-
-<h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Trend-Indicators" data-toc-modified-id="Trend-Indicators-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Trend Indicators</a></span><ul class="toc-item"><li><span><a href="#Moving-Averages" data-toc-modified-id="Moving-Averages-2.1"><span class="toc-item-num">2.1&nbsp;&nbsp;</span>Moving Averages</a></span><ul class="toc-item"><li><span><a href="#Trend-of-Closing-Price-Over-a-30d-Periods" data-toc-modified-id="Trend-of-Closing-Price-Over-a-30d-Periods-2.1.1"><span class="toc-item-num">2.1.1&nbsp;&nbsp;</span>Trend of Closing Price Over a 30d Periods</a></span></li></ul></li><li><span><a href="#Guppy-Multiple-Moving-Average-(GMMA)" data-toc-modified-id="Guppy-Multiple-Moving-Average-(GMMA)-2.2"><span class="toc-item-num">2.2&nbsp;&nbsp;</span>Guppy Multiple Moving Average (GMMA)</a></span><ul class="toc-item"><li><span><a href="#Calculation-of-GMMA" data-toc-modified-id="Calculation-of-GMMA-2.2.1"><span class="toc-item-num">2.2.1&nbsp;&nbsp;</span>Calculation of GMMA</a></span></li><li><span><a href="#Viewing-GMMA-with-Candlestick" data-toc-modified-id="Viewing-GMMA-with-Candlestick-2.2.2"><span class="toc-item-num">2.2.2&nbsp;&nbsp;</span>Viewing GMMA with Candlestick</a></span></li><li><span><a href="#References" data-toc-modified-id="References-2.2.3"><span class="toc-item-num">2.2.3&nbsp;&nbsp;</span>References</a></span></li></ul></li><li><span><a href="#Percentage-Price-Oscillator" data-toc-modified-id="Percentage-Price-Oscillator-2.3"><span class="toc-item-num">2.3&nbsp;&nbsp;</span>Percentage Price Oscillator</a></span><ul class="toc-item"><li><span><a href="#Calculation" data-toc-modified-id="Calculation-2.3.1"><span class="toc-item-num">2.3.1&nbsp;&nbsp;</span>Calculation</a></span></li><li><span><a href="#Reference" data-toc-modified-id="Reference-2.3.2"><span class="toc-item-num">2.3.2&nbsp;&nbsp;</span>Reference</a></span></li></ul></li><li><span><a href="#Moving-Average-Convergence-Divergence-(MACD)" data-toc-modified-id="Moving-Average-Convergence-Divergence-(MACD)-2.4"><span class="toc-item-num">2.4&nbsp;&nbsp;</span>Moving Average Convergence Divergence (MACD)</a></span><ul class="toc-item"><li><span><a href="#Calculation" data-toc-modified-id="Calculation-2.4.1"><span class="toc-item-num">2.4.1&nbsp;&nbsp;</span>Calculation</a></span></li><li><span><a href="#References" data-toc-modified-id="References-2.4.2"><span class="toc-item-num">2.4.2&nbsp;&nbsp;</span>References</a></span></li></ul></li></ul></li><li><span><a href="#Conclusion" data-toc-modified-id="Conclusion-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Conclusion</a></span></li></ul></div>
-
 ## Introduction
-Hello and welcome back everyone to our second part of the new blog series [Python for Stock Market Analysis](). In the last part, we explored different [types of moving averages]() like Simple Moving Average (SMA), Exponential Moving Average (EMA), Weighted Moving Average (WMA) and explored other moving metrics like Moving Median and Moving Variance. Until now we were looking only into the trend over the time and trend over the period of time. These simple metrics are used under the hood to make some assumptions in the stock markets. In this blog, we will explore some of popular metrics that are used in the stock markets which are based on Moving Averages.
+Hello and welcome back everyone to our second part of the new blog series [Python for Stock Market Analysis](). In the last part, we explored different [types of moving averages]() like Simple Moving Average (SMA), Exponential Moving Average (EMA), Weighted Moving Average (WMA) and explored other moving metrics like Moving Median and Moving Variance. Until now we were looking only into the trend over the time and trend over the period of time. These simple metrics are used under the hood to make some assumptions in the stock markets. In this blog, we will explore some of popular metrics that are used in the stock markets which are based on Moving Averages. Please refer to the [interactive version of this blog]({{site.url}}/html_posts/python-for-stock-market-analysis-exploring-different-types-of-trend-Indicators) if you want to see the interactive plots.
 
 **Disclaimer:** This blog is for educational purpose only and we do not recommend taking the knowledge gained from this blog to implement in real financial exercises.
 
@@ -124,14 +120,10 @@ GMMA is a technical indicator where we use two groups of EMAs (total 12) and com
 * Bullish crossover happens when SEMA crosses over the LEMA. And it indicates a bullish reversal occurrence. 
 * Bearish crossover happens when SEMA crosses below the LEMA. And it indicates a bearish reversal occurrence.
 * When two groups are trending horizontally or parallel, then this the when **no trend** was found.
-* 
 
 #### Calculation of GMMA
 * Calculate EMAs for both short term and long term trends.
 * Plot them and check whether a trend forms or not.
-
-
-
 
 ```python
 def guppy_multiple_ma(tdf,col="close", sma=[], lma=[]):
@@ -220,11 +212,11 @@ Looking over the last 1000 days of the trends, there can be seen crossover in ar
 
 ![]({{site.url}}/assets/stock_analysis/zoomed_guppy.png)
 
-Above plot is interactive in our interactive blog, [please refer there for the interactive version of this blog]().
+Above plot is interactive in our interactive blog, [please refer there for the interactive version of this blog]({{site.url}}/html_posts/python-for-stock-market-analysis-exploring-different-types-of-trend-Indicators).
 
 #### References
-* https://www.investopedia.com/terms/g/guppy-multiple-moving-average.asp
-* https://www.babypips.com/learn/forex/guppy-multiple-moving-average
+* [Multiple Moving Average-Investopedia](https://www.investopedia.com/terms/g/guppy-multiple-moving-average.asp)
+* [Guppy Multiple Moving Average-Investopedia](https://www.babypips.com/learn/forex/guppy-multiple-moving-average)
 
 
 ### Percentage Price Oscillator
@@ -325,13 +317,12 @@ In above plot, we have changed the color of the histogram once the crossover hap
 ![]({{site.url}}/assets/stock_analysis/zoomed_ppo.png)
 
 #### Reference
-* https://www.investopedia.com/terms/p/ppo.asp
+* [Percentage Price Oscillator-Investopedia](https://www.investopedia.com/terms/p/ppo.asp)
 
 ### Moving Average Convergence Divergence (MACD)
 MACD is often considered as a Oscillator Indicator but this does give trend and some sort of volatility over a period of time by subtracting the 26 period EMA from 12 period EMA. Period in this case can be day, week, month and so on thus the periods can be changed according to our need. This is exactly similar to the PPO except we do not take Percentage.
 
 #### Calculation
-
 * When MACD crosses above 0, then bullish is considered happening and conversely, when MACd crosses below 0, then bearish is considered happening.
 * Divergence happens when MACD forms highs When the MACD forms highs or lows that diverge from the corresponding highs and lows on the price, it is called a divergence.
 * A bullish divergence appears when the MACD forms two rising lows that correspond with two falling lows on the price. This is a valid bullish signal when the long-term trend is still positive.
@@ -412,12 +403,7 @@ Above plot looks similar to the PPO plot and it is because they both use same EM
 
 
 #### References 
-* https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/macd
+* [MACD-Fidelity.com](https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/macd)
 
 ## Conclusion
 In this blog, we we explored some of popular trend indicators like GMMA, PPO and MACD. In the next blog, we will explore other indicators and so on. This blogging series will not end soon :P.
-
-
-```python
-
-```
