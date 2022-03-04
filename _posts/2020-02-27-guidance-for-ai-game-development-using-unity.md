@@ -4,8 +4,8 @@ date: 2020-02-27T04:24:09+05:45
 header:
   teaser: assets/wp-content/uploads/2020/02/Opera-Snapshot_2020-02-27_100713_learn.unity_.com_-e1582777392565.png
 categories:
-  - Programming
-  - Software
+  - Unity3D
+  - Game Development
 tags:
   - premium unity learning
   - unity asset store

@@ -10,6 +10,7 @@ categories:
   - Programming
   - Project
 tags:
+  - machine learning from scratch
   - computer vision
   - Convolutional neural network
   - python

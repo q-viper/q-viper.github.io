@@ -10,6 +10,8 @@ categories:
   - Computer Vision
   - Machine Learning
   - Programming
+tags:
+  - image processing
 ---
 
 **Contents**

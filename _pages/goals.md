@@ -14,11 +14,13 @@ disallow: true
 * Study Course (ex. GAN Specialization)
 * Academic (ex. Research Paper)
 * Health (ex. Run KMs)
+* Freelancing
 
 Goals might change or updated according to the priority.
 ## Updates
 * [2022-Jan-12] Just remembered I made this plan nearly a month ago. Should I delete it or update?
 * [2022-Feb-14] Lots of things has happened. Earned few bucks from Upwork, continued writing blogs, learning game development.
+* [2022-Mar-04] Pausing game development, learning about Stock Market and writing blogs.
 
 # Year: 2022
 ## Blogging Site
@@ -31,8 +33,12 @@ Goals might change or updated according to the priority.
     * [Plotting interactive plots with Plotly and Cufflinks](https://q-viper.github.io/2022/01/29/interactive-plot-with-plotly-cufflinks/)
     * [Walkthrough of Statistical Analysis in Data Science](https://q-viper.github.io/2022/02/05/statistical-analysis-in-data-science/)
     * [Installing Julia in Windows and Running in Jupyter Notebook](https://q-viper.github.io/2022/02/13/installing-julia-in-windows-running-in-jupyter/)
-    * [Creating Awesome Data Dashboard with Plotly in Streamlit]()
-
+    * [Creating Awesome Data Dashboard with Plotly in Streamlit: Add EDA]()
+    * [Creating Awesome Data Dashboards with Plotly in Streamlit: Add Clustering Algorithm]()
+    * [Python for Stock Market Analysis: Moving Averages]()
+    * [Airflow in WSL but Using MySQL Installed in Windows as Default Database]()
+    * [Python for Stock Market Analysis: Trend Indicators]()
+    
 * Reach daily 100 views by the end of year.
 
 ## Make a Game
@@ -40,17 +46,20 @@ Goals might change or updated according to the priority.
 * Progress as of:
     * January 12: (not even written a single script.)
     * February 14: Written lots of scripts and still figuring out what did I do?
+    * March 04: Paused game development.
 
 ## Academic
-### Write at least 1 by the end of year.
-* Discussion on going with colleague.
+### Write at least 1 paper by the end of year.
+* Discussion on going with colleagues.
 
 ### Read at least 1 paper per week.
 * January 12: Not started yet.
+* March 04: Not started yet.
 
 ## Study Study and Study
 ### Probability and Statistics
 * Khan Academy
+    * Revised inferential and descriptive parts (ex. IQR, Central Tendency, Tests).
 
 ### Linear Algebra
 *
@@ -60,11 +69,13 @@ Goals might change or updated according to the priority.
 
 ## TV Shows to Watch
 ### Better Call Saul 
-* January 12: Season 1 Completed
+* January 12: Season 1 Completed.
+* March 04: Already stopped watching because of too much work.
 
 ## Certification to Gain
 ### Airflow Certification from Astronomer
 * January 12: Course completed 80%.
+* March 04: Have not visited the Astronomer site from more than a month.
 
 ## Reading Books
 ### Philosophy

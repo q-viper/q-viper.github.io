@@ -8,7 +8,7 @@ categories:
 * TOC
 {:toc}
 
-<p>I thought of doing blogging since the highschool but guess what, internet was not that much cloudy like these days. After years, I am about to write something I think on my own website. This is getting exciting for me. This blog is kind of pledge to me and I am willing to add at least 1 blog per week on my site. After all I have lot more tasks to do. </p>
+<p>I thought of doing blogging since the highschool but guess what, internet was not that much available like these days. After years, I am about to write something I think, on my own website. This is getting exciting for me. This blog is kind of pledge to me and I am willing to add at least 1 blog per week on my site. After all I have lot more tasks to do. </p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->

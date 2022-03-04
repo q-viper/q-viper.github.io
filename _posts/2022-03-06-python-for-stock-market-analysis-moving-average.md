@@ -7,7 +7,7 @@ categories:
     - Technical Analysis
 tags:
     - data analysis
-    - stock market
+    - stock market analysis
     - plotly
 header:
   teaser: assets/stock_analysis/candle.png
@@ -825,7 +825,7 @@ Now it is more clearer. Looking over the plot of open,
 * If we look over the November to December, the Open value is increasing rapidly but the SMA is increasing slowly because it knows that there were some small values in last 5 days. Similarly WMA is also increasing slowly. But we can see that WMA is always much nearer to the Open value because it is giving much importance to the latest value.
 * The sudden rise/fall in open is not the sign or price up/down in long run because one must always consider moving averages.
 
-### Exponential Moving Average (WMA)
+### Exponential Moving Average (EMA)
 
 It is similar to the WMA in the sense of giving weights to values but, instead of the linear weights, we will give exponential weights.
 
