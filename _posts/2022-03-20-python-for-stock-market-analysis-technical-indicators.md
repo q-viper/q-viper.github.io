@@ -1,6 +1,6 @@
 ---
 title:  "Python for Stock Market Analysis: Exploring Technical Trend Indicators"
-date:   2022-03-01 09:29:17 +0545
+date:   2022-03-20 09:29:17 +0545
 categories:
     - Data Analysis
     - Stock Market
