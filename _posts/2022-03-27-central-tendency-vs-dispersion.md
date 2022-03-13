@@ -9,7 +9,7 @@ tags:
     - pandas
     - statistics
 header:
-  teaser: assets/stock_analysis/ppo.png
+  teaser: assets/statistical_analysis/output_17_1.png
 ---
 Hello everyone, welcome back! In this blog we will again focus into the some of widely used central tendency techniques and then measure of spread in the Statistical Analysis of the EDA part. If you are looking for a brief walk-through of a [Statistical Data Analysis in Data Science please refer to this blog](https://dataqoil.com/2022/02/06/walkthrough-of-statistical-analysis-in-data-science/) of mine.
 
