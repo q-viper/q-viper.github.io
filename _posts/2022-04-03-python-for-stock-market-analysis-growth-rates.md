@@ -1,6 +1,6 @@
 ---
 title:  "Python for Stock Market Analysis: Growth Rates"
-date:   2022-03-20 09:29:17 +0545
+date:   2022-04-03 09:29:17 +0545
 categories:
     - Data Analysis
     - Stock Market
