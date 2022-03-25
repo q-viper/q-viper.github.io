@@ -132,7 +132,42 @@ $$
 ror = \frac{V_{current}-V_{initial}}{V_{initial}} * 100
 $$
 
+
 RoR is the simplest growth rate and it does not take external factors like inflation into consideration.
+
+
+```python
+mdf["ror"] = 100*(mdf.Close-mdf.Close.tolist()[0])/mdf.Close.tolist()[0]
+
+
+mdf.iplot(kind="line", x="Date",y="ror", title="Rate of Return")
+```
+
+![]({{site.url}}/assets/stock_analysis/ror1.png)
+
+Looking over above plot, the rate of return is more than 100K and it is not much useful for new buyers. New buyers might need to look into latest data's ROR or ROR from last few years only. Or even from some period.
+
+### Windowed ROR
+
+So, lets take a window of 12 and calculate rate of return in that period. Because this way, we will be considering only latest points while calculating the ROR.
+
+
+```python
+window=12
+mdf[f"wror_{window}"] = 0
+idxs = mdf.index.tolist()
+for idx in [idxs[i-window:i] for i in range(window, len(idxs)+1)]:
+    tmp = mdf.iloc[mdf.index.isin(idx)].Close.tolist()
+    ror = (tmp[-1]-tmp[0])/tmp[0]
+    i = idx[-1]
+    mdf.loc[i, f"wror_{window}"] = ror*100
+mdf.iplot(kind="line", x="Date", y=[f"wror_{window}"])
+```
+
+![]({{site.url}}/assets/stock_analysis/wror.png)
+
+
+Now it is making little bit more sense.
 
 ## Month Over Month (MOM) Growth Rate
 This is the simple measurement of the growth rate where we simply calculate the rate of change from the previous month.
