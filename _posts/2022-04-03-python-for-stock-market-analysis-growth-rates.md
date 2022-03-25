@@ -12,11 +12,9 @@ tags:
 header:
   teaser: assets/stock_analysis/wcmgr1.png
 ---
-
-<h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Introduction" data-toc-modified-id="Introduction-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Introduction</a></span></li><li><span><a href="#Rate-of-Return" data-toc-modified-id="Rate-of-Return-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Rate of Return</a></span></li><li><span><a href="#Month-Over-Month-(MOM)-Growth-Rate" data-toc-modified-id="Month-Over-Month-(MOM)-Growth-Rate-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Month Over Month (MOM) Growth Rate</a></span></li><li><span><a href="#Compounding-Monthly-Growth-Rate-(CMGR)" data-toc-modified-id="Compounding-Monthly-Growth-Rate-(CMGR)-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Compounding Monthly Growth Rate (CMGR)</a></span><ul class="toc-item"><li><span><a href="#Simple-CGR" data-toc-modified-id="Simple-CGR-4.1"><span class="toc-item-num">4.1&nbsp;&nbsp;</span>Simple CGR</a></span></li><li><span><a href="#Windowed-CMGR" data-toc-modified-id="Windowed-CMGR-4.2"><span class="toc-item-num">4.2&nbsp;&nbsp;</span>Windowed CMGR</a></span></li></ul></li><li><span><a href="#Year-over-Year-(YoY)-Growth-Rate" data-toc-modified-id="Year-over-Year-(YoY)-Growth-Rate-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Year over Year (YoY) Growth Rate</a></span></li><li><span><a href="#Compounding-Annual-Growth-Rate-(CAGR)" data-toc-modified-id="Compounding-Annual-Growth-Rate-(CAGR)-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Compounding Annual Growth Rate (CAGR)</a></span><ul class="toc-item"><li><span><a href="#Simple-CAGR" data-toc-modified-id="Simple-CAGR-6.1"><span class="toc-item-num">6.1&nbsp;&nbsp;</span>Simple CAGR</a></span></li></ul></li><li><span><a href="#Windowed-CAGR" data-toc-modified-id="Windowed-CAGR-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>Windowed CAGR</a></span></li><li><span><a href="#References" data-toc-modified-id="References-8"><span class="toc-item-num">8&nbsp;&nbsp;</span>References</a></span></li></ul></div>
-
 ## Introduction
+Interactive plot version of blog is available at [here]({{site.url}}/html_posts/python-for-stock-market-analysis-growth-rates.html).
+
 This is the part 3 of our Python for Stock Market Analysis series and here, we will explore some of popular growth rates that can be used to see how well is our value is changing over the period of time. Lets take some of scenarios:
 
 * If we want to know by what rate is our current month's closing price is changed compared to the previous, we could simply divide change of values by the values at base month.
@@ -125,7 +123,7 @@ df.head()
       <td>73449600</td>
     </tr>
   </tbody>
-</table></div>
+</table>
 
 ## Rate of Return
 Lets suppose that we bought a stock 2 months ago and we want to find out how much profit we currently have then we might subtract the price at the time we bought from the current price. And it can be simply called return. The rate of return is simple measurement that tells us how much has been the price increase from the base period. It is calculated as:
@@ -233,7 +231,7 @@ mdf
       <td>4.797121</td>
     </tr>
   </tbody>
-</table></div>
+</table>
 
 
 
