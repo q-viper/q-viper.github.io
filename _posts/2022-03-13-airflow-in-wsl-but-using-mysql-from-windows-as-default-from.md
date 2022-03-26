@@ -99,15 +99,19 @@ sudo apt install mariadb-client-core-10.3  # version 1:10.3.31-0ubuntu0.20.04.1
 For me, I did first one.
 
 ### Find IPv4 Adress of WSL
-* Go to Settings -> Network and Internet -> Status -> View Hardware and connection properties. Look for WSL.
+* Go to Settings -> Network and Internet -> Status -> View Hardware and connection properties. **Look for the name vEthernet (WSL)**. It will usually be on the bottom.
 * My looks like below. But I've shaded the adresses.
 
 ![]({{site.url}}/assets/wsl_mysql/ipv4_address.png)
 
+![]({{site.url}}/assets/wsl_mysql/ipv4_wsl.png)
+
+
+
 Now try to connect to MySQL from WSL using below command:
 
 ```shell
-mysql -u wsl_root -p -h 192.168.xxx.xxx
+mysql -u wsl_root -p -h 172.24.xxx.xxx
 ```
 
 Please remember that in above command xxx is just a placeholder. Also, `root` is just a username that we tried to login with. **We will get an error right now with above command and we will fix it.**
@@ -127,7 +131,7 @@ In above query,
 * We have granted all privileges to that user and it will be just another admin.
 
 ### From WSL
-Now running the command `mysql -u wsl_root -p -h 192.168.xxx.xxx` and giving password after it asked, we could connect to the MySQL server.
+Now running the command `mysql -u wsl_root -p -h 172.24.xxx.xxx` and giving password after it asked, we could connect to the MySQL server.
 
 ### References
 * [StackOverflow](https://stackoverflow.com/questions/1559955/host-xxx-xx-xxx-xxx-is-not-allowed-to-connect-to-this-mysql-server)
