@@ -98,9 +98,9 @@ sudo apt install mariadb-client-core-10.3  # version 1:10.3.31-0ubuntu0.20.04.1
 
 For me, I did first one.
 
-### Find IPv4 Adress of WSL
+### Find IPv4 Address of WSL
 * Go to Settings -> Network and Internet -> Status -> View Hardware and connection properties. **Look for the name vEthernet (WSL)**. It will usually be on the bottom.
-* My looks like below. But I've shaded the adresses.
+* My looks like below. But I've shaded the addresses.
 
 ![]({{site.url}}/assets/wsl_mysql/ipv4_address.png)
 
@@ -127,7 +127,7 @@ FLUSH PRIVILEGES;
 ```
 
 In above query, 
-* `wsl_root` is a name of user that we will use from WSL. `localhost` is a adress where MySQL is and `password` is password. :)
+* `wsl_root` is a name of user that we will use from WSL. `localhost` is a address where MySQL is and `password` is password. :)
 * We have granted all privileges to that user and it will be just another admin.
 
 ### From WSL
