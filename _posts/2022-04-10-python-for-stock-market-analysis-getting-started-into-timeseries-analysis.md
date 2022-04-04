@@ -1,6 +1,6 @@
 ---
 title:  "Python for Stock Market Analysis: Getting Started into Timeseries Analysis"
-date:   2022-04-10 09:29:17 +0545
+date:   2022-04-01 09:29:17 +0545
 categories:
     - Data Analysis
     - Stock Market Analysis
@@ -164,8 +164,7 @@ Auto-Correlation is just like a normal correlation but it is calculated with the
 If the time series with N values can be expressed as as V0, V1, ... VN, and at time t, Vt. An Auto-correlation of a series `V` with lag `k` can be calculated as,
 
 $$
-r_{k} = \frac{\sum_{i=1}^{N-k}(V_{i} - \bar{V})(V_{i+k} - 
-         \bar{V})} {\sum_{i=1}^{N}(V_{i} - \bar{V})^{2} }
+r_{k} = \frac{\sum_{i=1}^{N-k}(V_{i} - \bar{V})(V_{i+k} - \bar{V})} {\sum_{i=1}^{N}(V_{i} - \bar{V})^{2} }
 $$
 
 Where, 
