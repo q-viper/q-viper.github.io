@@ -403,7 +403,7 @@ $$
 It is most robust error as it is squared and then taken a root.
 
 $$
-RMSE = \sqrt{\frac{1}{n} \sum_{i}^{n}{{(y_t-p_t)}^2}}
+RMSE = \sqrt{\frac{1}{n} \sum_{i}^{n}{(y_t-p_t)^2}}
 $$
 
 Additionally, we will be using our custom metric, Percentage Change error. According to this metric, we will accept the percentage change of only 10% as valid.
