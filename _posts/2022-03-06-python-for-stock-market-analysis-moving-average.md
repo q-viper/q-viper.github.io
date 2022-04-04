@@ -3,7 +3,7 @@ title:  "Python for Stock Market Analysis: Working with Moving Averages"
 date:   2022-03-06 09:29:17 +0545
 categories:
     - Data Analysis
-    - Stock Market
+    - Stock Market Analysis
     - Technical Analysis
 tags:
     - data analysis
@@ -13,7 +13,7 @@ header:
   teaser: assets/stock_analysis/candle.png
 ---
 ## Introduction
-This blog is a part of our series **Python for Stock Market Analysis**.
+This blog is a first part of our series **Python for Stock Market Analysis**.
 
 **Disclaimer:** This blog is for educational purpose only and we do not recommend taking the knowledge gained from this blog to implement in real financial exercises.
 
