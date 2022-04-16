@@ -366,6 +366,131 @@ It seems that there are very narrow residuals in Multiplicative model whereas, t
 
 
 
+
+## EDA
+
+### Yearwise Average Closing Price
+
+
+```python
+ndf = df.copy().reset_index()
+ndf.groupby(pd.Grouper(key="Date", freq="1Y")).close.mean().plot(kind="line", title="Yearly")
+```
+
+
+
+
+    <AxesSubplot:title={'center':'Yearly'}, xlabel='Date'>
+
+
+
+
+    
+![png]({{site.url}}/assets/timeseries_analysis/output_29_1.png)
+    
+
+
+### Monthly Average Closing Price
+
+
+```python
+ndf.groupby(pd.Grouper(key="Date", freq="1M")).close.mean().plot(kind="line", title="Monthly")
+```
+
+
+
+
+    <AxesSubplot:title={'center':'Monthly'}, xlabel='Date'>
+
+
+
+
+    
+![png]({{site.url}}/assets/timeseries_analysis/output_31_1.png)
+    
+
+
+### Weekly Average Closing Price
+
+
+```python
+ndf.groupby(pd.Grouper(key="Date", freq="1W")).close.mean().plot(kind="line", title="Weekly")
+```
+
+
+
+
+    <AxesSubplot:title={'center':'Weekly'}, xlabel='Date'>
+
+
+
+
+    
+![png]({{site.url}}/assets/timeseries_analysis/output_33_1.png)
+    
+
+
+### Variances Per W/M/Y
+
+
+```python
+ndf.groupby(pd.Grouper(key="Date", freq="1Y")).close.std().plot(kind="line", title="Yearly")
+ndf.groupby(pd.Grouper(key="Date", freq="1M")).close.std().plot(kind="line", title="Monthly")
+ndf.groupby(pd.Grouper(key="Date", freq="1W")).close.std().plot(kind="line", title="Weekly")
+plt.legend(["Yearly", "Monthly", "Weekly"])
+plt.title("Trends of Variances")
+plt.show()
+```
+
+
+    
+![png]({{site.url}}/assets/timeseries_analysis/output_35_0.png)
+    
+
+
+### Average Closing Price Per Year Per Month
+
+
+```python
+mdf = ndf.query("Date>'2010'").groupby([pd.Grouper(key="Date", freq="1M")]).adj_close.mean().reset_index()
+mdf["month"] = mdf.Date.dt.strftime('%B')
+mdf["day"] = mdf.Date.dt.strftime('%A')
+mdf["year"] = mdf.Date.dt.year
+
+
+fig, ax = plt.subplots(figsize=(20,10))
+palette = sns.color_palette("vlag", 4)
+a = sns.barplot(x="year", y="adj_close",hue = 'month',data=mdf)
+a.set_title("AAPL Closing Prices Year & Month Wise",fontsize=20)
+plt.legend(loc='upper left',title="Month")
+plt.show()
+```
+
+
+    
+![png]({{site.url}}/assets/timeseries_analysis/output_37_0.png)
+    
+
+
+In recent years, the closing price has been increasing in closing months.
+
+### Average Closing Price Per Day Per Month
+
+
+```python
+fig, ax = plt.subplots(figsize=(20,10))
+palette = sns.color_palette("vlag", 4)
+a = sns.barplot(x="month", y="adj_close",hue = 'day',data=mdf.groupby(["month", "day"]).adj_close.mean().reset_index())
+a.set_title("AAPL Average Closing Prices Month & Day Wise",fontsize=20)
+plt.legend(loc='upper left',title="Month")
+plt.show()
+```
+
+
+    
+![png]({{site.url}}/assets/timeseries_analysis/output_40_0.png)
+
+
 ## Modeling
 
 ### Metrics to Evaluate a Model
