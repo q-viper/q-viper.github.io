@@ -47,6 +47,7 @@ Two events are called independent events if occurring of one has nothing to do w
 
 ## Probability
 If there are N equally likely, mutually exclusive events and m is the number of expected outcome of an even A, then the probability of occurrence of A can be given by:
+
 $$
 P(A) = \frac{\text{Expected number of outcome of an event A (m)}}{\text{Total number of outcomes (N)}}
 $$
@@ -72,7 +73,7 @@ If A, B and C are mutually exclusive events then occurrence of A, B and C can be
 P(A and B and C) = P(A) * P(B) * P(C)
 In above example, the occurrence of 1 after 2 and after that 3 can be written as 1/6*1/6*1/6 = 1/136.
 
-if A and B are two dependent events then P(A and B) = P(B)P(A|B) = P(A)P(B|A). Where P(B|A) means that probability of occurrence of event B given that A has already occurred
+If A and B are two dependent events then P(A and B) = P(B)P(A|B) = P(A)P(B|A). Where P(B|A) means that probability of occurrence of event B given that A has already occurred
 
 ### Conditional Probability and Bayes' Theorem
 The conditional probability of an event B given the A can be written as, P(A|B) = P(A and B) / P(B) when P(B) > 0. Similarly, P(B|A) = P(A and B) / P(A) when P(A)>0.
