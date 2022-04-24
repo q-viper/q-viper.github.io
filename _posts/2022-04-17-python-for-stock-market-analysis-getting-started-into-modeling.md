@@ -1,6 +1,6 @@
 ---
 title:  "Python for Stock Market Analysis: Getting Started into Modeling Timeseries"
-date:   2022-04-10 09:29:17 +0545
+date:   2022-04-17 09:29:17 +0545
 categories:
     - Data Analysis
     - Stock Market Analysis
