@@ -22,12 +22,12 @@ tags:
 ## Getting API Keys
 * To access API, we need to have an account. So lets signup in https://app.alpaca.markets/signup. Then fill up the form and go to the home page.
 
-![png](alpaca/app.png)
+![png]({{site.url}}/assets/alpaca/app.png)
 
 * In order to make first ever API request, we need to have API keys and secret. So go to [papertrading and signup for keys](https://app.alpaca.markets/paper/dashboard/overview). **It requires real identity card and live camera at some point**.
 * Save your API Keys and Secret somewhere safe.
 
-![png](alpaca/api_keys.png)
+![png]({{site.url}}/assets/alpaca/api_keys.png)
 
 
 
