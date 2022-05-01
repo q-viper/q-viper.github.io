@@ -20,7 +20,7 @@ tags:
 
 
 ## Getting API Keys
-* To access API, we need to have an account. So lets signup in https://app.alpaca.markets/signup. Then fill up the form and go to the home page.
+* To access API, we need to have an account. So lets signup in [https://app.alpaca.markets/signup](https://app.alpaca.markets/signup). Then fill up the form and go to the home page.
 
 ![png]({{site.url}}/assets/alpaca/app.png)
 
