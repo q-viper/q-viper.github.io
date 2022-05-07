@@ -918,3 +918,75 @@ There are some other streamming APIs also like `subscribe_bars` which can be see
 By default there is not a possibility to stream a bars data but one can do it by using `asyncio` in Python.
 
 This section will be updated soon. Sorry.
+
+
+```python
+async def get_bars(symbols, start_time,timeframe="1Min"):
+    tm = int(timeframe.split("Min")[0])
+    end_time=None
+    sym=None
+    dump_table=f"bars_{timeframe.split('Min')[0]}m"
+    try:
+        while True:
+            print(f"Start Time: {start_time} End Time {end_time} Timeframe: {timeframe}")
+            resp = api.get_bars_iter(symbols,start=start_time,end=end_time, timeframe=timeframe)
+            
+            for r in resp:
+                print(r)
+                sym=r.symbol
+
+            sym=symbol
+            if start_time==timestamp.isoformat() and sym==symbol:
+                logger.info(f"Start Time == End Time: {start_time} == {timestamp}. Sleeping for {tm} minutes")
+                await asyncio.sleep(tm*60)
+            start_time=timestamp.isoformat()
+            end_time=timestamp+timedelta(days=2)
+            end_time=end_time.isoformat()
+
+            print("-----------------------------------------------------")
+            print("Setting start time to: ", timestamp)
+            
+            clock = api.get_clock()
+            next_open = clock.next_open
+            curr_day = fdate.strftime("%A")            
+
+            if clock.is_open==False:
+                sleep_seconds = (clock.next_open-clock.timestamp).total_seconds()
+                sleep_hours = sleep_seconds/(3600)
+                logger.info(f"Market is closed. Market Opens on {clock.next_open}. Sleeping for {sleep_hours} hrs.")
+                await asyncio.sleep(sleep_seconds)
+            else:
+                logger.info(f"No new data available. Sleeping for {tm} Minutes")
+                await asyncio.sleep(tm*60)              
+            
+    
+    except Exception as e:
+            print(f"Error {e} in {timeframe}, {start_time}")
+
+async def stream_mbars():
+    rdate=date.today()-timedelta(days=2)
+    allow_symbols = ["TSLA", "AAPL"]
+    
+    await asyncio.gather(
+                        get_bars(allow_symbols,rdate,timeframe="1Min"),
+                        get_bars(allow_symbols,rdate, timeframe="2Min"),
+                        get_bars(allow_symbols,rdate, timeframe="3Min"),
+                        get_bars(allow_symbols,rdate, timeframe="5Min"),
+                        
+                        )
+
+def main_stream():
+    asyncio.run(stream_mbars())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(stream_mbars())
+```
+
+In above code, there are 3 functions and we will call the `main_stream()` function. It runs the `stream_mbars` event and it also runs other events like `get_bars`. It is little bit messy but lets explain it little:
+* The program never ends as there is `while True` is in the `get_bars` function.
+* However, `get_bars` is allowed to sleep when market is close, or no new data is available. Which means that if we are going to get `5m` bars, then running it for each minute is not a good idea instead we need to run it every 5 minutes. So it will sleep for 5mins.
+* The data is retrieved from the iterator because it is much safer as it takes less memory.
+* After an iterator completes, we set the end time to two days from last timestamp. Its sure that there will not be any data for 2 days from last timestamp. But still.
+
+In my original production side code, I have stored all these data into table and later used it to calculate indicators and based on the indicators, I make alerts and for the alerts, I have number of rules. If the alert is True in any time then I get mail of it. Phew.....
+
+
