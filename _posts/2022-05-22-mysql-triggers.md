@@ -177,3 +177,8 @@ Will be updated sooon....
 
 ```
 
+## Drawbacks
+Now we knew its benefits and the use cases, lets get into the drawbacks of Triggers:
+1. It increases the server overhead and can cause server hang ups.
+2. It is difficult to test triggers because they are run by Database itself.
+3. Can be used for advanced data validation but simple ones can be achieved by constraints like Unique, Null, Check, foreign key etc.
