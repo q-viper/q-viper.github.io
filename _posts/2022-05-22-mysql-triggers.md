@@ -100,7 +100,6 @@ INSERT into Student.student_bio values(1,'John', 5, 15), (1,'Johnny', 7, 25);
 ![png]({{site.url}}/assets/mysql/after_insert1.png)
 
 
-
 ### Alert Before Insert
 Lets insert the logs before inserting the values.
 
@@ -134,6 +133,7 @@ INSERT into Student.student_bio(`name`, class, age) values('Diwo', 5, 15), ('Ben
 Lets create a trigger which checks the new value before inserting. If new value is greater than old, then set age as average of them. Else set age as old age. And additionally, insert the logs too.
 
 1. Create a trigger as:
+
 ```sql
  delimiter // 
 CREATE TRIGGER Student.before_student_update
@@ -149,6 +149,7 @@ if old.age<new.age then set new.age=(old.age+new.age)/2;
  //
  delimiter ;
 ```
+
 2. Now update `student_bio` as:
 
 ```sql
