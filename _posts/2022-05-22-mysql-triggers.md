@@ -97,7 +97,7 @@ INSERT into Student.student_bio values(1,'John', 5, 15), (1,'Johnny', 7, 25);
 4. Now look into `Student.student_logs`
 
 
-![png](after_insert1.png)
+![png]({{site.url}}/assets/mysql/after_insert1.png)
 
 
 
