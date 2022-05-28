@@ -114,7 +114,7 @@ There are only 9 columns but lots of rows.
 ```python
 df.head()
 ```
-
+  <table>
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -569,43 +569,43 @@ for c in cols:
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_31_0.png)
+![png]({{site.url}}/assets/general_eda/output_31_0.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_31_1.png)
+![png]({{site.url}}/assets/general_eda/output_31_1.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_31_2.png)
+![png]({{site.url}}/assets/general_eda/output_31_2.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_31_3.png)
+![png]({{site.url}}/assets/general_eda/output_31_3.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_31_4.png)
+![png]({{site.url}}/assets/general_eda/output_31_4.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_31_5.png)
+![png]({{site.url}}/assets/general_eda/output_31_5.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_31_6.png)
+![png]({{site.url}}/assets/general_eda/output_31_6.png)
     
 
 
@@ -644,7 +644,7 @@ plt.ylabel('Frequency', fontsize=16)
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_35_1.png)
+![png]({{site.url}}/assets/general_eda/output_35_1.png)
     
 
 
@@ -666,7 +666,7 @@ plt.ylabel('Frequency', fontsize=16)
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_36_1.png)
+![png]({{site.url}}/assets/general_eda/output_36_1.png)
     
 
 
@@ -691,43 +691,43 @@ for c in [i for i in df.columns if i not in ["date", "ts", "device", "device_nam
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_39_0.png)
+![png]({{site.url}}/assets/general_eda/output_39_0.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_39_1.png)
+![png]({{site.url}}/assets/general_eda/output_39_1.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_39_2.png)
+![png]({{site.url}}/assets/general_eda/output_39_2.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_39_3.png)
+![png]({{site.url}}/assets/general_eda/output_39_3.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_39_4.png)
+![png]({{site.url}}/assets/general_eda/output_39_4.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_39_5.png)
+![png]({{site.url}}/assets/general_eda/output_39_5.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_39_6.png)
+![png]({{site.url}}/assets/general_eda/output_39_6.png)
     
 
 
@@ -1126,31 +1126,31 @@ for c in cols:
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_53_0.png)
+![png]({{site.url}}/assets/general_eda/output_53_0.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_53_1.png)
+![png]({{site.url}}/assets/general_eda/output_53_1.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_53_2.png)
+![png]({{site.url}}/assets/general_eda/output_53_2.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_53_3.png)
+![png]({{site.url}}/assets/general_eda/output_53_3.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_53_4.png)
+![png]({{site.url}}/assets/general_eda/output_53_4.png)
     
 
 
@@ -2292,37 +2292,37 @@ dfa = av.AutoViz("iot_telemetry_data.csv")
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_101_1.png)
+![png]({{site.url}}/assets/general_eda/output_101_1.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_101_2.png)
+![png]({{site.url}}/assets/general_eda/output_101_2.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_101_3.png)
+![png]({{site.url}}/assets/general_eda/output_101_3.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_101_4.png)
+![png]({{site.url}}/assets/general_eda/output_101_4.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_101_5.png)
+![png]({{site.url}}/assets/general_eda/output_101_5.png)
     
 
 
 
     
-![png]({{site.url}}/asstes/general_eda/output_101_6.png)
+![png]({{site.url}}/assets/general_eda/output_101_6.png)
     
 
 
