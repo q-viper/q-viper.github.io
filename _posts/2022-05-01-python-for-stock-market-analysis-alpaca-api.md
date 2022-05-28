@@ -12,6 +12,8 @@ tags:
     - stock market
     - nasdaq
     - nyse
+header:
+  teaser: assets/alpaca/app.png
 ---
 
 ## Introduction

@@ -9,7 +9,11 @@ categories:
 tags:
     - pyscript
     - python
+header:
+  teaser: assets/pyscript/hello.png
 ---
+
+
 ## Introduction
 Hello and whats up everyone, in this blog we will explore PyScript for running Python codes inside our HTML files. It is quite easy to do so. How does it works under the hood is not what is being focused here but what can we do will be. For docs, please visit [here](https://github.com/pyscript/pyscript).
 
