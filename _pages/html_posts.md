@@ -11,3 +11,4 @@ This page contains list of HTML Posts that are downloaded as HTML from Jupyter N
 * [Python for Stock Market Analysis - Moving Average]({{site.url}}/html_posts/python-for-stock-market-analysis-moving-averages)
 * [Python for Stock Market Analysis - Exploring Technical Trend Indicators]({{site.url}}/html_posts/python-for-stock-market-analysis-exploring-different-types-of-trend-Indicators)
 * [Python for Stock Market Analysis - Growth Rates]({{site.url}}/html_posts/python-for-stock-market-analysis-growth-rates.html)
+* [General Way of Doing EDA]({{site.url}}/html_posts/general_way_of_doing_eda.html)

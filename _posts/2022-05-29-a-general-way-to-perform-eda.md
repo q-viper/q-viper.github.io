@@ -22,6 +22,7 @@ Hello everyone, welcome back to another new blog where we will explore different
 
 While walking through these major steps, one will try to answer different questions of analysis like how many times some categorical data has appeared, what is the distribution over a date, what is the performance over certain cases and so on.
 
+Please follow the following link for the interactive version of this blog [General Way of Doing EDA]({{site.url}}/html_posts/general_way_of_doing_eda.html).
 ## Data Loading
 
 ### Installing Libraries
