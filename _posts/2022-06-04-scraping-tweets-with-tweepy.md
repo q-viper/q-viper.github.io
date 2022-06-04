@@ -23,11 +23,11 @@ First we need to have a Twitter Developer Account and only with it, we can get k
 * Go to sign in and fill in the credentials.
 * Then create an app.
 
-![]({{site.url}}/assets/twitter_bot/tweet_scraping/bot_name.png)
+![]({{site.url}}/assets/twitter_bot/bot_name.png)
 
 * Generate and save API Keys.
 
-![]({{site.url}}/assets/twitter_bot/tweet_scraping/apikey.png)
+![]({{site.url}}/assets/twitter_bot/apikey.png)
 
 
 ### Installing Tweepy
