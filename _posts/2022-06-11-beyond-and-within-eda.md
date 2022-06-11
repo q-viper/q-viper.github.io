@@ -70,25 +70,6 @@ mpl.rcParams['agg.path.chunksize'] = 10000
 ```
 
 
-<script type="text/javascript">
-window.PlotlyConfig = {MathJaxConfig: 'local'};
-if (window.MathJax) {MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
-if (typeof require !== 'undefined') {
-require.undef("plotly");
-requirejs.config({
-    paths: {
-        'plotly': ['https://cdn.plot.ly/plotly-2.4.2.min']
-    }
-});
-require(['plotly'], function(Plotly) {
-    window._Plotly = Plotly;
-});
-}
-</script>
-
-
-
-
 ```python
 df=pd.read_csv("iot_telemetry_data.csv")
 
@@ -105,20 +86,6 @@ df
 
 
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -294,7 +261,6 @@ df
   </tbody>
 </table>
 <p>405184 rows × 11 columns</p>
-</div>
 
 
 
@@ -342,23 +308,6 @@ X["cluster"] = y_kmeans
 df 
 ```
 
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -546,7 +495,6 @@ df
   </tbody>
 </table>
 <p>405184 rows × 12 columns</p>
-</div>
 
 
 
@@ -598,14 +546,9 @@ scatterplot(X, cols[0], cols[1],"cluster")
 
 
     
-![png](output_13_0.png)
+![png]({{site.url}}/assets/beyond_eda/output_13_0.png)
     
 
-
-
-```python
-
-```
 
 There seems to be having some sort of cluster but is that meaningful? Lets view that:
 
@@ -655,7 +598,7 @@ for c in cs:
 
 
     
-![png](output_18_1.png)
+![png]({{site.url}}/assets/beyond_eda/output_18_1.png)
     
 
 
@@ -671,7 +614,7 @@ for c in cs:
 
 
     
-![png](output_18_3.png)
+![png]({{site.url}}/assets/beyond_eda/output_18_3.png)
     
 
 
@@ -687,7 +630,7 @@ for c in cs:
 
 
     
-![png](output_18_5.png)
+![png]({{site.url}}/assets/beyond_eda/output_18_5.png)
     
 
 
@@ -704,7 +647,7 @@ for c in cs:
 
 
     
-![png](output_18_7.png)
+![png]({{site.url}}/assets/beyond_eda/output_18_7.png)
     
 
 
@@ -723,7 +666,7 @@ for c in cs:
 
 
     
-![png](output_18_9.png)
+![png]({{site.url}}/assets/beyond_eda/output_18_9.png)
     
 
 
@@ -744,7 +687,7 @@ for c in cs:
 
 
     
-![png](output_18_11.png)
+![png]({{site.url}}/assets/beyond_eda/output_18_11.png)
     
 
 
@@ -766,7 +709,7 @@ for c in cs:
 
 
     
-![png](output_18_13.png)
+![png]({{site.url}}/assets/beyond_eda/output_18_13.png)
     
 
 
@@ -789,7 +732,7 @@ for c in cs:
 
 
     
-![png](output_18_15.png)
+![png]({{site.url}}/assets/beyond_eda/output_18_15.png)
     
 
 
@@ -823,7 +766,7 @@ plt.show()
 
 
     
-![png](output_19_0.png)
+![png]({{site.url}}/assets/beyond_eda/output_19_0.png)
     
 
 
@@ -831,10 +774,12 @@ Looking over the plot above, the best K value seems to be 3 or 4 from where the 
 But the data points are not correctly clustered.
 
 ### K Medoids Clustering
+Please fllow this blog of ours to learn about [K-Medoids Clustering from Scratch](https://dataqoil.com/2022/02/04/k-medoids-clustering-in-python-from-scratch/).
 
 *K-medoids are a prominent clustering algorithm as an improvement of the predecessor, K-Means algorithm. Despite its widely used and less sensitive to noises and outliers, the performance of K-medoids clustering algorithm is affected by the distance function.* [From here](https://ieeexplore.ieee.org/document/9079259).
 
 When k-means algorithm is not appropriate to make a objects of cluster to the data points then k-medoid clustering algorithm is prefer. The medoid is objects of cluster whose dissimilarity to all the objects in the cluster is minimum. The main difference between K-means and K-medoid algorithm that we work with arbitrary matrix of distance instead of euclidean distance. K-medoid is a classical partitioning technique of clustering that cluster the dataset into k cluster. It is more robust to noise and outliers because it may minimize sum of pair-wise dissimilarities however k-means minimize sum of squared Euclidean distances. Most common distances used in KMedoids clustering techniques are Manhattan distance or Minkowski distance and here we will use Manhattan distance.
+
 
 **Manhattan Distance**
 
@@ -854,10 +799,6 @@ Of p1, p2 is: $|(x2-x1)+(y2-y1)|$.
 
 We will use scikit learn extra instead of scikit learn this provides more features of algorithms than sklearn. But there is huge problem with KMedoids which is the time and memory complexity. We will be looping through data in big O. So we will try to cluster on sample data instead of the original data.
 
-
-```python
-
-```
 
 
 ```python
@@ -887,7 +828,7 @@ for c in cs:
 
 
     
-![png](output_24_1.png)
+![png]({{site.url}}/assets/beyond_eda/output_24_1.png)
     
 
 
@@ -902,7 +843,7 @@ for c in cs:
 
 
     
-![png](output_24_3.png)
+![png]({{site.url}}/assets/beyond_eda/output_24_3.png)
     
 
 
@@ -918,7 +859,7 @@ for c in cs:
 
 
     
-![png](output_24_5.png)
+![png]({{site.url}}/assets/beyond_eda/output_24_5.png)
     
 
 
@@ -936,7 +877,7 @@ for c in cs:
 
 
     
-![png](output_24_7.png)
+![png]({{site.url}}/assets/beyond_eda/output_24_7.png)
     
 
 
@@ -956,7 +897,7 @@ for c in cs:
 
 
     
-![png](output_24_9.png)
+![png]({{site.url}}/assets/beyond_eda/output_24_9.png)
     
 
 
@@ -978,7 +919,7 @@ for c in cs:
 
 
     
-![png](output_24_11.png)
+![png]({{site.url}}/assets/beyond_eda/output_24_11.png)
     
 
 
@@ -1002,7 +943,7 @@ for c in cs:
 
 
     
-![png](output_24_13.png)
+![png]({{site.url}}/assets/beyond_eda/output_24_13.png)
     
 
 
@@ -1028,7 +969,7 @@ for c in cs:
 
 
     
-![png](output_24_15.png)
+![png]({{site.url}}/assets/beyond_eda/output_24_15.png)
     
 
 
@@ -1062,7 +1003,7 @@ plt.show()
 
 
     
-![png](output_25_0.png)
+![png]({{site.url}}/assets/beyond_eda/output_25_0.png)
     
 
 
@@ -1131,7 +1072,7 @@ plt.show()
 
 
     
-![png](output_29_0.png)
+![png]({{site.url}}/assets/beyond_eda/output_29_0.png)
     
 
 
@@ -1374,7 +1315,7 @@ plt.show()
 
 
     
-![png](output_49_0.png)
+![png]({{site.url}}/assets/beyond_eda/output_49_0.png)
     
 
 
@@ -1440,7 +1381,7 @@ plt.show()
 
 
     
-![png](output_53_0.png)
+![png]({{site.url}}/assets/beyond_eda/output_53_0.png)
     
 
 
@@ -1503,7 +1444,7 @@ plt.show()
 
 
     
-![png](output_56_1.png)
+![png]({{site.url}}/assets/beyond_eda/output_56_1.png)
     
 
 
@@ -1570,7 +1511,7 @@ plt.show()
 
 
     
-![png](output_59_1.png)
+![png]({{site.url}}/assets/beyond_eda/output_59_1.png)
     
 
 
@@ -1726,7 +1667,7 @@ plot_confusion_matrix(grid_search_lr,X_test,y_test)
 
 
     
-![png](output_78_1.png)
+![png]({{site.url}}/assets/beyond_eda/output_78_1.png)
     
 
 
@@ -1809,7 +1750,7 @@ plt.show()
 
 
     
-![png](output_87_0.png)
+![png]({{site.url}}/assets/beyond_eda/output_87_0.png)
     
 
 
@@ -1966,7 +1907,7 @@ plt.show()
 
 
     
-![png](output_96_0.png)
+![png]({{site.url}}/assets/beyond_eda/output_96_0.png)
     
 
 
