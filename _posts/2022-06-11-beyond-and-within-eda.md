@@ -1,6 +1,6 @@
 ---
 title:  "Beyond and Within EDA: Taking EDA into Modelling"
-date:   2022-06-04 09:29:17 +0545
+date:   2022-06-11 09:29:17 +0545
 categories:
     - EDA
     - Data Science
@@ -1912,9 +1912,6 @@ plt.show()
 
 
 
-```python
-
-```
 
 ### Conclusion from Classification
 * Decision trees are powerful algorithms and they provide great result if we have our data preprocessed well and done feature engineering.
