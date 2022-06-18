@@ -9,7 +9,7 @@ tags:
     - Python
     - eda
 header:
-  teaser: assets/beyond_eda/output_29_0.png
+  teaser: assets/data_app/10.png
 ---
 
 ## Introduction
