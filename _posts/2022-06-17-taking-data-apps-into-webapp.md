@@ -1,5 +1,5 @@
 ---
-title:  "Beyond and Within EDA: Taking EDA into Modelling"
+title:  "Taking Data Apps into WebApp: Using Streamlit, Plotly, and Python"
 date:   2022-06-12 09:29:17 +0545
 categories:
     - EDA
