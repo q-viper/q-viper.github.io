@@ -1,6 +1,6 @@
 ---
 title:  "Getting Started with Apache Superset for Data Dashboards"
-date:   2022-06-19 09:29:17 +0545
+date:   2022-06-26 09:29:17 +0545
 categories:
     - Data Visualization
     - Apache Superset
@@ -9,7 +9,7 @@ tags:
     - COVID Dashboard
     - Apache Superset
 header:
-  teaser: assets/apache_superset/covid-dashboard.png
+  teaser: assets/apache_superset/covid-dashboard.jpg
 ---
 ## Making Data Dashboard with Apache Superset
 Hello and welcome back everyone, in this blog, we will explore how we can create awesome data dashboards using Apache superset with little to no code at all. But there are few things one should do before making first dashboard, we need to have installed Superset and have some data too.
