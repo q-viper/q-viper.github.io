@@ -8,7 +8,7 @@ tags:
     - Python
     - SMTPlib
 header:
-  teaser: assets/smtplib/attached.png
+  teaser: assets/smtplib/smtp.png
 ---
 ## Introduction
 Hello and welcome back everyone, in this blog we will be exploring how we can send emails using Python. We will be using [SMTPlib](https://docs.python.org/3/library/smtplib.html).
