@@ -24,7 +24,7 @@ Its easy to get API Key. Just sign up for free version to see the dashboard and 
 
 
 ```python
-key="yMU4qf8_bZIgInGyztizQg5vPjkJr6EY"
+key=""
 ```
 
 ## Installing Polygon API Client
