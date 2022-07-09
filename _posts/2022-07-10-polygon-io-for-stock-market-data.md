@@ -1,5 +1,5 @@
 ---
-title:  "Poygon.io for Stock Market Data"
+title:  "Polygon.io for Stock Market Data"
 date:   2022-07-10 09:29:17 +0545
 categories:
     - Stock
