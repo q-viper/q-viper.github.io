@@ -309,7 +309,7 @@ Looking over the data of last 100 months, we have used MOM closing price on the 
 Compounding monthly growth rate is the rate of closing price that would be required for an stock's closing price to grow from its base closing to its ending closing price. And it can be calculated as:
 
 $$
-CMGR = \left[\left(\frac{{V_{t}}}{V_0} \right)^{\frac{1}{n}} - 1\right]*100
+CMGR = \left[\left(\frac{V_{t}}{V_0} \right)^{\frac{1}{n}} - 1\right]*100
 $$
 
 Where,
