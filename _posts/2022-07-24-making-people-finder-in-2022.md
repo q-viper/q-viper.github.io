@@ -8,7 +8,7 @@ tags:
     - scraping
     - people finding
 header:
-  teaser: assets/streamlit_live/apached.png
+  teaser: assets/people_finder/github_search.png
 ---
 
 ## Introduction
