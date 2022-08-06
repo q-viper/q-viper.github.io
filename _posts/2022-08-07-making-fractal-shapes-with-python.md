@@ -43,7 +43,7 @@ Sectional formula is a simplest way to calculate the coordinates of a staight li
 
 $$
 x3 = \frac{x1 * n + x2*m}{m+n} \\\
-y3 = \frac{y1 * n + y2*m}{m+n} \\\
+y3 = \frac{y1 * n + y2*m}{m+n} 
 $$
 
 Then for the 3rd point.
@@ -121,13 +121,13 @@ middle_cantor()
 
 
     
-![png](output_5_0.png)
+![png]({{site.url}}/assets/fractals/output_5_0.png)
     
 
 
 
     
-![png](output_5_1.png)
+![png]({{site.url}}/assets/fractals/output_5_1.png)
     
 
 
@@ -206,13 +206,13 @@ von_koch()
 
 
     
-![png](output_7_0.png)
+![png]({{site.url}}/assets/fractals/output_7_0.png)
     
 
 
 
     
-![png](output_7_1.png)
+![png]({{site.url}}/assets/fractals/output_7_1.png)
     
 
 
@@ -263,7 +263,7 @@ Sierpinsky Gasket is another form of Fractals and its possibly the simplest of a
 * Join the mid points of the triangle to form a new triangle inside a triangle. That triangle will have half the area of large one.
 * Then having a new triangle inside a triangle by joining mid points will create 3 new triangles. Repeat above step for all triangles.
 
-A Python code of modified version of Sierpinsky Gasket can be found in my [GitHub repository]().
+A Python code of modified version of Sierpinsky Gasket can be found in my [GitHub repository](https://github.com/q-viper/fractalGeometry).
 
 
 ```python
