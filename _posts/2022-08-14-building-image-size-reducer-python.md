@@ -1,6 +1,6 @@
 ---
 title:  "Building Image Size Reducer In Python"
-date:   2022-08-10 09:29:17 +0545
+date:   2022-08-14 09:29:17 +0545
 categories:
     - Image Processing
     - Web App
