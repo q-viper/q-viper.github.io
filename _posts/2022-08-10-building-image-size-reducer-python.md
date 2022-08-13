@@ -15,7 +15,7 @@ The version of streamlit is 1.12.0 on this blog. Below is the demo of an working
 
 
 <figure>
-<video src = "{{site.url/assets}}/image_tool/image_reducer.webm" width="100%" controls> </video>
+<video src = "{{site.url}}/assets/image_tool/image_reducer.webm" width="100%" controls> </video>
 <figcaption style = "text-align:left; font-style:italic">Image Size Reducer</figcaption>
 </figure> 
 
@@ -23,7 +23,7 @@ The version of streamlit is 1.12.0 on this blog. Below is the demo of an working
 ## Project Structure
 Since the project is currently in the beginning, its not a bad idea to follow the following project structure.
 
-![]({{site.url/assets}}/image_tool/proj_str.png)
+![]({{site.url}}/assets/image_tool/proj_str.png)
 
 ### Config File
 Config file will be used to prepare the configuration of our app. In the future, we might want to change this because changing a config from web app is even easier for an admin. For now, config file will look like below:
