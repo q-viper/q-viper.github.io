@@ -10,7 +10,7 @@ header:
   teaser: assets/fractals/output_7_1.png
 ---
 
-Fractals are the continous and never ending patterns that can be seen in the nature. But its quite different than the classical geometry in the sense of construction. Fractal shapes can be seen in many things in our nature where the shapes are repeating in itself with the same representation one popular example is fern leaf.
+Fractals are the continuous and never ending patterns that can be seen in the nature. But its quite different than the classical geometry in the sense of construction. Fractal shapes can be seen in many things in our nature where the shapes are repeating in itself with the same representation one popular example is fern leaf.
 
 There are many other examples of fractal shapes in our world like the small bubbles of clouds, the ripple of water, ripple in pond after throwing stone, tree barks, even our own neural system and so on. Those are all complex form of fractals but lets start with simple one.
 
