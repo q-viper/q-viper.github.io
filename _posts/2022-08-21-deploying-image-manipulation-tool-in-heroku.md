@@ -13,8 +13,8 @@ header:
 In this part, we explore Deploying Image Manipulation tool in Heroku because it is a cloud application platform which gives us the flexibility to deploy our web apps from our GitHub repository and makes continous integration feasible. By the end of this part, we will have a web app like in this [link](https://image-manipulation-tool.herokuapp.com). 
 
 Until now, we have done following part:
-* Image Size Reducer in Python
-* Image Merger Web Tool in Python
+* [Image Size Reducer in Python](https://dataqoil.com/2022/08/14/building-image-size-reducer-tool-in-python/)
+* [Image Merger Web Tool in Python](https://dataqoil.com/2022/08/21/building-image-merger-web-tool-in-python/)
 
 And now is the time for us to make that app live. So lets do it.
 
