@@ -67,23 +67,38 @@ Let me take some notation form the book Tensorflow for Dummies by Matthew Scarpi
 Before diving into algorithm and comparing it with code, let us understand that, I have done addition with all delta terms because I have already taken `minus` of delta terms.
 
 ## Gradient Descent
-Weight update term for all units is:-
+Weight update term for all units is:
+
 $$
 \begin{equation}
 \triangle w_{ji} = \alpha \delta_j x_{ji}
 \end{equation}
+$$
+
+$$
 \begin{equation}
 \ when\ momentum\ term\ is\ applied\,
 \end{equation}
+$$
+$$
 \begin{equation}
 \triangle w_{ji}(n) = \beta \delta_j x_{ji} + \triangle w_{ji}(n-1) 
 \end{equation}
+$$
+
+$$
 \begin{equation}
 \ \beta\ is\ momentum\ rate
 \end{equation}
+$$
+
+$$
 \begin{equation}
 \delta_j\ formula\ varies\ with\ the\ unit\ being\ output\ or\ internal. 
 \end{equation}
+$$
+
+$$
 \begin{equation}
 w_{ji} = w_{ji} -  \triangle w_{ji}\\
 \end{equation}
