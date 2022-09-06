@@ -331,15 +331,3 @@ Where `gt` is the gradient term.
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="References">References<a class="anchor-link" href="#References">¶</a></h1><ul>
-<li>Tensorflow for Dummies by Matthew Scarpino</li>
-<li><a href="https://www.github.com/ShivamShrirao/dnn_from_scratch">Optimizers code were referenced from here</a></li>
-<li><a href="https://ruder.io/optimizing-gradient-descent/index.html">An Overview of Gradient Descent Optimization Algorithms</a></li>
-</ul>
-
-</div>
-</div>
-</div>
-    
-<!-- /wp:html -->
