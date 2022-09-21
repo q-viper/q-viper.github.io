@@ -1,4 +1,5 @@
-# Minimal Mistakes remote theme starter
+# q-viper.github.io
+Hello there surfer, this repo contains all my blogs and portfolio and is live [q-viper.github.io](https://q-viper.github.io). Additionally, I crosspost blogs in [dataqoil.com](https://dataqoil.com) too. This site uses Minimal Mistakes Jekyll Theme and with the support to the author of this theme, I am sharing theme's readme here.
 
 Click [**Use this template**](https://github.com/mmistakes/mm-github-pages-starter/generate) button above for the quickest method of getting started with the [Minimal Mistakes Jekyll theme](https://github.com/mmistakes/minimal-mistakes).
 
