@@ -878,7 +878,6 @@ show(img)
 
     
 ![png]({{site.url}}/assets/intro_opencv/output_45_0.png)
-    
 
 
 ## Color tracking on OpenCv
