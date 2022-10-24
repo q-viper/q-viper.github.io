@@ -145,23 +145,27 @@ Combination of processes:
 ## Implementation
 * Simple functions of OpenCv can be used to implement YOLO
 * We can make a DNN of YOLO using config file from code:
-<code>
+
+```python
 #create the DNN with existing weights and configurations
 net = cv2.dnn.readNet('yolov3.weights', 'yolov3.cfg')
 #get the layer names
 layer_names = net.getLayerNames()
 #get o/p layer
 output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
-</code>
+```
+
 * Then we will have to get blob from image and pass it to YOLO model of input shape
-<code>
+
+```python
 #get blob from img..img, scaleFactor, size, means of channel, RGB?
 blob = cv2.dnn.blobFromImage(img, 0.00392, (416, 416), (0, 0, 0), True, crop = False)         
 #send image to input layer
 net.setInput(blob)       
 #get output of model
 outs = net.forward(output_layers)
-</code>
+```
+
 * Output of model will contain center coo., height, width, class ids, prediction scores 
 * We will used NMS(Non Max Suppression) to eliminate multiple bounding boxes around same object
 
@@ -226,7 +230,7 @@ plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY).T)
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_8_1.png)
+![png]({site.url}}/assets/intro_opencv/output_8_1.png)
     
 
 
@@ -252,7 +256,7 @@ plt.show()
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_12_0.png)
+![png]({site.url}}/assets/intro_opencv/output_12_0.png)
     
 
 
@@ -269,7 +273,7 @@ plt.show()
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_14_0.png)
+![png]({site.url}}/assets/intro_opencv/output_14_0.png)
     
 
 
@@ -292,13 +296,13 @@ plt.show()
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_15_0.png)
+![png]({site.url}}/assets/intro_opencv/output_15_0.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_15_1.png)
+![png]({site.url}}/assets/intro_opencv/output_15_1.png)
     
 
 
@@ -320,7 +324,7 @@ plt.show()
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_17_0.png)
+![png]({site.url}}/assets/intro_opencv/output_17_0.png)
     
 
 
@@ -346,7 +350,7 @@ plt.show()
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_19_1.png)
+![png]({site.url}}/assets/intro_opencv/output_19_1.png)
     
 
 
@@ -366,13 +370,13 @@ plt.show()
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_20_0.png)
+![png]({site.url}}/assets/intro_opencv/output_20_0.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_20_1.png)
+![png]({site.url}}/assets/intro_opencv/output_20_1.png)
     
 
 
@@ -392,7 +396,7 @@ plt.show()
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_21_0.png)
+![png]({site.url}}/assets/intro_opencv/output_21_0.png)
     
 
 
@@ -406,7 +410,7 @@ plt.show()
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_22_0.png)
+![png]({site.url}}/assets/intro_opencv/output_22_0.png)
     
 
 
@@ -425,13 +429,13 @@ plt.show()
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_23_0.png)
+![png]({site.url}}/assets/intro_opencv/output_23_0.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_23_1.png)
+![png]({site.url}}/assets/intro_opencv/output_23_1.png)
     
 
 
@@ -506,7 +510,7 @@ plt.show()
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_25_0.png)
+![png]({site.url}}/assets/intro_opencv/output_25_0.png)
     
 
 
@@ -515,43 +519,43 @@ plt.show()
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_25_2.png)
+![png]({site.url}}/assets/intro_opencv/output_25_2.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_25_3.png)
+![png]({site.url}}/assets/intro_opencv/output_25_3.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_25_4.png)
+![png]({site.url}}/assets/intro_opencv/output_25_4.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_25_5.png)
+![png]({site.url}}/assets/intro_opencv/output_25_5.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_25_6.png)
+![png]({site.url}}/assets/intro_opencv/output_25_6.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_25_7.png)
+![png]({site.url}}/assets/intro_opencv/output_25_7.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_25_8.png)
+![png]({site.url}}/assets/intro_opencv/output_25_8.png)
     
 
 
@@ -610,25 +614,25 @@ show(filtered, 'Sobel')
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_29_0.png)
+![png]({site.url}}/assets/intro_opencv/output_29_0.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_29_1.png)
+![png]({site.url}}/assets/intro_opencv/output_29_1.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_29_2.png)
+![png]({site.url}}/assets/intro_opencv/output_29_2.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_29_3.png)
+![png]({site.url}}/assets/intro_opencv/output_29_3.png)
     
 
 
@@ -665,31 +669,31 @@ show(blurred)
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_32_0.png)
+![png]({site.url}}/assets/intro_opencv/output_32_0.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_32_1.png)
+![png]({site.url}}/assets/intro_opencv/output_32_1.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_32_2.png)
+![png]({site.url}}/assets/intro_opencv/output_32_2.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_32_3.png)
+![png]({site.url}}/assets/intro_opencv/output_32_3.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_32_4.png)
+![png]({site.url}}/assets/intro_opencv/output_32_4.png)
     
 
 
@@ -704,7 +708,7 @@ show(thresholded)
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_34_0.png)
+![png]({site.url}}/assets/intro_opencv/output_34_0.png)
     
 
 
@@ -734,7 +738,7 @@ show(canny_img, "Canny")
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_37_0.png)
+![png]({site.url}}/assets/intro_opencv/output_37_0.png)
     
 
 
@@ -750,13 +754,13 @@ show(canny_img)
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_38_0.png)
+![png]({site.url}}/assets/intro_opencv/output_38_0.png)
     
 
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_38_1.png)
+![png]({site.url}}/assets/intro_opencv/output_38_1.png)
     
 
 
@@ -785,7 +789,7 @@ show(line_img)
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_40_0.png)
+![png]({site.url}}/assets/intro_opencv/output_40_0.png)
     
 
 
@@ -829,7 +833,7 @@ show(cv2.cvtColor(img, cv2.COLOR_BGR2RGBA))
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_42_0.png)
+![png]({site.url}}/assets/intro_opencv/output_42_0.png)
     
 
 
@@ -873,7 +877,7 @@ show(img)
 
 
     
-![png](({site.url}}/assets/intro_opencv/output_45_0.png)
+![png]({site.url}}/assets/intro_opencv/output_45_0.png)
     
 
 

@@ -41,7 +41,7 @@ In simple words, CNN is mainly a image processing neural networks but can be use
 
 
 Lets see the visualization:
-![]({site.url}}/assets/cnn//simple.png)
+![]({{site.url}}/assets/cnn/simple.png)
 
 
 ## What does normal CNN include?
@@ -59,26 +59,26 @@ Normal CNN includes below layers:
 * <b>Convolutional layer</b> is the layer where convolution operation happens. Convolution here is same as on image processing where features are extracted. A filter of same row and column or square size is taken and multiplied across the window that fits filter. The element-wise product is done and summed all. We generally use stride, as how much pixel shift after doing one convolution. Also zero padding is done sometime to add zeros. The convolution layer gives number of filters with same properties. Here more the number of filter, more the accurate model can get but computational complexity increases.
 
 > Each CNN layer manipulates image using kernels ex.
-![]({site.url}}/assets/cnn//conv out.png)
+![]({{site.url}}/assets/cnn/conv out.png)
 
 > What actually happens inside CNN layer?
-![]({site.url}}/assets/cnn//2dconv.gif)
+![]({{site.url}}/assets/cnn/2dconv.gif)
 <center> Inside Grayscale image </center>
 
-![]({site.url}}/assets/cnn//3dconv.gif)
-![]({site.url}}/assets/cnn//sum.gif)
-![]({site.url}}/assets/cnn//bias.gif)
+![]({{site.url}}/assets/cnn/3dconv.gif)
+![]({{site.url}}/assets/cnn/sum.gif)
+![]({{site.url}}/assets/cnn/bias.gif)
 
 <center> Inside RGB image </center>
-![]({site.url}}/assets/cnn//padding.gif)
+![]({{site.url}}/assets/cnn/padding.gif)
 <center> Padding of pixels</center>
 
 * <b>Max-Pooling layer</b> is a layer where we take only few pixels from previous layers. We must provide a pool size and then that pool size is used on input pixels. The pool window is moved over entire input and max value within the overlaped input is taken. For example, pool of size (2, 2) give half of input data.
 
-![]({site.url}}/assets/cnn//stride.gif)
+![]({{site.url}}/assets/cnn/stride.gif)
 <center> Maxpooling</center>
 
-![]({site.url}}/assets/cnn//maxpool.gif)
+![]({{site.url}}/assets/cnn/maxpool.gif)
 <center> Summing up</center>
 
 
