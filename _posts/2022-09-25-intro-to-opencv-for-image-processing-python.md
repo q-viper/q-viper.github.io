@@ -75,7 +75,7 @@ OpenCV is a multi-platform Image Processing tool which provides lots of algorith
 * Filters are convolutional kernels, ex [[0 -1 0] [-1 4 -1] [0 -1 0]]. Finds change between current and neighbor pixels.
 * If output of convolution is 0 or its -ve then its darken else brighter.
 * Example of edge detection using high-pass filter: 
-    <img src ="({site.url}}/assets/intro_opencv/conv out.png">
+    <img src ="({{site.url}}/assets/intro_opencv/conv out.png">
     <center> High-pass filtering image </center>
 * Convolution process: 
     <img src = "https://www.researchgate.net/publication/334105601/figure/fig2/AS:774948163420160@1561773448507/A-schematic-of-convolution-and-pooling-processes-in-CNN-a-convolution-process-and-b.ppm">
@@ -188,7 +188,7 @@ print(cv2.__version__)
 
 ```python
 # read image
-fg = cv2.imread('({site.url}}/assets/intro_opencv/petal.jpg', 1) # 1 reads as BGR 0 reads as Grayscale
+fg = cv2.imread('({{site.url}}/assets/intro_opencv/petal.jpg', 1) # 1 reads as BGR 0 reads as Grayscale
 fg = cv2.resize(fg, (425, 425))
 
 #shape of image
@@ -216,7 +216,7 @@ print(fg.reshape(1, -1))
 
 
 ```python
-img = cv2.imread('({site.url}}/assets/intro_opencv/everest.jpg')
+img = cv2.imread('({{site.url}}/assets/intro_opencv/everest.jpg')
 
 plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY).T)
 ```
@@ -230,7 +230,7 @@ plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY).T)
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_8_1.png)
+![png]({{site.url}}/assets/intro_opencv/output_8_1.png)
     
 
 
@@ -256,7 +256,7 @@ plt.show()
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_12_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_12_0.png)
     
 
 
@@ -273,7 +273,7 @@ plt.show()
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_14_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_14_0.png)
     
 
 
@@ -296,13 +296,13 @@ plt.show()
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_15_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_15_0.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_15_1.png)
+![png]({{site.url}}/assets/intro_opencv/output_15_1.png)
     
 
 
@@ -324,7 +324,7 @@ plt.show()
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_17_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_17_0.png)
     
 
 
@@ -333,7 +333,7 @@ plt.show()
 
 ```python
 # lets read a pyramid image
-pyramid = cv2.imread('({site.url}}/assets/intro_opencv/pyramid.jpg', 1)
+pyramid = cv2.imread('({{site.url}}/assets/intro_opencv/pyramid.jpg', 1)
 
 #reshape pyramid to shape of flag
 print(pyramid.shape)
@@ -350,7 +350,7 @@ plt.show()
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_19_1.png)
+![png]({{site.url}}/assets/intro_opencv/output_19_1.png)
     
 
 
@@ -370,13 +370,13 @@ plt.show()
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_20_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_20_0.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_20_1.png)
+![png]({{site.url}}/assets/intro_opencv/output_20_1.png)
     
 
 
@@ -396,7 +396,7 @@ plt.show()
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_21_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_21_0.png)
     
 
 
@@ -410,7 +410,7 @@ plt.show()
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_22_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_22_0.png)
     
 
 
@@ -429,13 +429,13 @@ plt.show()
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_23_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_23_0.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_23_1.png)
+![png]({{site.url}}/assets/intro_opencv/output_23_1.png)
     
 
 
@@ -446,7 +446,7 @@ plt.show()
 ## Stackking up
 
 # read image
-fg = cv2.imread('({site.url}}/assets/intro_opencv/rose.jpg', 1) # 1 reads as BGR 0 reads as Grayscale
+fg = cv2.imread('({{site.url}}/assets/intro_opencv/rose.jpg', 1) # 1 reads as BGR 0 reads as Grayscale
 fg = cv2.resize(fg, (425, 425))
 
 
@@ -458,7 +458,7 @@ plt.show()
 
 
 # lets read a pyramid image
-pyramid = cv2.imread('({site.url}}/assets/intro_opencv/everest.jpg', 1)
+pyramid = cv2.imread('({{site.url}}/assets/intro_opencv/everest.jpg', 1)
 
 #reshape pyramid to shape of flag
 print(pyramid.shape)
@@ -510,7 +510,7 @@ plt.show()
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_25_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_25_0.png)
     
 
 
@@ -519,43 +519,43 @@ plt.show()
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_25_2.png)
+![png]({{site.url}}/assets/intro_opencv/output_25_2.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_25_3.png)
+![png]({{site.url}}/assets/intro_opencv/output_25_3.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_25_4.png)
+![png]({{site.url}}/assets/intro_opencv/output_25_4.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_25_5.png)
+![png]({{site.url}}/assets/intro_opencv/output_25_5.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_25_6.png)
+![png]({{site.url}}/assets/intro_opencv/output_25_6.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_25_7.png)
+![png]({{site.url}}/assets/intro_opencv/output_25_7.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_25_8.png)
+![png]({{site.url}}/assets/intro_opencv/output_25_8.png)
     
 
 
@@ -585,7 +585,7 @@ def show(img, t = 'image', cmap='gray'):
 
 
 ```python
-stripes = cv2.imread('({site.url}}/assets/intro_opencv/coin.png', 0)
+stripes = cv2.imread('({{site.url}}/assets/intro_opencv/coin.png', 0)
 show(stripes)
 
 # Sobel x
@@ -614,25 +614,25 @@ show(filtered, 'Sobel')
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_29_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_29_0.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_29_1.png)
+![png]({{site.url}}/assets/intro_opencv/output_29_1.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_29_2.png)
+![png]({{site.url}}/assets/intro_opencv/output_29_2.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_29_3.png)
+![png]({{site.url}}/assets/intro_opencv/output_29_3.png)
     
 
 
@@ -651,7 +651,7 @@ show(filtered, 'Sobel')
 
 
 ```python
-noise = cv2.imread('({site.url}}/assets/intro_opencv/noise.png', 0)
+noise = cv2.imread('({{site.url}}/assets/intro_opencv/noise.png', 0)
 show(noise)
 kernel = np.ones([7, 7], dtype = np.float32)/255
 blurred = cv2.filter2D(noise, -1, kernel)
@@ -669,31 +669,31 @@ show(blurred)
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_32_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_32_0.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_32_1.png)
+![png]({{site.url}}/assets/intro_opencv/output_32_1.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_32_2.png)
+![png]({{site.url}}/assets/intro_opencv/output_32_2.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_32_3.png)
+![png]({{site.url}}/assets/intro_opencv/output_32_3.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_32_4.png)
+![png]({{site.url}}/assets/intro_opencv/output_32_4.png)
     
 
 
@@ -708,7 +708,7 @@ show(thresholded)
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_34_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_34_0.png)
     
 
 
@@ -738,14 +738,14 @@ show(canny_img, "Canny")
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_37_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_37_0.png)
     
 
 
 
 ```python
 # Hough transform
-img = cv2.imread('({site.url}}/assets/intro_opencv/flag.jpg', 0)
+img = cv2.imread('({{site.url}}/assets/intro_opencv/flag.jpg', 0)
 show(img)
 
 canny_img = cv2.Canny(img, low, high)
@@ -754,13 +754,13 @@ show(canny_img)
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_38_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_38_0.png)
     
 
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_38_1.png)
+![png]({{site.url}}/assets/intro_opencv/output_38_1.png)
     
 
 
@@ -789,7 +789,7 @@ show(line_img)
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_40_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_40_0.png)
     
 
 
@@ -798,7 +798,7 @@ show(line_img)
 
 ```python
 # Haar Cascade
-img = cv2.imread("({site.url}}/assets/intro_opencv/xmen.jpg", 1)
+img = cv2.imread("({{site.url}}/assets/intro_opencv/xmen.jpg", 1)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 # locate XML Haar Cascade file(it will be inside site packages/cv2/data)
@@ -833,7 +833,7 @@ show(cv2.cvtColor(img, cv2.COLOR_BGR2RGBA))
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_42_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_42_0.png)
     
 
 
@@ -847,7 +847,7 @@ Contours are simple curves that are joined around a object of same color or inte
 
 
 ```python
-img = cv2.imread('({site.url}}/assets/intro_opencv/flag.jpg')
+img = cv2.imread('({{site.url}}/assets/intro_opencv/flag.jpg')
 img_gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 
 _, thresh = cv2.threshold(img_gray, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
@@ -877,7 +877,7 @@ show(img)
 
 
     
-![png]({site.url}}/assets/intro_opencv/output_45_0.png)
+![png]({{site.url}}/assets/intro_opencv/output_45_0.png)
     
 
 
@@ -920,8 +920,4 @@ cap.release()
 cv2.destroyAllWindows()
 
 ```
-
-
-```python
-
-```
+ 
