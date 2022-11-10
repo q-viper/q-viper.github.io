@@ -315,6 +315,7 @@ def activation_dfn(self, r):
             return soft * (1 - soft)
         if self.activation == 'relu':
             r[r<0] = 0
+            r[>=1]=1
             return r
 ```
 
@@ -334,11 +335,11 @@ ii. \frac{d(sigmoid(x))}{d(x)} = sigmoid(x)(1- sigmoid(x))
 \end{equation}
 
 \begin{equation}
-iii. \frac{d(tanh(x))}{d(x)} = \frac{2x}{(1+x)^2} 
+iii. \frac{d(tanh(x))}{d(x)} = 1-tanh(x)**2
 \end{equation}
 
 \begin{equation}
-iv. \frac{d(relu(x))}{d(x)} = 1
+iv. \frac{d(relu(x))}{d(x)} = 1 if x>=1 else 0
 \end{equation}
 
 \begin{equation}
@@ -1675,7 +1676,7 @@ This ends the Convolutional Neural Networks from scratch part of the blog. There
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="7-You-might-like-to-view:-">7 You might like to view:-<a class="anchor-link" href="#7-You-might-like-to-view:-">&#182;</a></h1><ul>
+<h2 id="7-You-might-like-to-view:-">7 You might like to view:-<a class="anchor-link" href="#7-You-might-like-to-view:-">&#182;</a></h2><ul>
 <li><a href="https://dataqoil.com/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/">Writing Popular Machine Learning Optimizers from Scratch on Python</a></li>
 <li><a href="https://dataqoil.com/2020/05/30/image-processing-class-from-scratch-on-python/">Writing Image Processing Class From Scratch on Python</a></li>
 <li><a href="https://dataqoil.com/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/">Writing a Deep Neural Network from Scratch on Python</a></li>

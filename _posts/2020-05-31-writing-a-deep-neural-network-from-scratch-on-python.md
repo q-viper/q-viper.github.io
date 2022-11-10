@@ -172,6 +172,10 @@ def activation_dfn(self, r):
         if self.activtion == 'softmax':
             soft = self.activation_fn(r)
             return soft * (1 - soft)
+        if self.activation=='relu':
+            r[r>=1]=1
+            r[r<1]=0
+            return r
 ```
  
 Let's revise a bit of calculus.
@@ -188,11 +192,11 @@ ii. \frac{d(sigmoid(x))}{d(x)} = sigmoid(x)(1- sigmoid(x))
 \end{equation}
  
 \begin{equation}
-iii. \frac{d(tanh(x))}{d(x)} = \frac{2x}{(1+x)^2}
+iii. \frac{d(tanh(x))}{d(x)} = 1-tanh(x)**2
 \end{equation}
  
 \begin{equation}
-iv. \frac{d(relu(x))}{d(x)} = 1
+iv. \frac{d(relu(x))}{d(x)} = 1 if x>0 else 0
 \end{equation}
  
 \begin{equation}
