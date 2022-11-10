@@ -39,6 +39,10 @@ I am sorry for not using a single image here on this blog because I was low on d
 
 [If you are less on time then follow this repository for all the files, also see inside the folder `quark`](https://github.com/q-viper/ML-from-Basics).
 
+## Updates:
+* 2020/06/05: Published blog.
+* 2022/11/10: Fixed errors in derivative.
+
 ## 1.1 What this blog will cover?
 * Includes `Feed forward` layer
 * A gentle introduction to `Conv2d`
@@ -119,7 +123,7 @@ I am not going to explain much more here because a previous post about [Writing 
         if self.activation == 'tanh':
             return 1 - r ** 2
         if self.activation == 'sigmoid':
-            r = self.activation_fn(r)
+            # r = self.activation_fn(r)
             return r * (1 - r)
         if self.activation == "softmax":
             soft = self.activation_fn(r)                                
@@ -127,6 +131,7 @@ I am not going to explain much more here because a previous post about [Writing 
             return diag_soft  
         if self.activation == 'relu':
             r[r < 0] = 0
+            r[r>=1]=1
             return r
         return r
                     
