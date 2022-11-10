@@ -19,31 +19,29 @@ tags:
 * TOC
 {:toc}
 
+Lets write a Convolutional Neural Networks From Scratch. Writing Convoluitional Nerual Networks from Scratch is one of the challenging thing to be even for experienced person because we have been using frameworks like PyTorch to train and slowly forgetting basics of it. 
 
-# 1 Writing a Convolutional Neural Network From Scratch
-I might stop to write new blogs in this site so please visit [dataqoil.com](https://dataqoil.com) for more awesome blogs about computer vision projects.
+What will you do when you are stuck in a village with no electricity for 4 days and you only have a pen and paper? For me, I wrote a `Convolutional Neural Networks from Scratch` on paper. Once again, high credit goes to the pandemic Corona Virus, without it, I would not have lived as a farmer once more and the idea of <i>' from scratch'</i> arose.
 
-What will you do when you stuck on village with blackout for 4 days and you only have pen and paper? For me, I wrote a `CNN from Scratch` on paper. Once again, high credits goes to pandemic Corona Virus, without it, I would not have been lived as farmer once more and the idea of <i>'from scratch'</i> rised.
+I am sorry for not using a single image here on this blog because I was low on data and this entire blog is written on markdown(sometimes latex) only so the text format might seem a little disturbing also.
 
-I am sorry for not using a single image here on this blog because I was low on data and this entire blog is written on markdown(sometimes latex) only so text format might seem little disturbing also.
-
-<b>If you are here, then you are encouraged to look at the below 3 blog posts(serially) of mine(most of the concept on this blog are taken from below posts):</b>
-* [Writing a Feed forward Neural Network from Scratch on Python]({{site.url}}/2020/05/29/writing-a-deep-neural-network-from-scratch-on-python/)
-    * This post gives a brief introduction to a OOP concept of making a simple Keras like ML library.
-    * A gentle introduction to the backpropagation and gradient descent from scratch.
-* [Writing top Machine Learning Optimizers from scratch on Python]({{site.url}}/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
-    * Gives introduction and python code to optimizers like `GradientDescent`, `ADAM`.
-* [Writing a Image Processing Codes from Scratch on Python]({{site.url}}/2020/05/30/image-processing-class-from-scratch-on-python/)
+<b>If you are here, then you are encouraged to look at the below 3 blog posts(serially) of mine(most of the concepts on this blog are taken from the below posts):</b>
+* [Writing a Feedforward Neural Network from Scratch on Python](https://dataqoil.com/2020/05/29/writing-a-deep-neural-network-from-scratch-on-python/)
+    * This post gives a brief introduction to an OOP concept of making a simple Keras-like ML library.
+    * A gentle introduction to backpropagation and gradient descent from scratch.
+* [Writing top Machine Learning Optimizers from scratch on Python](https://dataqoil.com/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
+    * Gives introduction and python code to optimizers like `GradientDescent` and ADAM`.
+* [Writing a Image Processing Codes from Scratch on Python](https://dataqoil.com/2020/05/30/image-processing-class-from-scratch-on-python/)
     * This post gives a brief introduction to convolution operation and RGB to grayscale conversion from scratch.
-    * We will be using same convolution concept here on this blog.
+    * We will be using the same convolution concept here on this blog.
 
 [If you are less on time then follow this repository for all the files, also see inside the folder `quark`](https://github.com/q-viper/ML-from-Basics).
 
 ## Updates:
 * 2020/06/05: Published blog.
-* 2022/11/10: Fixed errors in derivative.
+* 2022/11/10: Fixed errors in the derivative.
 
-## 1.1 What this blog will cover?
+## 1.1 What this Convolutional Neural Networks from Scratch blog will cover?
 * Includes `Feed forward` layer
 * A gentle introduction to `Conv2d`
 * Includes `Dropout` layer
@@ -52,34 +50,34 @@ I am sorry for not using a single image here on this blog because I was low on d
 * Test Cases with different architectures(4 of them) on `MNIST` dataset
 * Bonus Topics
 
-Testing a model will require huge time, my system is Dell I5 with 8gb RAM and 256gb SSD. And I had tested these models on my local machine. It had taken nearly week to find the test cases and imporve the overall concepts. Sometimes, I had to sleep my laptop for saving battery power so some epoch might be seen taken 4+hours of time. And yes, I used mobile data to post this blog.
+Testing a model will require huge time, my system is Dell I5 with 8GB RAM and 256GB SSD. And I tested these models on my local machine. It had taken nearly a week to find the test cases and improve the overall concepts. Sometimes, I had to sleep on my laptop for saving battery power so some epochs might be seen taking 4+hours of time. And yes, I used mobile data to post this blog.
 
 
-# 2 Preliminary Concept
+## 2 Preliminary Concepts for Convolutional Neural Networks from Scratch
 * Every layer will have the common methods(doing so will ease the overhead of method calling):
     * `set_output_shape`
     * `apply_activation`
         * `Conv2d` can have functions like `relu` and convolution operation happens here
-        * `FFL` will use the `activation_fn` method on linear combination of input, weights and biases.
+        * `FFL` will use the `activation_fn` method on a linear combination of input, weights, and biases.
         * `Pool2d` will perform pooling operations like `max, min, average`
         * `Dropout` will perform setting input to 0 randomly
-        * `Flatten` will convert feature vectures to 1d vector 
+        * `Flatten` will convert feature vectores to 1d vector 
     * `backpropagate`
-        * `Conv2d` will use the delta term of next layer to find delta term and delta parameters
+        * `Conv2d` will use the delta term of the next layer to find the delta term and delta parameters
         * `FFL` 
         * `Pool2d`: error is backpropagated from the index of the output of this layer
-        * `Dropout`: propagate error through non zero output units
-        * `Flatten` : propagate error of next layer to previous by reshapping to input shape
+        * `Dropout`: propagate error through non-zero output units
+        * `Flatten`: propagate error of next layer to previous by reshaping to input shape
 
-# 3 Steps
+## 3 Steps
 * Prepare layers
 * Prepare stacking class
 * Prepare Optimizers
 
 ## 3.1 Prepare Layers
-
+Let's prepare layers from scratch for Convolutional Neural Networks from Scratch.
 ### 3.1.1 Feedforward Layer
-I am not going to explain much more here because a previous post about [Writing a Feed forward Neural Network from Scratch on Python]({{site.url}}/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/) has explained already.
+For a typical Convolutional Neural Networks from Scratch, we need a feedforward layer as well. I am not going to explain much more here because a previous post about [Writing a Feedforward Neural Network from Scratch on Python](https://dataqoil.com/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/) has explained already.
 
 ```python
    class FFL():
@@ -116,7 +114,7 @@ I am not going to explain much more here because a previous post about [Writing 
     
     def activation_dfn(self, r):
         """
-            A method of FFL to find derivative of given activation function.
+            A method of FFL to find the derivative of a given activation function.
         """     
         if self.activation is None:
             return np.ones(r.shape)
@@ -137,7 +135,7 @@ I am not going to explain much more here because a previous post about [Writing 
                     
     def activation_fn(self, r):
         """
-        A method of FFL which contains the operation and defination of given activation function.
+        A method of FFL that contains the operation and definition of a given activation function.
         """        
         if self.activation == 'relu':
             r[r < 0] = 0
@@ -177,7 +175,9 @@ I am not going to explain much more here because a previous post about [Writing 
 ```
 
 ### 3.1.2 Conv2d Layer
-#### 3.1.2.1 Lets initialize it first.
+This layer will be the crucial layer for Convolutional Neural Networks from Scratch.
+
+#### 3.1.2.1 Let's initialize it first.
 
 ```python
 class Conv2d():
@@ -202,23 +202,23 @@ class Conv2d():
 ```
 
 Initializing takes:-
-* `input_shape`:- It is the input shape of this layer. It will include tuple of `(rows, cols, num_channels)`. For any non input layer, it will be default i.e. `None`.
-* `filters`:- How many of kernel or filters are we using?
-* `kernel_size`:- It is a size of convoluting tuple of matrix or filter's `(row, cols)`. Later we will create a kernel of shape `rows, cols, input_channels, num_filters`.
+* `input_shape`:- It is the input shape of this layer. It will include a tuple of `(rows, cols, num_channels)`. For any noninput layer, it will default i.e. `None`.
+* `filters`:- How many kernels or filters are we using?
+* `kernel_size`:- It is the size of convoluting tuple of matrix or filter's `(row, cols)`. Later we will create a kernel of shape `rows, cols, input_channels, num_filters`.
 * `isbias`: Boolean value for whether we will use bias or not.
 * `activaiton`: Activation function.
 * `tride`: A tuple indicating a step of convolution operation per row, column.
 * `padding`: String indicating what operation will be done on borders, available among `[zeros, same]`.
-* `kernel`: A convoluting matrix. Recommendated not to use.
+* `kernel`: A convoluting matrix. Recommended not to use it.
 * `bias`: A array of shape `(num_filters, 1)` will be added after each convolution operation.
 
-Few important things inside this method are:-
+A few important things inside this method are:-
 * The `output_shape` of any convolution layer will be:
 \begin{equation}
 W = \frac{(w-f+2*p)}{s} + 1
 \end{equation}
 
-    Where, W is output width or shape and w is input width or shape.\
+    Where W is output width or shape and w is input width or shape.\
     f is filter width.\
     p is padding(1 if used)\
     s is stride width or shape\
@@ -236,8 +236,8 @@ def set_variables(self):
     self.delta_biases = np.zeros(self.biases.shape)    
 ```
 
-* To make our optimization easier, we are naming filter as weights. 
-* The method `init_param()` initializes parameter from random normal sample.
+* To make our optimization easier, we are naming filters as weights. 
+* The method `init_param()` initializes the parameter from the random normal sample.
 
 ```python
 def init_param(self, size):
@@ -253,7 +253,7 @@ def init_param(self, size):
 ```python
 def activation_fn(self, r):
     """
-    A method of FFL which contains the operation and defination of given activation function.
+    A method of FFL that contains the operation and definition of a given activation function.
     """
     if self.activation == None or self.activation == "linear":
         return r   
@@ -294,7 +294,7 @@ v. softmax(x_j) = \frac{exp^{(x_j)}}{\sum_{i=1}^n{exp^{(x_i)}}}
 Where, soma = XW + \theta
 \end{equation}
 
-And `W` is weight vector of shape `(n, w)`. `X` is input vector of shape `(m, n)` and `𝜃` is bias term of shape `w, 1`. 
+And `W` is the weight vector of shape `(n, w)`. `X` is the input vector of shape `(m, n)` and `𝜃` is the bias term of shape `w, 1`. 
 
 
 
@@ -302,7 +302,7 @@ And `W` is weight vector of shape `(n, w)`. `X` is input vector of shape `(m, n)
 ```python
 def activation_dfn(self, r):
         """
-            A method of FFL to find derivative of given activation function.
+            A method of FFL to find the derivative of a given activation function.
         """
         if self.activation is None:
             return np.ones(r.shape)
@@ -319,10 +319,11 @@ def activation_dfn(self, r):
 ```
 
 
-Lets revise bit of calculus. 
+Let's revise a bit of calculus. 
 
 ##### Why do we need derivative? 
-Well, if you are here then you already know that gradient descent is based upon the derivatives(gradients) of activation functions and errors. So we need to perform this derivative. But you are on your own to perform calculation. I will also explain the gradient descent later. 
+While doing Convolutional Neural Networks from Scratch, we need to do few derivatives.
+Well, if you are here then you already know that gradient descent is based on the derivatives(gradients) of activation functions and errors. So we need to perform this derivative. But you are on your own to perform calculations. I will also explain the gradient descent later. 
 
 \begin{equation}
 i. \frac{d(linear(x))}{d(x)} = 1
@@ -396,14 +397,14 @@ For the sake of simplicity, we use the case of `j = k` for softmax.
         return self.out
 ```
 
-I have linked a post about convolution operation on the top of this blog. Only important part here are:-
+I have linked a post about convolution operation at the top of this blog. The only important part here is:-
 * For each filter 
     * do elementwise matrix multiplication and sum them all(of each channels also)
     * Then add bias term
     * Output of this filter will have channel(not a real color channel) of `num_filters`
-* Finally apply activation function on this output.
+* Finally apply the activation function on this output.
 
-It is clear that, if a layer have 5 filters then the output of this layer will have 5 channels also.
+It is clear that, if a layer has 5 filters then the output of this layer will have 5 channels also.
 
 #### 3.1.2.6 Prepare Method for Backpropagation
 
@@ -433,24 +434,24 @@ It is clear that, if a layer have 5 filters then the output of this layer will h
         layer.delta = layer.activation_dfn(layer.delta)
 ```
     
-Backpropagating error from Convolution layer is really hard and challenging task. I have tried my best to do right way of backpropagation but I still have doubt about it. Some really awesome articles like below can help to understand these things:-
+Backpropagating error from the Convolution layer is a really hard and challenging task. I have tried my best to do the right way of backpropagation but I still have doubt about it. Some really awesome articles like below can help to understand these things:-
 * [Convolutional Neural Network from Ground Up](https://towardsdatascience.com/convolutional-neural-network-from-ground-up-c67bb41454e1)
 * [A Gentle Introduction to CNN](https://sefiks.com/2017/11/03/a-gentle-introduction-to-convolutional-neural-networks/)
-* [Training a Convolutional Neural Network](https://victorzhou.com/blog/intro-to-cnns-part-2/)
+* [Training a Convolutional Neural Networks from Scratch](https://victorzhou.com/blog/intro-to-cnns-part-2/)
 
 For understanding how to pass errors and find the delta terms for parameters:
-* The delta term for this layer will be equal to the shape of input i.e. `(input_row, input_cols, input_channels)`. 
+* The delta term for this layer will be equal to the shape of the input i.e. `(input_row, input_cols, input_channels)`. 
 * We will also take the input to this layer into consideration.
-* For each filters:-
-    * Loop through each row and col just like convolution operation
-    * Get the chunk or part of image and multiply it with the delta term of next layer to get delta filter(weight)
-        * i.e. `layer.delta_weights[:, :, :, f] += chunk * nx_layer.delta[i, j, f]` a trick to understand the delta of next layer is by revisiting the input and output shape of layer. For a layer with 5 filters, output will have 5 channels. And the delta term of next layer will have same number of channels. Hence we are giving `[i, j, f]`. Note that for every step on input image(i.e step on row and col), `i`, `j` will increase by 1. Initially, `layer.delta_weights[:, :, :, f]` will be all 0s but it will change by visiting every chunks. Since we have filter of shape `(row, col, channels, num_filters)`, delta_weights is updated for each filter by adding it with multiplication of each chunk with corresponding next layer's delta.
-        * Delta term of this layer will have shape of `(input_rows, input_cols, channels)` i.e equal to input shape. Hence we will set the delta term using the number of channels on this layer's filters. We will add the delta term for that chunk using each filters. Because each filters are responsible for the error and the contribution of each filter must be taken equally. The `layer.delta[rv:r, cv:c, :] += nx_layer.delta[i, j, f] * layer.weights[:, :, :, f]` is here to do this task.
-        * We increase I after completing row and j after completing column. `i` and `j` are used to get values from delta of next layer.
+* For each filter:-
+    * Loop through each row and col just like the convolution operation
+    * Get the chunk or part of the image and multiply it with the delta term of the next layer to get the delta filter(weight)
+        * i.e. `layer.delta_weights[:, :, :, f] += chunk * nx_layer.delta[i, j, f]` a trick to understanding the delta of the next layer is by revisiting the input and output shape of the layer. For a layer with 5 filters, the output will have 5 channels. And the delta term of the next layer will have the same number of channels. Hence we are giving `[i, j, f]`. Note that for every step on the input image(i.e step on row and col), `i`, `j` will increase by 1. Initially, `layer.delta_weights[:, :, :, f]` will be all 0s but it will change by visiting every chunk. Since we have a filter of shape `(row, col, channels, num_filters)`, delta_weights is updated for each filter by adding it with the multiplication of each chunk with the corresponding next layer's delta.
+        * Delta term of this layer will have shape of `(input_rows, input_cols, channels)` i.e equal to input shape. Hence we will set the delta term using the number of channels on this layer's filters. We will add the delta term for that chunk using each filter. Because each filter is responsible for the error and the contribution of each filter must be taken equally. The `layer.delta[rv:r, cv:c, :] += nx_layer.delta[i, j, f] * layer.weights[:, :, :, f]` is here to do this task.
+        * We increase I after completing the row and j after completing the column. `i` and `j` are used to getting values from the delta of the next layer.
     * We sum the delta term of this filter to get `delta_biases` due to this filter.
-* Finally, we get delta of this layer by applying derivative of activation function of this layer.
+* Finally, we get the delta of this layer by applying the derivative of the activation function of this layer.
 
-> <b>There are different approaches than this one of doing backpropagation on Convolution layer. I found this one to be working on my case(i wrote this approach). Please try to visit one of above links for more explanation.</b>
+> <b>There are different approaches than this one of doing backpropagation on the Convolution layer. I found this one to be working on my case(i wrote this approach). Please try to visit one of the above links for more explanation.</b>
 
 <b>Please test your class like below:-</b>
 
@@ -468,7 +469,7 @@ plt.imshow(cout.reshape(28, 28))
 Where `xt` is an image array of shape `(28, 28, 1)` from `mnist`.
 
 ### 3.1.3 Dropout Layer
-The main concept behind the dropout layer is to forget some of the inputs to current layer forcefully. Doing so will reduce the risk of overfitting the model.
+The main concept behind the dropout layer is to forget some of the inputs to the current layer forcefully. Doing so will reduce the risk of overfitting the model.
 
 ```python
 class Dropout:
@@ -512,14 +513,14 @@ class Dropout:
         self.delta[self.output == 0] = 0
 ```
 
-* Some of parameters like `weights`, `biases` are actually not available on the Dropout layer but I am using this for the sake of simplicity while working with stack of layers.
-* The input shape and output shape of Dropout layer will be same, what differs is the value. Where some will be set to 0 i.e forgotten randomly.
+* Some of the parameters like `weights`, `biases` are actually not available on the Dropout layer but I am using this for the sake of simplicity while working with a stack of layers.
+* The input shape and output shape of the Dropout layer will be the same, what differs is the value. Where some will be set to 0 i.e forgotten randomly.
 * The method `apply_activation` performs the dropout operation. 
-    * The easier way is to first convert it to 1d vector(by numpy's `flatten`) and take random indices from given probability. 
-    * Then we set the element of those random indices to 0 and return the reshaped new array as output of this layer.
+    * The easier way is to first convert it to a 1d vector(by NumPy's `flatten`) and take random indices from a given probability. 
+    * Then we set the element of those random indices to 0 and return the reshaped new array as the output of this layer.
 * The method `backpropagate` performs the backpropagation operation on error.
-     * We set delta to `0` if the recent output of this layer is 0, else leave as it is.
-* Note:- In testing phase, forward propagation will be different. Entire activation is reduced by factor. So we are also giving a train parameter to `apply_activation`.
+     * We set the delta to `0` if the recent output of this layer is 0, else leave it as it is.
+* Note:- In the testing phase, forward propagation will be different. Entire activation is reduced by a factor. So we are also giving a training parameter to `apply_activation`.
      
 <b> Lets test our class:-</b>
 
@@ -530,21 +531,21 @@ dp.apply_activation(x)
 ```
 
 ### 3.1.4 Pooling Layer
-A convolutional neural network's work can be thought as:
-* Take a image where we want to perform a convolution.
-* Take a lens(will be filter) and place it over an image.
-* Slide the lens over a image and find the important features.
+A convolutional neural network's work can be thought of as:
+* Take an image where we want to perform a convolution.
+* Take a lens(will be filtered) and place it over an image.
+* Slide the lens over an image and find the important features.
 * We find features using different lenses.
-* Once we found certain features under our boundary, we pass those feature maps to next scanning place or we can do pooling.
-* Pooling can be thought of as zooming out, or we make the remaining image little smaller, by this way more important features will be seen. Or in other way, scan from bit far and take only important part.
+* Once we found certain features under our boundary, we pass those feature maps to the next scanning place or we can do pooling.
+* Pooling can be thought of as zooming out, or we make the remaining image a little smaller, by this way more important features will be seen. Or in another way, scan from a bit far and take only the important parts.
 
-A pooling operation works on similar way like convolution but instead of matrix multiplication we do different operation. The output of a pooling layer will be:-
+A pooling operation works in a similar way to convolution but instead of matrix multiplication, we do a different operation. The output of a pooling layer will be:-
 
 \begin{equation}
 w = \frac{W-f + 2p}{s} + 1
 \end{equation}
 
-where `w` is new width, `W` is old or input width, `f` is kernel width, `p` is padding. <b>I am not using padding right now for the operation.</b>
+where `w` is the new width, `W` is the old or input width, `f` is kernel width, `p` is padding. <b>I am not using padding right now for the operation.</b>
 
 
 
@@ -575,16 +576,16 @@ class Pool2d:
             self.stride = self.kernel_size
         self.pools = ['max', "average", 'min']
         if kind not in self.pools:
-            raise ValueError("Pool kind not understoood.")            
+            raise ValueError("Pool kind not understood.")            
         self.kind = kind
 ```
 
-Most of attributes are common to the `Convolution layer`.
+Most of the attributes are common to the `Convolution layer.
 * Just like Keras, we will set the `stride` to `kernel_size` if nothing is given.
-* The pools is a list of available pooling type. Currently, I have only included 3.
+* The pool is a list of available pooling types. Currently, I have only included 3.
 
 #### 3.1.4.2 Method `set_output_shape`
-As always, this method will always be called from the stackking class.
+As always, this method will always be called from the stacking class.
 
 ```python
     def set_output_shape(self):
@@ -635,9 +636,9 @@ $$
 \begin{equation}
 x = 
 \begin{pmatrix}
-1 & 2 & 3 & 1 \\ 
-11 & 12 & 4 & 10 \\
-101 & 11 & 88 & 10 \\
+1 & 2 & 3 & 1 \\\
+11 & 12 & 4 & 10 \\\
+101 & 11 & 88 & 10 \\\
 10 & 11 & 11 & 5 \end{pmatrix}
 \end{equation}
 
@@ -646,27 +647,27 @@ $$
 After maxpool of size `(2, 2)` and stride `(2, 2)`:-
 * First our pointer will be 0 for row/col i.e `curr_pointer = (0, 0)` and  window will be values of  `curr_pointer:curr_pointer+kernel_size-1`.
 * In other words, our first window will be `[[1 2] [11, 12]]`.
-* Then for maxpool, maximum value on this window is 12, so 12 is taken, if average pool then output of this window will be `6.5` i.e average of `1, 2, 11, 12`.
+* Then for the max pool, the maximum value on this window is 12, so 12 is taken, if the average pool then the output of this window will be `6.5` i.e average of `1, 2, 11, 12`.
 * Then current pointer of row will be `prev_pointer[0]+stride[0]`
-* Now new window will be `[[3 1] [4 10]]` and maxpool will be `10`.
-* Now we have reached the end of this row, we will increase the column. Then current pointer will be `curr_pointer + (0, stride[1]-1)`. 
+* Now the new window will be `[[3 1] [4 10]]` and the max pool will be `10`.
+* Now we have reached the end of this row, we will increase the column. Then the current pointer will be `curr_pointer + (0, stride[1]-1)`. 
 
 <b>Maxpooling of `𝑥`:</b>
 
 $$
 \begin{pmatrix}
-12 & 10 \\ 
+12 & 10 \\\ 
 101 & 88 \end{pmatrix}
 $$
 
-In more simpler way, we took only those values which contributes high value.
+In a simpler way, we took only those values which contribute to high value.
 
 #### 3.1.4.4 Backpropagate Method
 
 ```python
 def backpropagate(self, nx_layer):
     """
-        Gradients are passed through index of latest output value .
+        Gradients are passed through an index of the latest output value.
     """
     layer = self
     stride = layer.stride
@@ -703,12 +704,12 @@ def backpropagate(self, nx_layer):
             i+=1
 ```
 
-Main idea behind the backpropagation on Pooling Layer is:-
-* If pooling is `Max` then error is passed through index of largest value on chunk.
-* If pooling is `Min`then error is passed through index of smallest value on chunk.
-* If pooling is `average` then error is passed through entire indices on chunk
+The main idea behind the backpropagation on Pooling Layer is:-
+* If pooling is `Max` then an error is passed through an index of the largest value on the chunk.
+* If pooling is `Min`then error is passed through an index of the smallest value on the chunk.
+* If pooling is `average` then an error is passed through entire indices on a chunk
 
-Since the output shape and input shape's number of channel remains same, we loop through each channel and get the delta for each channel. So we are not adding the delta term.
+Since the output shape and input shape's number of the channel remain the same, we loop through each channel and get the delta for each channel. So we are not adding the delta term.
 
 <b>Lets test our pooling class:</b>
 
@@ -718,12 +719,12 @@ test = np.random.randint(1, 100, (32, 32, 3))
 o = pool.apply_activation(test)
 ```
 
-If you don't get any error then, great lets proceed. Else please see the reference file on github.
+If you don't get any errors then, great let's proceed. Else please see the reference file on GitHub.
 
 
 
 ### 3.1.5 Flatten Layer
-Flatten layer's main task is to take entire feature maps of previous layer and make a 1d vector from it. Flatten layer is used before passing a result of convolution to classification layers.
+Flatten layer's main task is to take entire feature maps of the previous layer and make a 1d vector from it. Flatten layer is used before passing a result of convolution to classification layers.
 
 Let the input to `Flatten` be `(3, 3, 3)`.
 
@@ -736,13 +737,13 @@ x =
 \begin{pmatrix}
 1 & 11 & 12\end{pmatrix} 
 \begin{pmatrix}
-4 & 10 & 1\end{pmatrix}\\
+4 & 10 & 1\end{pmatrix}\\\
 \begin{pmatrix}
 101 & 11 & 88\end{pmatrix}
 \begin{pmatrix}
 10 & 11 & 11\end{pmatrix}
 \begin{pmatrix}
-5 & 111 & 33\end{pmatrix}\\
+5 & 111 & 33\end{pmatrix}\\\
 \begin{pmatrix}
 9 & 11 & 123\end{pmatrix}
 \begin{pmatrix}
@@ -801,10 +802,10 @@ class Flatten:
         self.delta = self.delta.reshape(self.input_shape)
 ```
 
-<b>Note: There will be no attributes like `weights`, `biases` on `Flatten` layer but i used to make it work on doing optimization</b>
+<b>Note: There will be no attributes like `weights`, `biases` on `Flatten` layer but I used to make it work on doing optimization</b>
 * The output shape of this layer will be the multiplication of `(num_rows, num_cols, num_channels)`.
-* Since this layer will be connected before the feedforward layer, error and delta terms are calculated like on feedforward layer.
-* The shape of delta of this layer will be shape of input.
+* Since this layer will be connected before the feedforward layer, error and delta terms are calculated like on the feedforward layer.
+* The shape of the delta of this layer will be the shape of the input.
 
 <b> Lets test our flatten class:</b>
 
@@ -814,20 +815,20 @@ f = Flatten()
 print(f.apply_activation(test))  
 ```
 
-If you got output like below, then cool:-
+If you got output like the below, then cool:-
 
 `[1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1]`
 
-## 3.2 Creating a Stackking class
+## 3.2 Creating a Stacking class
 
-We will name it to `CNN`.
+We will name it `CNN`.
 
 As previous feedforward post, this will perform all the tasks like training, testing and so on.
 
 
 ### 3.2.1 Initializing a class
 
-Please refer to previous post about Feedforward Neural Network for more explanation.
+Please refer to the previous post about Feedforward Neural Networks for more explanation.
 
 ```python
 class CNN():
@@ -894,7 +895,7 @@ def add(self, layer):
 
 
 ### 3.2.3 Writing a `summary` method:
-Please refer to previous post for more explanation.
+Please refer to the previous post for more explanation.
 
 ```python
     def summary(self):
@@ -934,7 +935,7 @@ m.summary()
 ```
 
 ### 3.2.4 Writing a `train` method
-This method is identical to the `train` method of Feed Forward Neural Network. Please refer to the previous post.
+This method is identical to the `train` method of feeding a Forward Neural Network. Please refer to the previous post.
 
 ```python
 def train(self, X, Y, epochs, show_every=1, batch_size = 32, shuffle=True, val_split=0.1, val_x=None, val_y=None):     
@@ -1009,7 +1010,7 @@ def train(self, X, Y, epochs, show_every=1, batch_size = 32, shuffle=True, val_s
 ```
 
 ### 3.2.5 `check_trainnable` method
-This method does same work like previous post's method. 
+This method does the same work as the previous post's method. 
 
 ```python
 def check_trainnable(self, X, Y):
@@ -1026,7 +1027,7 @@ def check_trainnable(self, X, Y):
 ```
 
 ### 3.2.6 Writing `compiling` method
-This method is identical to previous post's method.
+This method is identical to the previous post's method.
 
 ```python
 def compile_model(self, lr=0.01, mr = 0.001, opt = "sgd", loss = "mse", metrics=['mse']):
@@ -1047,10 +1048,10 @@ def compile_model(self, lr=0.01, mr = 0.001, opt = "sgd", loss = "mse", metrics=
     self.optimizer = self.optimizer.opt_dict[opt]        
 ```   
 
-##### In order to run properly, we need to have `Optimizer` class defined. [Please see this article about it.]({{site.url}}/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/) 
+##### In order to run properly, we need to have the `Optimizer` class defined. [Please see this article about it.](https://dataqoil.com/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/) 
 
-### 3.2.7 Writing `feedforward` method
-This method is also same as previous post's method.
+### 3.2.7 Writing the `feedforward` method
+This method is also the same as the previous post's method.
 
 ```python
 def feedforward(self, x, train=True):
@@ -1072,7 +1073,7 @@ def feedforward(self, x, train=True):
 ```
 
 ### 3.2.8 Writing `apply_loss` method
-This method is identical to previous post's method.
+This method is identical to the previous post's method.
 
 ```python
 def apply_loss(self, y, out):
@@ -1088,7 +1089,7 @@ def apply_loss(self, y, out):
         else: #print("Using Categorical CSE.")            
             if self.layers[-1].activation == "softmax":
                 """if o/p layer's fxn is softmax then loss is y - out
-                check the derivation of softmax and crossentropy with derivative"""
+                check the derivation of softmax and cross-entropy with derivative"""
                 loss = y - out
                 loss = loss / self.layers[-1].activation_dfn(out)
             else:
@@ -1099,8 +1100,8 @@ def apply_loss(self, y, out):
         return loss, cse
 ```
 
-### 3.2.9 Writing `backpropagate` method
-This method is identical to previous post's method.
+### 3.2.9 Writing the `backpropagate` method
+This method is identical to the previous post's method.
 
 ```python
     def backpropagate(self, loss, update):
@@ -1151,13 +1152,15 @@ def predict(self, X):
 ```
 
 ## 3.3 Preparing Optimizers
-* [Please refer to this article for optimizers code.]({{site.url}}/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/) 
-* [Or find these entire code on this notebook.](https://github.com/q-viper/ML-from-Basics/blob/master/Optimizers.ipynb)
+* [Please refer to this article for optimizers code.](https://dataqoil.com/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/) 
+* [Or find the entire code in this notebook.](https://github.com/q-viper/ML-from-Basics/blob/master/Optimizers.ipynb)
 
-# 4 Testing with our Model
-## 4.1 Prepare datasets
+## 4 Testing with our Model
+We just created Convolutional Neural Networks from Scratch but its time for a test.
 
-<b>Note:- More the training samples, more the performance of model(but not always). But more samples takes more time to complete epoch.</b>
+### 4.1 Prepare datasets
+
+<b>Note:- More the training samples, more the performance of model(but not always). But more samples take more time to complete the epoch.</b>
 
 ```python
 from keras.datasets import mnist
@@ -1172,7 +1175,7 @@ xt = xt.reshape(-1, 28, 28, 1)
 yt = pd.get_dummies(y_test).to_numpy()
 ```
 
-## 4.2 Test 1:- Model with only one `Conv2d` and `Output` layer
+### 4.2 Test 1:- Model with only one `Conv2d` and `Output` layer
 
 ```python
 m = CNN()
@@ -1183,14 +1186,14 @@ m.compile_model(lr=0.01, opt="adam", loss="cse", mr=0.001)
 m.summary()
 ```
 
-### 4.2.1 Train model
-For the sake of simplicity I am using only 1000 samples from our this test. Additionally we will use 100 of testing samples too.
+#### 4.2.1 Train model
+For the sake of simplicity, I am using only 1000 samples from this test. Additionally, we will use 100 testing samples too.
 
 ```python
 m.train(x[:1000], y[:1000], epochs=100, batch_size=32, val_x=xt[:100], val_y=yt[:100])
 ```
 
-The validation accuracy of model will not be that satisfactory but we can give it a try. 
+The validation accuracy of the model will not be that satisfactory but we can give it a try. 
 
 After 70th epoch:
 
@@ -1202,20 +1205,20 @@ Val Loss: 320.0215 Val Accuracy: 63.0%
 
 <b>When using entire datasets, the model's performance will be great.</b>
 
-## 4.3 Test 2:- Model with 2 `Conv2d` and Output Layer
+### 4.3 Test 2:- Model with 2 `Conv2d` and Output Layer
 ```python
 m.add(Conv2d(input_shape = (28, 28, 1), filters = 8, padding=None, kernel_size=(3, 3), activation="relu"))
 m.add(Conv2d(filters=16, kernel_size=(3, 3), padding=None, activation="relu"))
 ```
 
-### 4.3.1 Train model
-Lets take 10000 of training samle and 500 of validation samples. Time to perform a epoch will be huge but accuracy will be great.
+#### 4.3.1 Train model
+Let's take 10000 training samples and 500 validation samples. The time to perform an epoch will be huge but the accuracy will be great.
 
 <code>
 m.train(x[:10000], y[:10000], epochs=100, batch_size=32, val_x=xt[:500], val_y=yt[:500])
 </code>
 
-Output is something like below:-
+Output is something like the below:-
 
 ```
 Epoch: 0, Time: 10528.569sec
@@ -1241,8 +1244,8 @@ Val Loss: 487.3858 Val Accuracy: 81.8%
 
 > It is clear that our model's performance will be good after training more with more data. To be honest, our model's performance is not as good as `keras` but it is worth trying to code it from scratch.
 
-## 4.4 Test 3:- A complex model
-Lets test our new model, which will have all previous assumed layers.
+### 4.4 Test 3:- A complex model
+Let's test our new model, which will have all previously assumed layers.
 ```python
 m = CNN()
 m.add(Conv2d(input_shape = (28, 28, 1), filters = 4, padding=None, kernel_size=(3, 3), activation="relu"))
@@ -1256,7 +1259,7 @@ m.summary()
 m.train(x[:5000], y[:5000], epochs=100, batch_size=32, val_x=xt[:500], val_y=yt[:500]) 
 ```
 
-<b> Note that, since this model is huge(have many layers) the time to perform single epoch migh be huge so I am taking only `5000` of training examples and `500` of testing samples.</b>
+<b> Note that, since this model is huge(has many layers) the time to perform a single epoch might be huge so I am taking only `5000` training examples and `500` testing samples.</b>
 
 The result on my machine is:-
 
@@ -1282,7 +1285,7 @@ Time: 1640.885sec
 Train Loss: 99970.6308 Train Accuracy: 15.52%
 Val Loss: 10490.2164 Val Accuracy: 13.8% 
 ```
-The first epoch doesn't seem that much of satisfactionary but what might be other epoch?
+The first epoch doesn't seem that much of satisfactory but what might be the other epoch?
 
 ```
 Epoch: 10:
@@ -1291,7 +1294,7 @@ Train Loss: 37848.7813 Train Accuracy: 57.68%
 Val Loss: 4674.9309 Val Accuracy: 53.4%
 ```
 
-It is quite clear that model is progressing slowly. And 22nd epoch is:-
+It is quite clear that the model is progressing slowly. And 22nd epoch is:-
 
 ```
 Epoch: 22:
@@ -1304,10 +1307,10 @@ Time: 1420.809sec
 Train Loss: 17295.6898 Train Accuracy: 83.1%
 Val Loss: 2358.6877 Val Accuracy: 76.2% 
 ```
-Similar model on `keras` gives 90+ accuracy within 5th epoch but good think about our model is, it is training.
+A similar model on `keras` gives 90+ accuracy within the 5th epoch but the good thing about our model is, it is training.
 
-## 4.5 Test 4:- A complex model
-Our model doesn't seem to do great on previous complex architecture. But what if we modified it little bit? I am using my days to train these model and I have also done lots of hit and trial also.
+### 4.5 Test 4:- A complex model
+Our model doesn't seem to do great on previous complex architecture. But what if we modified it a little bit? I am using my days to train these models and I have also done lots of hit and trial also.
 
 ```python
 m = CNN()
@@ -1360,17 +1363,18 @@ Val Loss: 19256.6702 Val Accuracy: 61.0%
 <i>Model is progressing......</i>
 
 
-# 5 Bonus Topics
+## 5 Bonus Topics
 * Good thing, these topics are interesting.
 * Bad thing, you are on your own(but you can leave a comment if explanation needed)
-## 5.1 Save Model 
-This method can be placed inside the class that is stackking the layers. Else pass the model object.
+
+### 5.1 Save Model 
+Let's save our model created by Convolutional Neural Networks from Scratch. This method can be placed inside the class that is stacking the layers. Else pass the model object.
 
 ```python
 def save_model(self, path="model.json"):
         """
-            path:- where to save a model including filename
-            saves Json file on given path.
+            path:- where to save a model including the filename
+            saves Json files on a given path.
         """
         dict_model = {"model":str(type(self).__name__)}
         to_save = ["name", "isbias", "neurons", "input_shape", "output_shape", 
@@ -1402,19 +1406,19 @@ def save_model(self, path="model.json"):
 save_model(m)
 ```
 
-At last line of above code, we are calling a method to save our model. If we looked to our local directory, then there is a json file.
+In the last line of the above code, we are calling a method to save our model. If we looked at our local directory, then there is a JSON file.
 
-## 5.2 Load Model
-This method can be treat as independent method.
+### 5.2 Load Model
+This method can be treated as an independent method.
 
 ```python
 def load_model(path="model.json"):
     """
-        path:- path of model file including filename        
+        path:- the path of model file including filename        
         returns:- a model
     """    
     models = {"CNN": CNN}
-    layers = {"FFL": FFL, "Conv2d":Conv2d, "Dropout":Dropout, "Flatten": Flatten, "Pool2d":Pool2d}
+    layers = {"FFL": FFL, "Conv2d": Conv2d, "Dropout": Dropout, "Flatten": Flatten, "Pool2d": Pool2d}
     with open(path, "r") as f:
         dict_model = json.load(f)
         model = dict_model["model"]
@@ -1465,29 +1469,29 @@ mm.summary()
 m.predict(x[0]) == mm.predict(x[0])
 ```
 
-On above block of code, we tried to load a model. I am not going to describe much here but we are printing summary and then checking if the prediction from original model and loaded model is right or wrong. If our model is loaded properly, then the array of all `True` will be printed.
+On the above block of code, we tried to load a model. I am not going to describe much here but we are printing a summary and then checking if the prediction from the original model and loaded model is right or wrong. If our model is loaded properly, then the array of all `True` will be printed.
 
-## Upsample Layer
-Note that, `Pooling Layer` can be called as downsampling layer because it takes samples of pixels and returns new image with shape lesser than original image. And the opposite of this layer is `Upsample Layer`. Upsample layer generally increase the size of shape, in more simple words, it zooms the image. And if we see to the configuration of `YOLO(You Only Look Once)` authors have used multiple times `Upsample Layer`. For simpler case, I am doing the pixels expansion. 
-Lets take an example(on my case):
+### Upsample Layer
+Note that, the `Pooling Layer` can be called a downsampling layer because it takes samples of pixels and returns a new image with a shape lesser than the original image. And the opposite of this layer is `Upsample Layer`. Upsample layer generally increases the size of the shape, in more simple words, it zooms the image. And if we see at the configuration of `YOLO(You Only Look Once)` authors have used multiple times `Upsample Layer`. In a simpler case, I am doing the pixel expansion. 
+Let's take an example(in my case):
 
 $$
 \begin{pmatrix}
-12 & 10 \\ 
+12 & 10 \\\ 
 101 & 88 \end{pmatrix}
 $$
 
-The output after the kernel (2, 2) will be<i>(the kernel here will not exactly the kernel like on Maxpool or CNN but it will be used as expansion rate of (row, col))</i>:-
+The output after the kernel (2, 2) will be<i>(the kernel here will not exactly be the kernel like on Maxpool or CNN but it will be used as expansion rate of (row, col))</i>:-
 
 $$
 \begin{pmatrix}
-12 & 12 & 10 & 10\\ 
-12 & 12 & 10 & 10\\
-101 & 101 & 88 & 88\\ 
+12 & 12 & 10 & 10\\\
+12 & 12 & 10 & 10\\\
+101 & 101 & 88 & 88\\\ 
 101 & 101 & 88 & 88\end{pmatrix}
 $$
 
-This is just a simple case of Upsampling, and I haven not done much research about it.
+This is just a simple case of Upsampling, and I have not done much research about it.
 
 ```python
 class Upsample:
@@ -1535,7 +1539,7 @@ class Upsample:
         return self.out
     def backpropagate(self, nx_layer):
         """
-            Gradients are passed through index of largest value .
+            Gradients are passed through an index of the largest value.
         """
         layer = self
         stride = layer.stride
@@ -1562,7 +1566,7 @@ class Upsample:
                 i+=1            
 ```
 
-I edited the code of `Pool2d` for this and `backpropagate` is bit different. You can test this code by:-
+I edited the code of `Pool2d` for this and `backpropagate` is a bit different. You can test this code by:-
 
 ```python
 us = Upsample(kernel_size=(1, 3))
@@ -1570,8 +1574,8 @@ img = us.apply_activation(x_train[0].reshape(28, 28, 1))
 plt.imshow(img.reshape(28, 28*3))
 ```
 
-## Visualizing Learned Features
-Well, we trained a model but what actually did a model learned? We will be taking the model that we saved earlier. It is loaded on `mm`. And now we will loop through all layers and corresponding weights are visualized.
+### Visualizing Learned Features
+Well, we trained a model but what actually did a model learned? We will be taking the model that we saved earlier. It is loaded on `mm`. And now we will loop through all layers and the corresponding weights are visualized.
 
 ```python
 for l in mm.layers:
@@ -1588,7 +1592,7 @@ for l in mm.layers:
 ```
 
 ### More on Visualization
-How will an test image change through the layers? Lets try to find out. When a image gets into any CNN layer, we apply the filters to each channel and sum them. Our `feedforward` method has granted us huge application because we can set the `input` and `output` of each layer for current example. And yes thats what we are using.
+How will a test image change through the layers? Let's try to find out. When an image gets into any CNN layer, we apply the filters to each channel and sum them. Our `feedforward` method has granted us a huge application because we can set the `input` and `output` of each layer for the current example. And yes that's what we are using.
 
 ```python
 timg = x[0]
@@ -1649,18 +1653,20 @@ for l in mm.layers:
     plt.show()
 ```
 
-![image-title-here]({{site.url}}/assets/wp-content/uploads/2020/06/visualize.png){:class="img-responsive"}
+![image-title-here](https://q-viper.github.io/assets/wp-content/uploads/2020/06/visualize.png)
+
+This ends the Convolutional Neural Networks from scratch part of the blog. There are many other algorithms done from scratch and available in this site too.
 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="6-References:">6 References:<a class="anchor-link" href="#6-References:">&#182;</a></h1><p>I have not done all these codes by myself. I have tried to give credits and references whenever I borrowed concepts and codes. I got help from googling and mostly stackoverflow. However I have to mentions some of great resources at last:-</p>
+<h2 id="6-References:">6 References:<a class="anchor-link" href="#6-References:">&#182;</a></h2><p>I have not done all these codes by myself. I have tried to give credit and references whenever I borrowed concepts and codes. I got help from googling and mostly StackOverflow. However, I have to mention some the great resources at last:-</p>
 <ul>
 <li><a href="https://www.github.com/ShivamShrirao/dnn_from_scratch">Optimizers code were referenced from here</a></li>
 <li><a href="https://ruder.io/optimizing-gradient-descent/index.html">An Overview of Gradient Descent Optimization Algorithms</a></li>
-<li><a href="https://towardsdatascience.com/convolutional-neural-network-from-ground-up-c67bb41454e1">Convolutional Neural Network from Ground Up</a></li>
+<li><a href="https://towardsdatascience.com/convolutional-neural-network-from-ground-up-c67bb41454e1">Convolutional Neural Network from Scratch</a></li>
 <li><a href="https://sefiks.com/2017/11/03/a-gentle-introduction-to-convolutional-neural-networks/">A Gentle Introduction to CNN</a></li>
-<li><a href="https://victorzhou.com/blog/intro-to-cnns-part-2/">Training a Convolutional Neural Network</a></li>
+<li><a href="https://victorzhou.com/blog/intro-to-cnns-part-2/">Training a Convolutional Neural Networks from Scratch</a></li>
 </ul>
 
 </div>
@@ -1669,15 +1675,16 @@ for l in mm.layers:
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="7-You-might-like-to-view:-">7 You might like to view:-<a class="anchor-link" href="#7-You-might-like-to-view:-">&#182;</a></h1><ul>
-<li><a href="{{site.url}}/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/">Writing Popular Machine Learning Optimizers from Scratch on Python</a></li>
-<li><a href="{{site.url}}/2020/05/30/image-processing-class-from-scratch-on-python/">Writing Image Processing Class From Scratch on Python</a></li>
-<li><a href="{{site.url}}/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/">Writing a Deep Neural Network from Scratch on Python</a></li>
-<li><a href="{{site.url}}/2020/06/05/convolutional-neural-networks-from-scratch-on-python/">Convolutional Neural Networks from Scratch on Python</a></li>
+<h2 id="7-You-might-like-to-view:-">7 You might like to view:-<a class="anchor-link" href="#7-You-might-like-to-view:-">&#182;</a></h1><ul>
+<li><a href="https://dataqoil.com/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/">Writing Popular Machine Learning Optimizers from Scratch on Python</a></li>
+<li><a href="https://dataqoil.com/2020/05/30/image-processing-class-from-scratch-on-python/">Writing Image Processing Class From Scratch on Python</a></li>
+<li><a href="https://dataqoil.com/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/">Writing a Deep Neural Network from Scratch on Python</a></li>
+<li><a href="https://dataqoil.com/2020/06/05/convolutional-neural-networks-from-scratch-on-python/">Convolutional Neural Networks from Scratch on Python</a></li>
 </ul>
-<p>For the production phase, it is always best idea to use frameworks but for the learning phase, starting from the scratch is a great idea. I also got suggestions from friends that, prof. Adrew Ng's contents drives us through the scratch but I never got chance to watch one. I am sharing a notebook and repository link also. On next blog I will try to do <strong>RNN</strong> from scratch. Please leave a feedback, and if you find this good content then sharing is caring. Thank you for your time and please ping me on **[twitter](https://twitter.com/Quassarianviper)**. You can find all these files under <a href="https://github.com/q-viper/ML-from-Basics">ML From Basics</a>.</p>
+
+
+<p>For the production phase, it is always the best idea to use frameworks but for the learning phase, doing Convolutional Neural Networks from Scratch is a great idea. I also got suggestions from friends that, Prof. Andrew Ng's contents drive us through scratch but I never got a chance to watch one. I am sharing a notebook and repository link also. In the next blog, I will try to do <strong>RNN</strong> from scratch. Please leave feedback, and if you find this good content then sharing is caring. Thank you for your time and please ping me on **[Twitter](https://twitter.com/Quassarianviper)**. You can find all these files under <a href="https://github.com/q-viper/ML-from-Basics">ML From Basics</a>.</p>
 
 </div>
 </div>
 </div>
-    
