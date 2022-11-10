@@ -495,7 +495,8 @@ class Dropout:
         if train:
             self.input_data = x
             flat = np.array(self.input_data).flatten()
-            random_indices = np.random.randint(0, len(flat), int(self.prob * len(flat)))
+            random_indices = np.random.choice(len(flat), int(self.prob*len(flat)), replace=False)
+            # np.random.randint(0, len(flat), int(self.prob * len(flat)))
             flat[random_indices] = 0
             self.output = flat.reshape(x.shape)
             return self.output
