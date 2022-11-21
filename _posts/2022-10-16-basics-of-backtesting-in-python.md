@@ -1,5 +1,5 @@
 ---
-title:  Basics of Backtesting in Python
+title:  Basics of Stock Backtesting in Python
 date:   2022-10-16 01:29:17 +0545
 categories:
     - Python
@@ -9,6 +9,8 @@ tags:
     - python
     - stock
     - backtesting
+header:
+  teaser: assets/backtesting/bt14.png
 ---
 Stock Backtesting in Python is way of testing our strategy in a historical data to see if our strategy makes any money or not. Let's start with a simple story.
 
