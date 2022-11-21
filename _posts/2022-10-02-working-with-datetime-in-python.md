@@ -8,7 +8,7 @@ tags:
     - python
     - datetime
 header:
-  teaser: assets/general/datetime.png
+  teaser: assets/python/datetime.png
 ---
 Working with DateTime in Python can be a challenging job if we do not know the right module to do the right thing. Here we will explore some of the useful modules based on their purpose and application rather than exploring the module as a whole.
 

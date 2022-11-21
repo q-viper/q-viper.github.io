@@ -8,6 +8,8 @@ tags:
     - python
     - joblib
     - multiprocess
+header:
+  teaser: assets/python/threading.png
 ---
 
 Multi-threading in Python is often used when there are tasks related to I/O bound. But before going further, let's take few examples where multi-threading could be used:
