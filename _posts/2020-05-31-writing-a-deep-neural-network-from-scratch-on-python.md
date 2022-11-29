@@ -13,14 +13,14 @@ tags:
   - neural networks
   - python
 ---
-
+ 
 **Contents**
 * TOC
 {:toc}
-
-
-Let's write a multi layer deep neural network from scratch in Python. But why do we need to write neural network from scratch while there are already tools like Keras? It is a good exercise as well as refreshment of the knowledge about how neural networks works. For neural network from scratch, we need to have some knowledge of Calculus, Linear Algebra, OOP (here in this blog).
-
+ 
+ 
+Let's write a multi layer deep neural network from scratch in Python. But why do we need to write neural networks from scratch while there are already tools like Keras? It is a good exercise as well as refreshment of the knowledge about how neural networks works. For a neural network from scratch, we need to have some knowledge of Calculus, Linear Algebra, OOP (here in this blog).
+ 
 I am not using <i>gist</i> for codes, so don't panic if you find unfriendly text formats. Also I have written this blog on `Markdown` of `Jupyter Notebook` so the formats are a bit different. But the truth is, the class we will be building will be just like `keras`. Yes Keras!
  
 ## Updates:
@@ -40,9 +40,9 @@ For this code, I will be using:
 * `time` for viewing time
  
 ## 2. Warning
-<b>I am not going to make next Keras or Tensorflow here.</b> This is only going to be simple multi layer neural network from scratch.
+<b>I am not going to make the next Keras or Tensorflow here.</b> This is only going to be a simple multi-layer neural network from scratch.
  
-Most of these days, we have many ML frameworks with many choices. We have high level to low level frameworks. Recently PyTorch has earned huge popularity but for beginners, Keras is a best choice. But writing a ML code and neural network from scratch is always a challenging and complex for even intermediate programmers. The mathematics behind the cute ML frameworks are scary. But once we understood a prerequisites of ML, then starting to code neural network from scratch is a good idea.
+Most of these days, we have many ML frameworks with many choices. We have high level to low level frameworks. Recently PyTorch has gained huge popularity but for beginners, Keras is the best choice. But writing a ML code and neural network from scratch is always challenging and complex for even intermediate programmers. The mathematics behind the cute ML frameworks are scary. But once we understood the prerequisites of ML, then starting to code neural networks from scratch is a good idea.
  
 ## 3. Steps
 * Create a FF layer class.
@@ -110,7 +110,7 @@ OOP is a very awesome feature of python and using the object of FF layer class, 
  
  
  
-### 3.1.3 Now prepare the activation functions. For begining, we will use only few.
+### 3.1.3 Now prepare the activation functions. For beginning, we will use only few.
 ```python
     def activation_fn(self, r):
         """
@@ -266,7 +266,7 @@ Note that: If this layer is the output layer, then the error will be the final e
  
 Again going back to our method `backpropagate` here, this method is called only when this layer is not the final layer. Otherwise the next layer won't exist. Let's take a look into `self.error`, it is brought to this layer from its immediate layer or called `downstream(j)` here. Then we find the delta term. We need the first derivative of the `activation` function of this layer and we do it wrt output. When the term `delta` for this layer is found, we can get `delta_weights` for this layer by multiplying `delta` with this layer's most recent `input`. Similarly `delta_biases` is just the term delta. Note that, the len of delta will be equal to a total number of neurons. It stores the delta term for this layer.
  
-## 3.2 Writing a stackking class
+## 3.2 Writing a stacking class
 AHHHH long journey Aye!!
  
 We will name it `NN`. And we will perform all training operations under this class.
@@ -548,7 +548,7 @@ def train(self, X, Y, epochs, show_every=1, batch_size = 32, shuffle=True):
                 print(f"Accuracy: {round(pred.mean() * 100, 4)}%")    
 ```
  
-Alright folks, this is the train method. I hope you are not scared with the size.
+Alright folks, this is the train method. I hope you are not scared of the size.
 Some major steps:
 * Check if the dataset is trainable or not
 * Start a timer(or should we start timer after making batches)
@@ -978,8 +978,8 @@ m = load_model()
             out.append(self.feedforward(x))
         return out
 ```
-Now, this is where this blog ends but I have written another blog, [Convolutional Neural Network from Scratch](https://dataqoil.com/2020/06/05/convolutional-neural-networks-from-scratch-on-python/) too. I hope you’ve found this blog to be useful and this will be helpful when you try to write your own version of a neural network from scratch. 
-
+Now, this is where this blog ends but I have written another blog, [Convolutional Neural Network from Scratch](https://dataqoil.com/2020/06/05/convolutional-neural-networks-from-scratch-on-python/) too. I hope you’ve found this blog to be useful and this will be helpful when you try to write your own version of a neural network from scratch.
+ 
 ## 7 References and Credits
 * [Optimizers were referenced from here](https://www.github.com/ShivamShrirao/dnn_from_scratch)
 * [About Softmax Activation Function and Crossentropy](https://www.sefiks.com/2017/11/08/softmax-as-a-neural-networks-activation-function)
@@ -987,4 +987,6 @@ Now, this is where this blog ends but I have written another blog, [Convolutiona
 * Tensorflow For Dummies by Matthew Scarpino
 * [Artificial Intelligence Deep Learning Machine Learning Tutorials](https://www.github.com/TarrySingh/Artificial-Intelligence-Deep-Learning-Machine-Learning-Tutorials)(Most awesome repository.)
 * Grokking Deep Learning by Andrew Trask
+ 
+ 
 
