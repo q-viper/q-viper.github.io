@@ -1,6 +1,6 @@
 ---
 title:  "Advent of Code 2022 with Python"
-date:   2022-12-01 09:29:17
+date:   2022-12-04 09:29:17
 categories:
     - Python
     - Challenge
@@ -12,12 +12,11 @@ header:
 ---
 The advent of Code is a yearly festival for programmers like me where we try to solve different stories to gain stars. I love these challenge because its fun and takes us slowly from beginner level to harder level. I am really weak in competitive programming and DSA stuff but still, I like to try Advent of Code. Last year I was only able to complete up to day 16 and I had to take help from some sources like Reddit too. This year I forgot the start date and it's already December 3. I will not be in the rank but this is really a fun and great challenge. Let's start from Day 1.
 
-
-
 The input data will be in two parts, the first part will be the test given on the site and the second part is the personalized input. There will be a special line `Split from here` which separates these parts. 
 
 After I copy the data from the challenge page to the respective text file of a challenge i.e. day1.txt for the day 1 challenge, I write a solution for the test first and if it matches the answer then I run it on my input. Mostly it works.
 
+As usual, my solutions are in [repository](https://github.com/q-viper/Adevent-Of-Code.git) as well.
 
 ## Preparation and Pushing Solution
 
