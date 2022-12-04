@@ -1,6 +1,6 @@
 ---
 title:  "Advent of Code 2022 with Python"
-date:   2022-12-01 01:29:17 +0545
+date:   2022-12-01 09:29:17 +0545
 categories:
     - Python
     - Challenge
