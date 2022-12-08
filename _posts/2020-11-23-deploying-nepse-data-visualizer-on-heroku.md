@@ -12,8 +12,8 @@ tags:
   - heroku
   - web development
 header:
-  teaser: https://banksnepal.com/laravel-filemanager/photos/1/news/topnews/nepse.cr%20brk.jpeg
-  overlay_image: https://www.newbusinessage.com/img/news/20190522025606_20190522121752_nepse.jpg
+  teaser: asset/nepse/date_vs_buyer.png
+  overlay_image: asset/nepse/date_vs_buyer.png
 subtitle: NEPSE Data visualizer.
 ---
 
