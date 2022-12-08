@@ -62,7 +62,7 @@ Do you have a gig to sell? Do you have a compelling project that you need to sel
 
 
 
-    Image from the digest.myhq.in on [How to make money on Fiverr?](https://digest.myhq.in/how-make-money-on-fiverr/)
+Image from the digest.myhq.in on [How to make money on Fiverr?](https://digest.myhq.in/how-make-money-on-fiverr/)
 
 
 #### Tips to win in Fiverr
@@ -162,7 +162,7 @@ While talking about remote jobs, We Work Remotely comes into the 10 top list bec
 Tips to win in this remote job platform are the same as previous ones and there is no easy way either.
 
 
-![We Work Remotely Logo]({{site.url}}/assets/freelancing/where_to/we_wrok_remotely.png)
+![We Work Remotely Logo]({{site.url}}/assets/freelancing/where_to/we_work_remotely.png)
 
 
 Image from [weworkremotely.com](https://weworkremotely.com/)
