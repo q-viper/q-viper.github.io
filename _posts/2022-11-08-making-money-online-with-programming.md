@@ -26,7 +26,7 @@ Here in this blog, we will share some tips and tricks if you are willing to be o
 Of course, one needs to have an idea before making money with programming but the idea here I am sharing is the one to sell. What do you want to sell? If you use hours of social media like Facebook and TikTok, you will be selling your data and engagements for wasted time. 
 
 
-![]({{site.url}}/assets/freelancing/getting_started/images/image3.jpg)
+![]({{site.url}}/assets/freelancing/getting_started/image3.jpg)
 
 Image from Pixabay Free Images.
 
