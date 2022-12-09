@@ -17,7 +17,7 @@ tags:
   - unity3d
 ---
 # Creating a Chatbot on Android Using Unity3d and RASA
-I might stop to write new blogs in this site so please visit [dataqoil.com](https://dataqoil.com) for more cool stuffs.
+I might stop writing new blogs on this site so please visit [dataqoil.com](https://dataqoil.com) for more cool kinds of stuff.
 
 **Contents**
 * TOC

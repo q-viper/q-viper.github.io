@@ -18,7 +18,7 @@ subtitle: NEPSE Data visualizer.
 ---
 
 ## Introduction
-I might stop to write new blogs in this site and will actively write in [dataqoil.com](https://dataqoil.com) so, please visit for more cool stuffs.
+I might stop writing new blogs on this site so please visit [dataqoil.com](https://dataqoil.com) for more cool kinds of stuff.
 
 Visualise Nepal Stock Exchange Data and Deploy it On Heroku Using Streamlit and Plotly.
 
