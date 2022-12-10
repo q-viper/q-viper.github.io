@@ -30,22 +30,6 @@ WordCloud in Python can be done in different ways but one of the most popular an
     Requirement already satisfied: six in c:\programdata\anaconda3\lib\site-packages (from cycler>=0.10->matplotlib->wordcloud) (1.15.0)
     
 
-    WARNING: Ignoring invalid distribution -sgpack (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -ryptography (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -rapt (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -lick (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution - (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -equests (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -cikit-learn (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -sgpack (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -ryptography (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -rapt (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -lick (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution - (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -equests (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -cikit-learn (c:\programdata\anaconda3\lib\site-packages)
-    
-
 WordCloud simply is the words scattered in an image and the word's size differs based on different properties. Here in this blog, I will plot a word cloud for based on a tweet created with keywords `['worldcup', 'world cup', 'wcup', 'football', 'qatar worldcup prediction']`. You can read about [how to scrape tweets from this blog](https://dataqoil.com/2022/06/05/scraping-tweets-with-tweepy/) and [how to perform sentiment analysis from this blog](https://dataqoil.com/2022/11/29/worldcup-tweet-sentiment-analysis-in-python/).
 
 ## Importing Packages
@@ -69,23 +53,6 @@ df = pd.read_csv('en1670670038.8448372.csv')
 df.head()
 ```
 
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -237,7 +204,6 @@ df.head()
   </tbody>
 </table>
 <p>5 rows × 26 columns</p>
-</div>
 
 
 
