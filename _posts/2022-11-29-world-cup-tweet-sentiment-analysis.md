@@ -1,22 +1,22 @@
 ---
-title:  "World Cup Tweet Sentiment Analysis in Python"
+title:  "WorldCup Tweet Sentiment Analysis in Python"
 date:   2022-11-22 09:29:17
 categories:
     - Project
 tags:
     - sentiment analysis
     - python
+    - WorldCup
 header:
   teaser: assets/twitter_bot/output_24_0.png
 ---
-
-World Cup tweet sentiment analysis will be done based on tweets related to the world cup.
+WorldCup tweet sentiment analysis will be done based on tweets related to the world cup.
 
 This is a time of the world cup and social media might be full of activities related to the world cup. Most of us pick a side with the country and make posts based on them or against other teams. I remember getting angry with friends while being on the opposite team during WorldCup. Since we are busy on social media and we share our opinion of ours on it, we could be part of heated arguments too. But can we detect those? Let's use sentiment analysis in them.
 
 ## Getting Tweet Data
-The first step of world cup tweet sentiment analysis is to get tweet data related to the world cup and to do that, we will use Tweepy. I have written a walkthrough blog to use Tweepy to get tweets using Tweeter API and you can read it below.
-* [Tweet Scraping Using Tweepy](https://q-viper.github.io/2022/06/04/scraping-tweets-with-tweepy/)
+The first step of WorldCup tweet sentiment analysis is to get tweet data related to the world cup and to do that, we will use Tweepy. I have written a walkthrough blog to use Tweepy to get tweets using Tweeter API and you can read it below.
+* [Tweet Scraping Using Tweepy](https://dataqoil.com/2022/06/05/scraping-tweets-with-tweepy/)
 
 But the first step is to install the latest Tweepy:
 
@@ -38,15 +38,6 @@ But the first step is to install the latest Tweepy:
     WARNING: Ignoring invalid distribution -equests (c:\programdata\anaconda3\lib\site-packages)
     WARNING: Ignoring invalid distribution -cikit-learn (c:\programdata\anaconda3\lib\site-packages)
       Running command git clone --filter=blob:none --quiet https://github.com/tweepy/tweepy.git 'C:\Users\Viper\AppData\Local\Temp\pip-req-build-t4466103'
-    WARNING: Ignoring invalid distribution -sgpack (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -ryptography (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -rapt (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -lick (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution - (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -equests (c:\programdata\anaconda3\lib\site-packages)
-    WARNING: Ignoring invalid distribution -cikit-learn (c:\programdata\anaconda3\lib\site-packages)
-    
-
     
       Cloning https://github.com/tweepy/tweepy.git to c:\users\viper\appdata\local\temp\pip-req-build-t4466103
       Resolved https://github.com/tweepy/tweepy.git to commit 4b0fa90e91eb2b67dfd33f0d27b148e95ea05f65
@@ -97,7 +88,7 @@ api = tw.API(auth, wait_on_rate_limit=True)
 If no error is shown then it worked!
 
 ## A Function to get Related Tweets
-This is taken from the above blog.
+This is taken from the above blog. Following function searches the tweets related to given keyword and writes it in a CSV file. This is crucial for our Worldcup tweet sentiment analysis.
 
 
 ```python
@@ -243,20 +234,6 @@ get_related_tweets(kwds)
 
 
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -552,7 +529,7 @@ get_related_tweets(kwds)
   </tbody>
 </table>
 <p>1849 rows × 26 columns</p>
-</div>
+
 
 
 
@@ -567,20 +544,8 @@ df
 
 
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -876,12 +841,12 @@ df
   </tbody>
 </table>
 <p>1849 rows × 26 columns</p>
-</div>
+
 
 
 
 ## Cleaning Tweet Text
-Looking into the tweet text above, we can see many noises like @, hashtags, and hyperlinks, so let's remove them and pre-process the text to a usable format.
+Looking into the tweet text above, we can see many noises like @, hashtags, and hyperlinks, so let's remove them and pre-process the text to a usable format. 
 
 
 ```python
@@ -914,21 +879,6 @@ df[['text', 'ctext']]
 
 
 
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -996,14 +946,14 @@ df[['text', 'ctext']]
   </tbody>
 </table>
 <p>1849 rows × 2 columns</p>
-</div>
+
 
 
 
 The emoji, @, and # all are gone but there are still numbers present and I do not think that would affect the result. 
 
 ## Getting Sentiment
-For this, we need to install Python Package textblob.
+We have clean text now. Let's perform WorldCup tweet sentiment analysis. For this, we need to install Python Package textblob.
 
 `pip install textblob`
 
@@ -1032,20 +982,7 @@ df[['ctext', 'sentiment']]
 
 
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1113,7 +1050,7 @@ df[['ctext', 'sentiment']]
   </tbody>
 </table>
 <p>1849 rows × 2 columns</p>
-</div>
+
 
 
 
@@ -1131,7 +1068,7 @@ plt.show()
 
 
     
-![png]({{site.url}}/assets/twitter_bot/output_24_0.png)
+![png](https://q-viper.github.io/assets/twitter_bot/output_24_0.png)
     
 
 
@@ -1151,7 +1088,7 @@ plt.show()
 
 
     
-![png]({{site.url}}/assets/twitter_bot/output_27_0.png)
+![png](https://q-viper.github.io/assets/twitter_bot/output_27_0.png)
     
 
 
@@ -1195,14 +1132,15 @@ plt.show()
 
 
     
-![png]({{site.url}}/assets/twitter_bot/output_31_0.png)
+![png](https://q-viper.github.io/assets/twitter_bot/output_31_0.png)
     
 
 
 It seems that android users are the most.
 
 ## Tweets Per Day
-We have a column `tweet_created_at` which means when the tweet was created and we can plot to see how many tweets were made on a particular day. And further, we could view what is the sentiment distribution throughout the days.
+We have a column `tweet_created_at` which means when the tweet was created and we can plot to see how many tweets were made on a particular day. And further, we could view what is the sentiment distribution throughout the days. Will there be any insights inside world cup tweet sentiment analysis based on tweeting hour?
+
 
 
 ```python
@@ -1237,14 +1175,14 @@ plt.show()
 
 
     
-![png]({{site.url}}/assets/twitter_bot/output_35_0.png)
+![png](https://q-viper.github.io/assets/twitter_bot/output_35_0.png)
     
 
 
 It seems that the latest date has the most tweets. But this is only an experiment and if we tried to collect more tweets and perform analysis, this will change.
 
 ## Tweeting Hour
-
+Can we find any insight inside world cup tweet sentiment analysis based on tweeting hour?
 
 ```python
 pd.to_datetime(df.tweet_created_at).dt.hour.value_counts().plot(kind='bar',figsize=(15,10))
@@ -1254,7 +1192,7 @@ plt.show()
 
 
     
-![png]({{site.url}}/assets/twitter_bot/output_38_0.png)
+![png](https://q-viper.github.io/assets/twitter_bot/output_38_0.png)
     
 
 
@@ -1273,7 +1211,7 @@ plt.show()
 
 
     
-![png]({{site.url}}/assets/twitter_bot/output_41_0.png)
+![png](https://q-viper.github.io/assets/twitter_bot/output_41_0.png)
     
 
 
@@ -1288,14 +1226,14 @@ plt.show()
 
 
     
-![png]({{site.url}}/assets/twitter_bot/output_43_0.png)
+![png](https://q-viper.github.io/assets/twitter_bot/output_43_0.png)
     
 
 
 Does it hold any insights?
 
 ## Word Cloud of Tweets
-For the word clouds of the Tweets please refer to [this blog]()!
+For the further analysis of world cup tweet sentiment analysis we could plot word clouds of the Tweets. Please refer to [this blog]()!
 
 ## Further Analysis
 For further WorldCup tweet sentiment analysis, we can find the answers to the following questions:
