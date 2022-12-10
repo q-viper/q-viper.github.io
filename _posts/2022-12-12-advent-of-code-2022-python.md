@@ -1,6 +1,6 @@
 ---
 title:  "Advent of Code 2022 with Python"
-date:   2022-12-04 09:29:17
+date:   2022-12-12 09:29:17
 categories:
     - Python
     - Challenge
