@@ -13,12 +13,10 @@ header:
   teaser: assets/pyscript/hello.png
 ---
 
-
-## Introduction
-Hello and whats up everyone, in this blog we will explore PyScript for running Python codes inside our HTML files. It is quite easy to do so. How does it works under the hood is not what is being focused here but what can we do will be. For docs, please visit [here](https://github.com/pyscript/pyscript).
+Pyscript is a JS library that allows us to write and run Python code on HTML web pages.  In this blog, we will explore PyScript for running Python codes inside our HTML files. It is quite easy to do so. How it works under the hood is not what is being focused on here but what can we do will be. For docs, please visit [here](https://github.com/pyscript/pyscript).
 
 ## First Program
-* Create a HTML file and on the top, import packages inside the head section.
+* Create an HTML file and on the top, import packages inside the head section.
 ```html
 <html>
     <head>
@@ -39,7 +37,7 @@ Opening above HTML in browser will show like below:
 
 ## Importing Default Package
 
-Lets add below code just below above's to print random number generated between 100 and 200.
+Let's add below code just below above to print a random number generated between 100 and 200.
 
 ```html
 <py-script>
@@ -53,7 +51,7 @@ Output will be something like below:
 ![]({{site.url}}/assets/pyscript/random.png)
 
 ## Importing External Libraries
-Lets import NumPy. It is not possible to import them by default as they are not installed. Hence we need to include them in environment section like below.
+Let's import NumPy. It is not possible to import them by default as they are not installed. Hence we need to include them in the environment section like below.
 
 ```html
 <html>
@@ -88,12 +86,12 @@ fig
 </html>
 ```
 
-It will take little bit to see the result like below:
+It will take a little bit to see the result like below:
 
 ![]({{site.url}}/assets/pyscript/scatter.png)
 
 ### Pandas Dataframe
-Just like we used NumPy above, we can include pandas too and lets see it in action.
+Just like we used NumPy above, we can include pandas too and let's see it in action.
 
 ```html
 <html>
@@ -138,7 +136,7 @@ df
 ![]({{site.url}}/assets/pyscript/pandas.png)
 
 ## Live Code Editor
-We can even have our own code editor in browser using PyScript. It can be done by using tag `<py-repl>`. Lets see it in action.
+We can even have our own code editor in the browser using PyScript. It can be done by using the tag `<py-repl>`. Let's see it in action.
 
 ```html
 <html>
@@ -167,3 +165,5 @@ We can see something like below in a browser:
 What is interesting is that we can run code by shift+enter just like in Jupyter Notebook.
 
 ![]({{site.url}}/assets/pyscript/repl_hello.png)
+
+For more content like this one, please subscribe to our [newsletter](https://dataqoil.com/newsletter/).
