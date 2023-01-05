@@ -13,7 +13,7 @@ header:
   teaser: assets/python/date_parser.png
 ---
 
-Why do we need to find DateTime in the text? In the field of data science, we often have to deal with various kinds of data and one of the common is Text data. Before jumping into a topic let's first start with a problem I recently encountered. I was given a task to extract sent and received email messages from a long thread of multipart emails. The email I used to get would be something like the below:
+Why do we need to find DateTime in the text? In the field of data science, we often have to deal with various kinds of data and one of the common is Text data but sometimes datetime in the text has to be extracted. Before jumping into a topic let's first start with a problem I recently encountered. I was given a task to extract sent and received email messages from a long thread of multipart emails. The email I used to get would be something like the below:
  
  
  
@@ -68,7 +68,7 @@ The above text is modified from an original multipart email. My goal was to sepa
  
  
  
-It worked for some but when sent dates were in a different format based on mail servers, this failed. Now there is a number of ways one could do it. But all are based on finding the pattern of DateTime. Usually, DateTime has patterns like YYYY/MM/DD HH:MM:SS, DD/MM/YYYY HH:MM:SS and so on we could prepare regex for that and find where it matched.
+It worked for some but when sent dates were in a different format based on mail servers, this failed. Now there is a number of ways one could do it. But all are based on finding the pattern of DateTime in the text. Usually, DateTime in the text has patterns like YYYY/MM/DD HH:MM:SS, DD/MM/YYYY HH:MM:SS and so on we could prepare regex for that and find where it matched.
  
  
 ```python
@@ -78,7 +78,7 @@ import re
 ## Finding Date Using Regex
  
 ### Format 1
-Let's try to find the date from the format YYYY/MM/DD without any time.
+Let's try to find the datetime in the text from the format YYYY/MM/DD without any time.
  
  
 ```python
@@ -142,7 +142,7 @@ print(re.split(pattern, txt, re.DOTALL))
  
 ## Our Email
  
-There are different formats of date in our above email.
+There are different formats of datetime in the text in our above email.
 * Wed, Jun 1, 2011, 9:39 PM
 * 01/06/2011, at 7:57 PM
 * 1 June 2011 13:43
@@ -342,6 +342,8 @@ list(find_dates(eml))
 This also gets our job done but we are more concerned about the original date format.
  
 That's all for now and for my use case, I found `date parser` to be best. What is yours?
- 
- 
+
+For more content like this one, please stay exploring our site or signup for the [newsletter](https://dataqoil.com/newsletter/).
+
+
 
