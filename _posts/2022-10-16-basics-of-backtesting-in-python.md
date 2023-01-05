@@ -16,7 +16,7 @@ Stock Backtesting in Python is way of testing our strategy in a historical data 
 
 John and Joe are two best friends. They both earned some money from their hard working corporate job and wanted to invest it in a stock market. Unlike Joe, John is clever and does not fall for any influence of stock's price increasing and decreasing. They studied some Statistics and Probability along with Economics in college and and they love their money. Joe followed trend and bought some stock of X and felt glad that his stock's price increased by some % in few days. John was calm person and thought that John's stock position is increased but he is not earning any money and only way to earn is by selling it. John wanted to get back in time and questioned himself what will happen if I try to buy some stock of X and sell it if price increased by 10% or decrease by 5%. Then I will buy as much stock as possible from the amount I have. How much would have I earned today? Well he did not know but what he tried to do is a simple stock backtesting example.
 
-Here in this blog, we will start with our very simple strategy and then try to use of the most popular stock backtesting Python package [`Backtesting.py`](https://kernc.github.io/backtesting.py/doc/backtesting/#manuals). But first, let's install it. 
+Here in this stock backtesting blog, we will start with our very simple strategy and then try to use of the most popular stock backtesting Python package [`Backtesting.py`](https://kernc.github.io/backtesting.py/doc/backtesting/#manuals). But first, let's install it. 
 
 
 ```python
@@ -187,7 +187,7 @@ data
 
 
 
-Our data will be daily floorsheet data and we will make strategy on it. Alternatively we could get data for testing from backtesting.py too but it only allows GOOG.
+Our data will be daily floorsheet data and we will make stock backtesting strategy on it. Alternatively we could get data for testing from backtesting.py too but it only allows GOOG.
 
 
 ```python
@@ -313,10 +313,10 @@ btest.GOOG
 ## Preparing SMA
 
 
-We will work on our data from yfinance next. There is a good availability of classes and modules in backtesting and lets use them instead of writing our own indicators. But I have written many indicators from scratch and [you can find them here](https://q-viper.github.io/2022/03/20/python-for-stock-market-analysis-technical-indicators/). Here, SMA stands for Simple Moving Average.
+We will work on our data from yfinance next. There is a good availability of classes and modules for stock backtesting and lets use them instead of writing our own indicators. But I have written many indicators from scratch and [you can find them here]({{site.url}}/2022/03/20/python-for-stock-market-analysis-technical-indicators/). Here, SMA stands for Simple Moving Average.
 
 
-We start by making a class that inherits `Strategy` class inside backtesting and we do not need anything at all at this time but lets use `crossover` and `SMA` too. But this will be covered later. First lets take a look into our data and try to plot SMA of two periods, one longer and one shorter. One SMA of 20 days and another of 40 days. Our simple strategy will be to buy when small SMA crosses over bigger SMA. 
+We start by making a class that inherits `Strategy` class inside backtesting and we do not need anything at all at this time but lets use `crossover` and `SMA` too. But this will be covered later. First lets take a look into our data and try to plot SMA of two periods, one longer and one shorter. One SMA of 20 days and another of 40 days. Our simple stock backtesting strategy will be to buy when small SMA crosses over bigger SMA. 
 
 
 ```python
@@ -1459,7 +1459,7 @@ stats
 Looks like we made some money. But this is just another bad strategy we tested.
 
 ### Testing Percentage Price Oscillator
-Following is taken from my another [blog](https://q-viper.github.io/2022/03/20/python-for-stock-market-analysis-technical-indicators/). 
+Following is taken from my another [blog]({{site.url}}/2022/03/20/python-for-stock-market-analysis-technical-indicators/). 
 * This is a momentum indicator (determines the strength or weakness of a value). But we can view the volatility too.
 * Two EMAs, 26 period and 12 periods are used to calculate PPO.
 * It contains 2 lines, PPO line and signal line. Signal line is an EMA of the 9 Period PPO, so it moves slower than PPO.
@@ -1695,4 +1695,4 @@ print(stats)
 
 In first PPO strategy, we tested with AAPL and in second we tested with BABA. In BABA, we lost money but in AAPL we made some.
 
-There are many features and strategy to try on stock backtesting using Backtesting.py and those will be covered in next part. Thank you :)
+There are many features and stock backtesting strategy to try on stock backtesting using Backtesting.py and those will be covered in next part. Thank you :)
