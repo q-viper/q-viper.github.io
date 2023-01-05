@@ -11,18 +11,18 @@ tags:
 header:
   teaser: assets/python/threading.png
 ---
+Multi-threading in Python is often used when there are tasks related to I/O bound. But before going further, let's take a few examples where multi-threading could be used:
 
-Multi-threading in Python is often used when there are tasks related to I/O bound. But before going further, let's take few examples where multi-threading could be used:
-1. Downloading images from the web and doing image processing related tasks. It takes some time to download the image and some time to process it too but these two sub-tasks can be run either sequentially or parallelly. Running sequentially has some flaws when our system has multi-threading as our resources will not be using what is available. And another is image processing could take a long time and downloading will be paused when processing is going on. But we could run these two tasks in independent threads. One thread will download images from the web and another will process that downloaded image.
+1. Downloading images from the web and doing image processing-related tasks. It takes some time to download the image and some time to process it too but these two sub-tasks can be run either sequentially or parallelly. Running sequentially has some flaws when our system has multi-threading as our resources will not be using what is available. And another is image processing could take a long time and the download will be paused when processing is going on. But we could run these two tasks in independent threads. One thread will download images from the web and another will process that downloaded image.
 2. While doing machine learning tasks, we have to work with multiple data and process a lot before sending them to modeling. We could run multiple threads that our CPU supports and then perform pre-processing on them.
-3. Another application I recently did was for making a back-testing bot. Users will make different alerts with rules based on technical indicators and they will try to check if this alert will fire at this time of the day. One can run this test for a long period of time and the data is not related to each other. While testing sequentially, it was quite slow and was not running on the full capacity of the system. But when I made different threads and ran clusters of different dates, it was surprisingly fast.
-4. Another I built is also for a trading bot. There will be an API listening to the user's request to buy stock options based on strike price, symbol and expiry date. Also we had to use [bracket order](https://www.investopedia.com/terms/b/bracketedbuyorder.asp). I had to keep a track of these orders. So I ran distinct threads for distinct order until they were filled. This way one order runs independently of another.
+3. Another application I recently did was for making a back-testing bot. Users will make different alerts with rules based on technical indicators and they will try to check if this alert will fire at this time of the day. One can run this test for a long period of time and the data is not related to each other. While testing sequentially, it was quite slow and was not running at the full capacity of the system. But when I made different threads and ran clusters of different dates, it was surprisingly fast.
+4. Another I built is also for a trading bot. There will be an API listening to the user's request to buy stock options based on the strike price, symbol, and expiry date. Also, we had to use [bracket order](https://www.investopedia.com/terms/b/bracketedbuyorder.asp). I had to keep a track of these orders. So I ran distinct threads in distinct order until they were filled. This way one order runs independently of another.
  
 ## Using `threading`
-`threading` is one of the standard python libraries to do thread based multiprocessing. Please follow the [documentation](https://docs.python.org/3/library/threading.html) for modules.
+Multi-threading in Python can be done using builtin module too. `threading` is one of the standard python libraries to do thread-based multiprocessing. Please follow the [documentation](https://docs.python.org/3/library/threading.html) for modules.
  
 ### Simple Example
-Lets create a simple example where we will print even numbers in one and odds in another function. Even will sleep for 2 seconds after printing one and odd will sleep for 1 second. There should not be any blocking of time from even function while it is sleeping.
+Let's create a simple example of multi-threading in Python where we will print even numbers in one and odds in another function. Even will sleep for 2 seconds after printing one and odd will sleep for 1 second. There should not be any blocking of time from even functioning while it is sleeping.
  
  
 ```python
@@ -69,7 +69,7 @@ th2.join()
     
  
 `threading.Thread()` creates a thread object and we start the thread by calling the `start` method of it. Then we join to wait for the thread to complete.
-As we can see in the above example that both functions are running independent of each other without altering the order of another. Above process can also be achieved with Asyncio but Asyncio doesn't use multi-threading.
+As we can see in the above example that both functions are running independently of each other without altering the order of another. The above process can also be achieved with Asyncio but Asyncio doesn't use multi-threading.
  
 Lets try another example where one function writes data to a file and another will read that from another thread.
  
@@ -171,10 +171,10 @@ th2.join()
     Writer N: 14 | Wrote Line: 14
     
  
-Error happens! Why? Because the file `15.txt` was supposed to be created by the write function which is started later than the reader function. The reader function tries to read the file which is not created yet. 
+Error happens! Why? Because the file `15.txt` was supposed to be created by the write function which is started later than the reader function. The reader function tries to read the file which is not been created yet. 
  
 ### Using `threading.Thread` Class
-We can create a thread by creating a child class of `threadin.Thread`. This way we can do thread stuff as well as write our own version of operations inside it.
+We can create a multi-threading in Python by by creating a child class of `threadin.Thread`. This way we can do thread stuff as well as write our own version of operations inside it.
  
  
 ```python
@@ -201,7 +201,7 @@ t.join()
     
  
 ## Using Joblib
- 
+ Another option to do multi-threading in Python is using Joblib.
 [Joblib](https://joblib.readthedocs.io/en/latest/) is a Python library that provides an easy way to perform parallelization. We need to install joblib before using it. We can do so by `pip install joblib`.
  
  
@@ -241,7 +241,7 @@ print(res)
     [3.1622776601683795, 3.0, 2.8284271247461903, 2.6457513110645907, 2.449489742783178, 2.23606797749979, 2.0, 1.7320508075688772, 1.4142135623730951]
     
  
-If we were to do sequential programming which is the above way, it would take us a long time. That is 21.16 secs. What if we ran above code in parallel?
+If we were to do sequential programming which is the above way, it would take us a long time. That is 21.16 secs. What if we ran the above code in parallel?
  
  
 ```python
@@ -297,7 +297,7 @@ backend: str, ParallelBackendBase instance or None, default: 'loky'
       a backend of your liking.
  
     It is not recommended to hard-code the backend name in a call to
-    Parallel in a library. Instead it is recommended to set soft hints
+    Parallel in a library. Instead, it is recommended to set soft hints
     (prefer) or hard constraints (require) so as to make it possible
     for library users to change the backend from the outside using the
     parallel_backend context manager.
@@ -338,17 +338,9 @@ print(result)
 It seems to be faster than loky.
  
  
-```python
- 
-```
- 
+This blog was a simple example of different options of multi-threading in Python and there is more to it! [Please stay tuned for more!](https://dataqoil.com/newsletter/)
+
 ## References
-* https://joblib.readthedocs.io/en/latest/index.html
-* https://docs.python.org/3/library/threading.html
- 
- 
-```python
- 
-```
- 
+* [JobLib Documentation](https://joblib.readthedocs.io/en/latest/index.html)
+* [Threading](https://docs.python.org/3/library/threading.html)
 
