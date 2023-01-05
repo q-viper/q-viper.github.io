@@ -18,42 +18,38 @@ tags:
 * TOC
 {:toc}
 
-## Introduction
-If I have to write about part, then this is the 4th part or 4th version of <b>Gesture Based Visually Writing System</b>. If you have read my previous blogs on this same topic then you probably know that how much have I progressed from the early version. <b><i>The first best version of anything will be the imporvements of shortcoming.</i></b> I am applying same concept. On previous versions, there were lots of problems, one of them is the structured way of the code. Now on this version, I am using the Object Oriented Way, any concept of OOP will be enough to understand the codes following. And minor image processing concept along with beginner OpenCV knowledge will be enough to know everything about on this blog. But for the better understanding of this project requires <b>primary prerequisite to understand the concepts and algorithms used on this blog are to view my previous blogs</b>. Because I am explaining little this time. Follow the [Before Anything](#Before-Anything) section for more information.
+Gesture Based Visually Writing System is one where we try to write something on canvas by moving our fingers in the air.
+
+If I have to write about the part, then this is the 4th part or 4th version of <b>Gesture Based Visually Writing System</b>. If you have read my previous blogs on this same topic then you probably know how much have I progressed from the early version. <b><i>The first best version of anything will be the improvements of shortcomings.</i></b> I am applying same concept. In previous versions, there were lots of problems, one of them being the structured way of the code. Now on this version, I am using the Object Oriented Way, any concept of OOP will be enough to understand the codes following. And minor image processing concept along with beginner OpenCV knowledge will be enough to know everything about this blog. But for a better understanding of this project requires <b> the primary prerequisite to understanding the concepts and algorithms used on this blog is to view my previous blogs</b>. Because I am explaining little this time. Follow the [Before Anything](#Before-Anything) section for more information.
+
+This is part of [Gesture Based Visually Writing System](https://github.com/q-viper/Contour-Based-Writing/).
+* [Gesture-Based Visually Writing System Using OpenCV and Python](https://dataqoil.com/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
+* [Gesture-Based Visually Writing System: Adding Visual User Interface](https://dataqoil.com/2020/08/11/gesture-based-visually-writing-system-make-a-visual-user-interface/)
+* [Gesture Based Visually Writing System: Adding Virtual Animation, New Mode and New VUI](https://dataqoil.com/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/)
+* [Gesture Based Visually Writing System: Add Slider, More Colors and Optimized OOP code](https://dataqoil.com/2020/08/21/gesture-based-visually-writing-system-add-slider-more-colors-and-optimized-code/)
+* [Gesture-Based Visually Writing System: Building a Web App Using Flask](https://dataqoil.com/2020/08/28/gesture-based-visually-writing-system-building-a-web-app-using-flask/)
 
 ### What now?
-* Now on this blog, I will be sharing new and more optimized and scalable way of writing codes to perform this task. I am introducing the OOP way.
-* I will also add new mode. And that mode is the most essential one. A slider to change size of a pointer.
+* Now on this blog, I will be sharing a new and more optimized and scalable way of writing codes to perform this task. I am introducing the OOP way.
+* I will also add a new mode. And that mode is the most essential one. A slider to change the size of a pointer.
 
 The entire system can be divided onto 3 parts. And if I have to make a diagram then it will be something like below.
-![png]({{site.url}}/assets/contour-writing/oop.png)
+![png](https://q-viper.github.io/assets/contour-writing/oop.png)
 
 ### VUI
-A class representing Visual User Interface, which will lie above the canvas and it contains icons, and interacting panel. Some common methods are written inside the box and the communication medium between the classes is vai object and sometimes attributes. One example of communication is, the class Contour Writing sends the current location of pointer to VUI and VUI shows the pointer on VUI region (if lies). Then the view applies animation on icons, and tries to set mode. Then VUI's current window is sent back along with running mode.
+A class representing Visual User Interface, which will lie above the canvas and contains icons, and an interacting panel. Some common methods are written inside the box and the communication medium between the classes is a VUI object and sometimes attributes. One example of communication is, the class Contour Writing sends the current location of the pointer to VUI and VUI shows the pointer on the VUI region (if lies). Then the view applies animation on icons and tries to set the mode. Then VUI's current window is sent back along with running mode.
 
 ### Canvas
-A class representing writing place. Contour writing sends thep pointer location and running mode and the operation happens on canvas. Operations generally are Draw. erase and move. Finally, the written canvas is sent back.
+A class representing writing place. Contour writing sends the pointer location and running mode and the operation happens on the canvas. Operations generally are drawn. erase and move. Finally, the written canvas is sent back.
 
 ### Contour Writing
-A class that handles all other classes and performs contour extraction task using OpenCV. This class is responsible for many things and one of them is pointer assignment.
+A class that handles all other classes and performs contour extraction tasks using OpenCV. This class is responsible for many things and one of them is the pointer assignment.
 
 ### Before Anything
-Before anything, I am requesting you to view my previous blogs and only then return to this blog. Because the blogs below are the earlier version of the codes and concepts. I am still using same concepts and also you will be amazed to see how much I have progressed. I am only going to describe what is happening here on very little. Hence, if you are new to this project then it is best idea to view them. Please view them serially.
-* [Gesture Based Visually Writing System Using OpenCV and Python]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
-* [Gesture Based Visually Writing System: Adding Visual User Interface]({{site.url}}/2020/08/11/gesture-based-visually-writing-system-make-a-visual-user-interface/)
-* [Gesture Based Visually Writing System: Adding Virtual Animationn, New Mode and New VUI]({{site.url}}/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/)
-
-## Credits
-I want to give credits of this blogs to everyone on [LinkedIn](https://linkedin.com/in/ramkrishna-acharya-91a217183/) who reacted, shared and commented my previous blog and on [Twitter](https://twitter.com/QuassarianViper) also (most of retweets was from bots lol). I am very grateful that my [this LinkedIn post about previous version](https://www.linkedin.com/posts/ramkrishna-acharya-91a217183_opencv-computervision-python-activity-6699919193124548608-bJI-) got more than 2.2k reactions and nearly 30k views. I never thought that this will gain so much attention and here I am improving it again. 
-If I have to take a name and reason for credits:-
-* [Sagar Dhungel](https://www.linkedin.com/in/sagardhungel/): Who motivates me to write more.
-* [Suraj Bista](https://www.linkedin.com/in/suraj-bista-282830126): Who motivates me to write more.
-* [Pitambar Mahato](https://www.linkedin.com/in/pitambar-mahato-245621140/): Who reads my all blogs and gives feedbacks.
-* [Kamal Gautam](https://): Who reads my all blogs and gives feedbacks.
-* [Indra Poudel](https://): Who helped me find issues on blogs.
-
-## Motivation
-I am highly motivated by the support people gave me on [LinkedIn](https://www.linkedin.com/posts/ramkrishna-acharya-91a217183_opencv-computervision-python-activity-6699919193124548608-bJI-).
+Before anything, I am requesting you to view my previous blogs and only then return to this blog. Because the blogs below are the earlier version of the codes and concepts. I am still using the same concepts and also you will be amazed to see how much I have progressed. I am only going to describe what is happening here on very little. Hence, if you are new to this project then it is the best idea to view them. Please view them serially.
+* [Gesture-Based Visually Writing System Using OpenCV and Python](https://dataqoil.com/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
+* [Gesture-Based Visually Writing System: Adding Visual User Interface](https://dataqoil.com/2020/08/11/gesture-based-visually-writing-system-make-a-visual-user-interface/)
+* [Gesture Based Visually Writing System: Adding Virtual Animation, New Mode and New VUI](https://dataqoil.com/2020/08/14/gesture-based-visually-writing-system-adding-virtual-animation-new-mode-and-new-vui/)
 
 ## Dependencies
 As usual, importing dependencies on earlier of the code run.
@@ -73,10 +69,10 @@ def show(img, figsize=(10, 10)):
 ```
 
 ## VUI: Visual User Interface
-I don't know if the term VUI for Visual User Interface is already used and if this term is right one now to use. But I am using it anyway on the purpose that we are interacting with video frames. This time instead of a simple variable, I am using a new and robust way of defining VUI. A VUI Class.
+I don't know if the term VUI for Visual User Interface is already used and if this term is the right one now to use. But I am using it anyway for the purpose that we are interacting with video frames. This time instead of a simple variable, I am using a new and robust way of defining VUI. A VUI Class.
 
 ### Initialize Class
-The class is initialized with default parameters and setting useful parameters ahead of program run.
+The class is initialized with default parameters and set useful parameters ahead of the program run.
 
 ```python
 class VUI:
@@ -127,33 +123,33 @@ class VUI:
 ```
 
 * `idir`: holds icons directory.
-* `window`: holds VUI window. Initally blank image.
-* `vui_part`: how much of rows from top row to use for icons?
-* `dd_part`: how much of the rows from top row to use for dropdown?
-* `modes`: available modes. Normally name of the images under idir.
-* `icon_size`: size of each icon on vui_part. Format (cols, rows).
-* `current_icons`: list to store icons on every frame.
+* `window`: holds VUI window. Initially blank image.
+* `vui_part`: how many rows from the top row to use for icons?
+* `dd_part`: how many of the rows from the top row to use for the dropdown?
+* `modes`: available modes. Normally the name of the images is under idir.
+* `icon_size`: the size of each icon on vui_part. Format (cols, rows).
+* `current_icons`: the list to store icons on every frame.
 * `anim_scale`: animation scale. How to increase/decrease the icon size?
 * `anim_color`: animation color for icons
-* `prev_mode`: previous mode, default is move.
+* `prev_mode`: the previous mode, default is move.
 * `current_mode`: current mode, default is move.
 * `running_mode`: running mode, default is None.
-* `hover`: if cursor is above vui region.
-* `mode_count`: count number of times pointer contiously lied above current icon. Default 1.
-* `max_count`: how many times current mode be repeated to change running mode to current mode?
+* `hover`: if the cursor is above the VUI region.
+* `mode_count`: count the number of times the pointer continuously lies above the current icon. Default 1.
+* `max_count`: how many times current mode be repeated to change the running mode to the current mode?
 * `color_count`: same as mode_count but for color.
 * `max_count`: same as max_count but for color.
-* `current_pointer`: where is pointer located currently? value modified by other classes.
-* `canvas_pointer`: where is pointer right now on canvas?
+* `current_pointer`: where is the pointer located currently? value modified by other classes.
+* `canvas_pointer`: where is the pointer right now on canvas?
 * `draw_color`: current draw color. Red default.
-* `previous_color`: where did cursor lied on previous dropdown of color?
-* `current_color`: where is cursor lying on current dropdown of color?
-* `pointer_color`: which color should the pointer be of.
+* `previous_color`: where did the cursor lie on the previous dropdown of color?
+* `current_color`: where is the cursor lying on the current dropdown of color?
+* `pointer_color`: which color should the pointer be?
 * `point`: value to tune pointer size. (radius, thickness)
-* `colors`: list of colors in RGB for chosing colors
+* `colors`: list of colors in RGB for choosing colors
 * `icons`: value set by method `prepare_icons`.
 
-Each and every attribute has its own usecase and I tried to make it lesser. Some variables like count, current/previous are important to change modes/colors so they must be tuned properly. 
+Each and every attribute has its own use case and I tried to make it lesser. Some variables like count, and current/previous are important to change modes/colors so they must be tuned properly. 
 
 
 
@@ -186,17 +182,17 @@ A method to prepare icons and their respective modes. It is called initially whi
 ```
 #### What is happening here?
 * Method starts by creating an array of columns for icons. If we have 9 icons, then to stack them how many lines are required? 10.
-* Then we modify that array into list of tuple. Store (y1, y2) for each column.
+* Then we modify that array into a list of tuples. Store (y1, y2) for each column.
 * Initialize dictionaries `icon_pos` and `mode_pos`.
-* For each image on icons directory:
-    * Read image and resize it to shape that fits completely on cols.
-    * Store img on `icon_pos`, key be cols and value be image.
+* For each image on the icons directory:
+    * Read the image and resize it to a shape that fits completely on cols.
+    * Store img on `icon_pos`, key be cols and value be an image.
     * Store cols on `mode_pos`, key as mode name and value as cols.
 * Make attributes for `cols`, `icon_position`, `current_icons`, `mode_pos`.
     
 
 ### Method: Set Colors
-This method is used to change the color of pointer/draw when pointer lies above it for some frames. We can change color from dropdown menu. Colors are either provided from outside of use default.
+This method is used to change the color of the pointer/draw when the pointer lies above it for some frames. We can change color from drop-down menu. Colors are either provided from outside of use default.
 ```python
     def set_colors(self, col=None, new_colors=None):
         """
@@ -241,14 +237,14 @@ This method is used to change the color of pointer/draw when pointer lies above 
         return self.colors
 ```
 * Method takes the pointer as canvas's pointer because we only use the pointer of VUI on `vui_part` only.
-* We edited the pointer to make it fit on our case. The swapping is require because we have pointer on (y, x) format mostly.
+* We edited the pointer to make it fit our case. The swapping is required because we have pointers in (y, x) format mostly.
 * We initialize `colors` from condition checks.
-* Since colors are chosed form dropdown, colors are stackked top to down. Hence find rows that divides colors.
-* If current pointer's x coordinate lies within any of color's row then the `color_count` is increased.
+* Since colors are chosen from the drop-down, colors are stacked top to down. Hence find rows that divide colors.
+* If the current pointer's x coordinate lies within any of the color's rows then the `color_count` is increased.
 * When `color_count` reaches `max_count` we change the pointer color and draw color.
-* We also have to change the window's color on those region where current color's position is.
+* We also have to change the window's color on that region where the current color's position is.
 
-### Method: Get window
+### Method: Get a window
 This method is called from other methods.
 ```python
     def get_window(self):
@@ -265,13 +261,13 @@ This method is called from other methods.
         
         return self.current_window
 ```
-* Starts by initializing new blank image.
-* Loop through `current_icons`'s key and values, set the icon image on exact position of `vui_part`.
-* When `running_mode` is color we have to show dropdown hence call `set_colors` method and pass the column where current pointer is.
-* Finally draw a pointer on window and return.
+* Starts by initializing a new blank image.
+* Loop through `current_icons`'s key and values, and set the icon image on the exact position of `vui_part`.
+* When `running_mode` is color we have to show a drop-down hence call the `set_colors` method and pass the column where the current pointer is.
+* Finally draw a pointer on the window and return.
 
 ### Method: Update VUI
-This method is called from the main class of writing. Method performs too many things here. This method calls other methods also to perform operations like changing color, changing mode etc.
+This method is called from the main class of writing. The method performs too many things here. This method calls other methods also to perform operations like changing color, changing mode, etc.
 ```python
     def update_vui(self, pointer=(100, 100), cpointer=(10, 100)):
         """
@@ -342,25 +338,25 @@ This method is called from the main class of writing. Method performs too many t
 
 * Take `vui_pointer` and set it to `current_pointer`. 
 * Take `canvas_pointer` and set it too.
-* Initialize dictionary to store `current_icons`. We store the changed icon here along with unchanged.
+* Initialize dictionary to store `current_icons`. We store the changed icon here along with the unchanged one.
 * Initialize `hover` to None.
-* Proceed below only when current x axis lies below the `vui_part`. i.e if pointer is on icons panel.
-* Loop through columns of icons and modes at same time.
-    * Take icon lying on this column.
-    * If current pointer's column lies within the columns:
+* Proceed below only when current x axis lies below the `vui_part`. i.e if the pointer is on the icons panel.
+* Loop through columns of icons and modes at the same time.
+    * Take the icon lying on this column.
+    * If the current pointer's column lies within the columns:
         * Set current mode.
-        * Create blank image of icon shape as `zeros_icon`. 
-        * Find the scale factor by multiple of mode counts.
-        * Find new row/column for this icon. We are scaling icon to make it look like animating.
-        * Make new icon's center and original icon's center same and insert it into blank image.
+        * Create a blank image of icon shape as `zeros_icon`. 
+        * Find the scale factor by multiple mode counts.
+        * Find a new row/column for this icon. We are scaling icons to make it look like animating.
+        * Make the new icon's center and original icon's center the same and insert them into the blank image.
         * Store `zeros_icon` on `current_icons`.
-        * Perform count checkings. And change mode when mode count reaches max. Set hover to True.
+        * Perform count checking. And change mode when the mode count reaches max. Set hover to True.
     * Else:
-         * Store icon on `current_icon`. Because pointer is not above this icon so leave it as it is.
-* Return the output of `get_window` method.
+         * Store icon on `current_icon`. Because the pointer is not above this icon so leave it as it is.
+* Return the output of the `get_window` method.
 
 ### Test Class: VUI
-To test the class, we will call the method `update_vui` by passing it a pointer. To make sure our dropdown is working fine I will set pointer to color's region. And to show animating like effect, I will call it multiple times. See the result below.
+To test the class, we will call the method `update_vui` by passing it a pointer. To make sure our drop-down is working fine I will set the pointer to the color's region. And to show an animating-like effect, I will call it multiple times. See the result below.
 
 
 ```python
@@ -377,17 +373,17 @@ for i in range(2):
 ```
 
 
-![png]({{site.url}}/assets/contour-writing/output_14_0.png)
+![png](https://q-viper.github.io/assets/contour-writing/output_14_0.png)
 
 
 
-![png]({{site.url}}/assets/contour-writing/output_14_1.png)
+![png](https://q-viper.github.io/assets/contour-writing/output_14_1.png)
 
 
-From above image, it is clear that our dropdown is working fine and the icon is also changing its color and size at the same time. Hence test passed.
+From the above image, it is clear that our drop-down is working fine and the icon is also changing its color and size at the same time. Hence test passed.
 
 ## Canvas
-The canvas we will use will also be a class. It is not much complicated than VUI class because its task is to only write/erase on that position where pointer lies. Erase is much easier if we specified the background color eariler and whenever the pointer lies, draw a circle there with background color.
+The canvas we will use will also be a class. It is not much more complicated than VUI class because its task is to only write/erase on that position where the pointer lies. Erase is much easier if we specified the background color earlier and whenever the pointer lies, draw a circle there with the background color.
 
 ### Initialize: Canvas
 Initialize a class with default and essential parameters. Follow the docstring for more information.
@@ -422,12 +418,12 @@ class Canvas:
         self.ssize = ssize
         self.sregion = ()
 ```
-* Canvas is initialized with background color.
+* Canvas is initialized with the background color.
 * Current window must include the pointer and the real canvas. 
 
 
-### Method: Update Window
-A method which performs draw/erase/move on canvas and shows pointer.
+### Method: Update the Window
+A method that performs draw/erase/move on canvas and shows a pointer.
 ```python
     def update_window(self, mode, pointer=(400, 100)):
         """
@@ -465,23 +461,23 @@ A method which performs draw/erase/move on canvas and shows pointer.
         #show(self.current_window)
         return self.current_window
 ```
-* Some attributes are set initially from VUI object and parameters.
-* Initialize slider to blank image.
-* When pointer lies on slider region, then call slider window and change mode to move.
-* If mode is draw, 
-    * Draw circle on pointer position with current properties of draw on canvas. 
+* Some attributes are set initially from VUI objects and parameters.
+* Initialize the slider to a blank image.
+* When the pointer lies on the slider region, then call the slider window and change mode to move.
+* If mode is a draw, 
+    * Draw a circle on the pointer position with the current properties of drawing on canvas. 
     * Create current window.
-    * Draw circle on current window with pointer color.
-* If mode is erase,
-    * Draw circle on pointer position with current properties of draw on canvas. i.g background color
+    * Draw a circle on a current window with a pointer color.
+* If the mode is erased,
+    * Draw a circle on the pointer position with the current properties of drawing on canvas. i.g background color
     * Create current window.
-    * Draw circle on current window with pointer color.
+    * Draw a circle on the current window with the pointer color.
 * Else:
-    * Create current window and draw a circle on pointer position with pointer color. 
-* Return current window.
+    * Create a current window and draw a circle on the pointer position with the pointer color. 
+* Return the current window.
 
 ### Method: Slider
-This is new concept on this version. I am using slider to change the size of pointer. Isn't it interesting?
+This is a new concept in this version. I am using the slider to change the size of a pointer. Isn't it interesting?
 ```python
      def slider(self, size=(300, 30, 3), spoint=50, scolor=(100, 55, 100)):
         """
@@ -506,10 +502,10 @@ This is new concept on this version. I am using slider to change the size of poi
         #cv2.imshow("slider", swindow.astype(np.uint8))
         return swindow.astype(np.uint8)   
 ```
-* Method starts by defining new variable `swidth`, which is slider width.
-* New blank image is made to store slider.
-* Slider is made by making a rectangle on the spoint row, we add width on both top/bottom of slider.
-* Change our pointer size relative to the the slider position.
+* Method starts by defining a new variable `swidth`, which is slider width.
+* New blank image is made to store the slider.
+* Slider is made by making a rectangle on the spoint row, we add width on both the top/bottom of the slider.
+* Change our pointer size relative to the slider position.
 * Return the slider window.
 
 ### Method: Clear
@@ -522,7 +518,7 @@ A method to clear the window and canvas when clear mode is enabled.
 Both canvas and window is returned to their original state.
 
 ### Test: Canvas
-Lets test our canvas. The output should look like below. I am testing it to work with slider and draw both.
+Lets test our canvas. The output should look like below. I am testing it to work with a slider and draw both.
 
 
 ```python
@@ -577,7 +573,7 @@ plt.show()
     
 
 
-![png]({{site.url}}/assets/contour-writing/output_20_1.png)
+![png](https://q-viper.github.io/assets/contour-writing/output_20_1.png)
 
 
     Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).
@@ -594,37 +590,37 @@ plt.show()
     
 
 
-![png]({{site.url}}/assets/contour-writing/output_20_5.png)
+![png](https://q-viper.github.io/assets/contour-writing/output_20_5.png)
 
 
     Draw with new pointer.
     
 
 
-![png]({{site.url}}/assets/contour-writing/output_20_7.png)
+![png](https://q-viper.github.io/assets/contour-writing/output_20_7.png)
 
 
     Erase with new pointer.
     
 
 
-![png]({{site.url}}/assets/contour-writing/output_20_9.png)
+![png](https://q-viper.github.io/assets/contour-writing/output_20_9.png)
 
 
-The test above is done on draw mode and erase with different pointer size. What have I done?
+The test above is done on draw mode and erase with different pointer sizes. What have I done?
 * Made a figure and subplots for 6 images.
-* Draw a color on canvas at pointer position at different position.
-* Make pointer position at slider region and made it move.
+* Draw a color on the canvas at the pointer position at a different position.
+* Make the pointer position at the slider region and made it move.
 * Draw with new pointer size.
 * Erase with new pointer size.
 
 Test passed.
 
 ## Contour Writing
-A class to perform overall operation using contours. I have worked hard to maintain the codes here by updating previous codes.
+A class to perform an overall operation using contours. I have worked hard to maintain the codes here by updating previous codes.
 
 ### Initialize: Contour Writing
-Instead of using a distinct variable for each ROIs, I thought of using dictionaries to store particular property only. The keys of a dictionary will be ROI name and value will be the type of data to store.
+Instead of using a distinct variable for each ROIs, I thought of using dictionaries to store particular property only. The keys of a dictionary will be the ROI name and the value will be the type of data to store.
 ```python
 class ContourWriting:
     """
@@ -668,12 +664,12 @@ class ContourWriting:
         
 ```
 
-* `roi_averages`: to store average image of each roi.
-* `roi_grays`: to store grayscale image of each roi.
-* `roi_masks`: to store mask image of each roi.
-* `roi_pointer`: to store pointer position on each roi.
+* `roi_averages`: to store an average image of each roi.
+* `roi_grays`: to store a grayscale image of each roi.
+* `roi_masks`: to store the mask image of each roi.
+* `roi_pointer`: to store the pointer position on each roi.
 * `roi_counts`: to store the counts of contour points on each roi.
-* `set_pointer`: method to set pointer on respective position.
+* `set_pointer`: method to set the pointer on respective position.
 * `vui`: attribute to store object of `VUI` class.
 * `canvas_shape`: must be below `vui_part`.
 * `force_modes`: name of force modes from force or `mroi`.
@@ -740,34 +736,34 @@ A method to call from outside and handles all the tasks.
 * Starts by initializing camera.
 * Initialize `num_frames` to `0`, and `take_average` to `True`.
 * While true perform below:
-    * Read each frame and read success parameter.
-    * If frame has been read, perform below:
+    * Read each frame and read the success parameter.
+    * If the frame has been read, perform below:
         * Initialize key check.
-        * Resize the frame and flip it to make it mirror effect.
+        * Resize the frame and flip it to make it a mirror effect.
         * Convert frame to graysclae and pass it to `set_grays()` method to find grayscale on each ROIs.
         * If `num_frames` is smaller than `avg_frames` and `take_average` is `True`,
             * Call `running_average()`.
-            * Put frame number on frame.
+            * Put frame number on the frame.
             * Increase `num_frames`.
         * Else:
             * Set `take_average` to `False`.
-            * Call `find_contours()` to get current contours.
+            * Call `find_contours()` to get the current contours.
             * Call `check_force_mode()` method to check on `mroi`.
-            * Call `update_vui()` of VUI by passing it current pointer of VUI ROI and draw ROI.
+            * Call `update_vui()` of VUI by passing it the current pointer of VUI ROI and draw ROI.
             * If `hover` is not `None`:
                 * Then set running mode to running mode of VUI.
             * If counts of contour points on `mroi` is greater than `vroi`'s then try to set running mode to force mode.
-            * Else set running_mode to running mode of VUI.
-            * Finally perfomr the mode action.
-            * Set running mode of VUI to running mode.
+            * Else set running_mode to the running mode of VUI.
+            * Finally perform the mode action.
+            * Set the running mode of VUI to running mode.
             * Call `update_window()` of Canvas by passing it running mode and pointer of draw ROI.
-            * Finally call `get_window()` method by passing current canvas and vui.
+            * Finally call `get_window()` method by passing the current canvas and vui.
             * Show the current writing window.
-            * Set ROI of VUI to (-1, -1) to prevent false pointer.
-            * Call `make_rectangles()` to make rectangle for each ROIs.
+            * Set the ROI of VUI to (-1, -1) to prevent false pointers.
+            * Call `make_rectangles()` to make a rectangle for each ROI.
         * Show `clone` image.
         * Exit loop on exit mode.
-    * Release camera and destroy all windows.
+    * Release the camera and destroy all windows.
             
 
 ### Method: Set Grays
@@ -783,8 +779,8 @@ A method to call from outside and handles all the tasks.
             self.roi_grays[rname] = gray_roi
 ```
 * Loop through each bounding box of each ROI.
-    * Take top, right, bottom, left coordinates of box and crop that region from grayscale frame.
-    * Add some blur to that cropped region and add set it to `roi_grays` to corresponding `rname` key.
+    * Take the top, right, bottom, and left coordinates of the box and crop that regiothe n from grayscale frame.
+    * Add some blur to that cropped region and add set it to `roi_grays` to the corresponding `rname` key.
 
 ### Method: Running Average
 A method to perform running average on every ROIs.
@@ -848,15 +844,15 @@ A method to perform running average on every ROIs.
                 
         return clone  
 ```
-A method to find contours on each ROIs, draw maximum contours and then set pointer relative to VUI and Canvas.
+A method to find contours on each ROIs, draw maximum contours, and then set pointer relative to VUI and Canvas.
 * Initialize roi_counts with keys as each ROIs and values as None.
-* Loop through  average of each ROIs.
-    * Take current gray of this ROI and find absolute difference.
+* Loop through average of each ROIs.
+    * Take the current gray of this ROI and fthe ind absolute difference.
     * Threshold the difference image to binary and find contours.
     * Set m to (-1, -1) initially.
-    * If length of contours is greater then:
-        * Find max contour and draw it on frame clone.
-        * Find minimum point of contour and draw a pointer on that point.
+    * If the length of the contours is greater then:
+        * Find the max contour and draw it on the frame clone.
+        * Find a minimum point of a contour and draw a pointer on that point.
         * Insert contour counts to each ROIs.
         * Perform pointer translation relative to mroi, vroi and droi.
     * Finally, set `roi_pointer` to each ROI.
@@ -895,14 +891,14 @@ Note that we have 2 ROIs that can change the running mode but when to use which?
 * Take a top, right, bottom, left from `mroi` key's value on `roi_boxes`.
 * Then `foce_modes` is checked if is `None` or not.
     * Divide the ROI Box into parts equal to `force_modes`. By default use `move, draw, erase`.
-    * Create a dictionary with column as key and value as mode name.
+    * Create a dictionary with the column as key and value as mode name.
     * Set `force_modes` attribute.
-* Else length of contours on `mroi` is greater than 0, then take pointer.
-    * Loop through each columns, mode on `force_modes`: 
-        * If the y coordinate of pointer is within the range of column for this mode then set do check previous and current mode.
+* Else length of contours on `mroi` is greater than 0, then take the pointer.
+    * Loop through each column, mode on `force_modes`: 
+        * If the y coordinate of the pointer is within the range of the column for this mode then set do check the previous and current mode.
 
 ### Method: Perform Mode
-I have used 9 modes total. Until now, draw, erase, move, color have been used but now for remaining modes, we have to perform some action. Lets define a method for that too.
+I have used 9 modes total. Until now, draw, erase, move, and color has been used but now for the remaining modes, we have to perform some action. Let's define a method for that too.
 ```python
     def perform_mode(self):
         if self.running_mode=="clear":
@@ -931,13 +927,13 @@ I have used 9 modes total. Until now, draw, erase, move, color have been used bu
     * Set `num_frames = 0`
     * Set `running_mode="move"`.
     * Call the `clear()` method of `canvas`'s object.
-* If running mode is save:
+* If running mode saves:
     * Save current canvas draw on disk and change running mode to move.
-* If running mode is exit, then change current key to 27.
-* If running mode is detect, then change running mode to move and call detector method.
+* If running mode is an exit, then change the current key to 27.
+* If running mode is detected, then change running mode to move and call the detector method.
 
 ### Method: Detector
-A method that takes current canvas and performs detection using detection model like OCR. For now, I am using Tesseract.
+A method that takes the current canvas and performs detection using a detection model like OCR. For now, I am using Tesseract.
 ```python
     def detector(self):
         img = self.canvas.canvas.astype(np.uint8)
@@ -945,11 +941,11 @@ A method that takes current canvas and performs detection using detection model 
         print("Detected: ", op)
 ```
 * To install pytesseract is easy. But you have to install another installation file on windows to make it run.
-* If you have any problems regarding installation of pytesseract then leave me mail or comment.
+* If you have any problems regarding the installation of pytesseract then leave me an mail or comment.
 
 
 ### Method: Get Window
-A method that binds window of VUI and Canvas to make them look like one and return new window.
+A method that binds the window of VUI and Canvas to make them look like one and return a new window.
 ```python
     def get_window(self, canvas, vui):
         final_window = vui.copy()
@@ -973,14 +969,14 @@ A method that binds window of VUI and Canvas to make them look like one and retu
 ```
 * A simple indexing will be enough to perform this operation.
 * Take the canvas window(not the canvas itself) and vui window.
-* If running mode is color, then there is dropdown to be shown.
+* If the running mode is color, then there is a dropdown to be shown.
     * Prepare the indices there lies only the dropdown of color.
-* Assign the canvas to parts below the `vui_part` of VUI because, those parts includes icons.
-* Finally draw the pointer on new window. It is not necessary though.
+* Assign the canvas to parts below the `vui_part` of VUI because those parts include icons.
+* Finally draw the pointer on the new window. It is not necessary though.
 * Return the final window.
 
 ### Method: Make Rectangles
-A method to make rectangles on the clone of frame so that we can notice where our finger is moving in front of the camera. Also this method will add text to each rectangles.
+A method to make rectangles on the clone of the frame so that we can notice where our finger is moving in front of the camera. Also, this method will add text to each rectangles.
 
 ```python
     def make_rectangles(self, clone):
@@ -1019,11 +1015,11 @@ A method to make rectangles on the clone of frame so that we can notice where ou
 ```
 Simple operation is happening here.
 * For each ROIs:
-    * Take top, right, bottom, left then find midpoint of this box.
-    * Draw the rectangle ofor each ROIs. And divide the Rectangle on parts if necessary.
+    * Take the top, right, bottom, left then fthe ind midpoint of this box.
+    * Draw the rectangle for each ROIs. And divide the Rectangle on parts if necessary.
 
 ### Test: Contour Writing
-Combine everything and lets try to make our system run. We will create and object of class `ContourWriting` and call its `main()` method.
+Combine everything and let’s try to make our system run. We will create a object of the class `ContourWriting` and call its `main()` method.
 
 
 ```python
@@ -1033,16 +1029,16 @@ gw.main()
 
 Output should look like the video below.
 <figure>
-<video src = "{{site.url}}/assets/contour-writing/slider_final.mp4" width="100%" controls autoplay loop> </video>
+<video src = "https://q-viper.github.io/assets/contour-writing/slider_final.mp4" width="100%" controls autoplay loop> </video>
 <figcaption style = "text-align:left; font-style:italic">Animation and New VUI</figcaption>
 </figure> 
 
-I am highly recommending you to tune your `max_count` variables around the VUI class and ContourWriting class if you are working on more noisy room. Above video was taken on night hence there are many flickering poins on frames but tuning the count values works fine.
+I am highly recommending you to tune your `max_count` variables around the VUI class and ContourWriting class if you are working on the more noisy room. Above video was taken on night hence there are many flickering poins on frames but tuning the count values works fine.
 
 Test passed.
 
 ## Finally
-The final version of code should look like below.
+The final version of the code should look lthe ike below.
 
 
 ```python
@@ -1598,35 +1594,23 @@ gw.main()
 I am going to point out features and shortcomings of this system now. 
 
 ### Codes
-Codes to current version of the system is available on link below and if it is not, then hit the comment or leave me message (LinkedIn or Twitter or mail me).
+Codes to the current version of the system is available on the link below and if it is not, then hit the comment or leave a me message (LinkedIn or Twitter or mail me).
 * [Contour Based Writing](https://github.com/q-viper/Contour-Based-Writing/)
 
 ### Features
-* A slider can be used to change size of pointer.
+* A slider can be used to change the size of pointer.
 * Code is refactored and made OOP.
 * Dual hand can be used to change modes draw/move/erase pointer.
 * Color can be picked from dropdown like fashion. We can add as many color as we want.
 * Total of 9 modes available.
 
 ### Shortcomings
-Shortcomings are most helpful to find new feature on next version. Well here are plenty of them.
-* The system is usable by contour of anything. Hence some gesture confirming model must be used.
-* Also on above video, there can be seen pointer moving rapidly on the VUI regions. It is not always acceptable by users. Hence it must be eliminated soon.
+Shortcomings are most helpful to find a new feature in next version. Well here are plenty of them.
+* The system is usable by the contour of anything. Hence some gesture confirming model must be used.
+* Also on the above video, there can be seen pointer moving rapidly on the VUI regions. It is not always acceptable to users. Hence it must be eliminated soon.
 
 ### Ideas
-* What if we can create a model that can classify gesture and we can define a certain gesture for certain mode?
+* What if we can create a model that can classify gesture and we can define a certain gesture for a certain mode?
 
 ## What Next?
-I will try to solve shortcomings on next time. But I am interested to make this system run on mobile phones too. As per now, I am thinking of taking frames from device camera and process it. Then use some API call to get those frame. I might use Unity. I am highly excited to try using LSTMs and other state of the art Deep Learning Algorithms to make this system more awesome but I don't have internet access (other than cellular data) to do broad research.
-
-### Why not read more?
-* [Deploying a RASA Chatbot on Android using Unity3d]({{site.url}}/2020/08/04/deploying-a-simple-rasa-chatbot-on-unity3d-project-to-make-a-chatbot-for-android-devices/)
-* [Gesture Based Visually Writing System Using OpenCV and Python]({{site.url}}/2020/08/01/gesture-based-visually-writing-system-using-opencv-and-python/)
-* [Logistic Regression from Scratch]({{site.url}}/2020/08/11/writing-a-logistic-regression-class-from-scratch/)
-* [Linear Regression from Scratch]({{site.url}}/2020/08/07/writing-a-linear-regression-class-from-scratch-using-python/)
-* [Writing Popular ML Optimizers from Scratch]({{site.url}}/2020/06/05/writing-popular-machine-learning-optimizers-from-scratch-on-python/)
-* [Feed Forward Neural Network from Scratch]({{site.url}}/2020/05/30/writing-a-deep-neural-network-from-scratch-on-python/)
-* [Convolutional Neural Networks from Scratch]({{site.url}}/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
-* [Writing a Simple Image Processing Class from Scratch]({{site.url}}/2020/05/30/image-processing-class-from-scratch-on-python/)
-* [Naive Bayes for text classifications: Scratch to Framework]({{site.url}}/2020/03/04/text-classification-using-naive-bayes-scratch-to-the-framework/)
-* [Simple OCR for Devanagari Handwritten Text]({{site.url}}/2020/02/25/building-ocr-for-devanagari-handwritten-character/)
+I will try to solve shortcomings next time. But I am interested to make this system run on mobile phones too. As per now, I am thinking of taking frames from the device camera and processing it. Then use some API call to get those frames. I might use Unity. I am highly excited to try using LSTMs and other state-of-the-art Deep Learning Algorithms to make this system more awesome but I don't have internet access (other than cellular data) to do broad research.
