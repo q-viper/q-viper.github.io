@@ -27,10 +27,10 @@ This blog will be using [Apache Superset](https://superset.apache.org/docs/insta
 ## Setting up Superset
 * Create an admin user in your metadata database (use `admin` as username to be able to load the examples)
 
-`
+```
 export FLASK_APP=superset
 superset fab create-admin
-`
+```
 
 * Initialize the DB as `superset db upgrade`.
 * Load some data to play with `superset load_examples`
