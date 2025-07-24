@@ -3,9 +3,8 @@ title:  "Connecting to MySQL Server in Windows Machine from WSL"
 date:   2022-01-13 10:29:17 +0545
 last_modified_at: 2022-01-16 12:29:17 +0545
 categories:
-    - apache airflow
-    - data engineering
-    - data pipelining
+    - Apache Airflow
+    - Data Engineering
     - MySQL
 tags:
     - data pipelining

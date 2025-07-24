@@ -3,8 +3,7 @@ title:  "A General Way to Perform an EDA"
 date:   2022-05-29 09:29:17 +0545
 categories:
     - EDA
-    - Data Science
-    
+    - Data Science    
 tags:
     - Pandas
     - Python

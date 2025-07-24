@@ -2,7 +2,7 @@
 title:  "Simple Cryptography Algorithms in Python"
 date:   2022-11-22 09:29:17
 categories:
-    - cryptography
+    - Cryptography
 tags:
     - cryptography
     - python

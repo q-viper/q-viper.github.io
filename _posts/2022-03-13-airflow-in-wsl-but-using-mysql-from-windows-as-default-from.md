@@ -3,10 +3,9 @@ title:  "Running Airflow in WSL but Using MySQL Server from Windows as Default"
 date:   2022-03-13 9:29:17 +0545
 last_modified_at: 2022-03-13 12:29:17 +0545
 categories:
-    - apache airflow
-    - data engineering
-    - data pipelining
-    - mysql
+    - Apache Airflow
+    - Data Engineering
+    - MySQL
 tags:
     - data pipelining
     - ubuntu and windows

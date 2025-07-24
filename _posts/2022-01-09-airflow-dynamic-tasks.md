@@ -3,9 +3,8 @@ title:  "Dynamic Tasks in Airflow"
 date:   2022-01-09 10:29:17 +0545
 last_modified_at: 2022-01-09 12:29:17 +0545
 categories:
-    - apache airflow
-    - data engineering
-    - data pipelining
+    - Apache Airflow
+    - Data Engineering
 tags:
     - data pipelining
     - ubuntu and windows

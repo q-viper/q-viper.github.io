@@ -2,7 +2,7 @@
 title:  "Finding Remote Jobs but How and Where?"
 date:   2022-11-15 09:29:17
 categories:
-    - remote jobs
+    - Misc
 tags:
     - freelancing
     - remote work

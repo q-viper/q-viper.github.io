@@ -4,8 +4,7 @@ date:   2022-05-15 09:29:17 +0545
 categories:
     - Python
     - Pyscript
-    - Javascript
-    
+    - Javascript    
 tags:
     - pyscript
     - python

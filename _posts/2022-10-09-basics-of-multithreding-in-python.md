@@ -3,7 +3,7 @@ title:  Basics of Multi-threading in Python
 date:   2022-10-09 01:29:17 +0545
 categories:
     - Python
-    - multi-threading
+    - Multi Threading
 tags:
     - python
     - joblib

@@ -2,7 +2,7 @@
 title:  "Making People Finder in 2022 Using BeautifulSoup"
 date:   2022-07-24 09:29:17 +0545
 categories:
-    - urllib3
+    - Web Scrapping
     - BeautifulSoup
 tags:
     - scraping

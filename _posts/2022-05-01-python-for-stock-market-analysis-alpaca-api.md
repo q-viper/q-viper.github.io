@@ -4,8 +4,7 @@ date:   2022-05-01 09:29:17 +0545
 categories:
     - Data Analysis
     - Alpaca API
-    - Stock Market Analysis
-    
+    - Stock Market Analysis    
 tags:
     - data analysis
     - alpaca api

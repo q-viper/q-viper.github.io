@@ -9,7 +9,7 @@ categories:
 tags:
   - 3d modeling
   - animation
-  - 'C#'
+  - C-sharp
   - Game Development
   - unity asset store
   - unity learning

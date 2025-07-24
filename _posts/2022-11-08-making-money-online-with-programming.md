@@ -2,7 +2,7 @@
 title:  "Making Money with Programming"
 date:   2022-11-08 09:29:17
 categories:
-    - programming
+    - Misc
 tags:
     - money
     - remote work

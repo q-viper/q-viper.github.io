@@ -2,8 +2,8 @@
 title:  "Making Fractal Shapes with Python"
 date:   2022-08-06 09:29:17 +0545
 categories:
-    - fractal
-    - mathematics
+    - Fractal Geometry
+    - Mathematics
 tags:
     - fractal
 header:

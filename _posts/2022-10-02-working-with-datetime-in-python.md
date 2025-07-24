@@ -3,7 +3,7 @@ title:  Working with datetime in Python
 date:   2022-10-02 01:29:17 +0545
 categories:
     - Python
-    - datetime
+    - DateTime
 tags:
     - python
     - datetime

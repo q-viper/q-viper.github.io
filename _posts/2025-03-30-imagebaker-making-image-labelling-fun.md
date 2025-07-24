@@ -2,6 +2,7 @@
 title:  ImageBaker - Making Image Labelling Fun
 date:   2025-03-21 01:29:17 +0545
 categories:
+    - Project
     - Python
     - ImageBaker
 tags:

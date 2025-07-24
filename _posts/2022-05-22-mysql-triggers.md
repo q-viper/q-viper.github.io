@@ -3,8 +3,7 @@ title:  "MySQL: Triggers"
 date:   2022-05-22 09:29:17 +0545
 categories:
     - MySQL
-    - Triggers
-    
+    - Triggers    
 tags:
     - mysql
     - triggers

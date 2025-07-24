@@ -3,8 +3,7 @@ title:  "Tweet Scraping with Tweepy"
 date:   2022-06-04 09:29:17 +0545
 categories:
     - Tweets
-    - Data Science
-    
+    - Data Science    
 tags:
     - Pandas
     - Python

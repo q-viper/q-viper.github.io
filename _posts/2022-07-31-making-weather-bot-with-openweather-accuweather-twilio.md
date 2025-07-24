@@ -2,8 +2,8 @@
 title:  "Making Weather Bot with Accuweather, OpenWeather and Twilio"
 date:   2022-07-31 09:29:17 +0545
 categories:
-    - urllib3
-    - weather-bot
+    - Web Scrapping
+    - Bot
 tags:
     - accuweather
     - openweather

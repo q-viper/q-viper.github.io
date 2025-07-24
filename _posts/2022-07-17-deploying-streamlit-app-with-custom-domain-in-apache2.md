@@ -2,8 +2,8 @@
 title:  "Deploying Streamlit App with Custom Domain in Apache2"
 date:   2022-07-17 09:29:17 +0545
 categories:
-    - streamlit
-    - apache2
+    - Streamlit
+    - Apache2
 tags:
     - streamlit
     - apache2

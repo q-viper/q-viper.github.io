@@ -4,8 +4,7 @@ date:   2022-05-08 09:29:17 +0545
 categories:
     - Python
     - Concurrent Programming
-    - Asyncio
-    
+    - Asyncio    
 tags:
     - Asyncio
     - alpaca api
