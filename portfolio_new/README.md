@@ -1,1 +1,1 @@
-clonned from https://github.com/RyanFitzgerald/devportfolio
+Used Perplexity to make it.
