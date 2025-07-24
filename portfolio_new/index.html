@@ -872,139 +872,224 @@ detect forged signatures.</li>
 
     <script>
         // Smoke Simulation System
-        class SmokeSimulation {
-            constructor() {
-                this.canvas = document.getElementById('smoke-canvas');
-                this.ctx = this.canvas.getContext('2d');
-                this.particles = [];
-                this.mouse = { x: 0, y: 0 };
-                this.lastTime = 0;
-                
-                this.init();
-                this.bindEvents();
-                this.animate();
-            }
-            
-            init() {
-                this.resize();
-                window.addEventListener('resize', () => this.resize());
-            }
-            
-            resize() {
-                this.canvas.width = window.innerWidth;
-                this.canvas.height = window.innerHeight;
-            }
-            
-            bindEvents() {
-                document.addEventListener('mousemove', (e) => {
-                    this.mouse.x = e.clientX;
-                    this.mouse.y = e.clientY;
-                    this.createParticles();
-                });
-            }
-            
-            bindEvents() {
-    // ❶ Click sets (or moves) the emitter
-    document.addEventListener('click', (e) => {
-        this.emitter = {x: e.clientX, y: e.clientY};
-    });
-
-    // ❷ (Optional) keep the old burst-on-move effect
-    document.addEventListener('mousemove', (e) => {
-        this.mouse.x = e.clientX;
-        this.mouse.y = e.clientY;
-        // Small burst while moving
-        this.createParticles(e.clientX, e.clientY, 2);
-    });
-}
-
-
-            createParticles() {
-                // Create multiple particles for richer effect
-                for (let i = 0; i < 3; i++) {
-                    this.particles.push({
-                        x: this.mouse.x + (Math.random() - 0.5) * 20,
-                        y: this.mouse.y + (Math.random() - 0.5) * 20,
-                        vx: (Math.random() - 0.5) * 2,
-                        vy: -Math.random() * 3 - 1,
-                        size: Math.random() * 15 + 5,
-                        opacity: Math.random() * 0.5 + 0.3,
-                        life: 1.0,
-                        decay: Math.random() * 0.02 + 0.005,
-                        color: {
-                        r: Math.abs(Math.sin(this.mouse.x * 0.01)) * 255,
-                        g: Math.abs(Math.sin(this.mouse.y * 0.01)) * 255,
-                        b: Math.abs(Math.sin((this.mouse.x + this.mouse.y) * 0.005)) * 255
-}
-
-                    });
-                }
-                
-                // Limit particle count for performance
-                if (this.particles.length > 150) {
-                    this.particles = this.particles.slice(-150);
-                }
-            }
-            
-            updateParticles() {
-                this.particles = this.particles.filter(particle => {
-                    // Update position
-                    particle.x += particle.vx;
-                    particle.y += particle.vy;
-                    
-                    // Apply physics
-                    particle.vy -= 0.05; // Buoyancy
-                    particle.vx *= 0.99; // Air resistance
-                    particle.vy *= 0.99;
-                    
-                    // Update life
-                    particle.life -= particle.decay;
-                    particle.opacity = particle.life * 0.8;
-                    particle.size += 0.2; // Expand as it rises
-                    
-                    return particle.life > 0;
-                });
-            }
-            
-            drawParticles() {
-                this.particles.forEach(particle => {
-                    this.ctx.save();
-                    
-                    // Create radial gradient for smoky effect
-                    const gradient = this.ctx.createRadialGradient(
-                        particle.x, particle.y, 0,
-                        particle.x, particle.y, particle.size
-                    );
-                    
-                    gradient.addColorStop(0, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, ${particle.opacity})`);
-                    gradient.addColorStop(0.5, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, ${particle.opacity * 0.5})`);
-                    gradient.addColorStop(1, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 0)`);
-                    
-                    this.ctx.fillStyle = gradient;
-                    this.ctx.beginPath();
-                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                    this.ctx.fill();
-                    
-                    this.ctx.restore();
-                });
-            }
-            
-            animate(currentTime = 0) {
-                const deltaTime = currentTime - this.lastTime;
-                this.lastTime = currentTime;
-                
-                // Clear canvas
-                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                
-                // Update and draw particles
-                this.updateParticles();
-                this.drawParticles();
-                
-                requestAnimationFrame((time) => this.animate(time));
-            }
+        // Enhanced Smoke Simulation using SmokeMachine approach
+class SmokeSimulation {
+    constructor() {
+        this.canvas = document.getElementById('smoke-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.mouse = { x: 0, y: 0 };
+        this.emitter = null;
+        this.mouseMoving = false;
+        this.lastTime = performance.now();
+        
+        // Opacity array for smoke sprite
+        this.opacities = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, , 0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 5, 7, 4, 4, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 17, 27, 41, 52, 56, 34, 23, 15, 11, 4, 9, 5, 1, 0, 0, 0, 0, 0, 0, 1, 45, 63, 57, 45, 78, 66, 52, 41, 34, 37, 23, 20, 0, 1, 0, 0, 0, 0, 1, 43, 62, 66, 64, 67, 115, 112, 114, 56, 58, 47, 33, 18, 12, 10, 0, 0, 0, 0, 39, 50, 63, 76, 87, 107, 105, 112, 128, 104, 69, 64, 29, 18, 21, 15, 0, 0, 0, 7, 42, 52, 85, 91, 103, 126, 153, 128, 124, 82, 57, 52, 52, 24, 1, 0, 0, 0, 2, 17, 41, 67, 84, 100, 122, 136, 159, 127, 78, 69, 60, 50, 47, 25, 7, 1, 0, 0, 0, 34, 33, 66, 82, 113, 138, 149, 168, 175, 82, 142, 133, 70, 62, 41, 25, 6, 0, 0, 0, 18, 39, 55, 113, 111, 137, 141, 139, 141, 128, 102, 130, 90, 96, 65, 37, 0, 0, 0, 2, 15, 27, 71, 104, 129, 129, 158, 140, 154, 146, 150, 131, 92, 100, 67, 26, 3, 0, 0, 0, 0, 46, 73, 104, 124, 145, 135, 122, 107, 120, 122, 101, 98, 96, 35, 38, 7, 2, 0, 0, 0, 50, 58, 91, 124, 127, 139, 118, 121, 177, 156, 88, 90, 88, 28, 43, 3, 0, 0, 0, 0, 30, 62, 68, 91, 83, 117, 89, 139, 139, 99, 105, 77, 32, 1, 1, 0, 0, 0, 0, 0, 16, 21, 8, 45, 101, 125, 118, 87, 110, 86, 64, 39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 28, 79, 79, 117, 122, 88, 84, 54, 46, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 6, 55, 61, 68, 71, 30, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 23, 25, 20, 12, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 12, 9, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0];
+        
+        this.smokeSpriteSize = 20;
+        this.particles = [];
+        this.running = false;
+        
+        this.init();
+        this.bindEvents();
+        this.createSmokeSprite();
+        this.start();
+        
+        window.smokeSimInstance = this;
+    }
+    
+    init() {
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+    }
+    
+    resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    }
+    
+    // Create smoke sprite from opacity array
+    createSmokeSprite(color) {
+        color = color || [100, 150, 255]; // Blue smoke color
+        const smokeSprite = document.createElement('canvas');
+        const ctx = smokeSprite.getContext('2d');
+        const data = ctx.createImageData(this.smokeSpriteSize, this.smokeSpriteSize);
+        const d = data.data;
+        
+        for (let i = 0; i < d.length; i += 4) {
+            // // random color from 10 to 256
+            // color = [
+            //     Math.floor(Math.random() * 10) + 150,
+            //     Math.floor(Math.random() * 10) + 150,
+            //     Math.floor(Math.random() * 146) + 100
+            // ];
+            d[i] = color[0];     // Red
+            d[i + 1] = color[1]; // Green  
+            d[i + 2] = color[2]; // Blue
+            d[i + 3] = this.opacities[i / 4]; 
         }
         
-        // Initialize smoke simulation when page loads
+        smokeSprite.width = this.smokeSpriteSize;
+        smokeSprite.height = this.smokeSpriteSize;
+        ctx.putImageData(data, 0, 0);
+        
+        this.smokeSprite = smokeSprite;
+    }
+    
+    // Utility function for random float in range
+    floatInRange(start, end) {
+        return start + Math.random() * (end - start);
+    }
+    
+    // Create individual particle
+    createParticle(x, y, options = {}) {
+        const particle = {
+            x: x,
+            y: y,
+            vx: this.floatInRange(options.minVx || -4 / 100, options.maxVx || 4 / 100),
+            startvy: this.floatInRange(options.minVy || -4 / 10, options.maxVy || -1 / 10),
+            scale: this.floatInRange(options.minScale || 0, options.maxScale || 0.2),
+            lifetime: this.floatInRange(options.minLifetime || 1000, options.maxLifetime || 10000),
+            age: 0,
+        };
+        
+        particle.finalScale = this.floatInRange(
+            particle.scale + this.smokeSpriteSize * 0.9,
+            particle.scale + this.smokeSpriteSize
+        );
+        particle.vy = particle.startvy;
+        
+        return particle;
+    }
+    
+    // Update particle physics
+    updateParticle(particle, deltatime) {
+        particle.x += particle.vx * deltatime;
+        particle.y += particle.vy * deltatime;
+        const frac = Math.sqrt(particle.age / particle.lifetime);
+        particle.vy = (1 - frac) * particle.startvy;
+        particle.age += deltatime;
+        particle.scale = frac * particle.finalScale;
+    }
+    
+    // Draw individual particle
+    drawParticle(particle) {
+        this.ctx.globalAlpha = (1 - Math.abs(1 - 2 * particle.age / particle.lifetime)) / 8;
+        const off = particle.scale * this.smokeSpriteSize / 2;
+        const xmin = particle.x - off;
+        const xmax = xmin + off * 2;
+        const ymin = particle.y - off;
+        const ymax = ymin + off * 2;
+        
+        this.ctx.drawImage(this.smokeSprite, xmin, ymin, xmax - xmin, ymax - ymin);
+    }
+    
+    // Add smoke particles
+    addSmoke(x, y, numParticles = 10, options = {}) {
+        if (numParticles < 1) {
+            if (Math.random() <= numParticles) {
+                this.particles.push(this.createParticle(x, y, options));
+            }
+            return;
+        }
+        
+        for (let i = 0; i < numParticles; i++) {
+            this.particles.push(this.createParticle(x, y, options));
+        }
+    }
+    
+    // Update and draw all particles
+    updateAndDrawParticles(deltatime) {
+        // Clear canvas
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Update particles
+        this.particles.forEach(p => this.updateParticle(p, deltatime));
+        
+        // Remove dead particles
+        this.particles = this.particles.filter(p => p.age < p.lifetime);
+        
+        // Draw particles
+        this.particles.forEach(p => this.drawParticle(p));
+        
+        // Reset global alpha
+        this.ctx.globalAlpha = 1;
+    }
+    
+    bindEvents() {
+        // Set/move continuous emitter on click
+        // document.addEventListener('click', e => {
+        //     this.emitter = { x: e.clientX, y: e.clientY };
+        // });
+
+        // Add smoke on mouse move
+        document.addEventListener('mousemove', e => {
+            this.mouse.x = e.clientX;
+            this.mouse.y = e.clientY;
+            this.mouseMoving = true;
+            this.addSmoke(e.clientX, e.clientY, 2);
+        });
+        
+        document.addEventListener('mouseleave', () => { 
+            this.mouseMoving = false; 
+        });
+    }
+    
+    // Main animation loop
+    animate(time) {
+        if (!this.running) return;
+        
+        const deltaTime = time - this.lastTime;
+        this.lastTime = time;
+        
+        // Emit from click emitter
+        if (this.emitter) {
+            this.addSmoke(this.emitter.x, this.emitter.y, 3);
+        }
+        
+        // Update and draw
+        this.updateAndDrawParticles(deltaTime);
+        
+        requestAnimationFrame(t => this.animate(t));
+    }
+    
+    start() {
+        this.running = true;
+        this.lastTime = performance.now();
+        requestAnimationFrame(t => this.animate(t));
+    }
+    
+    stop() {
+        this.running = false;
+    }
+    
+    // For compatibility with gear system
+    createParticles(x, y, count, colorType) {
+        const options = {};
+        
+        // Different options based on source
+        switch(colorType) {
+            case 'gear':
+                // Create orange/yellow sprite for gear smoke
+                this.createSmokeSprite([255, 150, 50]);
+                options.minLifetime = 3000;
+                options.maxLifetime = 6000;
+                break;
+            case 'contact':
+                // Bright spark-like particles
+                this.createSmokeSprite([255, 255, 100]);
+                options.minLifetime = 1000;
+                options.maxLifetime = 3000;
+                break;
+            default:
+                // Standard blue smoke
+                this.createSmokeSprite([100, 150, 255]);
+                break;
+        }
+        
+        this.addSmoke(x, y, count, options);
+    }
+}
+// Initialize smoke simulation when page loads
         document.addEventListener('DOMContentLoaded', () => {
             new SmokeSimulation();
         });
