@@ -258,6 +258,7 @@ layout: archive
             <a href="#projects" class="nav-link">Projects</a>
             <a href="https://q-viper.github.io/posts/" class="nav-link">Blogs</a>
             <a href="#skills" class="nav-link">Skills</a>
+            <a href="#research" class="nav-link">Research</a>
             <a href="#education" class="nav-link">Education</a>
             <a href="#experience" class="nav-link">Experience</a>
             <a href="#contact" class="nav-link">Contact</a>
@@ -294,18 +295,16 @@ layout: archive
         <h2 class="text-4xl font-bold mb-12 text-center gradient-text">About Me</h2>
         <div class="section-card rounded-2xl p-8">
           <p class="text-lg text-gray-300 leading-relaxed mb-6">
-            I'm a passionate Software Engineer (focused in Applied Machine Learning) currently pursuing my Master's in
-            Data
-            Science
-            at FAU Erlangen-Nuremberg, Germany. With expertise in deep learning, cyber security, image processing,
+            I'm a passionate Software Engineer (focused in Applied Machine Learning), graduate of Master's in
+            DataScience from FAU Erlangen-Nuremberg, Germany. With expertise in deep learning, cyber security, image
+            processing,
             and neural networks, building trading bots, I specialize in developing innovative solutions that bridge the
-            gap
-            between theoretical machine learning and practical applications.
+            gap between theoretical machine learning and practical applications.
           </p>
           <p class="text-lg text-gray-300 leading-relaxed">
             My work spans from building advanced options trading bots, network intrusion detection systems to advanced
-            template matching algorithms,
-            always pushing the boundaries of what's possible with machine learning technology.
+            template matching algorithms, always pushing the boundaries of what's possible with machine learning
+            technology.
           </p>
           <p class="text-lg text-gray-300 leading-relaxed" align="center">
             <a href="assets/ramkrishna_cv.pdf" class="text-blue-400 underline">Download my CV</a>
@@ -314,6 +313,62 @@ layout: archive
       </div>
     </section>
 
+    <!-- Research & Publications Section -->
+    <section id="research" class="py-20 px-6">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-4xl font-bold mb-12 text-center gradient-text">Research & Publications</h2>
+        <div class="section-card rounded-2xl p-8">
+          <p class="text-lg text-gray-300 leading-relaxed mb-6">
+            My research focuses on applied machine learning, computer vision, and cybersecurity. Here are some of my key
+            publications:
+          </p>
+          <div class="space-y-6">
+            <!-- Paper 1 -->
+            <div class="achievement-card">
+              <h3 class="text-xl font-bold mb-2">ADVIS-G: An Adversarially Defended Intrusion Detection System for Smart
+                Grids Using Deep Learning</h3>
+              <p class="text-blue-400 font-medium mb-2">Aug 2025</p>
+              <p class="text-gray-400 mb-4">
+                (Paper accepted in <a href="https://link.springer.com/journal/13218"
+                  class="text-blue-400 hover:text-blue-300" target="_blank">German Journal of Artificial
+                  Intelligence</a>.)
+              </p>
+              <ul class="text-gray-400 text-sm space-y-1 list-disc list-inside ml-4">
+                <li>Proposed an image-based IDS framework to defend smart grids against adversarial and cyberattacks
+                </li>
+                <li>Used MobileNet for attack classification and adversarial training, and U-Net for adversarial defence
+                </li>
+                <li><strong>Technologies:</strong> Python, PyTorch, ScaPy, Adversarial Robustness Toolbox</li>
+              </ul>
+              <a href="https://github.com/cs7org/ADVIS-G"
+                class="text-blue-400 hover:text-blue-300 transition-colors mt-4 inline-block" target="_blank">
+                View on GitHub →
+              </a>
+            </div>
+            <!-- Paper 2 -->
+            <div class="achievement-card">
+              <h3 class="text-xl font-bold mb-2">ROSAID-ST: Adversarially Robust Intrusion and Anomaly Detection in ROS
+                Networks via Student-Teacher Deep Learning</h3>
+              <p class="text-blue-400 font-medium mb-2">Mar 2026</p>
+              <p class="text-gray-400 mb-4">
+                (Paper submitted in <a href="https://journals.sagepub.com/home/ARX"
+                  class="text-blue-400 hover:text-blue-300" target="_blank">International Journal of Advanced Robotic
+                  Systems</a>.)
+              </p>
+              <ul class="text-gray-400 text-sm space-y-1 list-disc list-inside ml-4">
+                <li>Proposed a DL based IDS framework to defend against known and novel attacks</li>
+                <li>Used a custom CNN for attack detection and STFPM for novel attack detection</li>
+                <li><strong>Technologies:</strong> Python, PyTorch, ScaPy, Adversarial Robustness Toolbox</li>
+              </ul>
+              <a href="https://github.com/cs7org/ROSAID-ST"
+                class="text-blue-400 hover:text-blue-300 transition-colors mt-4 inline-block" target="_blank">
+                View on GitHub →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Experience Section -->
     <section id="experience" class="py-20 px-6">
@@ -704,13 +759,41 @@ layout: archive
       <div class="max-w-6xl mx-auto">
         <h2 class="text-4xl font-bold mb-12 text-center gradient-text">Featured Projects</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Text Baker Project -->
+          <div class="project-card rounded-xl p-6">
+            <div class="flex justify-between items-start mb-4">
+              <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">2026</span>
+              <div class="flex space-x-2">
+                <span class="github-stats">
+                  <i class="fas fa-star text-yellow-400"></i> 0
+                </span>
+                <span class="github-stats">
+                  <i class="fas fa-code-branch text-green-400"></i> 0
+                </span>
+              </div>
+            </div>
+            <div class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
+              <img src="https://raw.githubusercontent.com/q-viper/text-baker/main/assets/icon.png" alt="Text Baker Demo"
+                class="h-full">
+            </div>
+            <h3 class="text-xl font-bold mb-2">Text Baker</h3>
+            <p class="text-gray-400 text-sm mb-4">
+              A tool for annotating and generating synthetic text datasets for OCR and NLP tasks. Supports custom font
+              rendering, augmentation, and export for training deep learning models.
+            </p>
+            <a href="https://github.com/q-viper/text-baker" class="text-blue-400 hover:text-blue-300 transition-colors"
+              target="_blank">
+              View Project →
+            </a>
+          </div>
+
           <!-- 2025 Projects -->
           <div class="project-card rounded-xl p-6">
             <div class="flex justify-between items-start mb-4">
               <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">2025</span>
               <div class="flex space-x-2">
                 <span class="github-stats">
-                  <i class="fas fa-star text-yellow-400"></i> 16
+                  <i class="fas fa-star text-yellow-400"></i> 18
                 </span>
                 <span class="github-stats">
                   <i class="fas fa-code-branch text-green-400"></i> 2
@@ -734,6 +817,8 @@ layout: archive
               View Project →
             </a>
           </div>
+
+
 
           <!-- 2024 Projects -->
           <div class="project-card rounded-xl p-6">
@@ -769,7 +854,7 @@ layout: archive
               <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">2024</span>
               <div class="flex space-x-2">
                 <span class="github-stats">
-                  <i class="fas fa-star text-yellow-400"></i> 6
+                  <i class="fas fa-star text-yellow-400"></i> 7
                 </span>
                 <span class="github-stats">
                   <i class="fas fa-code-branch text-green-400"></i> 0
@@ -1186,52 +1271,13 @@ layout: archive
       stop() {
         this.running = false;
       }
-
-      // For compatibility with gear system
-      createParticles(x, y, count, colorType) {
-        const options = {};
-
-        // Different options based on source
-        switch (colorType) {
-          case 'gear':
-            // Create orange/yellow sprite for gear smoke
-            this.createSmokeSprite([255, 150, 50]);
-            options.minLifetime = 3000;
-            options.maxLifetime = 6000;
-            break;
-          case 'contact':
-            // Bright spark-like particles
-            this.createSmokeSprite([255, 255, 100]);
-            options.minLifetime = 1000;
-            options.maxLifetime = 3000;
-            break;
-          default:
-            // Standard blue smoke
-            this.createSmokeSprite([100, 150, 255]);
-            break;
-        }
-
-        this.addSmoke(x, y, count, options);
-      }
     }
-    // Initialize smoke simulation when page loads
-    document.addEventListener('DOMContentLoaded', () => {
-      new SmokeSimulation();
-    });
 
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-      });
-    });
+    // Instantiate smoke simulation
+    const smokeSim = new SmokeSimulation();
+
+    // For debugging: expose instance to window
+    window.smokeSim = smokeSim;
   </script>
 </body>
 
