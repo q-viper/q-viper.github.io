@@ -1,386 +1,791 @@
 ---
-title:  "Polygon.io for Stock Market Data"
-date:   2022-07-10 09:29:17 +0545
+layout: single
+title: "Polygon.io Stock Market Data in Python: REST Aggregates, WebSockets, pandas, and Realtime Streams"
+date: 2022-07-10 09:29:17 +0545
+last_modified_at: 2026-06-16
 categories:
-    - Stock
-    - Polygon
+  - Stock
+  - Polygon
+  - Python
 tags:
-    - Websocket
-    - Rest
+  - "Polygon.io"
+  - "Massive"
+  - "Stock Market Data"
+  - "Python"
+  - "REST API"
+  - "WebSocket"
+  - "Realtime Data"
+  - "pandas"
+  - "OHLC"
+  - "Aggregates"
+description: "A beginner-friendly guide to using Polygon.io stock market data in Python, including API keys, REST aggregate bars, pandas DataFrames, WebSocket streams, and realtime minute candles."
+excerpt: "Learn how to use Polygon.io stock market data in Python with REST APIs, aggregate OHLC bars, pandas DataFrames, and WebSocket realtime streams."
 header:
   teaser: assets/polygon/dashboard.png
+  og_image: assets/polygon/dashboard.png
+  image_description: "Polygon.io dashboard screenshot for stock market data API tutorial"
+toc: true
+toc_label: "Polygon.io Stock Data"
+toc_icon: "chart-line"
+toc_sticky: true
+read_time: true
+share: true
+related: true
+classes: wide
 ---
 
-## Introduction
-Hello everyone, welcome back to our new blog about getting Stock data in realtime using Polygon.io. Few blogs ago, I've shared how can we use Alpaca API to stream Stock data. But in this blog, we will use Polygon.io and choosing Polyon over Alpaca has its own pros and cons.
-* Alpaca is little bit better than Polygon in terms of the documentation in GitHub and the APIs. Which can be seen in [Alpaca Trade API](https://github.com/alpacahq/alpaca-trade-api-python) and [Polygon IO Client Python](https://github.com/polygon-io/client-python).
-* Alpaca could give data in dataframe as well as JSON format but Polygon gives only in JSON. However we could make dataframe from JSON as well.
-* The Updated candles in Alpaca were arriving little slower than Polygon. It was found that at least 3sec is taken from the Polygon to send corrected bars whereas Alpaca was taking more than 30secs.
+In this tutorial, we will learn how to get **stock market data in Python using Polygon.io**. We will look at both REST API data and WebSocket streaming data.
 
-So, to choose between Alpaca and Polygon, one should focus if the 30 seconds delay in corrected data is acceptable or not. If it is not then Polygon is best choice else Alpaca wins the race for me as it provides some great modules like `get_clock()`.
+The original version of this blog was written in 2022. At that time, I was comparing Alpaca and Polygon for realtime stock data. Polygon was useful because the updated minute bars were arriving faster in my experiments.
 
-## Getting User and Key: Polygon.io
-Its easy to get API Key. Just sign up for free version to see the dashboard and then the key will be there somewhere.
+Today, the ecosystem has changed. Polygon.io has rebranded as **Massive**, but many developers still know the platform as Polygon.io. Existing Polygon-style API concepts are still important, so this tutorial keeps the original name while also mentioning the newer client library direction.
 
+> This post is for educational use only. It is not financial advice and should not be used as the only basis for trading or investing decisions.
 
-```python
-key=""
+## What This Tutorial Covers
+
+We will cover:
+
+- what Polygon.io is used for
+- REST API vs WebSocket API
+- how to keep API keys safe
+- installing the Python client
+- getting aggregate OHLC bars
+- converting JSON results to a pandas DataFrame
+- cleaning timestamp columns
+- plotting stock candles
+- using WebSocket for realtime minute aggregates
+- common errors and fixes
+- when to use REST and when to use WebSocket
+
+## Polygon.io vs Alpaca
+
+A few blogs before the original post, I wrote about using Alpaca API to stream stock data. Polygon.io and Alpaca both provide market data, but they are useful in slightly different ways.
+
+In my earlier experiment:
+
+- Alpaca had very convenient Python tools.
+- Alpaca could return data in friendly formats.
+- Polygon returned JSON, but it was easy to convert to pandas.
+- Polygon's corrected aggregate bars arrived faster in my use case.
+- Alpaca had useful trading-related helpers such as market clock functions.
+
+So, the choice depends on what you need.
+
+Use Polygon.io or Massive-style APIs when:
+
+- you mostly need market data
+- you need REST and WebSocket data streams
+- you want aggregates, trades, quotes, snapshots, or reference data
+- you are building dashboards, research tools, or data pipelines
+
+Use Alpaca when:
+
+- you also need trading APIs
+- you want broker-style account features
+- you want paper trading and market-data features together
+
+## Current Note: Polygon.io Rebrand
+
+Polygon.io has rebranded as Massive. If you are updating older code, you may see two styles:
+
+Old style:
+
+```bash
+pip install polygon-api-client
 ```
 
-## Installing Polygon API Client
-I am using version 0.2.11 because this version was working as my requirements was for the project.
+Newer style:
 
-
-```python
-!pip install polygon-api-client==0.2.11
+```bash
+pip install -U massive
 ```
 
-    Looking in indexes: https://pypi.org/simple, https://us-python.pkg.dev/colab-wheels/public/simple/
-    Collecting polygon-api-client==0.2.11
-      Downloading polygon_api_client-0.2.11-py3-none-any.whl (22 kB)
-    Collecting websocket-client>=0.56.0
-      Downloading websocket_client-1.3.3-py3-none-any.whl (54 kB)
-    [K     |████████████████████████████████| 54 kB 2.2 MB/s 
-    [?25hRequirement already satisfied: requests>=2.22.0 in /usr/local/lib/python3.7/dist-packages (from polygon-api-client==0.2.11) (2.23.0)
-    Collecting websockets>=8.0.2
-      Downloading websockets-10.3-cp37-cp37m-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl (112 kB)
-    [K     |████████████████████████████████| 112 kB 12.1 MB/s 
-    [?25hRequirement already satisfied: urllib3!=1.25.0,!=1.25.1,<1.26,>=1.21.1 in /usr/local/lib/python3.7/dist-packages (from requests>=2.22.0->polygon-api-client==0.2.11) (1.24.3)
-    Requirement already satisfied: idna<3,>=2.5 in /usr/local/lib/python3.7/dist-packages (from requests>=2.22.0->polygon-api-client==0.2.11) (2.10)
-    Requirement already satisfied: chardet<4,>=3.0.2 in /usr/local/lib/python3.7/dist-packages (from requests>=2.22.0->polygon-api-client==0.2.11) (3.0.4)
-    Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.7/dist-packages (from requests>=2.22.0->polygon-api-client==0.2.11) (2022.6.15)
-    Installing collected packages: websockets, websocket-client, polygon-api-client
-    Successfully installed polygon-api-client-0.2.11 websocket-client-1.3.3 websockets-10.3
-    
-
-## Rest API to Get Aggregate Data
-Aggregate Data means the data that is aggregated with time. There could be OHLC in every minute and in any time frame. Open is always a Opening price of first candle in the timeframe, close is always a closing price of last candle in a timeframe and high is high price among all candles in timeframe and low is low price among all candles in timeframe.
-
+Old imports may look like this:
 
 ```python
 from polygon import RESTClient
+```
+
+Newer imports may look like this:
+
+```python
+from massive import RESTClient
+```
+
+If you are maintaining an older project, check which package version the project uses before changing imports.
+
+## Getting an API Key
+
+To use Polygon.io or Massive market data APIs, you need an API key.
+
+General steps:
+
+1. create an account
+2. open the dashboard
+3. find your API key
+4. copy it into an environment variable
+5. never commit it to GitHub
+
+In the original notebook, the API key was written directly as:
+
+```python
+key = ""
+```
+
+That is not safe. A better approach is to use environment variables.
+
+## Store API Key Safely
+
+Create a `.env` file:
+
+```text
+POLYGON_API_KEY=your_api_key_here
+```
+
+Add `.env` to `.gitignore`:
+
+```text
+.env
+__pycache__/
+*.pyc
+```
+
+Install `python-dotenv`:
+
+```bash
+pip install python-dotenv
+```
+
+Load the key:
+
+```python
+import os
+
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+API_KEY = os.environ["POLYGON_API_KEY"]
+```
+
+This keeps the key out of your source code.
+
+## Install Python Client
+
+For newer projects, install the current official client:
+
+```bash
+pip install -U massive
+```
+
+Then import:
+
+```python
+from massive import RESTClient
+```
+
+If you are following older code from 2022, you may see:
+
+```bash
+pip install polygon-api-client==0.2.11
+```
+
+and:
+
+```python
+from polygon import RESTClient
+```
+
+The old version may still be useful if you are reproducing an old notebook, but for new projects, start from the latest client and official documentation.
+
+## REST API vs WebSocket API
+
+There are two common ways to get market data.
+
+| API Type | Best For |
+|---|---|
+| REST API | Historical data, one-time queries, backtesting, dashboards |
+| WebSocket API | Realtime streams, live dashboards, alert systems |
+
+Use REST when you want data for a date range.
+
+Use WebSocket when you want to listen for live updates.
+
+## What Is Aggregate Data?
+
+Aggregate data means OHLCV data grouped by time.
+
+OHLCV means:
+
+| Column | Meaning |
+|---|---|
+| Open | first price in the period |
+| High | highest price in the period |
+| Low | lowest price in the period |
+| Close | last price in the period |
+| Volume | traded volume in the period |
+
+For example, one-minute aggregate bars contain one row per minute.
+
+## Get Aggregate Stock Data with REST API
+
+First, create the client.
+
+```python
+import os
+
 import pandas as pd
+from dotenv import load_dotenv
+from massive import RESTClient
 
-client = RESTClient(key)
 
+load_dotenv()
+
+API_KEY = os.environ["POLYGON_API_KEY"]
+
+client = RESTClient(api_key=API_KEY)
 ```
 
-Polygon uses timestamp to mention datetime FROM and TO. So we need to get timestamp first. And its also worth mentioning that the timestamp should be using milliseconds. We got the timestamp below but its not upto milliseconds so we added 3 0s in the end of bothn while calling api.
-
+Now request one-minute aggregate bars for Apple.
 
 ```python
-int(pd.to_datetime("2022-06-10 01:22").timestamp()),int(pd.to_datetime("2022-06-21 06:22").timestamp())
+ticker = "AAPL"
+
+aggs = []
+
+for bar in client.list_aggs(
+    ticker=ticker,
+    multiplier=1,
+    timespan="minute",
+    from_="2022-06-10",
+    to="2022-06-21",
+    limit=50000
+):
+    aggs.append(bar)
 ```
 
+This returns aggregate bar objects.
 
+## Convert Aggregates to pandas DataFrame
 
-
-    (1654824120, 1655792520)
-
-
-
-The data we are looking for is 1minute candle and it is available using `stocks_equities_aggregates` in this version. More about this function can be found in documentation [here](https://polygon.io/docs/stocks/get_v2_aggs_ticker__stocksticker__range__multiplier___timespan___from___to).
-
+The exact object format can depend on the client version. A safe approach is to convert each item to a dictionary.
 
 ```python
-res=client.stocks_equities_aggregates(ticker='AAPL', multiplier=1, 
-                                      timespan="minute", from_="1654824120000", 
-                                      to="1655792520000",limit=500000)
+records = []
+
+for bar in aggs:
+    if hasattr(bar, "__dict__"):
+        records.append(bar.__dict__)
+    else:
+        records.append(dict(bar))
+
+df = pd.DataFrame(records)
+
+df.head()
 ```
 
-The result will be in JSON but we can use pandas to make it dataframe.
-
+If your client already returns dictionaries, this can be simpler:
 
 ```python
-res.results
+df = pd.DataFrame(aggs)
 ```
 
+## Understand Aggregate Columns
+
+Depending on the client version, columns may be long names or short names.
+
+Old JSON-style columns often looked like this:
+
+| Column | Meaning |
+|---|---|
+| `v` | volume |
+| `vw` | volume weighted average price |
+| `o` | open |
+| `c` | close |
+| `h` | high |
+| `l` | low |
+| `t` | timestamp in milliseconds |
+| `n` | number of transactions |
+
+A cleaned version can use readable column names:
 
 ```python
+rename_map = {
+    "v": "volume",
+    "vw": "vwap",
+    "o": "open",
+    "c": "close",
+    "h": "high",
+    "l": "low",
+    "t": "timestamp",
+    "n": "transactions",
+}
 
+df = df.rename(columns=rename_map)
 ```
 
+## Convert Timestamp to Datetime
+
+Polygon-style aggregate timestamps are often in milliseconds.
 
 ```python
-df = pd.DataFrame(res.results)
+df["datetime"] = pd.to_datetime(
+    df["timestamp"],
+    unit="ms",
+    utc=True
+)
 
-df
+df = df.sort_values("datetime")
+
+df.head()
 ```
 
-
-
-
-
-  <div id="df-2a46dcf9-8f0a-447a-bb0e-e89ad781d304">
-    <div class="colab-df-container">
-      <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>v</th>
-      <th>vw</th>
-      <th>o</th>
-      <th>c</th>
-      <th>h</th>
-      <th>l</th>
-      <th>t</th>
-      <th>n</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>2292.0</td>
-      <td>142.9749</td>
-      <td>143.03</td>
-      <td>142.99</td>
-      <td>143.03</td>
-      <td>142.90</td>
-      <td>1654848000000</td>
-      <td>64</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>817.0</td>
-      <td>143.0116</td>
-      <td>143.02</td>
-      <td>143.03</td>
-      <td>143.03</td>
-      <td>143.02</td>
-      <td>1654848060000</td>
-      <td>53</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>513.0</td>
-      <td>143.0704</td>
-      <td>143.10</td>
-      <td>143.10</td>
-      <td>143.10</td>
-      <td>143.10</td>
-      <td>1654848120000</td>
-      <td>34</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>940.0</td>
-      <td>143.2342</td>
-      <td>143.23</td>
-      <td>143.25</td>
-      <td>143.25</td>
-      <td>143.23</td>
-      <td>1654848240000</td>
-      <td>30</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1802.0</td>
-      <td>143.1876</td>
-      <td>143.20</td>
-      <td>143.15</td>
-      <td>143.20</td>
-      <td>143.15</td>
-      <td>1654848300000</td>
-      <td>58</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>5033</th>
-      <td>536.0</td>
-      <td>131.5226</td>
-      <td>131.52</td>
-      <td>131.52</td>
-      <td>131.52</td>
-      <td>131.52</td>
-      <td>1655509860000</td>
-      <td>18</td>
-    </tr>
-    <tr>
-      <th>5034</th>
-      <td>706.0</td>
-      <td>131.5344</td>
-      <td>131.52</td>
-      <td>131.55</td>
-      <td>131.55</td>
-      <td>131.52</td>
-      <td>1655509920000</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <th>5035</th>
-      <td>2014.0</td>
-      <td>131.5570</td>
-      <td>131.55</td>
-      <td>131.57</td>
-      <td>131.57</td>
-      <td>131.55</td>
-      <td>1655510040000</td>
-      <td>27</td>
-    </tr>
-    <tr>
-      <th>5036</th>
-      <td>647.0</td>
-      <td>131.5287</td>
-      <td>131.53</td>
-      <td>131.52</td>
-      <td>131.53</td>
-      <td>131.52</td>
-      <td>1655510220000</td>
-      <td>21</td>
-    </tr>
-    <tr>
-      <th>5037</th>
-      <td>902.0</td>
-      <td>131.5651</td>
-      <td>131.55</td>
-      <td>131.56</td>
-      <td>131.56</td>
-      <td>131.55</td>
-      <td>1655510340000</td>
-      <td>32</td>
-    </tr>
-  </tbody>
-</table>
-<p>5038 rows × 8 columns</p>
-</div>
-      <button class="colab-df-convert" onclick="convertToInteractive('df-2a46dcf9-8f0a-447a-bb0e-e89ad781d304')"
-              title="Convert this dataframe to an interactive table."
-              style="display:none;">
-
-  <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
-       width="24px">
-    <path d="M0 0h24v24H0V0z" fill="none"/>
-    <path d="M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z"/><path d="M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z"/>
-  </svg>
-      </button>
-
-  <style>
-    .colab-df-container {
-      display:flex;
-      flex-wrap:wrap;
-      gap: 12px;
-    }
-
-    .colab-df-convert {
-      background-color: #E8F0FE;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      display: none;
-      fill: #1967D2;
-      height: 32px;
-      padding: 0 0 0 0;
-      width: 32px;
-    }
-
-    .colab-df-convert:hover {
-      background-color: #E2EBFA;
-      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
-      fill: #174EA6;
-    }
-
-    [theme=dark] .colab-df-convert {
-      background-color: #3B4455;
-      fill: #D2E3FC;
-    }
-
-    [theme=dark] .colab-df-convert:hover {
-      background-color: #434B5C;
-      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
-      fill: #FFFFFF;
-    }
-  </style>
-
-      <script>
-        const buttonEl =
-          document.querySelector('#df-2a46dcf9-8f0a-447a-bb0e-e89ad781d304 button.colab-df-convert');
-        buttonEl.style.display =
-          google.colab.kernel.accessAllowed ? 'block' : 'none';
-
-        async function convertToInteractive(key) {
-          const element = document.querySelector('#df-2a46dcf9-8f0a-447a-bb0e-e89ad781d304');
-          const dataTable =
-            await google.colab.kernel.invokeFunction('convertToInteractive',
-                                                     [key], {});
-          if (!dataTable) return;
-
-          const docLinkHtml = 'Like what you see? Visit the ' +
-            '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
-            + ' to learn more about interactive tables.';
-          element.innerHTML = '';
-          dataTable['output_type'] = 'display_data';
-          await google.colab.output.renderOutput(dataTable, element);
-          const docLink = document.createElement('div');
-          docLink.innerHTML = docLinkHtml;
-          element.appendChild(docLink);
-        }
-      </script>
-    </div>
-  </div>
-
-
-
-
-Columns in above table are using initials, o for open, h for high and so on.
-
-## Web Socket to Get Realtime Data
-
-Polygon also provides WebSocket which allows us to get data in near realtime.
-
+If you want New York time:
 
 ```python
-from polygon import WebSocketClient, STOCKS_CLUSTER,RESTClient
+df["datetime_ny"] = df["datetime"].dt.tz_convert("America/New_York")
+```
+
+Timezone handling is important in market data because exchanges operate in specific timezones.
+
+## Select Useful Columns
+
+```python
+columns = [
+    "datetime",
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume",
+    "vwap",
+    "transactions"
+]
+
+df = df[[column for column in columns if column in df.columns]]
+
+df.head()
+```
+
+Now the data is ready for analysis.
+
+## Plot Close Price
+
+```python
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12, 5))
+plt.plot(df["datetime"], df["close"])
+
+plt.title("AAPL 1-Minute Close Price")
+plt.xlabel("Time")
+plt.ylabel("Close Price")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+```
+
+This gives a simple line plot of close prices.
+
+## Save Data to CSV
+
+```python
+df.to_csv("aapl_1min_bars.csv", index=False)
+```
+
+Read it later:
+
+```python
+df = pd.read_csv("aapl_1min_bars.csv")
+```
+
+Saving data is useful for debugging, analysis, and backtesting.
+
+## Raw REST Request Alternative
+
+You can also use the REST API manually with `requests`.
+
+```python
+import os
+
+import pandas as pd
+import requests
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+API_KEY = os.environ["POLYGON_API_KEY"]
+
+ticker = "AAPL"
+
+url = (
+    "https://api.polygon.io/v2/aggs/ticker/"
+    f"{ticker}/range/1/minute/2022-06-10/2022-06-21"
+)
+
+params = {
+    "adjusted": "true",
+    "sort": "asc",
+    "limit": 50000,
+    "apiKey": API_KEY,
+}
+
+response = requests.get(url, params=params, timeout=30)
+response.raise_for_status()
+
+data = response.json()
+
+df = pd.DataFrame(data.get("results", []))
+```
+
+This is useful when you want to understand what the client library is doing internally.
+
+## WebSocket for Realtime Data
+
+REST is good for historical data. But if we want realtime market data, we need WebSockets.
+
+WebSockets keep a connection open and send new events as they arrive.
+
+In the old 2022 code, the WebSocket usage looked like this:
+
+```python
+from polygon import WebSocketClient, STOCKS_CLUSTER, RESTClient
 import json
 ```
 
-We need to create a handler inorder to handle a response. In our case, we need to create a handler that will write the data in our database or our desired place.
-
-
-```python
-def close_handler(ws):
-    ws=json.loads(ws)
-    for w in ws:
-        if w["ev"]=="AM":
-          print(w)
-```
-
-In above function, we are receiving websocket's response as ws and we convert it into dictionary using `json.loads`. Polygon sends bunch of responses in a same response if the system is slow or the result is too many to send one by one. So we loop through them, if there is a event (ev) named `AM` then we pring our data. AM means aggregated minute (I guess).
-
+Then:
 
 ```python
-symbols=["AAPL"]
+symbols = ["AAPL"]
 my_client = WebSocketClient(STOCKS_CLUSTER, key, close_handler)
 my_client.run_async()
 my_client.subscribe(*[f"AM.{s}" for s in symbols])
 ```
 
-* We prepare symbols in a list. 
-* Then prepare a object of `WebSocketClient` by passing STOCKS_CLUSTER, key and our handler. 
-* We run a Async and finally subscribe to the symbols. The `AM` there is responsible for getting realtime Aggregated data per minute.
+This was based on the older client style.
+
+For newer projects, check the current WebSocket client examples in the official client repository because the API style may change between versions.
+
+## WebSocket Event Types
+
+For stock streams, common channels include:
+
+| Channel | Meaning |
+|---|---|
+| `T.SYMBOL` | trades |
+| `Q.SYMBOL` | quotes |
+| `AM.SYMBOL` | minute aggregates |
+| `A.SYMBOL` | second aggregates, depending on plan/support |
+
+For example:
+
+```text
+AM.AAPL
+```
+
+means minute aggregate bars for Apple.
+
+## Simple WebSocket Handler Concept
+
+A WebSocket handler receives messages from the stream.
+
+Example concept:
+
+```python
+def handle_message(message):
+    """Handle incoming WebSocket messages."""
+    print(message)
+```
+
+In practice, the message format depends on the client version.
+
+A response may contain several events at once, so it is common to loop through messages.
+
+```python
+def handle_events(events):
+    for event in events:
+        event_type = getattr(event, "event_type", None)
+
+        if event_type == "AM":
+            print(event)
+```
+
+If the client gives dictionaries:
+
+```python
+def handle_events(events):
+    for event in events:
+        if event.get("ev") == "AM":
+            print(event)
+```
+
+## Store Realtime Bars
+
+For a real project, printing is not enough. We may want to store bars.
+
+Possible storage options:
+
+- CSV file
+- SQLite
+- PostgreSQL
+- Redis
+- TimescaleDB
+- Parquet files
+- message queue
+
+For a simple CSV example:
+
+```python
+def append_bar_to_csv(bar, file_path="bars.csv"):
+    row = pd.DataFrame([bar])
+    row.to_csv(
+        file_path,
+        mode="a",
+        header=not Path(file_path).exists(),
+        index=False
+    )
+```
+
+Remember to import `Path`:
+
+```python
+from pathlib import Path
+```
+
+## Realtime Data Pipeline Idea
+
+A simple realtime pipeline can look like this:
+
+```text
+WebSocket stream
+      |
+      v
+message handler
+      |
+      v
+clean event
+      |
+      v
+append to database
+      |
+      v
+dashboard or alert system
+```
+
+This is useful for:
+
+- live dashboards
+- alert systems
+- paper trading experiments
+- market monitoring
+- data collection
+- strategy research
+
+## REST vs WebSocket Example Use Cases
+
+| Task | Better Choice |
+|---|---|
+| Download last 6 months of 1-minute bars | REST |
+| Show live AAPL updates in dashboard | WebSocket |
+| Backtest a strategy | REST |
+| Monitor realtime trade events | WebSocket |
+| Build a daily report | REST |
+| Trigger alert when price moves | WebSocket |
+
+## Common Problems and Fixes
+
+### Problem 1: Authentication Error
+
+Check:
+
+- API key is correct
+- API key is active
+- environment variable is loaded
+- subscription plan supports the endpoint
+
+### Problem 2: No Data Returned
+
+Possible reasons:
+
+- ticker is wrong
+- market was closed
+- date range has no trading data
+- plan does not support the data
+- endpoint parameters are wrong
+
+### Problem 3: WebSocket Connects but No Messages Arrive
+
+Possible reasons:
+
+- market is closed
+- subscribed channel is not supported by your plan
+- wrong ticker symbol
+- wrong channel name
+- connection is blocked
+- you are using old client code with a newer package
+
+### Problem 4: Too Many Requests
+
+REST APIs can have rate limits.
+
+Solutions:
+
+- cache results
+- reduce request frequency
+- use pagination properly
+- use a paid plan if needed
+- use flat files for large historical downloads
+
+### Problem 5: Timestamp Looks Wrong
+
+Check the timestamp unit.
+
+If timestamp is in milliseconds:
+
+```python
+pd.to_datetime(df["timestamp"], unit="ms", utc=True)
+```
+
+If timestamp is in seconds:
+
+```python
+pd.to_datetime(df["timestamp"], unit="s", utc=True)
+```
+
+## Good Practices
+
+Here are some good practices when working with stock market APIs:
+
+- keep API keys in environment variables
+- do not commit keys to GitHub
+- understand your data plan and limits
+- store raw data before cleaning
+- convert timestamps carefully
+- use UTC internally
+- convert to exchange timezone for display
+- handle empty API responses
+- add retry logic for network errors
+- log WebSocket disconnects
+- do not make trading decisions from untested data
+
+## Minimal Project Structure
+
+A small project can look like this:
+
+```text
+polygon-stock-data/
+│
+├── rest_bars.py
+├── websocket_stream.py
+├── config.py
+├── requirements.txt
+├── .env
+├── .gitignore
+└── data/
+```
+
+Example `requirements.txt`:
+
+```text
+massive
+pandas
+python-dotenv
+requests
+matplotlib
+```
+
+If using old code:
+
+```text
+polygon-api-client==0.2.11
+pandas
+python-dotenv
+requests
+matplotlib
+```
+
+## Full REST Example
+
+```python
+import os
+
+import pandas as pd
+from dotenv import load_dotenv
+from massive import RESTClient
 
 
+load_dotenv()
+
+API_KEY = os.environ["POLYGON_API_KEY"]
+
+client = RESTClient(api_key=API_KEY)
+
+ticker = "AAPL"
+
+aggs = []
+
+for bar in client.list_aggs(
+    ticker=ticker,
+    multiplier=1,
+    timespan="minute",
+    from_="2022-06-10",
+    to="2022-06-21",
+    limit=50000
+):
+    aggs.append(bar)
+
+records = []
+
+for bar in aggs:
+    if hasattr(bar, "__dict__"):
+        records.append(bar.__dict__)
+    else:
+        records.append(dict(bar))
+
+df = pd.DataFrame(records)
+
+rename_map = {
+    "v": "volume",
+    "vw": "vwap",
+    "o": "open",
+    "c": "close",
+    "h": "high",
+    "l": "low",
+    "t": "timestamp",
+    "n": "transactions",
+}
+
+df = df.rename(columns=rename_map)
+
+if "timestamp" in df.columns:
+    df["datetime"] = pd.to_datetime(
+        df["timestamp"],
+        unit="ms",
+        utc=True
+    )
+
+df = df.sort_values("datetime")
+
+df.to_csv("data/aapl_1min_bars.csv", index=False)
+
+print(df.head())
+print(df.shape)
+```
+
+## Final Thoughts
+
+In this post, we learned how to use **Polygon.io stock market data in Python**. We covered REST aggregate bars, pandas conversion, timestamp cleaning, and the idea of WebSocket realtime streams.
+
+The main ideas are:
+
+- use REST API for historical data
+- use WebSocket API for realtime data
+- keep API keys secure
+- convert JSON responses into pandas DataFrames
+- clean timestamps carefully
+- check the current client library before copying old code
+
+The original 2022 code used `polygon-api-client==0.2.11`, which was useful at that time. For new projects, start from the current official client and documentation, then adapt the code based on your package version and subscription plan.

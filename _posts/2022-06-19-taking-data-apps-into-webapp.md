@@ -1,2278 +1,1796 @@
 ---
-title:  "Taking Data Apps into WebApp: Using Streamlit, Plotly, and Python"
-date:   2022-06-19 09:29:17 +0545
+layout: single
+title: "Build an Interactive Data Science Web App with Streamlit, Plotly, pandas, and scikit-learn"
+date: 2022-06-19 09:29:17 +0545
+last_modified_at: 2026-06-16
 categories:
-    - EDA
-    - Data Science
+  - EDA
+  - Data Science
+  - Streamlit
 tags:
-    - Pandas
-    - Python
-    - eda
+  - "Streamlit"
+  - "Plotly"
+  - "Python"
+  - "pandas"
+  - "EDA"
+  - "Machine Learning"
+  - "scikit-learn"
+  - "Data App"
+  - "Classification"
+  - "Clustering"
+description: "A beginner-friendly tutorial on building an interactive data science web app with Streamlit, Plotly, pandas, and scikit-learn for EDA, clustering, regression, classification, model saving, and inference."
+excerpt: "Learn how to turn a notebook-based data science project into an interactive Streamlit web app with Plotly charts, EDA tools, clustering, regression, classification, saved models, and inference forms."
 header:
   teaser: assets/data_app/10.png
+  og_image: assets/data_app/10.png
+  image_description: "Streamlit data science web app showing inference mode for occupancy prediction"
+toc: true
+toc_label: "Streamlit Data App"
+toc_icon: "chart-line"
+toc_sticky: true
+read_time: true
+share: true
+related: true
+classes: wide
 ---
 
-## Introduction
-From the past 2 stories of a data and its journey to confess the insights, we have explored several areas and to point out few:
-1. We have done EDA based on descriptive and inferential part of the statistics to find strong evidences, relationships and facts about the data.
-2. We used some of valuable insights from the EDA and tried to classify the possible environment that the properties reflects to. One example is, we tried to predict the value of CO based on Smoke and LPG.
+In the previous parts of this data science series, we explored data using descriptive and inferential statistics. We also used machine learning models to understand relationships in the data and predict possible outcomes.
 
-But now in this part, we will try to take those experiments into web app where we could tweak different aspects our experiment by making a simple yet powerful web app using Streamlit. Streamlit is a free tool available in Python that allows us to make Data Apps faster. 
+Now, we will take those notebook experiments and turn them into an **interactive data science web app**.
 
+We will use:
 
-## Making Things Ready
-* Please install Streamlit by doing `pip install streamlit`. 
-* Once installed, please make sure it is recognized by system as a environment variable by doing `streamlit --version` and if it gives a output, then we are ready to go. 
-* Please install Plotly as we will be making interactive plots based on it.
+- Streamlit for the web app
+- pandas for data loading and cleaning
+- Plotly for interactive charts
+- scikit-learn for clustering, regression, and classification
+- joblib for saving and loading trained models
 
-## Getting Data Ready
-For this purpose, we will be working with [Room Occupancy Detection Data](https://github.com/LuisM78/Occupancy-detection-data). Which is similar to the previous data. There are 3 text files with CSV formats, `datatraining.txt`, `datatest.txt` and `datatest2.txt`. Lets read them using Pandas and convert the date column to datetime. The column `Occupancy` contains a binary value 0/1 which will be the label for us later on.
+The goal is to build a small but useful app where we can:
 
+- load room occupancy data
+- explore datasets
+- compare feature distributions
+- view correlations
+- run clustering
+- train regression models
+- train classification models
+- save trained models
+- load saved models
+- make predictions from user input
+
+This is a practical step because many data science projects start in notebooks, but decision-makers and users often need a simple app.
+
+## What We Are Building
+
+We will build a Streamlit app with these modes:
+
+| Mode | Purpose |
+|---|---|
+| EDA | Show raw data, distributions, box plots, and correlations |
+| Clustering | Try K-Means and K-Medoids clustering |
+| Regression | Predict occupancy as a continuous value using regression models |
+| Classification | Predict occupancy class as vacant or occupied |
+| Inference | Load a saved model and make prediction from user input |
+
+The final app will look similar to the original screenshots.
+
+![]({{site.url}}/assets/data_app/10.png)
+
+## Dataset
+
+For this tutorial, we will use the **Room Occupancy Detection Data**.
+
+The dataset is available here:
+
+- [Room Occupancy Detection Data](https://github.com/LuisM78/Occupancy-detection-data)
+
+It contains three CSV-like text files:
+
+- `datatraining.txt`
+- `datatest.txt`
+- `datatest2.txt`
+
+The main columns are:
+
+| Column | Meaning |
+|---|---|
+| `date` | timestamp |
+| `Temperature` | room temperature |
+| `Humidity` | room humidity |
+| `Light` | light level |
+| `CO2` | carbon dioxide level |
+| `HumidityRatio` | humidity ratio |
+| `Occupancy` | target label, 0 for vacant and 1 for occupied |
+
+The `Occupancy` column is the label. It is a binary value:
+
+```text
+0 = vacant
+1 = occupied
+```
+
+## Install Required Packages
+
+Create a virtual environment first.
+
+```bash
+python -m venv env
+source env/bin/activate
+```
+
+On Windows:
+
+```bash
+env\\Scripts\\activate
+```
+
+Install the packages:
+
+```bash
+pip install streamlit pandas numpy plotly scikit-learn joblib
+```
+
+If you want to use K-Medoids:
+
+```bash
+pip install scikit-learn-extra
+```
+
+If `scikit-learn-extra` gives installation issues, you can skip K-Medoids and use only K-Means.
+
+## Recommended Project Structure
+
+A clean project structure can look like this:
+
+```text
+streamlit-data-app/
+│
+├── app.py
+├── models/
+│   └── .gitkeep
+├── data/
+│   └── .gitkeep
+├── requirements.txt
+└── README.md
+```
+
+The important file is:
+
+```text
+app.py
+```
+
+The `models/` folder will store saved machine learning models.
+
+## Load Libraries
 
 ```python
-import pandas as pd
-import cufflinks
-import plotly.io as pio
-import warnings
+from pathlib import Path
+
+import joblib
 import numpy as np
-cufflinks.go_offline()
-cufflinks.set_config_file(world_readable=True, theme='pearl')
-pio.renderers.default = "notebook"
-warnings.simplefilter("ignore")
+import pandas as pd
+import plotly.graph_objects as go
+import streamlit as st
+
+from plotly.subplots import make_subplots
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
+from sklearn.linear_model import ElasticNet, Lasso, LinearRegression, LogisticRegression, Ridge
+from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, r2_score
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.tree import DecisionTreeClassifier
 ```
+
+Optional K-Medoids import:
 
 ```python
-train = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatraining.txt")
-train["date"]=pd.to_datetime(train.date)
-train
+try:
+    from sklearn_extra.cluster import KMedoids
+    HAS_KMEDOIDS = True
+except ImportError:
+    HAS_KMEDOIDS = False
 ```
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>date</th>
-      <th>Temperature</th>
-      <th>Humidity</th>
-      <th>Light</th>
-      <th>CO2</th>
-      <th>HumidityRatio</th>
-      <th>Occupancy</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>1</th>
-      <td>2015-02-04 17:51:00</td>
-      <td>23.18</td>
-      <td>27.2720</td>
-      <td>426.0</td>
-      <td>721.250000</td>
-      <td>0.004793</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2015-02-04 17:51:59</td>
-      <td>23.15</td>
-      <td>27.2675</td>
-      <td>429.5</td>
-      <td>714.000000</td>
-      <td>0.004783</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2015-02-04 17:53:00</td>
-      <td>23.15</td>
-      <td>27.2450</td>
-      <td>426.0</td>
-      <td>713.500000</td>
-      <td>0.004779</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2015-02-04 17:54:00</td>
-      <td>23.15</td>
-      <td>27.2000</td>
-      <td>426.0</td>
-      <td>708.250000</td>
-      <td>0.004772</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>2015-02-04 17:55:00</td>
-      <td>23.10</td>
-      <td>27.2000</td>
-      <td>426.0</td>
-      <td>704.500000</td>
-      <td>0.004757</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>8139</th>
-      <td>2015-02-10 09:29:00</td>
-      <td>21.05</td>
-      <td>36.0975</td>
-      <td>433.0</td>
-      <td>787.250000</td>
-      <td>0.005579</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>8140</th>
-      <td>2015-02-10 09:29:59</td>
-      <td>21.05</td>
-      <td>35.9950</td>
-      <td>433.0</td>
-      <td>789.500000</td>
-      <td>0.005563</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>8141</th>
-      <td>2015-02-10 09:30:59</td>
-      <td>21.10</td>
-      <td>36.0950</td>
-      <td>433.0</td>
-      <td>798.500000</td>
-      <td>0.005596</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>8142</th>
-      <td>2015-02-10 09:32:00</td>
-      <td>21.10</td>
-      <td>36.2600</td>
-      <td>433.0</td>
-      <td>820.333333</td>
-      <td>0.005621</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>8143</th>
-      <td>2015-02-10 09:33:00</td>
-      <td>21.10</td>
-      <td>36.2000</td>
-      <td>447.0</td>
-      <td>821.000000</td>
-      <td>0.005612</td>
-      <td>1</td>
-    </tr>
-  </tbody>
-</table>
+## Load the Data
 
+In older Streamlit versions, we used:
 
 ```python
-test1 = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatest.txt")
-test1["date"]=pd.to_datetime(test1.date)
-test1
-
+@st.cache
 ```
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>date</th>
-      <th>Temperature</th>
-      <th>Humidity</th>
-      <th>Light</th>
-      <th>CO2</th>
-      <th>HumidityRatio</th>
-      <th>Occupancy</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>140</th>
-      <td>2015-02-02 14:19:00</td>
-      <td>23.700000</td>
-      <td>26.272000</td>
-      <td>585.200000</td>
-      <td>749.200000</td>
-      <td>0.004764</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>141</th>
-      <td>2015-02-02 14:19:59</td>
-      <td>23.718000</td>
-      <td>26.290000</td>
-      <td>578.400000</td>
-      <td>760.400000</td>
-      <td>0.004773</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>142</th>
-      <td>2015-02-02 14:21:00</td>
-      <td>23.730000</td>
-      <td>26.230000</td>
-      <td>572.666667</td>
-      <td>769.666667</td>
-      <td>0.004765</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>143</th>
-      <td>2015-02-02 14:22:00</td>
-      <td>23.722500</td>
-      <td>26.125000</td>
-      <td>493.750000</td>
-      <td>774.750000</td>
-      <td>0.004744</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>144</th>
-      <td>2015-02-02 14:23:00</td>
-      <td>23.754000</td>
-      <td>26.200000</td>
-      <td>488.600000</td>
-      <td>779.000000</td>
-      <td>0.004767</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>2800</th>
-      <td>2015-02-04 10:38:59</td>
-      <td>24.290000</td>
-      <td>25.700000</td>
-      <td>808.000000</td>
-      <td>1150.250000</td>
-      <td>0.004829</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2801</th>
-      <td>2015-02-04 10:40:00</td>
-      <td>24.330000</td>
-      <td>25.736000</td>
-      <td>809.800000</td>
-      <td>1129.200000</td>
-      <td>0.004848</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2802</th>
-      <td>2015-02-04 10:40:59</td>
-      <td>24.330000</td>
-      <td>25.700000</td>
-      <td>817.000000</td>
-      <td>1125.800000</td>
-      <td>0.004841</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2803</th>
-      <td>2015-02-04 10:41:59</td>
-      <td>24.356667</td>
-      <td>25.700000</td>
-      <td>813.000000</td>
-      <td>1123.000000</td>
-      <td>0.004849</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2804</th>
-      <td>2015-02-04 10:43:00</td>
-      <td>24.408333</td>
-      <td>25.681667</td>
-      <td>798.000000</td>
-      <td>1124.000000</td>
-      <td>0.004860</td>
-      <td>1</td>
-    </tr>
-  </tbody>
-</table>
-
-
+In newer Streamlit versions, we should use:
 
 ```python
-test2 = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatest2.txt")
-test2["date"]=pd.to_datetime(test2.date)
-test2
+@st.cache_data
 ```
 
-
- <table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>date</th>
-      <th>Temperature</th>
-      <th>Humidity</th>
-      <th>Light</th>
-      <th>CO2</th>
-      <th>HumidityRatio</th>
-      <th>Occupancy</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>1</th>
-      <td>2015-02-11 14:48:00</td>
-      <td>21.7600</td>
-      <td>31.133333</td>
-      <td>437.333333</td>
-      <td>1029.666667</td>
-      <td>0.005021</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2015-02-11 14:49:00</td>
-      <td>21.7900</td>
-      <td>31.000000</td>
-      <td>437.333333</td>
-      <td>1000.000000</td>
-      <td>0.005009</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2015-02-11 14:50:00</td>
-      <td>21.7675</td>
-      <td>31.122500</td>
-      <td>434.000000</td>
-      <td>1003.750000</td>
-      <td>0.005022</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2015-02-11 14:51:00</td>
-      <td>21.7675</td>
-      <td>31.122500</td>
-      <td>439.000000</td>
-      <td>1009.500000</td>
-      <td>0.005022</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>2015-02-11 14:51:59</td>
-      <td>21.7900</td>
-      <td>31.133333</td>
-      <td>437.333333</td>
-      <td>1005.666667</td>
-      <td>0.005030</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>9748</th>
-      <td>2015-02-18 09:15:00</td>
-      <td>20.8150</td>
-      <td>27.717500</td>
-      <td>429.750000</td>
-      <td>1505.250000</td>
-      <td>0.004213</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>9749</th>
-      <td>2015-02-18 09:16:00</td>
-      <td>20.8650</td>
-      <td>27.745000</td>
-      <td>423.500000</td>
-      <td>1514.500000</td>
-      <td>0.004230</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>9750</th>
-      <td>2015-02-18 09:16:59</td>
-      <td>20.8900</td>
-      <td>27.745000</td>
-      <td>423.500000</td>
-      <td>1521.500000</td>
-      <td>0.004237</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>9751</th>
-      <td>2015-02-18 09:17:59</td>
-      <td>20.8900</td>
-      <td>28.022500</td>
-      <td>418.750000</td>
-      <td>1632.000000</td>
-      <td>0.004279</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>9752</th>
-      <td>2015-02-18 09:19:00</td>
-      <td>21.0000</td>
-      <td>28.100000</td>
-      <td>409.000000</td>
-      <td>1864.000000</td>
-      <td>0.004321</td>
-      <td>1</td>
-    </tr>
-  </tbody>
-</table>
-
-
-Lets look over these data and do necessary actions.
-
+This is better for loading data and caching DataFrames.
 
 ```python
-test2.date.describe()
+@st.cache_data
+def load_data():
+    train = pd.read_csv(
+        "https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatraining.txt"
+    )
+    test1 = pd.read_csv(
+        "https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatest.txt"
+    )
+    test2 = pd.read_csv(
+        "https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatest2.txt"
+    )
+
+    for df in [train, test1, test2]:
+        df["date"] = pd.to_datetime(df["date"])
+
+    return {
+        "train": train,
+        "test1": test1,
+        "test2": test2,
+    }
 ```
 
-
-
-
-    count                    9752
-    unique                   9752
-    top       2015-02-15 15:04:59
-    freq                        1
-    first     2015-02-11 14:48:00
-    last      2015-02-18 09:19:00
-    Name: date, dtype: object
-
-
-
+Now load the data:
 
 ```python
-test1.date.describe()
+dfs = load_data()
 ```
 
+## Quick Data Check
 
-
-
-    count                    2665
-    unique                   2665
-    top       2015-02-03 14:45:59
-    freq                        1
-    first     2015-02-02 14:19:00
-    last      2015-02-04 10:43:00
-    Name: date, dtype: object
-
-
-
+Before creating the app, it is useful to understand the data.
 
 ```python
-train.date.describe()
+train = dfs["train"]
+test1 = dfs["test1"]
+test2 = dfs["test2"]
+
+train.head()
 ```
 
+The data contains sensor values and the target occupancy value.
 
+The original notebook showed the three datasets separately and checked their date ranges.
 
+The training data covers a different date range from the two test datasets. That means we should be careful when comparing model performance.
 
-    count                    8143
-    unique                   8143
-    top       2015-02-07 20:26:59
-    freq                        1
-    first     2015-02-04 17:51:00
-    last      2015-02-10 09:33:00
-    Name: date, dtype: object
+## Missing Values
 
+The original notebook checked missing values for all three datasets.
 
+```python
+for name, df in dfs.items():
+    total = df.isnull().sum()
+    percent = df.isnull().mean()
 
-Looking over the date of each dataframe, the train data have data from 04 to 10 day, and test1 have 02 to 04 then test2 have 11 to 18 day. It might be best idea to concatenate train and test2 but lets explore it later on.
+    missing = pd.concat(
+        [total, percent],
+        axis=1,
+        keys=["Total", "Percent"]
+    )
+
+    print(name)
+    print(missing)
+```
+
+In this dataset, there are no missing values in the main columns.
 
 ## Exploratory Data Analysis
 
-### Missing Values
+The original analysis compared each column using box plots and histograms.
 
-
-```python
-dfs = {"train":train,"test1":test1,"test2":test2}
-for df in dfs.values():
-    total = df.isnull().sum().sort_values(ascending = False)
-    percent = (df.isnull().sum()/df.isnull().count()).sort_values(ascending = False)
-    mdf = pd.concat([total, percent], axis=1, keys=['Total', 'Percent'])
-    mdf = mdf.reset_index()
-    print(mdf)
-```
-
-               index  Total  Percent
-    0           date      0      0.0
-    1    Temperature      0      0.0
-    2       Humidity      0      0.0
-    3          Light      0      0.0
-    4            CO2      0      0.0
-    5  HumidityRatio      0      0.0
-    6      Occupancy      0      0.0
-               index  Total  Percent
-    0           date      0      0.0
-    1    Temperature      0      0.0
-    2       Humidity      0      0.0
-    3          Light      0      0.0
-    4            CO2      0      0.0
-    5  HumidityRatio      0      0.0
-    6      Occupancy      0      0.0
-               index  Total  Percent
-    0           date      0      0.0
-    1    Temperature      0      0.0
-    2       Humidity      0      0.0
-    3          Light      0      0.0
-    4            CO2      0      0.0
-    5  HumidityRatio      0      0.0
-    6      Occupancy      0      0.0
-    
-
-It seems that there is no missing values in each columns. Lets see the distribution of each columns.
-
-### Summary of Each Variables
-For the purpose of comparing distribution of values in each dataframe, we will plot boxplot side by side. 
-Please ignore the import time and `fig.write_image(..)` part.
-
-
-```python
-from plotly.subplots import make_subplots
-import plotly.graph_objects as go
-import time
-
-titles = list(dfs.keys())
-
-for c in train.columns:
-    if c!="date":
-        fig = make_subplots(rows=2,cols=3, subplot_titles=titles, )
-        fig.add_trace(go.Box(y=train[c].tolist(), name=titles[0]), row=1, col=1)
-        fig.add_trace(go.Box(y=test1[c].tolist(), name = titles[1]), row=1, col=2)
-        fig.add_trace(go.Box(y=test2[c].tolist(), name = titles[2]), row=1, col=3)
-        
-        fig.add_trace(go.Histogram(y=train[c].tolist(), name=titles[0]), row=2, col=1)
-        fig.add_trace(go.Histogram(y=test1[c].tolist(), name = titles[1]), row=2, col=2)
-        fig.add_trace(go.Histogram(y=test2[c].tolist(), name = titles[2]), row=2, col=3)
-        fig.update_layout(height=600, width=800, title_text=f"Box and Distribution of {c}")
-        fig.show()
-        fig.write_image(f"summary_{c}.png")
-```
+Examples:
 
 ![]({{site.url}}/assets/data_app/summary_Humidity.png)
+
 ![]({{site.url}}/assets/data_app/summary_HumidityRatio.png)
+
 ![]({{site.url}}/assets/data_app/summary_Light.png)
+
 ![]({{site.url}}/assets/data_app/summary_Occupancy.png)
+
 ![]({{site.url}}/assets/data_app/summary_Temperature.png)
 
-Looking over a Histogram and a box plot of different column values, we can see that the descriptive property of a data is not identical to each other. Thus we might need to do some kind of data transformation if our model does not perform well.
+From these plots, we can see that the feature distributions are not identical across train and test data. This is important because models may perform differently when the test data distribution changes.
 
-### Correlation
-Lets see if correlation between variables are same and if they do, we will be on the bright side.
+## Correlation Analysis
 
+Correlation helps us understand how variables move together.
+
+The original notebook compared correlations for all three datasets.
+
+For this app, we can generate a correlation heatmap dynamically.
 
 ```python
-fig = make_subplots(rows=1,cols=3, subplot_titles=titles)
-fig.add_trace(go.Heatmap(z=train.corr(), y=train.corr().columns,x=train.corr().index, name=titles[0]), row=1, col=1)
-fig.add_trace(go.Heatmap(z=test1.corr(), x=train.corr().index, name = titles[1]), row=1, col=2)
-fig.add_trace(go.Heatmap(z=test2.corr(), x=train.corr().index, name = titles[2]), row=1, col=3)
-fig.show()
+def make_correlation_plot(dfs):
+    titles = list(dfs.keys())
 
-fig.write_image(f"corr.png")
+    fig = make_subplots(
+        rows=1,
+        cols=len(titles),
+        subplot_titles=titles
+    )
+
+    for i, name in enumerate(titles, start=1):
+        corr = dfs[name].select_dtypes(include="number").corr()
+
+        fig.add_trace(
+            go.Heatmap(
+                z=corr.values,
+                x=corr.columns,
+                y=corr.index,
+                coloraxis="coloraxis"
+            ),
+            row=1,
+            col=i
+        )
+
+    fig.update_layout(
+        title="Correlation Heatmaps",
+        height=500,
+        coloraxis={"colorscale": "Viridis"}
+    )
+
+    return fig
 ```
 
-The correlation seems almost similar for all 3 dataframes.
+## First Streamlit App
 
-## Taking EDA to Streamlit App
-Please create a project folder and inside it, create a Python file `main.py`. This file will be our main file where we will do all these plots and it will take our plots, analysis into the web app.
-
-### First Streamlit App
-We will read our file and then put it in a cache so that we wont have to read it whenever our app is changed.
+Now we can start building the Streamlit app.
 
 ```python
 import streamlit as st
-import numpy as np
-import pandas as pd
-import cufflinks
 
-@st.cache
-def get_data():
-    train = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatraining.txt")
-    train["date"]=pd.to_datetime(train.date)
-    
-    test1 = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatest.txt")
-    test1["date"]=pd.to_datetime(test1.date)
-    
-    test2 = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatest2.txt")
-    test2["date"]=pd.to_datetime(test2.date)
-    
-    dfs = {"train":train,"test1":test1,"test2":test2}
-    return dfs
+st.set_page_config(
+    page_title="Room Occupancy Data App",
+    page_icon="📊",
+    layout="wide"
+)
 
-dfs = get_data()
+st.title("Room Occupancy Data App")
+st.write("Interactive EDA and machine learning app using Streamlit.")
+```
+
+The first version only loads and displays the training data.
+
+```python
+dfs = load_data()
+
 st.dataframe(dfs["train"])
 ```
 
-In above code, we have read 3 files and put them in dictionary as dfs the returned. The `@st.cache` decorator allows us to cache the file so that we wont need to reload the data whenever the app reloads. Then we have shown the dataframe in a app. App should look like below:
+The app should look like this:
 
 ![]({{site.url}}/assets/data_app/1.png)
 
-For the next step, we will add few select box and then the analysis parts.
+Run the app:
 
-```python
-import streamlit as st
-import numpy as np
-import pandas as pd
-import cufflinks
-from plotly.subplots import make_subplots
-import plotly.graph_objects as go
-
-@st.cache
-def get_data():
-    train = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatraining.txt")
-    train["date"]=pd.to_datetime(train.date)
-    
-    test1 = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatest.txt")
-    test1["date"]=pd.to_datetime(test1.date)
-    
-    test2 = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatest2.txt")
-    test2["date"]=pd.to_datetime(test2.date)
-    
-    dfs = {"train":train,"test1":test1,"test2":test2}
-    return dfs
-
-dfs = get_data()
-sidebar = st.sidebar
-
-
-# select modes, EDA, Clustering, Regression and Classification
-mode = sidebar.selectbox("Select a mode.",options=["EDA", "Clustering", "Regression", "Classification"])
-
-# If selected EDA, show EDA related plots
-if mode=="EDA":
-    
-    # if selected show the data
-    show_data = sidebar.checkbox("Show data")
-    if show_data:
-        # if selected, show train data
-        if sidebar.checkbox("Show Train data"):
-            st.markdown("### Train Data")
-            st.dataframe(dfs["train"])
-        
-        # if selected, show test1 data
-        if sidebar.checkbox("Show Test1 data"):
-            st.markdown("### Test1 Data")
-            st.dataframe(dfs["test1"])
-            
-        # if selected, show test2 data
-        if sidebar.checkbox("Show Test2 data"):
-            st.markdown("### Test2 Data")
-            st.dataframe(dfs["test2"])
-    
-    # if selected, show the comparision data
-    show_comparison = sidebar.checkbox("Show comparison")
-    if show_comparison:
-        
-        # make a multiselect to select the columns to compare
-        selected = sidebar.multiselect("Select Columns ", [d for d in dfs["train"].columns if d not in ["date"]])
-        
-        
-        titles=list(dfs.keys())
-        train = dfs["train"]
-        test1 = dfs["test1"]
-        test2 = dfs["test2"]
-        
-        if selected:
-            st.markdown(f"### Selected Columns: {', '.join(selected)}")
-            
-            for c in selected:
-                fig = make_subplots(rows=2,cols=3, subplot_titles=titles, )
-                fig.add_trace(go.Box(y=train[c].tolist(), name=titles[0]), row=1, col=1)
-                fig.add_trace(go.Box(y=test1[c].tolist(), name = titles[1]), row=1, col=2)
-                fig.add_trace(go.Box(y=test2[c].tolist(), name = titles[2]), row=1, col=3)
-                
-                fig.add_trace(go.Histogram(y=train[c].tolist(), name=titles[0]), row=2, col=1)
-                fig.add_trace(go.Histogram(y=test1[c].tolist(), name = titles[1]), row=2, col=2)
-                fig.add_trace(go.Histogram(y=test2[c].tolist(), name = titles[2]), row=2, col=3)
-                fig.update_layout(height=600, width=800, title_text=f"Box and Distribution of {c}")
-                st.plotly_chart(fig)
-        
-        # if selected show correlation
-        show_corr = sidebar.checkbox("Show Correlation")
-        if show_corr:
-            st.markdown("### Correlation")
-            fig = make_subplots(rows=1,cols=3, subplot_titles=titles)
-            fig.add_trace(go.Heatmap(z=train.corr(), y=train.corr().columns,x=train.corr().index, name=titles[0]), row=1, col=1)
-            fig.add_trace(go.Heatmap(z=test1.corr(), x=train.corr().index, name = titles[1]), row=1, col=2)
-            fig.add_trace(go.Heatmap(z=test2.corr(), x=train.corr().index, name = titles[2]), row=1, col=3)
-            st.plotly_chart(fig)
+```bash
+streamlit run app.py
 ```
 
-In above code, we have added everything we did on EDA into a web app. We have added a comment above the part of code that needs explanation. Now our app looks like below:
+## Add Sidebar Navigation
 
+We will use the sidebar to switch between modes.
+
+```python
+sidebar = st.sidebar
+
+mode = sidebar.selectbox(
+    "Select a mode",
+    ["EDA", "Clustering", "Regression", "Classification", "Inference"]
+)
+
+st.markdown(f"## {mode} Mode")
+```
+
+The original app had modes for EDA, clustering, regression, and classification. We will also add inference mode.
+
+## EDA Mode
+
+EDA mode should let users:
+
+- show raw datasets
+- select columns
+- compare box plots and histograms
+- show correlation heatmaps
+
+```python
+FEATURES = ["Temperature", "Humidity", "Light", "CO2", "HumidityRatio"]
+TARGET = "Occupancy"
+```
+
+Create the EDA function:
+
+```python
+def render_eda_mode(dfs):
+    st.markdown("### Exploratory Data Analysis")
+
+    sidebar = st.sidebar
+
+    show_data = sidebar.checkbox("Show data")
+
+    if show_data:
+        selected_dataset = sidebar.selectbox(
+            "Select dataset",
+            list(dfs.keys())
+        )
+
+        st.markdown(f"#### {selected_dataset} Data")
+        st.dataframe(dfs[selected_dataset])
+
+    show_comparison = sidebar.checkbox("Show feature comparison")
+
+    if show_comparison:
+        selected_columns = sidebar.multiselect(
+            "Select columns",
+            FEATURES + [TARGET],
+            default=["Temperature", "Humidity", "Light"]
+        )
+
+        if selected_columns:
+            for column in selected_columns:
+                fig = make_feature_comparison_plot(dfs, column)
+                st.plotly_chart(fig, use_container_width=True)
+
+    show_corr = sidebar.checkbox("Show correlation")
+
+    if show_corr:
+        fig = make_correlation_plot(dfs)
+        st.plotly_chart(fig, use_container_width=True)
+```
+
+Feature comparison plot:
+
+```python
+def make_feature_comparison_plot(dfs, column):
+    titles = list(dfs.keys())
+
+    fig = make_subplots(
+        rows=2,
+        cols=3,
+        subplot_titles=titles,
+    )
+
+    for i, name in enumerate(titles, start=1):
+        df = dfs[name]
+
+        fig.add_trace(
+            go.Box(y=df[column], name=f"{name} box"),
+            row=1,
+            col=i
+        )
+
+        fig.add_trace(
+            go.Histogram(x=df[column], name=f"{name} hist"),
+            row=2,
+            col=i
+        )
+
+    fig.update_layout(
+        height=650,
+        title_text=f"Box Plot and Distribution of {column}",
+        showlegend=False
+    )
+
+    return fig
+```
+
+The EDA app should look like this:
 
 ![]({{site.url}}/assets/data_app/2.png)
 
-## Clustering
-Now we want to cluster our data based on the features we have. We already know that there are two classes in data occupancy, but lets try to find if some kind of clusters can be seen or not.
+## Clustering Mode
 
-### KMeans Clustering
+In clustering mode, we will try to group data points without using the `Occupancy` label.
 
-Lets first do clustering based on default features and see the performance of it on the train dataframe.
+The original notebook used:
 
+- K-Means
+- K-Medoids
+- PCA for dimensionality reduction
+- inertia plot
 
-```python
-from sklearn.cluster import KMeans
-
-
-clusters = 5
-features = ["Temperature", "Humidity", "CO2", "HumidityRatio","Light"][:-2]
-
-inertias = []
-
-for c in range(2,clusters+1):
-    tdf = train.copy()
-    X = tdf[features].to_numpy()
-    
-    colors=['red','green','blue','magenta','black','yellow']
-    model = KMeans(n_clusters=c)
-    model.fit(X)
-    y_kmeans = model.predict(X)
-    tdf["cluster"] = y_kmeans
-    inertias.append((c,model.inertia_))
-    
-    trace0 = go.Scatter(x=tdf[features[0]],y=tdf[features[1]],mode='markers',  marker=dict(
-        color=tdf.cluster.apply(lambda x: colors[x]),
-        colorscale='Viridis',
-        showscale=True
-    ),name="Cluster Points")
-    trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-        color=colors,
-        size=20,
-        showscale=True
-    ),name="Cluster Mean")
-        
-    data7 = go.Data([trace0, trace1])
-    fig = go.Figure(data=data7)
-    fig.update_layout(title=f"Cluster Size {c}")
-    fig.show()
-    fig.write_image(f"kmeans_{c}.png")
-
-inertias=np.array(inertias).reshape(-1,2)
-performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-layout = go.Layout(
-    title="Cluster Number vs Inertia",
-    xaxis=dict(
-        title="Ks"
-    ),
-    yaxis=dict(
-        title="Inertia"
-    ) ) 
-fig=go.Figure(data=go.Data([performance]))
-fig.update_layout(layout)
-fig.show()
-fig.write_image(f"kmeans_cvi{c}.png")
-```
+Example K-Means outputs:
 
 ![]({{site.url}}/assets/data_app/kmeans_2.png)
+
 ![]({{site.url}}/assets/data_app/kmeans_3.png)
+
 ![]({{site.url}}/assets/data_app/kmeans_4.png)
+
 ![]({{site.url}}/assets/data_app/kmeans_5.png)
+
 ![]({{site.url}}/assets/data_app/kmeans_cvi5.png)
 
+## PCA for Dimensionality Reduction
 
-Looking over the Inertia plot, it seems that inertia has decreased slowly from ks 3. But We already know that data is from two different occupancy. The cluster plots does not seems to be great because we have multiple features used for clustering and plot is 2d. Now lets try to do dimension reduction and see the performance.
+The original notebook also used PCA to reduce the data to lower-dimensional components.
 
-### PCA for Dimensionality Reduction
-PCA is used to reduce the high dimension of the data into more robust features.
+![]({{site.url}}/assets/data_app/output_33_0.png)
 
+![]({{site.url}}/assets/data_app/output_33_2.png)
 
-```python
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-import matplotlib.pyplot as plt
-
-X = train[features]
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
-
-# Create a PCA instance: pca
-pca = PCA(n_components=3)
-principalComponents = pca.fit_transform(X_scaled)# Plot the explained variances
-feat = range(pca.n_components_)
-plt.bar(feat, pca.explained_variance_ratio_, color='black')
-plt.xlabel('PCA features')
-plt.ylabel('variance %')
-plt.xticks(feat)# Save components to a DataFrame
-PCA_components = pd.DataFrame(principalComponents, columns=list(range(len(feat))))
-plt.show()
-
-plt.scatter(PCA_components[1], PCA_components[2], alpha=.1, color='black')
-plt.xlabel('PCA 1')
-plt.ylabel('PCA 2')
-
-```
-
-
-    
-![png]({{site.url}}/assets/data_app/output_33_0.png)
-    
-
-
-
-
-
-    Text(0, 0.5, 'PCA 2')
-
-
-
-
-    
-![png]({{site.url}}/assets/data_app/output_33_2.png)
-    
-
-
-Looking over the plots of components, we can see some kind of clustering. Thus, we will try to make a Cluster now.
-
-
-```python
-
-```
-
-
-```python
-clusters = 5
-features = ["Temperature", "Humidity", "CO2", "HumidityRatio","Light"][:-2]
-
-inertias = []
-
-for c in range(2,clusters+1):
-    X = PCA_components[[1,2]]
-    
-    colors=['red','green','blue','magenta','black','yellow']
-    model = KMeans(n_clusters=c)
-    model.fit(X)
-    y_kmeans = model.predict(X)
-    tdf["cluster"] = y_kmeans
-    inertias.append((c,model.inertia_))
-    
-    trace0 = go.Scatter(x=X[1],y=X[2],mode='markers',  marker=dict(
-        color=tdf.cluster.apply(lambda x: colors[x]),
-        colorscale='Viridis',
-        showscale=True
-    ),name="Cluster Points")
-    trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-        color=colors,
-        size=20,
-        showscale=True
-    ),name="Cluster Mean")
-        
-    data7 = go.Data([trace0, trace1])
-    fig = go.Figure(data=data7)
-    fig.update_layout(title=f"Cluster Size {c}")
-    fig.show()
-    fig.write_image(f"pca_kmeans_{c}1.png")
-
-inertias=np.array(inertias).reshape(-1,2)
-performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-layout = go.Layout(
-    title="Cluster Number vs Inertia",
-    xaxis=dict(
-        title="Ks"
-    ),
-    yaxis=dict(
-        title="Inertia"
-    ) ) 
-fig=go.Figure(data=go.Data([performance]))
-fig.update_layout(layout)
-fig.show()
-fig.write_image(f"pca_kmeans_cvi.png")
-```
+After PCA, the clusters are easier to visualize.
 
 ![]({{site.url}}/assets/data_app/pca_kmeans_2.png)
+
 ![]({{site.url}}/assets/data_app/pca_kmeans_3.png)
+
 ![]({{site.url}}/assets/data_app/pca_kmeans_4.png)
+
 ![]({{site.url}}/assets/data_app/pca_kmeans_5.png)
+
 ![]({{site.url}}/assets/data_app/pca_kmeans_cvi.png)
 
+## K-Medoids
 
-Now we can see the performance in better way. We can make cluster of 2. Before adding this into the web app, lets do KMedoids first.
-
-### KMedoids Clustering
-We have already covered the theory on previous part but in this one, we will just import KMedoids from sklearn_extra and use it just like the previous part.
-
-
-```python
-from sklearn_extra.cluster import KMedoids
-
-
-clusters = 5
-features = ["Temperature", "Humidity", "CO2", "HumidityRatio","Light"][:-2]
-
-inertias = []
-
-for c in range(2,clusters+1):
-    X = PCA_components[[1,2]]
-    
-    colors=['red','green','blue','magenta','black','yellow']
-    model = KMedoids(n_clusters=c)
-    model.fit(X)
-    y_kmeans = model.predict(X)
-    tdf["cluster"] = y_kmeans
-    inertias.append((c,model.inertia_))
-    
-    trace0 = go.Scatter(x=X[1],y=X[2],mode='markers',  marker=dict(
-        color=tdf.cluster.apply(lambda x: colors[x]),
-        colorscale='Viridis',
-        showscale=True
-    ),name="Cluster Points")
-    trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-        color=colors,
-        size=20,
-        showscale=True
-    ),name="Cluster Mean")
-        
-    data7 = go.Data([trace0, trace1])
-    fig = go.Figure(data=data7)
-    fig.update_layout(title=f"Cluster Size {c}")
-    fig.show()
-    fig.write_image(f"kmedoids_{c}.png")
-
-inertias=np.array(inertias).reshape(-1,2)
-performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-layout = go.Layout(
-    title="Cluster Number vs Inertia",
-    xaxis=dict(
-        title="Ks"
-    ),
-    yaxis=dict(
-        title="Inertia"
-    ) ) 
-fig=go.Figure(data=go.Data([performance]))
-fig.update_layout(layout)
-fig.show()
-fig.write_image(f"kmedoids_kvi.png")
-```
+The original version also tried K-Medoids.
 
 ![]({{site.url}}/assets/data_app/kmedoids_2.png)
+
 ![]({{site.url}}/assets/data_app/kmedoids_3.png)
+
 ![]({{site.url}}/assets/data_app/kmedoids_4.png)
+
 ![]({{site.url}}/assets/data_app/kmedoids_5.png)
+
 ![]({{site.url}}/assets/data_app/kmedoids_kvi.png)
 
+## Clustering Function
 
-Lets add this into streamlit app now.
-
-
-
-### Taking Clustering to Streamlit App
-
-Since we have already made a selectbox of each mode, we will add entire clustering codes in a clustering.
+Here is a cleaner clustering helper.
 
 ```python
-from sklearn_extra.cluster import KMedoids
-from sklearn.cluster import KMeans
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
+def build_cluster_model(algorithm, n_clusters):
+    if algorithm == "K-Means":
+        return KMeans(n_clusters=n_clusters, random_state=42, n_init="auto")
 
-if mode=="Clustering":
-    features = ["Temperature", "Humidity", "CO2", "HumidityRatio","Light"][:-2]
-    st.markdown("## Clustering Mode Selected")
-    st.markdown(hline)
-    
-    # select a  clustering algorithm
-    calg = sidebar.selectbox("Select a clustering algorithm", ["K-Medoids","K-Means"])
-    
-    # select number of clusters
-    ks = sidebar.slider("Select number of clusters", min_value=2, max_value=10, value=2)
-    
-    # select a dataframe to apply cluster on
-    data_type = sidebar.selectbox("Select a dataframe:", ["Train","Test1","Test2"])
-    st.markdown(f"## Dataframe selected {data_type}")
-    udf = dfs[data_type.lower()]
-    
-    # if selected kmedoids, do respective operations
-    if calg == "K-Medoids":  
-        st.markdown("### K-Medoids Clustering")      
-        
-        # if using PCA or not
-        use_pca = sidebar.radio("Use PCA?",["Yes","No"])
-        # if not using pca, do default clustering
-        if use_pca=="No":
-            st.markdown("### Not Using PCA")
-            inertias = []
-            for c in range(1,ks+1):
-                tdf = udf.copy()
-                X = tdf[features]                
-                colors=['red','green','blue','magenta','black','yellow']
-                model = KMedoids(n_clusters=c)
-                model.fit(X)
-                y_kmeans = model.predict(X)
-                tdf["cluster"] = y_kmeans
-                inertias.append((c,model.inertia_))
-                
-                trace0 = go.Scatter(x=tdf[features[0]],y=tdf[features[1]],mode='markers',  marker=dict(
-                    color=tdf.cluster.apply(lambda x: colors[x]),
-                    colorscale='Viridis',
-                    showscale=True
-                ),name="Cluster Points")
-                trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-                    color=colors,
-                    size=20,
-                    showscale=True
-                ),name="Cluster Mean")
-                    
-                data7 = go.Data([trace0, trace1])
-                fig = go.Figure(data=data7)
-                fig.update_layout(height=600, width=800, title=f"Cluster Size {c}")
-                st.plotly_chart(fig)
+    if algorithm == "K-Medoids":
+        if not HAS_KMEDOIDS:
+            raise ImportError("Install scikit-learn-extra to use K-Medoids.")
 
-            inertias=np.array(inertias).reshape(-1,2)
-            performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-            layout = go.Layout(
-                title="Cluster Number vs Inertia",
-                xaxis=dict(
-                    title="Ks"
-                ),
-                yaxis=dict(
-                    title="Inertia"
-                ) ) 
-            fig=go.Figure(data=go.Data([performance]))
-            fig.update_layout(layout)
-            st.plotly_chart(fig)
-        
-        # if using pca, use pca to reduce dimensionality and then do clustering    
-        if use_pca=="Yes":
-            st.markdown("### Using PCA")
-            tdf=udf.copy()
-            
-            X = udf[features]
-            scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X)
-            
-            pca = PCA(n_components=3)
-            principalComponents = pca.fit_transform(X_scaled)
-            feat = list(range(pca.n_components_))
-            PCA_components = pd.DataFrame(principalComponents, columns=list(range(len(feat))))
-            choosed_component = sidebar.multiselect("Choose Components",feat,default=[1,2])
-            choosed_component=[int(i) for i in choosed_component]
-            inertias = []
-            for c in range(1,ks+1):
-                X = PCA_components[choosed_component]
-                
-                colors=['red','green','blue','magenta','black','yellow']
-                model = KMedoids(n_clusters=c)
-                model.fit(X)
-                y_kmeans = model.predict(X)
-                tdf["cluster"] = y_kmeans
-                inertias.append((c,model.inertia_))
-                
-                trace0 = go.Scatter(x=X[1],y=X[2],mode='markers',  marker=dict(
-                    color=tdf.cluster.apply(lambda x: colors[x]),
-                    colorscale='Viridis',
-                    showscale=True
-                ),name="Cluster Points")
-                trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-                    color=colors,
-                    size=20,
-                    showscale=True
-                ),name="Cluster Mean")
-                    
-                data7 = go.Data([trace0, trace1])
-                fig = go.Figure(data=data7)
-                fig.update_layout(title=f"Cluster Size {c}")
-                st.plotly_chart(fig)
+        return KMedoids(n_clusters=n_clusters, random_state=42)
 
-            inertias=np.array(inertias).reshape(-1,2)
-            performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-            layout = go.Layout(
-                title="Cluster Number vs Inertia",
-                xaxis=dict(
-                    title="Ks"
-                ),
-                yaxis=dict(
-                    title="Inertia"
-                ) ) 
-            fig=go.Figure(data=go.Data([performance]))
-            fig.update_layout(layout)
-            st.plotly_chart(fig)
-    # if chosen KMeans, do respective operations
-    if calg == "K-Means":
-        st.markdown("### K-Means Clustering")        
-        use_pca = sidebar.radio("Use PCA?",["Yes","No"])
-        if use_pca=="No":
-            st.markdown("### Not Using PCA")
-            inertias = []
-            for c in range(1,ks+1):
-                tdf = udf.copy()
-                X = tdf[features]                
-                colors=['red','green','blue','magenta','black','yellow']
-                model = KMeans(n_clusters=c)
-                model.fit(X)
-                y_kmeans = model.predict(X)
-                tdf["cluster"] = y_kmeans
-                inertias.append((c,model.inertia_))
-                
-                trace0 = go.Scatter(x=tdf[features[0]],y=tdf[features[1]],mode='markers',  marker=dict(
-                    color=tdf.cluster.apply(lambda x: colors[x]),
-                    colorscale='Viridis',
-                    showscale=True
-                ),name="Cluster Points")
-                trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-                    color=colors,
-                    size=20,
-                    showscale=True
-                ),name="Cluster Mean")
-                    
-                data7 = go.Data([trace0, trace1])
-                fig = go.Figure(data=data7)
-                fig.update_layout(height=600, width=800, title=f"Cluster Size {c}")
-                st.plotly_chart(fig)
-
-            inertias=np.array(inertias).reshape(-1,2)
-            performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-            layout = go.Layout(
-                title="Cluster Number vs Inertia",
-                xaxis=dict(
-                    title="Ks"
-                ),
-                yaxis=dict(
-                    title="Inertia"
-                ) ) 
-            fig=go.Figure(data=go.Data([performance]))
-            fig.update_layout(layout)
-            st.plotly_chart(fig)
-            
-        if use_pca=="Yes":
-            st.markdown("### Using PCA")
-            tdf=udf.copy()
-            
-            X = udf[features]
-            scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X)
-            
-            pca = PCA(n_components=3)
-            principalComponents = pca.fit_transform(X_scaled)
-            feat = list(range(pca.n_components_))
-            PCA_components = pd.DataFrame(principalComponents, columns=list(range(len(feat))))
-            choosed_component = sidebar.multiselect("Choose Components",feat,default=[1,2])
-            choosed_component=[int(i) for i in choosed_component]
-            inertias = []
-            for c in range(1,ks+1):
-                X = PCA_components[choosed_component]
-                
-                colors=['red','green','blue','magenta','black','yellow']
-                model = KMeans(n_clusters=c)
-                model.fit(X)
-                y_kmeans = model.predict(X)
-                tdf["cluster"] = y_kmeans
-                inertias.append((c,model.inertia_))
-                
-                trace0 = go.Scatter(x=X[1],y=X[2],mode='markers',  marker=dict(
-                    color=tdf.cluster.apply(lambda x: colors[x]),
-                    colorscale='Viridis',
-                    showscale=True
-                ),name="Cluster Points")
-                trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-                    color=colors,
-                    size=20,
-                    showscale=True
-                ),name="Cluster Mean")
-                    
-                data7 = go.Data([trace0, trace1])
-                fig = go.Figure(data=data7)
-                fig.update_layout(title=f"Cluster Size {c}")
-                st.plotly_chart(fig)
-
-            inertias=np.array(inertias).reshape(-1,2)
-            performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-            layout = go.Layout(
-                title="Cluster Number vs Inertia",
-                xaxis=dict(
-                    title="Ks"
-                ),
-                yaxis=dict(
-                    title="Inertia"
-                ) ) 
-            fig=go.Figure(data=go.Data([performance]))
-            fig.update_layout(layout)
-            st.plotly_chart(fig)          
-            
+    raise ValueError(f"Unknown clustering algorithm: {algorithm}")
 ```
 
-Please refer to the comments for explanation of the code above. The web app should be something like below:
+Render clustering mode:
+
+```python
+def render_clustering_mode(dfs):
+    st.markdown("### Clustering")
+
+    sidebar = st.sidebar
+
+    algorithms = ["K-Means"]
+
+    if HAS_KMEDOIDS:
+        algorithms.append("K-Medoids")
+
+    algorithm = sidebar.selectbox(
+        "Select clustering algorithm",
+        algorithms
+    )
+
+    selected_dataset = sidebar.selectbox(
+        "Select dataset",
+        list(dfs.keys())
+    )
+
+    selected_features = sidebar.multiselect(
+        "Select features",
+        FEATURES,
+        default=["Temperature", "Humidity", "CO2"]
+    )
+
+    n_clusters = sidebar.slider(
+        "Number of clusters",
+        min_value=2,
+        max_value=10,
+        value=2
+    )
+
+    use_pca = sidebar.checkbox("Use PCA", value=True)
+
+    if len(selected_features) < 2:
+        st.warning("Please select at least two features.")
+        return
+
+    df = dfs[selected_dataset].copy()
+
+    X = df[selected_features]
+
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+
+    if use_pca:
+        pca = PCA(n_components=2)
+        X_plot = pca.fit_transform(X_scaled)
+        x_label = "PCA 1"
+        y_label = "PCA 2"
+    else:
+        X_plot = X_scaled[:, :2]
+        x_label = selected_features[0]
+        y_label = selected_features[1]
+
+    model = build_cluster_model(algorithm, n_clusters)
+    clusters = model.fit_predict(X_plot)
+
+    plot_df = pd.DataFrame({
+        "x": X_plot[:, 0],
+        "y": X_plot[:, 1],
+        "cluster": clusters.astype(str),
+        "Occupancy": df[TARGET].astype(str),
+    })
+
+    fig = go.Figure()
+
+    for cluster_id in sorted(plot_df["cluster"].unique()):
+        cdf = plot_df[plot_df["cluster"] == cluster_id]
+
+        fig.add_trace(
+            go.Scatter(
+                x=cdf["x"],
+                y=cdf["y"],
+                mode="markers",
+                name=f"Cluster {cluster_id}",
+                marker={"size": 5}
+            )
+        )
+
+    fig.update_layout(
+        title=f"{algorithm} Clustering",
+        xaxis_title=x_label,
+        yaxis_title=y_label,
+        height=600
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+```
+
+The clustering app should look like this:
 
 ![]({{site.url}}/assets/data_app/3.png)
 
 ![]({{site.url}}/assets/data_app/4.png)
 
-Now we will move on to the Regression part and implement it on our APP.
+## Regression Mode
 
-## Regression
+The original app added regression models to predict `Occupancy`.
 
-In this part, we will perform linear regression where we try to predict the occupancy based on other features. The metric will be calculated using `model.score`. The metric will be [R2 Score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.r2_score.html).
+Technically, `Occupancy` is a binary label, so classification is the more correct machine learning task. But regression can still be useful for learning how model training, feature selection, and scoring work inside Streamlit.
 
+The original models were:
 
-```python
-from sklearn.linear_model import LinearRegression
+- Linear Regression
+- Ridge Regression
+- Lasso Regression
+- Elastic Net
 
-model = LinearRegression()
-features = ["Temperature", "Humidity", "CO2", "HumidityRatio","Light"]
-dfs['btrain'] = pd.concat([train,test2])
-xtest = dfs["test1"][features].to_numpy()
-ytest = dfs["test1"]["Occupancy"]
-
-for ddn,d in dfs.items():
-    if ddn!="test1":
-        print(ddn)
-        X = d[features].to_numpy().reshape(-1,len(features))
-        y = d["Occupancy"]
-
-        model.fit(X,y)
-        print(f"Model R2: {model.score(X,y)}")
-        print(f"Test R2: {model.score(xtest,ytest)}")
-    
-```
-
-    train
-    Model R2: 0.8580749633459134
-    Test R2: 0.8714317856126421
-    test2
-    Model R2: 0.8952863420051961
-    Test R2: 0.8658567155646273
-    btrain
-    Model R2: 0.8693410187120196
-    Test R2: 0.8649947193268359
-    
-
-Looking over the results above, btrain seems to have given a high R2 Score but train also have good test score. 
-
-
-```python
-features = ["Temperature", "Humidity", "CO2", "HumidityRatio","Light"]
-for dn,d in dfs.items():
-    if ddn!="test1":
-        print(ddn)
-        X = d[features].to_numpy().reshape(-1,len(features))
-        y = d["Occupancy"]
-        scaler = StandardScaler()
-        X_scaled = scaler.fit_transform(X)
-
-
-        # Create a PCA instance: pca
-        pca = PCA(n_components=3)
-        principalComponents = pca.fit_transform(X_scaled)
-        feat = range(pca.n_components_)
-        PCA_components = pd.DataFrame(principalComponents, columns=list(feat))
-
-        model=LinearRegression()
-        model.fit(PCA_components.to_numpy().reshape(-1,len(feat)),y)
-
-        print(f"Model R2: {model.score(PCA_components.to_numpy().reshape(-1,len(feat)),y)}")
-        #print(f"Test R2: {model.score(xtest,ytest)}")
-```
-
-    btrain
-    Model R2: 0.8533646108336054
-    btrain
-    Model R2: 0.8786596706469451
-    btrain
-    Model R2: 0.6389469109358212
-    btrain
-    Model R2: 0.6305745433548783
-    
-
-It seems that our best model is from default Linear regression but still lets take PCA into the Streamlit app.
-
-### Taking Regression to Streamlit App
-
-```python
-from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge, Lasso, ElasticNet
-
-
-if mode == "Regression":
-    features = ["Temperature", "Humidity", "CO2", "HumidityRatio","Light"]
-    algorithm = sidebar.selectbox("Choose Algorithm",["Linear Regression","Ridge Regression","Lasso Regression","Elastic Net"])
-    st.markdown(f"### Chosen {algorithm}")
-    models = {"Linear Regression":LinearRegression(), "Ridge Regression":Ridge(), "Lasso Regression":Lasso(), "Elastic Net":ElasticNet()}
-    model = models[algorithm]
-    
-    train_df = sidebar.selectbox("Choose Train Data",data_list)
-    test_df = sidebar.selectbox("Choose Test Data",[i for i in data_list if i != train_df])
-    selected = sidebar.multiselect("Choose Features",features,default=features)
-       
-    xtrain = dfs[train_df][selected].to_numpy().reshape(-1,len(selected))
-    xtest = dfs[test_df][selected].to_numpy().reshape(-1,len(selected))
-    ytrain = dfs[train_df]["Occupancy"].to_numpy()
-    ytest = dfs[test_df]["Occupancy"].to_numpy()
-
-    model.fit(xtrain,ytrain)
-    st.markdown(f"Train R2 Score: {model.score(xtrain,ytrain)}")
-    st.markdown(f"Test R2 Score: {model.score(xtest,ytest)}")
-    
-```
-
-
-* We have imported few regression algorithms from sklearn.
-* We made a select box to select an algorithm.
-* Made select box to choose train/test data.
-* Made multi select box to choose features to use while making a model.
-* Then we trained a model using selected data, selected feature and selected algorithm.
-* Printed the accuracy also.
+Example output:
 
 ![]({{site.url}}/assets/data_app/5.png)
 
-Adding few more lines of codes to show coefficient and take user input for a prediction:
-
-```python
-    if sidebar.checkbox("Show Coefficients"):
-        st.markdown("#### Showing Coefficents and Intercept")
-        st.write(f"Coeffs: {model.coef_}")
-        st.write(f"Intercept: {model.intercept_}")
-    if sidebar.checkbox("Show Prediction"):
-        st.markdown("#### Showing Prediction")
-        input_values = [float((st.number_input(t))) for t in selected]
-        prediction = model.predict([input_values])
-        st.write(f"Predicted {prediction}")
-```
+Then coefficients and prediction input were added:
 
 ![]({{site.url}}/assets/data_app/6.png)
 
-
-
-### All Codes
-Below is the codes that we wrote upto now.
-
-
+## Regression Model Function
 
 ```python
-import streamlit as st
-import numpy as np
-import pandas as pd
-import cufflinks
-from plotly.subplots import make_subplots
-import plotly.graph_objects as go
-from sklearn_extra.cluster import KMedoids
-from sklearn.cluster import KMeans
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge, Lasso, ElasticNet
+def build_regression_model(name):
+    models = {
+        "Linear Regression": LinearRegression(),
+        "Ridge Regression": Ridge(),
+        "Lasso Regression": Lasso(),
+        "Elastic Net": ElasticNet(),
+    }
 
-hline="--"*40
-
-@st.cache
-def get_data():
-    train = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatraining.txt")
-    train["date"]=pd.to_datetime(train.date)
-    
-    test1 = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatest.txt")
-    test1["date"]=pd.to_datetime(test1.date)
-    
-    test2 = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatest2.txt")
-    test2["date"]=pd.to_datetime(test2.date)
-    
-    dfs = {"train":train,"test1":test1,"test2":test2}
-    return dfs
-
-dfs = get_data()
-data_list = list(dfs.keys())
-sidebar = st.sidebar
-
-# select modes, EDA, Clustering, Regression and Classification
-mode = sidebar.selectbox("Select a mode.",options=["EDA", "Clustering", "Regression", "Classification"])
-st.markdown(f"### {mode} Mode Selected")
-st.markdown(hline)
-    
-
-# If selected EDA, show EDA related plots
-if mode=="EDA":
-    # if selected show the data
-    show_data = sidebar.checkbox("Show data")
-    if show_data:
-        # if selected, show train data
-        if sidebar.checkbox("Show Train data"):
-            st.markdown("### Train Data")
-            st.dataframe(dfs["train"])
-        
-        # if selected, show test1 data
-        if sidebar.checkbox("Show Test1 data"):
-            st.markdown("### Test1 Data")
-            st.dataframe(dfs["test1"])
-            
-        # if selected, show test2 data
-        if sidebar.checkbox("Show Test2 data"):
-            st.markdown("### Test2 Data")
-            st.dataframe(dfs["test2"])
-    
-    # if selected, show the comparision data
-    show_comparison = sidebar.checkbox("Show comparison")
-    if show_comparison:
-        
-        # make a multiselect to select the columns to compare
-        selected = sidebar.multiselect("Select Columns ", [d for d in dfs["train"].columns if d not in ["date"]])
-        
-        
-        titles=list(dfs.keys())
-        train = dfs["train"]
-        test1 = dfs["test1"]
-        test2 = dfs["test2"]
-        
-        if selected:
-            st.markdown(f"### Selected Columns: {', '.join(selected)}")
-            
-            for c in selected:
-                fig = make_subplots(rows=2,cols=3, subplot_titles=titles, )
-                fig.add_trace(go.Box(y=train[c].tolist(), name=titles[0]), row=1, col=1)
-                fig.add_trace(go.Box(y=test1[c].tolist(), name = titles[1]), row=1, col=2)
-                fig.add_trace(go.Box(y=test2[c].tolist(), name = titles[2]), row=1, col=3)
-                
-                fig.add_trace(go.Histogram(y=train[c].tolist(), name=titles[0]), row=2, col=1)
-                fig.add_trace(go.Histogram(y=test1[c].tolist(), name = titles[1]), row=2, col=2)
-                fig.add_trace(go.Histogram(y=test2[c].tolist(), name = titles[2]), row=2, col=3)
-                fig.update_layout(height=600, width=800, title_text=f"Box and Distribution of {c}")
-                st.plotly_chart(fig)
-        
-        # if selected show correlation
-        show_corr = sidebar.checkbox("Show Correlation")
-        if show_corr:
-            st.markdown("### Correlation")
-            fig = make_subplots(rows=1,cols=3, subplot_titles=titles)
-            fig.add_trace(go.Heatmap(z=train.corr(), y=train.corr().columns,x=train.corr().index, name=titles[0]), row=1, col=1)
-            fig.add_trace(go.Heatmap(z=test1.corr(), x=train.corr().index, name = titles[1]), row=1, col=2)
-            fig.add_trace(go.Heatmap(z=test2.corr(), x=train.corr().index, name = titles[2]), row=1, col=3)
-            st.plotly_chart(fig)
-if mode=="Clustering":
-    features = ["Temperature", "Humidity", "CO2", "HumidityRatio","Light"][:-2]
-    
-    # select a  clustering algorithm
-    calg = sidebar.selectbox("Select a clustering algorithm", ["K-Medoids","K-Means"])
-    
-    # select number of clusters
-    ks = sidebar.slider("Select number of clusters", min_value=2, max_value=10, value=2)
-    
-    # select a dataframe to apply cluster on
-    data_type = sidebar.selectbox("Select a dataframe:", ["Train","Test1","Test2"])
-    st.markdown(f"## Dataframe selected {data_type}")
-    udf = dfs[data_type.lower()]
-    
-    # if selected kmedoids, do respective operations
-    if calg == "K-Medoids":  
-        st.markdown("### K-Medoids Clustering")      
-        
-        # if using PCA or not
-        use_pca = sidebar.radio("Use PCA?",["Yes","No"])
-        # if not using pca, do default clustering
-        if use_pca=="No":
-            st.markdown("### Not Using PCA")
-            inertias = []
-            for c in range(1,ks+1):
-                tdf = udf.copy()
-                X = tdf[features]                
-                colors=['red','green','blue','magenta','black','yellow']
-                model = KMedoids(n_clusters=c)
-                model.fit(X)
-                y_kmeans = model.predict(X)
-                tdf["cluster"] = y_kmeans
-                inertias.append((c,model.inertia_))
-                
-                trace0 = go.Scatter(x=tdf[features[0]],y=tdf[features[1]],mode='markers',  marker=dict(
-                    color=tdf.cluster.apply(lambda x: colors[x]),
-                    colorscale='Viridis',
-                    showscale=True
-                ),name="Cluster Points")
-                trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-                    color=colors,
-                    size=20,
-                    showscale=True
-                ),name="Cluster Mean")
-                    
-                data7 = go.Data([trace0, trace1])
-                fig = go.Figure(data=data7)
-                fig.update_layout(height=600, width=800, title=f"Cluster Size {c}")
-                st.plotly_chart(fig)
-
-            inertias=np.array(inertias).reshape(-1,2)
-            performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-            layout = go.Layout(
-                title="Cluster Number vs Inertia",
-                xaxis=dict(
-                    title="Ks"
-                ),
-                yaxis=dict(
-                    title="Inertia"
-                ) ) 
-            fig=go.Figure(data=go.Data([performance]))
-            fig.update_layout(layout)
-            st.plotly_chart(fig)
-        
-        # if using pca, use pca to reduce dimensionality and then do clustering    
-        if use_pca=="Yes":
-            st.markdown("### Using PCA")
-            tdf=udf.copy()
-            
-            X = udf[features]
-            scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X)
-            
-            pca = PCA(n_components=3)
-            principalComponents = pca.fit_transform(X_scaled)
-            feat = list(range(pca.n_components_))
-            PCA_components = pd.DataFrame(principalComponents, columns=list(range(len(feat))))
-            choosed_component = sidebar.multiselect("Choose Components",feat,default=[1,2])
-            choosed_component=[int(i) for i in choosed_component]
-            inertias = []
-            for c in range(1,ks+1):
-                X = PCA_components[choosed_component]
-                
-                colors=['red','green','blue','magenta','black','yellow']
-                model = KMedoids(n_clusters=c)
-                model.fit(X)
-                y_kmeans = model.predict(X)
-                tdf["cluster"] = y_kmeans
-                inertias.append((c,model.inertia_))
-                
-                trace0 = go.Scatter(x=X[1],y=X[2],mode='markers',  marker=dict(
-                    color=tdf.cluster.apply(lambda x: colors[x]),
-                    colorscale='Viridis',
-                    showscale=True
-                ),name="Cluster Points")
-                trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-                    color=colors,
-                    size=20,
-                    showscale=True
-                ),name="Cluster Mean")
-                    
-                data7 = go.Data([trace0, trace1])
-                fig = go.Figure(data=data7)
-                fig.update_layout(title=f"Cluster Size {c}")
-                st.plotly_chart(fig)
-
-            inertias=np.array(inertias).reshape(-1,2)
-            performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-            layout = go.Layout(
-                title="Cluster Number vs Inertia",
-                xaxis=dict(
-                    title="Ks"
-                ),
-                yaxis=dict(
-                    title="Inertia"
-                ) ) 
-            fig=go.Figure(data=go.Data([performance]))
-            fig.update_layout(layout)
-            st.plotly_chart(fig)
-    # if chosen KMeans, do respective operations
-    if calg == "K-Means":
-        st.markdown("### K-Means Clustering")        
-        use_pca = sidebar.radio("Use PCA?",["Yes","No"])
-        if use_pca=="No":
-            st.markdown("### Not Using PCA")
-            inertias = []
-            for c in range(1,ks+1):
-                tdf = udf.copy()
-                X = tdf[features]                
-                colors=['red','green','blue','magenta','black','yellow']
-                model = KMeans(n_clusters=c)
-                model.fit(X)
-                y_kmeans = model.predict(X)
-                tdf["cluster"] = y_kmeans
-                inertias.append((c,model.inertia_))
-                
-                trace0 = go.Scatter(x=tdf[features[0]],y=tdf[features[1]],mode='markers',  marker=dict(
-                    color=tdf.cluster.apply(lambda x: colors[x]),
-                    colorscale='Viridis',
-                    showscale=True
-                ),name="Cluster Points")
-                trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-                    color=colors,
-                    size=20,
-                    showscale=True
-                ),name="Cluster Mean")
-                    
-                data7 = go.Data([trace0, trace1])
-                fig = go.Figure(data=data7)
-                fig.update_layout(height=600, width=800, title=f"Cluster Size {c}")
-                st.plotly_chart(fig)
-
-            inertias=np.array(inertias).reshape(-1,2)
-            performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-            layout = go.Layout(
-                title="Cluster Number vs Inertia",
-                xaxis=dict(
-                    title="Ks"
-                ),
-                yaxis=dict(
-                    title="Inertia"
-                ) ) 
-            fig=go.Figure(data=go.Data([performance]))
-            fig.update_layout(layout)
-            st.plotly_chart(fig)
-            
-        if use_pca=="Yes":
-            st.markdown("### Using PCA")
-            tdf=udf.copy()
-            
-            X = udf[features]
-            scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X)
-            
-            pca = PCA(n_components=3)
-            principalComponents = pca.fit_transform(X_scaled)
-            feat = list(range(pca.n_components_))
-            PCA_components = pd.DataFrame(principalComponents, columns=list(range(len(feat))))
-            choosed_component = sidebar.multiselect("Choose Components",feat,default=[1,2])
-            choosed_component=[int(i) for i in choosed_component]
-            inertias = []
-            for c in range(1,ks+1):
-                X = PCA_components[choosed_component]
-                
-                colors=['red','green','blue','magenta','black','yellow']
-                model = KMeans(n_clusters=c)
-                model.fit(X)
-                y_kmeans = model.predict(X)
-                tdf["cluster"] = y_kmeans
-                inertias.append((c,model.inertia_))
-                
-                trace0 = go.Scatter(x=X[1],y=X[2],mode='markers',  marker=dict(
-                    color=tdf.cluster.apply(lambda x: colors[x]),
-                    colorscale='Viridis',
-                    showscale=True
-                ),name="Cluster Points")
-                trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-                    color=colors,
-                    size=20,
-                    showscale=True
-                ),name="Cluster Mean")
-                    
-                data7 = go.Data([trace0, trace1])
-                fig = go.Figure(data=data7)
-                fig.update_layout(title=f"Cluster Size {c}")
-                st.plotly_chart(fig)
-
-            inertias=np.array(inertias).reshape(-1,2)
-            performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-            layout = go.Layout(
-                title="Cluster Number vs Inertia",
-                xaxis=dict(
-                    title="Ks"
-                ),
-                yaxis=dict(
-                    title="Inertia"
-                ) ) 
-            fig=go.Figure(data=go.Data([performance]))
-            fig.update_layout(layout)
-            st.plotly_chart(fig)
-            
-if mode == "Regression":
-    features = ["Temperature", "Humidity", "CO2", "HumidityRatio","Light"]
-    algorithm = sidebar.selectbox("Choose Algorithm",["Linear Regression","Ridge Regression","Lasso Regression","Elastic Net"])
-    st.markdown(f"### Chosen {algorithm}")
-    models = {"Linear Regression":LinearRegression(), "Ridge Regression":Ridge(), "Lasso Regression":Lasso(), "Elastic Net":ElasticNet()}
-    model = models[algorithm]
-    
-    train_df = sidebar.selectbox("Choose Train Data",data_list)
-    test_df = sidebar.selectbox("Choose Test Data",[i for i in data_list if i != train_df])
-    selected = sidebar.multiselect("Choose Features",features,default=features)
-       
-    xtrain = dfs[train_df][selected].to_numpy().reshape(-1,len(selected))
-    xtest = dfs[test_df][selected].to_numpy().reshape(-1,len(selected))
-    ytrain = dfs[train_df]["Occupancy"].to_numpy()
-    ytest = dfs[test_df]["Occupancy"].to_numpy()
-
-    model.fit(xtrain,ytrain)
-    st.markdown(f"Train R2 Score: {model.score(xtrain,ytrain)}")
-    st.markdown(f"Test R2 Score: {model.score(xtest,ytest)}")
-    
-    if sidebar.checkbox("Show Coefficients"):
-        st.markdown("#### Showing Coefficents and Intercept")
-        st.write(f"Coeffs: {model.coef_}")
-        st.write(f"Intercept: {model.intercept_}")
-    if sidebar.checkbox("Show Prediction"):
-        st.markdown("#### Showing Prediction")
-        input_values = [float((st.number_input(t))) for t in selected]
-        prediction = model.predict([input_values])
-        st.write(f"Predicted {prediction}")
-    
+    return models[name]
 ```
 
-## Classification
-
-### Taking Classification to Streamlit App
-Until now we have created EDA, Clustering and Regression modes now is the time for us to create a classification models. We have covered a most of the redundant part of try out on above sections but in this one, we will jump right into the implementation part.
+Render regression mode:
 
 ```python
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
+def render_regression_mode(dfs):
+    st.markdown("### Regression")
 
-if mode == "Classification":
-    features = ["Temperature", "Humidity", "CO2", "HumidityRatio","Light"]
-    algorithm = sidebar.selectbox("Choose Algorithm",["Logistic Regression","KNN","Decision Tree","Random Forest", "Ada Boost"])
-    st.markdown(f"### Chosen {algorithm}")
-    models = {"Logistic Regression":LogisticRegression(), "KNN":KNeighborsClassifier(), "Decision Tree":DecisionTreeClassifier(), "Random Forest":RandomForestClassifier(), "Ada Boost":AdaBoostClassifier()}
-    model = models[algorithm]
-    
-    train_df = sidebar.selectbox("Choose Train Data",data_list)
-    test_df = sidebar.selectbox("Choose Test Data",[i for i in data_list if i != train_df])
-    selected = sidebar.multiselect("Choose Features",features,default=features)
-       
-    xtrain = dfs[train_df][selected].to_numpy().reshape(-1,len(selected))
-    xtest = dfs[test_df][selected].to_numpy().reshape(-1,len(selected))
-    ytrain = dfs[train_df]["Occupancy"].to_numpy()
-    ytest = dfs[test_df]["Occupancy"].to_numpy()
+    sidebar = st.sidebar
 
-    model.fit(xtrain,ytrain)
-    st.markdown(f"##### R2 Score: Train = {model.score(xtrain,ytrain) : .2f}, Test = {model.score(xtest,ytest) : .2f}")
-    
-    train_pred = model.predict(xtrain)
-    test_pred = model.predict(xtest)
-    
-    cm_train = confusion_matrix(ytrain,train_pred,labels=[0,1])
-    cm_test = confusion_matrix(ytest,test_pred,labels=[0,1])
-    
-    train_f1 = f1_score(ytrain,train_pred,average="macro")
-    test_f1 = f1_score(ytest,test_pred,average="macro")
-    train_acc = accuracy_score(ytrain,train_pred)
-    test_acc = accuracy_score(ytest,test_pred)
-    
-    st.markdown(f"##### F1 Score: Train = {train_f1 : .2f}, Test = {test_f1 : .2f}")
-    st.markdown(f"##### Accuracy Score: Train = {train_acc : .2f}, Test = {test_acc : .2f}")
-    
-    fig = make_subplots(rows=1,cols=2, subplot_titles=["Train","Test"])
-    labels = ["Vacant","Occupied"]
-    fig1 = go.Heatmap(z=cm_train, y=labels, x=labels, name="Train")
-    fig2 = go.Heatmap(z=cm_test, y=labels, x=labels, name="Test")
-    
-    fig.add_trace(fig1, row=1, col=1)
-    fig.add_trace(fig2, row=1, col=2)
-    fig.update_layout({"title":"Confusion Matrix","xaxis": {"title": "Predicted value"},
-        "yaxis": {"title": "Real value"}})
-    st.plotly_chart(fig)
-    
-    if sidebar.checkbox("Show Coefficients"):
-        st.markdown("#### Showing Coefficents and Intercept")
-        try:
-            st.write(f"Coeffs: {model.coef_}")
-            st.write(f"Intercept: {model.intercept_}")
-        except:
-            st.write("Coeffs: Not Available")
-    if sidebar.checkbox("Show Prediction"):
-        st.markdown("#### Showing Prediction")
-        input_values = [float((st.number_input(t))) for t in selected]
-        prediction = model.predict([input_values])
-        st.write(f"Predicted {prediction}")
-    
+    algorithm = sidebar.selectbox(
+        "Choose algorithm",
+        ["Linear Regression", "Ridge Regression", "Lasso Regression", "Elastic Net"]
+    )
+
+    train_name = sidebar.selectbox("Choose train data", list(dfs.keys()))
+    test_name = sidebar.selectbox(
+        "Choose test data",
+        [name for name in dfs.keys() if name != train_name]
+    )
+
+    selected_features = sidebar.multiselect(
+        "Choose features",
+        FEATURES,
+        default=FEATURES
+    )
+
+    if not selected_features:
+        st.warning("Please select at least one feature.")
+        return
+
+    train_df = dfs[train_name]
+    test_df = dfs[test_name]
+
+    x_train = train_df[selected_features]
+    y_train = train_df[TARGET]
+
+    x_test = test_df[selected_features]
+    y_test = test_df[TARGET]
+
+    model = Pipeline([
+        ("scaler", StandardScaler()),
+        ("model", build_regression_model(algorithm)),
+    ])
+
+    model.fit(x_train, y_train)
+
+    train_pred = model.predict(x_train)
+    test_pred = model.predict(x_test)
+
+    st.markdown(f"#### Chosen algorithm: `{algorithm}`")
+    st.metric("Train R2 Score", f"{r2_score(y_train, train_pred):.3f}")
+    st.metric("Test R2 Score", f"{r2_score(y_test, test_pred):.3f}")
+
+    if sidebar.checkbox("Show prediction form"):
+        render_prediction_form(model, selected_features, task="regression")
+
+    if sidebar.checkbox("Save model"):
+        save_model_form(model, selected_features, task="regression")
 ```
 
-What we are doing in above code is:
-* Select the classification algorithm and make its class.
-* Choose features and then prepare data using that features.
-* Train a model and show train/test metrics.
-* Show confusion matrix.
+## Classification Mode
 
-If everything is fine, then our app should look like below:
+For this dataset, classification is more appropriate because the target column is binary.
+
+The original app used:
+
+- Logistic Regression
+- KNN
+- Decision Tree
+- Random Forest
+- AdaBoost
+
+It also displayed:
+
+- train score
+- test score
+- F1 score
+- accuracy score
+- confusion matrix
+- prediction form
+
+Example app screenshots:
 
 ![]({{site.url}}/assets/data_app/7.png)
 
 ![]({{site.url}}/assets/data_app/8.png)
 
-
-### All Codes
-
-```python
-from sklearn.metrics import plot_confusion_matrix
-import streamlit as st
-import numpy as np
-import pandas as pd
-import cufflinks
-from plotly.subplots import make_subplots
-import plotly.graph_objects as go
-from sklearn_extra.cluster import KMedoids
-from sklearn.cluster import KMeans
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge, Lasso, ElasticNet
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
-
-hline="--"*40
-
-@st.cache
-def get_data():
-    train = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatraining.txt")
-    train["date"]=pd.to_datetime(train.date)
-    
-    test1 = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatest.txt")
-    test1["date"]=pd.to_datetime(test1.date)
-    
-    test2 = pd.read_csv("https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatest2.txt")
-    test2["date"]=pd.to_datetime(test2.date)
-    
-    dfs = {"train":train,"test1":test1,"test2":test2}
-    return dfs
-
-dfs = get_data()
-data_list = list(dfs.keys())
-sidebar = st.sidebar
-
-# select modes, EDA, Clustering, Regression and Classification
-mode = sidebar.selectbox("Select a mode.",options=["EDA", "Clustering", "Regression", "Classification"])
-st.markdown(f"### {mode} Mode Selected")
-st.markdown(hline)
-    
-
-# If selected EDA, show EDA related plots
-if mode=="EDA":
-    # if selected show the data
-    show_data = sidebar.checkbox("Show data")
-    if show_data:
-        # if selected, show train data
-        if sidebar.checkbox("Show Train data"):
-            st.markdown("### Train Data")
-            st.dataframe(dfs["train"])
-        
-        # if selected, show test1 data
-        if sidebar.checkbox("Show Test1 data"):
-            st.markdown("### Test1 Data")
-            st.dataframe(dfs["test1"])
-            
-        # if selected, show test2 data
-        if sidebar.checkbox("Show Test2 data"):
-            st.markdown("### Test2 Data")
-            st.dataframe(dfs["test2"])
-    
-    # if selected, show the comparision data
-    show_comparison = sidebar.checkbox("Show comparison")
-    if show_comparison:
-        
-        # make a multiselect to select the columns to compare
-        selected = sidebar.multiselect("Select Columns ", [d for d in dfs["train"].columns if d not in ["date"]])
-        
-        
-        titles=list(dfs.keys())
-        train = dfs["train"]
-        test1 = dfs["test1"]
-        test2 = dfs["test2"]
-        
-        if selected:
-            st.markdown(f"### Selected Columns: {', '.join(selected)}")
-            
-            for c in selected:
-                fig = make_subplots(rows=2,cols=3, subplot_titles=titles, )
-                fig.add_trace(go.Box(y=train[c].tolist(), name=titles[0]), row=1, col=1)
-                fig.add_trace(go.Box(y=test1[c].tolist(), name = titles[1]), row=1, col=2)
-                fig.add_trace(go.Box(y=test2[c].tolist(), name = titles[2]), row=1, col=3)
-                
-                fig.add_trace(go.Histogram(y=train[c].tolist(), name=titles[0]), row=2, col=1)
-                fig.add_trace(go.Histogram(y=test1[c].tolist(), name = titles[1]), row=2, col=2)
-                fig.add_trace(go.Histogram(y=test2[c].tolist(), name = titles[2]), row=2, col=3)
-                fig.update_layout(height=600, width=800, title_text=f"Box and Distribution of {c}")
-                st.plotly_chart(fig)
-        
-        # if selected show correlation
-        show_corr = sidebar.checkbox("Show Correlation")
-        if show_corr:
-            st.markdown("### Correlation")
-            fig = make_subplots(rows=1,cols=3, subplot_titles=titles)
-            fig.add_trace(go.Heatmap(z=train.corr(), y=train.corr().columns,x=train.corr().index, name=titles[0]), row=1, col=1)
-            fig.add_trace(go.Heatmap(z=test1.corr(), x=train.corr().index, name = titles[1]), row=1, col=2)
-            fig.add_trace(go.Heatmap(z=test2.corr(), x=train.corr().index, name = titles[2]), row=1, col=3)
-            st.plotly_chart(fig)
-if mode=="Clustering":
-    features = ["Temperature", "Humidity", "CO2", "HumidityRatio","Light"][:-2]
-    
-    # select a  clustering algorithm
-    calg = sidebar.selectbox("Select a clustering algorithm", ["K-Medoids","K-Means"])
-    
-    # select number of clusters
-    ks = sidebar.slider("Select number of clusters", min_value=2, max_value=10, value=2)
-    
-    # select a dataframe to apply cluster on
-    data_type = sidebar.selectbox("Select a dataframe:", ["Train","Test1","Test2"])
-    st.markdown(f"## Dataframe selected {data_type}")
-    udf = dfs[data_type.lower()]
-    
-    # if selected kmedoids, do respective operations
-    if calg == "K-Medoids":  
-        st.markdown("### K-Medoids Clustering")      
-        
-        # if using PCA or not
-        use_pca = sidebar.radio("Use PCA?",["Yes","No"])
-        # if not using pca, do default clustering
-        if use_pca=="No":
-            st.markdown("### Not Using PCA")
-            inertias = []
-            for c in range(1,ks+1):
-                tdf = udf.copy()
-                X = tdf[features]                
-                colors=['red','green','blue','magenta','black','yellow']
-                model = KMedoids(n_clusters=c)
-                model.fit(X)
-                y_kmeans = model.predict(X)
-                tdf["cluster"] = y_kmeans
-                inertias.append((c,model.inertia_))
-                
-                trace0 = go.Scatter(x=tdf[features[0]],y=tdf[features[1]],mode='markers',  marker=dict(
-                    color=tdf.cluster.apply(lambda x: colors[x]),
-                    colorscale='Viridis',
-                    showscale=True
-                ),name="Cluster Points")
-                trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-                    color=colors,
-                    size=20,
-                    showscale=True
-                ),name="Cluster Mean")
-                    
-                data7 = go.Data([trace0, trace1])
-                fig = go.Figure(data=data7)
-                fig.update_layout(height=600, width=800, title=f"Cluster Size {c}")
-                st.plotly_chart(fig)
-
-            inertias=np.array(inertias).reshape(-1,2)
-            performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-            layout = go.Layout(
-                title="Cluster Number vs Inertia",
-                xaxis=dict(
-                    title="Ks"
-                ),
-                yaxis=dict(
-                    title="Inertia"
-                ) ) 
-            fig=go.Figure(data=go.Data([performance]))
-            fig.update_layout(layout)
-            st.plotly_chart(fig)
-        
-        # if using pca, use pca to reduce dimensionality and then do clustering    
-        if use_pca=="Yes":
-            st.markdown("### Using PCA")
-            tdf=udf.copy()
-            
-            X = udf[features]
-            scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X)
-            
-            pca = PCA(n_components=3)
-            principalComponents = pca.fit_transform(X_scaled)
-            feat = list(range(pca.n_components_))
-            PCA_components = pd.DataFrame(principalComponents, columns=list(range(len(feat))))
-            choosed_component = sidebar.multiselect("Choose Components",feat,default=[1,2])
-            choosed_component=[int(i) for i in choosed_component]
-            inertias = []
-            for c in range(1,ks+1):
-                X = PCA_components[choosed_component]
-                
-                colors=['red','green','blue','magenta','black','yellow']
-                model = KMedoids(n_clusters=c)
-                model.fit(X)
-                y_kmeans = model.predict(X)
-                tdf["cluster"] = y_kmeans
-                inertias.append((c,model.inertia_))
-                
-                trace0 = go.Scatter(x=X[1],y=X[2],mode='markers',  marker=dict(
-                    color=tdf.cluster.apply(lambda x: colors[x]),
-                    colorscale='Viridis',
-                    showscale=True
-                ),name="Cluster Points")
-                trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-                    color=colors,
-                    size=20,
-                    showscale=True
-                ),name="Cluster Mean")
-                    
-                data7 = go.Data([trace0, trace1])
-                fig = go.Figure(data=data7)
-                fig.update_layout(title=f"Cluster Size {c}")
-                st.plotly_chart(fig)
-
-            inertias=np.array(inertias).reshape(-1,2)
-            performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-            layout = go.Layout(
-                title="Cluster Number vs Inertia",
-                xaxis=dict(
-                    title="Ks"
-                ),
-                yaxis=dict(
-                    title="Inertia"
-                ) ) 
-            fig=go.Figure(data=go.Data([performance]))
-            fig.update_layout(layout)
-            st.plotly_chart(fig)
-    # if chosen KMeans, do respective operations
-    if calg == "K-Means":
-        st.markdown("### K-Means Clustering")        
-        use_pca = sidebar.radio("Use PCA?",["Yes","No"])
-        if use_pca=="No":
-            st.markdown("### Not Using PCA")
-            inertias = []
-            for c in range(1,ks+1):
-                tdf = udf.copy()
-                X = tdf[features]                
-                colors=['red','green','blue','magenta','black','yellow']
-                model = KMeans(n_clusters=c)
-                model.fit(X)
-                y_kmeans = model.predict(X)
-                tdf["cluster"] = y_kmeans
-                inertias.append((c,model.inertia_))
-                
-                trace0 = go.Scatter(x=tdf[features[0]],y=tdf[features[1]],mode='markers',  marker=dict(
-                    color=tdf.cluster.apply(lambda x: colors[x]),
-                    colorscale='Viridis',
-                    showscale=True
-                ),name="Cluster Points")
-                trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-                    color=colors,
-                    size=20,
-                    showscale=True
-                ),name="Cluster Mean")
-                    
-                data7 = go.Data([trace0, trace1])
-                fig = go.Figure(data=data7)
-                fig.update_layout(height=600, width=800, title=f"Cluster Size {c}")
-                st.plotly_chart(fig)
-
-            inertias=np.array(inertias).reshape(-1,2)
-            performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-            layout = go.Layout(
-                title="Cluster Number vs Inertia",
-                xaxis=dict(
-                    title="Ks"
-                ),
-                yaxis=dict(
-                    title="Inertia"
-                ) ) 
-            fig=go.Figure(data=go.Data([performance]))
-            fig.update_layout(layout)
-            st.plotly_chart(fig)
-            
-        if use_pca=="Yes":
-            st.markdown("### Using PCA")
-            tdf=udf.copy()
-            
-            X = udf[features]
-            scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X)
-            
-            pca = PCA(n_components=3)
-            principalComponents = pca.fit_transform(X_scaled)
-            feat = list(range(pca.n_components_))
-            PCA_components = pd.DataFrame(principalComponents, columns=list(range(len(feat))))
-            choosed_component = sidebar.multiselect("Choose Components",feat,default=[1,2])
-            choosed_component=[int(i) for i in choosed_component]
-            inertias = []
-            for c in range(1,ks+1):
-                X = PCA_components[choosed_component]
-                
-                colors=['red','green','blue','magenta','black','yellow']
-                model = KMeans(n_clusters=c)
-                model.fit(X)
-                y_kmeans = model.predict(X)
-                tdf["cluster"] = y_kmeans
-                inertias.append((c,model.inertia_))
-                
-                trace0 = go.Scatter(x=X[1],y=X[2],mode='markers',  marker=dict(
-                    color=tdf.cluster.apply(lambda x: colors[x]),
-                    colorscale='Viridis',
-                    showscale=True
-                ),name="Cluster Points")
-                trace1 = go.Scatter(x=model.cluster_centers_[:, 0], y=model.cluster_centers_[:, 1],mode='markers', marker=dict(
-                    color=colors,
-                    size=20,
-                    showscale=True
-                ),name="Cluster Mean")
-                    
-                data7 = go.Data([trace0, trace1])
-                fig = go.Figure(data=data7)
-                fig.update_layout(title=f"Cluster Size {c}")
-                st.plotly_chart(fig)
-
-            inertias=np.array(inertias).reshape(-1,2)
-            performance = go.Scatter(x=inertias[:,0], y=inertias[:,1])
-            layout = go.Layout(
-                title="Cluster Number vs Inertia",
-                xaxis=dict(
-                    title="Ks"
-                ),
-                yaxis=dict(
-                    title="Inertia"
-                ) ) 
-            fig=go.Figure(data=go.Data([performance]))
-            fig.update_layout(layout)
-            st.plotly_chart(fig)
-            
-if mode == "Regression":
-    features = ["Temperature", "Humidity", "CO2", "HumidityRatio","Light"]
-    algorithm = sidebar.selectbox("Choose Algorithm",["Linear Regression","Ridge Regression","Lasso Regression","Elastic Net"])
-    st.markdown(f"### Chosen {algorithm}")
-    models = {"Linear Regression":LinearRegression(), "Ridge Regression":Ridge(), "Lasso Regression":Lasso(), "Elastic Net":ElasticNet()}
-    model = models[algorithm]
-    
-    train_df = sidebar.selectbox("Choose Train Data",data_list)
-    test_df = sidebar.selectbox("Choose Test Data",[i for i in data_list if i != train_df])
-    selected = sidebar.multiselect("Choose Features",features,default=features)
-       
-    xtrain = dfs[train_df][selected].to_numpy().reshape(-1,len(selected))
-    xtest = dfs[test_df][selected].to_numpy().reshape(-1,len(selected))
-    ytrain = dfs[train_df]["Occupancy"].to_numpy()
-    ytest = dfs[test_df]["Occupancy"].to_numpy()
-
-    model.fit(xtrain,ytrain)
-    st.markdown(f"Train R2 Score: {model.score(xtrain,ytrain) : .2f}")
-    st.markdown(f"Test R2 Score: {model.score(xtest,ytest) : .2f}")
-    
-    if sidebar.checkbox("Show Coefficients"):
-        st.markdown("#### Showing Coefficents and Intercept")
-        st.write(f"Coeffs: {model.coef_}")
-        st.write(f"Intercept: {model.intercept_}")
-    if sidebar.checkbox("Show Prediction"):
-        st.markdown("#### Showing Prediction")
-        input_values = [float((st.number_input(t))) for t in selected]
-        prediction = model.predict([input_values])
-        st.write(f"Predicted {prediction}")
-
-if mode == "Classification":
-    features = ["Temperature", "Humidity", "CO2", "HumidityRatio","Light"]
-    algorithm = sidebar.selectbox("Choose Algorithm",["Logistic Regression","KNN","Decision Tree","Random Forest", "Ada Boost"])
-    st.markdown(f"### Chosen {algorithm}")
-    models = {"Logistic Regression":LogisticRegression(), "KNN":KNeighborsClassifier(), "Decision Tree":DecisionTreeClassifier(), "Random Forest":RandomForestClassifier(), "Ada Boost":AdaBoostClassifier()}
-    model = models[algorithm]
-    
-    train_df = sidebar.selectbox("Choose Train Data",data_list)
-    test_df = sidebar.selectbox("Choose Test Data",[i for i in data_list if i != train_df])
-    selected = sidebar.multiselect("Choose Features",features,default=features)
-       
-    xtrain = dfs[train_df][selected].to_numpy().reshape(-1,len(selected))
-    xtest = dfs[test_df][selected].to_numpy().reshape(-1,len(selected))
-    ytrain = dfs[train_df]["Occupancy"].to_numpy()
-    ytest = dfs[test_df]["Occupancy"].to_numpy()
-
-    model.fit(xtrain,ytrain)
-    st.markdown(f"##### R2 Score: Train = {model.score(xtrain,ytrain) : .2f}, Test = {model.score(xtest,ytest) : .2f}")
-    
-    train_pred = model.predict(xtrain)
-    test_pred = model.predict(xtest)
-    
-    cm_train = confusion_matrix(ytrain,train_pred,labels=[0,1])
-    cm_test = confusion_matrix(ytest,test_pred,labels=[0,1])
-    
-    train_f1 = f1_score(ytrain,train_pred,average="macro")
-    test_f1 = f1_score(ytest,test_pred,average="macro")
-    train_acc = accuracy_score(ytrain,train_pred)
-    test_acc = accuracy_score(ytest,test_pred)
-    
-    st.markdown(f"##### F1 Score: Train = {train_f1 : .2f}, Test = {test_f1 : .2f}")
-    st.markdown(f"##### Accuracy Score: Train = {train_acc : .2f}, Test = {test_acc : .2f}")
-    
-    fig = make_subplots(rows=1,cols=2, subplot_titles=["Train","Test"])
-    labels = ["Vacant","Occupied"]
-    fig1 = go.Heatmap(z=cm_train, y=labels, x=labels, name="Train")
-    fig2 = go.Heatmap(z=cm_test, y=labels, x=labels, name="Test")
-    
-    fig.add_trace(fig1, row=1, col=1)
-    fig.add_trace(fig2, row=1, col=2)
-    fig.update_layout({"title":"Confusion Matrix","xaxis": {"title": "Predicted value"},
-        "yaxis": {"title": "Real value"}})
-    st.plotly_chart(fig)
-    
-    if sidebar.checkbox("Show Coefficients"):
-        st.markdown("#### Showing Coefficents and Intercept")
-        try:
-            st.write(f"Coeffs: {model.coef_}")
-            st.write(f"Intercept: {model.intercept_}")
-        except:
-            st.write("Coeffs: Not Available")
-    if sidebar.checkbox("Show Prediction"):
-        st.markdown("#### Showing Prediction")
-        input_values = [float((st.number_input(t))) for t in selected]
-        prediction = model.predict([input_values])
-        st.write(f"Predicted {prediction}")
-    
-    
-    
-```
-
-## Add Inference Mode
-For this purpose, we will need to save a model during Regression or Classification phase and then upload it on inference to test it. What we will do is,
-* Accept a model file upload and read number of features in it. 
-* Create a form where we will have number of input fields equal to number of features to accept input vlaues.
-* Create a submit button to pass those input values to loaded model and then print the result.
-
-
+## Classification Model Function
 
 ```python
-if mode in ["Regression", "Classification"]:    
-    filename=sidebar.text_input("Enter File Name",value="model.sav")
-    save = sidebar.button("Save Model") 
-    if save and model:
-        pickle.dump(model, open(filename, 'wb'))
-        sidebar.markdown("Saved Model!")
+def build_classification_model(name):
+    models = {
+        "Logistic Regression": LogisticRegression(max_iter=1000),
+        "KNN": KNeighborsClassifier(),
+        "Decision Tree": DecisionTreeClassifier(random_state=42),
+        "Random Forest": RandomForestClassifier(random_state=42),
+        "AdaBoost": AdaBoostClassifier(random_state=42),
+    }
 
-if mode =="Inference":
-    model=None
-    if "temp_model.csv" not in os.listdir():
-        file = sidebar.file_uploader("Upload Model File", accept_multiple_files=False)
-        if file:  
-            model = pickle.load(file)
-            pickle.dump(model, open("temp_model.sav", 'wb'))
-            st.markdown("Model Loaded.")
-    if model:
-        st.markdown(f"Loaded {type(model).__name__} Model!")
-        nfeatures="Not Known"
-        try:
-            nfeatures=model.n_features_
-            
-        except:
-            nfeatures = model.coef_.shape[-1]
-                
-        st.markdown(f"Number of features: {nfeatures}")
-            
-        if nfeatures!="Not Known":
-            form1 = st.form(key='my_form')
-
-            st.markdown("#### Showing Prediction")
-            input_values = [float((form1.number_input(f"Feature {t} Value"))) for t in range(nfeatures)]
-            
-            submit= form1.form_submit_button("Predict")
-            prediction=None
-            if submit:
-                prediction = model.predict([input_values])
-            st.markdown(f"Input Values: {input_values}")
-            st.write(f"Predicted {prediction}")
-        
+    return models[name]
 ```
-Now we should be able to see a text field to enter a file name and then save button on Regression and Classification Mode.
 
-Lets save some models and load them on Inference mode and try to predict from it.
-And our output should look like below:
+Render classification mode:
+
+```python
+def render_classification_mode(dfs):
+    st.markdown("### Classification")
+
+    sidebar = st.sidebar
+
+    algorithm = sidebar.selectbox(
+        "Choose algorithm",
+        ["Logistic Regression", "KNN", "Decision Tree", "Random Forest", "AdaBoost"]
+    )
+
+    train_name = sidebar.selectbox("Choose train data", list(dfs.keys()))
+    test_name = sidebar.selectbox(
+        "Choose test data",
+        [name for name in dfs.keys() if name != train_name]
+    )
+
+    selected_features = sidebar.multiselect(
+        "Choose features",
+        FEATURES,
+        default=FEATURES
+    )
+
+    if not selected_features:
+        st.warning("Please select at least one feature.")
+        return
+
+    train_df = dfs[train_name]
+    test_df = dfs[test_name]
+
+    x_train = train_df[selected_features]
+    y_train = train_df[TARGET]
+
+    x_test = test_df[selected_features]
+    y_test = test_df[TARGET]
+
+    model = Pipeline([
+        ("scaler", StandardScaler()),
+        ("model", build_classification_model(algorithm)),
+    ])
+
+    model.fit(x_train, y_train)
+
+    train_pred = model.predict(x_train)
+    test_pred = model.predict(x_test)
+
+    train_acc = accuracy_score(y_train, train_pred)
+    test_acc = accuracy_score(y_test, test_pred)
+
+    train_f1 = f1_score(y_train, train_pred, average="macro")
+    test_f1 = f1_score(y_test, test_pred, average="macro")
+
+    st.markdown(f"#### Chosen algorithm: `{algorithm}`")
+
+    c1, c2, c3, c4 = st.columns(4)
+
+    c1.metric("Train Accuracy", f"{train_acc:.3f}")
+    c2.metric("Test Accuracy", f"{test_acc:.3f}")
+    c3.metric("Train F1", f"{train_f1:.3f}")
+    c4.metric("Test F1", f"{test_f1:.3f}")
+
+    fig = make_confusion_matrix_plot(y_train, train_pred, y_test, test_pred)
+    st.plotly_chart(fig, use_container_width=True)
+
+    if sidebar.checkbox("Show prediction form"):
+        render_prediction_form(model, selected_features, task="classification")
+
+    if sidebar.checkbox("Save model"):
+        save_model_form(model, selected_features, task="classification")
+```
+
+## Confusion Matrix Plot
+
+```python
+def make_confusion_matrix_plot(y_train, train_pred, y_test, test_pred):
+    labels = ["Vacant", "Occupied"]
+
+    cm_train = confusion_matrix(y_train, train_pred, labels=[0, 1])
+    cm_test = confusion_matrix(y_test, test_pred, labels=[0, 1])
+
+    fig = make_subplots(
+        rows=1,
+        cols=2,
+        subplot_titles=["Train", "Test"]
+    )
+
+    fig.add_trace(
+        go.Heatmap(
+            z=cm_train,
+            x=labels,
+            y=labels,
+            colorscale="Blues",
+            showscale=False,
+            text=cm_train,
+            texttemplate="%{text}"
+        ),
+        row=1,
+        col=1
+    )
+
+    fig.add_trace(
+        go.Heatmap(
+            z=cm_test,
+            x=labels,
+            y=labels,
+            colorscale="Blues",
+            showscale=False,
+            text=cm_test,
+            texttemplate="%{text}"
+        ),
+        row=1,
+        col=2
+    )
+
+    fig.update_layout(
+        title="Confusion Matrix",
+        height=500
+    )
+
+    fig.update_xaxes(title_text="Predicted")
+    fig.update_yaxes(title_text="Actual")
+
+    return fig
+```
+
+## Prediction Form
+
+We can let users enter feature values manually.
+
+```python
+def render_prediction_form(model, selected_features, task):
+    st.markdown("#### Prediction Form")
+
+    input_values = []
+
+    with st.form(f"{task}_prediction_form"):
+        for feature in selected_features:
+            value = st.number_input(
+                feature,
+                value=0.0,
+                step=0.1
+            )
+            input_values.append(value)
+
+        submitted = st.form_submit_button("Predict")
+
+    if submitted:
+        prediction = model.predict([input_values])
+
+        st.write("Input values:", input_values)
+        st.write("Prediction:", prediction[0])
+
+        if task == "classification":
+            label = "Occupied" if int(prediction[0]) == 1 else "Vacant"
+            st.success(f"Predicted class: {label}")
+```
+
+## Save Trained Models
+
+The original article later added saved models and inference mode. This is useful because we do not always want to train the model again before making predictions.
+
+We can use `joblib`.
+
+```python
+MODEL_DIR = Path("models")
+MODEL_DIR.mkdir(exist_ok=True)
+```
+
+Save model with metadata:
+
+```python
+def save_model_form(model, selected_features, task):
+    model_name = st.text_input(
+        "Model file name",
+        value=f"{task}_model.joblib"
+    )
+
+    if st.button("Save model"):
+        if not model_name.endswith(".joblib"):
+            model_name += ".joblib"
+
+        payload = {
+            "model": model,
+            "features": selected_features,
+            "task": task,
+        }
+
+        file_path = MODEL_DIR / model_name
+
+        joblib.dump(payload, file_path)
+
+        st.success(f"Model saved to `{file_path}`")
+```
+
+## Inference Mode
+
+Inference mode loads a saved model and lets users make predictions.
+
+The original final app showed inference input and prediction output.
 
 ![]({{site.url}}/assets/data_app/9.png)
 
 ![]({{site.url}}/assets/data_app/10.png)
 
-
-## Conclusion
-
-It was a long ride from past few projects, where we done some EDA, then explored possible ML Models to predict, cluster data and in this part, we tried to do all those things from the web app and also we can now try to predict from the webapp by inserting some values into the form.
-
-
+Here is a cleaner implementation.
 
 ```python
+def render_inference_mode():
+    st.markdown("### Inference Mode")
 
+    model_files = sorted(MODEL_DIR.glob("*.joblib"))
+
+    if not model_files:
+        st.warning("No saved models found. Train and save a model first.")
+        return
+
+    selected_model_file = st.selectbox(
+        "Choose saved model",
+        model_files,
+        format_func=lambda path: path.name
+    )
+
+    payload = joblib.load(selected_model_file)
+
+    model = payload["model"]
+    features = payload["features"]
+    task = payload["task"]
+
+    st.write("Task:", task)
+    st.write("Features:", features)
+
+    render_prediction_form(model, features, task)
 ```
+
+## Full Modern app.py
+
+Below is a compact full version of the updated app.
+
+```python
+from pathlib import Path
+
+import joblib
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+import streamlit as st
+
+from plotly.subplots import make_subplots
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
+from sklearn.linear_model import ElasticNet, Lasso, LinearRegression, LogisticRegression, Ridge
+from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, r2_score
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.tree import DecisionTreeClassifier
+
+
+try:
+    from sklearn_extra.cluster import KMedoids
+    HAS_KMEDOIDS = True
+except ImportError:
+    HAS_KMEDOIDS = False
+
+
+FEATURES = ["Temperature", "Humidity", "Light", "CO2", "HumidityRatio"]
+TARGET = "Occupancy"
+
+MODEL_DIR = Path("models")
+MODEL_DIR.mkdir(exist_ok=True)
+
+
+@st.cache_data
+def load_data():
+    train = pd.read_csv(
+        "https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatraining.txt"
+    )
+    test1 = pd.read_csv(
+        "https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatest.txt"
+    )
+    test2 = pd.read_csv(
+        "https://github.com/LuisM78/Occupancy-detection-data/raw/master/datatest2.txt"
+    )
+
+    for df in [train, test1, test2]:
+        df["date"] = pd.to_datetime(df["date"])
+
+    return {
+        "train": train,
+        "test1": test1,
+        "test2": test2,
+    }
+
+
+def make_feature_comparison_plot(dfs, column):
+    titles = list(dfs.keys())
+
+    fig = make_subplots(
+        rows=2,
+        cols=3,
+        subplot_titles=titles,
+    )
+
+    for i, name in enumerate(titles, start=1):
+        df = dfs[name]
+
+        fig.add_trace(
+            go.Box(y=df[column], name=f"{name} box"),
+            row=1,
+            col=i
+        )
+
+        fig.add_trace(
+            go.Histogram(x=df[column], name=f"{name} hist"),
+            row=2,
+            col=i
+        )
+
+    fig.update_layout(
+        height=650,
+        title_text=f"Box Plot and Distribution of {column}",
+        showlegend=False
+    )
+
+    return fig
+
+
+def make_correlation_plot(dfs):
+    titles = list(dfs.keys())
+
+    fig = make_subplots(
+        rows=1,
+        cols=len(titles),
+        subplot_titles=titles
+    )
+
+    for i, name in enumerate(titles, start=1):
+        corr = dfs[name].select_dtypes(include="number").corr()
+
+        fig.add_trace(
+            go.Heatmap(
+                z=corr.values,
+                x=corr.columns,
+                y=corr.index,
+                coloraxis="coloraxis"
+            ),
+            row=1,
+            col=i
+        )
+
+    fig.update_layout(
+        title="Correlation Heatmaps",
+        height=500,
+        coloraxis={"colorscale": "Viridis"}
+    )
+
+    return fig
+
+
+def render_eda_mode(dfs):
+    st.markdown("### Exploratory Data Analysis")
+
+    sidebar = st.sidebar
+
+    show_data = sidebar.checkbox("Show data")
+
+    if show_data:
+        selected_dataset = sidebar.selectbox(
+            "Select dataset",
+            list(dfs.keys())
+        )
+
+        st.markdown(f"#### {selected_dataset} Data")
+        st.dataframe(dfs[selected_dataset])
+
+    show_comparison = sidebar.checkbox("Show feature comparison")
+
+    if show_comparison:
+        selected_columns = sidebar.multiselect(
+            "Select columns",
+            FEATURES + [TARGET],
+            default=["Temperature", "Humidity", "Light"]
+        )
+
+        if selected_columns:
+            for column in selected_columns:
+                fig = make_feature_comparison_plot(dfs, column)
+                st.plotly_chart(fig, use_container_width=True)
+
+    show_corr = sidebar.checkbox("Show correlation")
+
+    if show_corr:
+        fig = make_correlation_plot(dfs)
+        st.plotly_chart(fig, use_container_width=True)
+
+
+def build_cluster_model(algorithm, n_clusters):
+    if algorithm == "K-Means":
+        return KMeans(n_clusters=n_clusters, random_state=42, n_init="auto")
+
+    if algorithm == "K-Medoids":
+        if not HAS_KMEDOIDS:
+            raise ImportError("Install scikit-learn-extra to use K-Medoids.")
+
+        return KMedoids(n_clusters=n_clusters, random_state=42)
+
+    raise ValueError(f"Unknown clustering algorithm: {algorithm}")
+
+
+def render_clustering_mode(dfs):
+    st.markdown("### Clustering")
+
+    sidebar = st.sidebar
+
+    algorithms = ["K-Means"]
+
+    if HAS_KMEDOIDS:
+        algorithms.append("K-Medoids")
+
+    algorithm = sidebar.selectbox(
+        "Select clustering algorithm",
+        algorithms
+    )
+
+    selected_dataset = sidebar.selectbox(
+        "Select dataset",
+        list(dfs.keys())
+    )
+
+    selected_features = sidebar.multiselect(
+        "Select features",
+        FEATURES,
+        default=["Temperature", "Humidity", "CO2"]
+    )
+
+    n_clusters = sidebar.slider(
+        "Number of clusters",
+        min_value=2,
+        max_value=10,
+        value=2
+    )
+
+    use_pca = sidebar.checkbox("Use PCA", value=True)
+
+    if len(selected_features) < 2:
+        st.warning("Please select at least two features.")
+        return
+
+    df = dfs[selected_dataset].copy()
+
+    X = df[selected_features]
+
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+
+    if use_pca:
+        pca = PCA(n_components=2)
+        X_plot = pca.fit_transform(X_scaled)
+        x_label = "PCA 1"
+        y_label = "PCA 2"
+    else:
+        X_plot = X_scaled[:, :2]
+        x_label = selected_features[0]
+        y_label = selected_features[1]
+
+    model = build_cluster_model(algorithm, n_clusters)
+    clusters = model.fit_predict(X_plot)
+
+    plot_df = pd.DataFrame({
+        "x": X_plot[:, 0],
+        "y": X_plot[:, 1],
+        "cluster": clusters.astype(str),
+        "Occupancy": df[TARGET].astype(str),
+    })
+
+    fig = go.Figure()
+
+    for cluster_id in sorted(plot_df["cluster"].unique()):
+        cdf = plot_df[plot_df["cluster"] == cluster_id]
+
+        fig.add_trace(
+            go.Scatter(
+                x=cdf["x"],
+                y=cdf["y"],
+                mode="markers",
+                name=f"Cluster {cluster_id}",
+                marker={"size": 5}
+            )
+        )
+
+    fig.update_layout(
+        title=f"{algorithm} Clustering",
+        xaxis_title=x_label,
+        yaxis_title=y_label,
+        height=600
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+
+def build_regression_model(name):
+    models = {
+        "Linear Regression": LinearRegression(),
+        "Ridge Regression": Ridge(),
+        "Lasso Regression": Lasso(),
+        "Elastic Net": ElasticNet(),
+    }
+
+    return models[name]
+
+
+def build_classification_model(name):
+    models = {
+        "Logistic Regression": LogisticRegression(max_iter=1000),
+        "KNN": KNeighborsClassifier(),
+        "Decision Tree": DecisionTreeClassifier(random_state=42),
+        "Random Forest": RandomForestClassifier(random_state=42),
+        "AdaBoost": AdaBoostClassifier(random_state=42),
+    }
+
+    return models[name]
+
+
+def render_prediction_form(model, selected_features, task):
+    st.markdown("#### Prediction Form")
+
+    input_values = []
+
+    with st.form(f"{task}_prediction_form"):
+        for feature in selected_features:
+            value = st.number_input(
+                feature,
+                value=0.0,
+                step=0.1
+            )
+            input_values.append(value)
+
+        submitted = st.form_submit_button("Predict")
+
+    if submitted:
+        prediction = model.predict([input_values])
+
+        st.write("Input values:", input_values)
+        st.write("Prediction:", prediction[0])
+
+        if task == "classification":
+            label = "Occupied" if int(prediction[0]) == 1 else "Vacant"
+            st.success(f"Predicted class: {label}")
+
+
+def save_model_form(model, selected_features, task):
+    model_name = st.text_input(
+        "Model file name",
+        value=f"{task}_model.joblib"
+    )
+
+    if st.button("Save model"):
+        if not model_name.endswith(".joblib"):
+            model_name += ".joblib"
+
+        payload = {
+            "model": model,
+            "features": selected_features,
+            "task": task,
+        }
+
+        file_path = MODEL_DIR / model_name
+
+        joblib.dump(payload, file_path)
+
+        st.success(f"Model saved to `{file_path}`")
+
+
+def render_regression_mode(dfs):
+    st.markdown("### Regression")
+
+    sidebar = st.sidebar
+
+    algorithm = sidebar.selectbox(
+        "Choose algorithm",
+        ["Linear Regression", "Ridge Regression", "Lasso Regression", "Elastic Net"]
+    )
+
+    train_name = sidebar.selectbox("Choose train data", list(dfs.keys()))
+    test_name = sidebar.selectbox(
+        "Choose test data",
+        [name for name in dfs.keys() if name != train_name]
+    )
+
+    selected_features = sidebar.multiselect(
+        "Choose features",
+        FEATURES,
+        default=FEATURES
+    )
+
+    if not selected_features:
+        st.warning("Please select at least one feature.")
+        return
+
+    train_df = dfs[train_name]
+    test_df = dfs[test_name]
+
+    x_train = train_df[selected_features]
+    y_train = train_df[TARGET]
+
+    x_test = test_df[selected_features]
+    y_test = test_df[TARGET]
+
+    model = Pipeline([
+        ("scaler", StandardScaler()),
+        ("model", build_regression_model(algorithm)),
+    ])
+
+    model.fit(x_train, y_train)
+
+    train_pred = model.predict(x_train)
+    test_pred = model.predict(x_test)
+
+    st.markdown(f"#### Chosen algorithm: `{algorithm}`")
+    st.metric("Train R2 Score", f"{r2_score(y_train, train_pred):.3f}")
+    st.metric("Test R2 Score", f"{r2_score(y_test, test_pred):.3f}")
+
+    if sidebar.checkbox("Show prediction form"):
+        render_prediction_form(model, selected_features, task="regression")
+
+    if sidebar.checkbox("Save model"):
+        save_model_form(model, selected_features, task="regression")
+
+
+def make_confusion_matrix_plot(y_train, train_pred, y_test, test_pred):
+    labels = ["Vacant", "Occupied"]
+
+    cm_train = confusion_matrix(y_train, train_pred, labels=[0, 1])
+    cm_test = confusion_matrix(y_test, test_pred, labels=[0, 1])
+
+    fig = make_subplots(
+        rows=1,
+        cols=2,
+        subplot_titles=["Train", "Test"]
+    )
+
+    fig.add_trace(
+        go.Heatmap(
+            z=cm_train,
+            x=labels,
+            y=labels,
+            colorscale="Blues",
+            showscale=False,
+            text=cm_train,
+            texttemplate="%{text}"
+        ),
+        row=1,
+        col=1
+    )
+
+    fig.add_trace(
+        go.Heatmap(
+            z=cm_test,
+            x=labels,
+            y=labels,
+            colorscale="Blues",
+            showscale=False,
+            text=cm_test,
+            texttemplate="%{text}"
+        ),
+        row=1,
+        col=2
+    )
+
+    fig.update_layout(
+        title="Confusion Matrix",
+        height=500
+    )
+
+    fig.update_xaxes(title_text="Predicted")
+    fig.update_yaxes(title_text="Actual")
+
+    return fig
+
+
+def render_classification_mode(dfs):
+    st.markdown("### Classification")
+
+    sidebar = st.sidebar
+
+    algorithm = sidebar.selectbox(
+        "Choose algorithm",
+        ["Logistic Regression", "KNN", "Decision Tree", "Random Forest", "AdaBoost"]
+    )
+
+    train_name = sidebar.selectbox("Choose train data", list(dfs.keys()))
+    test_name = sidebar.selectbox(
+        "Choose test data",
+        [name for name in dfs.keys() if name != train_name]
+    )
+
+    selected_features = sidebar.multiselect(
+        "Choose features",
+        FEATURES,
+        default=FEATURES
+    )
+
+    if not selected_features:
+        st.warning("Please select at least one feature.")
+        return
+
+    train_df = dfs[train_name]
+    test_df = dfs[test_name]
+
+    x_train = train_df[selected_features]
+    y_train = train_df[TARGET]
+
+    x_test = test_df[selected_features]
+    y_test = test_df[TARGET]
+
+    model = Pipeline([
+        ("scaler", StandardScaler()),
+        ("model", build_classification_model(algorithm)),
+    ])
+
+    model.fit(x_train, y_train)
+
+    train_pred = model.predict(x_train)
+    test_pred = model.predict(x_test)
+
+    train_acc = accuracy_score(y_train, train_pred)
+    test_acc = accuracy_score(y_test, test_pred)
+
+    train_f1 = f1_score(y_train, train_pred, average="macro")
+    test_f1 = f1_score(y_test, test_pred, average="macro")
+
+    st.markdown(f"#### Chosen algorithm: `{algorithm}`")
+
+    c1, c2, c3, c4 = st.columns(4)
+
+    c1.metric("Train Accuracy", f"{train_acc:.3f}")
+    c2.metric("Test Accuracy", f"{test_acc:.3f}")
+    c3.metric("Train F1", f"{train_f1:.3f}")
+    c4.metric("Test F1", f"{test_f1:.3f}")
+
+    fig = make_confusion_matrix_plot(y_train, train_pred, y_test, test_pred)
+    st.plotly_chart(fig, use_container_width=True)
+
+    if sidebar.checkbox("Show prediction form"):
+        render_prediction_form(model, selected_features, task="classification")
+
+    if sidebar.checkbox("Save model"):
+        save_model_form(model, selected_features, task="classification")
+
+
+def render_inference_mode():
+    st.markdown("### Inference Mode")
+
+    model_files = sorted(MODEL_DIR.glob("*.joblib"))
+
+    if not model_files:
+        st.warning("No saved models found. Train and save a model first.")
+        return
+
+    selected_model_file = st.selectbox(
+        "Choose saved model",
+        model_files,
+        format_func=lambda path: path.name
+    )
+
+    payload = joblib.load(selected_model_file)
+
+    model = payload["model"]
+    features = payload["features"]
+    task = payload["task"]
+
+    st.write("Task:", task)
+    st.write("Features:", features)
+
+    render_prediction_form(model, features, task)
+
+
+def main():
+    st.set_page_config(
+        page_title="Room Occupancy Data App",
+        page_icon="📊",
+        layout="wide"
+    )
+
+    st.title("Room Occupancy Data App")
+    st.write("Interactive EDA and machine learning app using Streamlit.")
+
+    dfs = load_data()
+
+    mode = st.sidebar.selectbox(
+        "Select a mode",
+        ["EDA", "Clustering", "Regression", "Classification", "Inference"]
+    )
+
+    st.markdown(f"## {mode} Mode")
+
+    if mode == "EDA":
+        render_eda_mode(dfs)
+
+    elif mode == "Clustering":
+        render_clustering_mode(dfs)
+
+    elif mode == "Regression":
+        render_regression_mode(dfs)
+
+    elif mode == "Classification":
+        render_classification_mode(dfs)
+
+    elif mode == "Inference":
+        render_inference_mode()
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## Run the App
+
+Save the code as:
+
+```text
+app.py
+```
+
+Then run:
+
+```bash
+streamlit run app.py
+```
+
+Open the local URL shown in the terminal.
+
+## requirements.txt
+
+A simple requirements file can be:
+
+```text
+streamlit
+pandas
+numpy
+plotly
+scikit-learn
+joblib
+```
+
+If using K-Medoids:
+
+```text
+scikit-learn-extra
+```
+
+## Important Improvements Over the Original Version
+
+The original version worked, but this updated version improves several things.
+
+### 1. Use st.cache_data Instead of st.cache
+
+The old code used:
+
+```python
+@st.cache
+```
+
+The updated code uses:
+
+```python
+@st.cache_data
+```
+
+This is the recommended modern approach for cached data loading.
+
+### 2. Use scikit-learn Pipeline
+
+Instead of manually scaling data in many places, we use:
+
+```python
+Pipeline([
+    ("scaler", StandardScaler()),
+    ("model", model),
+])
+```
+
+This keeps preprocessing and model training together.
+
+### 3. Use Classification for Binary Occupancy
+
+Since `Occupancy` is binary, classification is the better task.
+
+Regression is still kept for learning, but the main prediction mode should be classification.
+
+### 4. Save Model Metadata
+
+We save:
+
+- model
+- selected features
+- task type
+
+This helps inference mode know what inputs to ask for.
+
+### 5. Cleaner App Structure
+
+The updated app uses functions for:
+
+- EDA
+- clustering
+- regression
+- classification
+- inference
+- plotting
+- model saving
+
+This makes the code easier to maintain.
+
+## Common Problems and Fixes
+
+### Problem 1: st.cache Warning
+
+Use:
+
+```python
+@st.cache_data
+```
+
+instead of:
+
+```python
+@st.cache
+```
+
+### Problem 2: K-Medoids Import Error
+
+Install:
+
+```bash
+pip install scikit-learn-extra
+```
+
+Or remove K-Medoids and use K-Means only.
+
+### Problem 3: Plotly Chart Does Not Show
+
+Make sure you installed Plotly:
+
+```bash
+pip install plotly
+```
+
+Use:
+
+```python
+st.plotly_chart(fig, use_container_width=True)
+```
+
+### Problem 4: Model File Not Found
+
+Make sure the `models/` folder exists.
+
+```python
+Path("models").mkdir(exist_ok=True)
+```
+
+### Problem 5: Prediction Input Order Is Wrong
+
+Always save the selected feature names with the model. In inference mode, use the same order of features.
+
+### Problem 6: Regression Prediction Gives Decimal Occupancy
+
+That is expected because regression predicts a continuous number. For occupancy prediction, classification is better.
+
+## Future Improvements
+
+This app can be improved further by adding:
+
+- train/test split inside the app
+- model comparison table
+- ROC curve
+- precision and recall
+- feature importance
+- SHAP explanations
+- downloadable prediction results
+- uploaded custom CSV support
+- database support
+- authentication
+- deployment to Streamlit Community Cloud
+- deployment with Docker
+- deployment with Apache or Nginx reverse proxy
+
+## Final Thoughts
+
+In this post, we converted a notebook-based data science workflow into an interactive **Streamlit data app**. We loaded occupancy data, explored it with Plotly charts, added clustering, trained regression and classification models, saved models, and created inference mode.
+
+This is a very useful pattern. Instead of keeping analysis only inside notebooks, we can turn it into an app where users can interact with data, change features, compare models, and make predictions.
+
+Streamlit is especially helpful for this because we can build useful data apps with normal Python code and only a small amount of UI logic.

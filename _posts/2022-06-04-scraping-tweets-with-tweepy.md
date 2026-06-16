@@ -1,270 +1,894 @@
 ---
-title:  "Tweet Scraping with Tweepy"
-date:   2022-06-04 09:29:17 +0545
+layout: single
+title: "Tweet Scraping with Tweepy: Search X/Twitter Posts Using API v2, pandas, and CSV Export"
+date: 2022-06-04 09:29:17 +0545
+last_modified_at: 2026-06-16
 categories:
-    - Tweets
-    - Data Science    
+  - Tweets
+  - Data Science
+  - Python
 tags:
-    - Pandas
-    - Python
-    - tweepy
-
+  - "Tweepy"
+  - "Twitter API"
+  - "X API"
+  - "Python"
+  - "pandas"
+  - "Tweet Scraping"
+  - "Social Media Data"
+  - "API v2"
+  - "CSV Export"
+description: "A beginner-friendly guide to collecting public X/Twitter posts with Tweepy and the X API v2, using bearer tokens, environment variables, recent search, pagination, pandas, and CSV export."
+excerpt: "Learn how to collect public X/Twitter posts with Tweepy using the modern X API v2 Client, recent search, pagination, safe API-key handling, pandas DataFrames, and CSV export."
 header:
   teaser: assets/twitter_bot/twitter_app.png
+  og_image: assets/twitter_bot/twitter_app.png
+  image_description: "Twitter/X developer app dashboard used for Tweepy API tutorial"
+toc: true
+toc_label: "Tweet Scraping with Tweepy"
+toc_icon: "twitter"
+toc_sticky: true
+read_time: true
+share: true
+related: true
+classes: wide
 ---
 
-Tweet Scraping can be done with different ways but one of the reliable ones is using Tweepy and Tweeter's developer API. In this blog we are going to explore how we can do Tweet Scraping using Twitter's API and Tweepy. The API calls are handled by Tweepy and we only need to give it Keys.
- 
- 
-### Getting API Keys
-First we need before doing tweet scraping is to have a Twitter Developer Account and only with it, we can get keys to scrape tweets.
-* Visit [developer.twitter.com](https://developer.twitter.com/en/docs/projects/overview). Please read carefully how much request is possible to which type of accounts.
-* Go to sign in and fill in the credentials.
-* Then create an app.
- 
+Collecting public posts from Twitter, now called **X**, can be useful for data science projects such as sentiment analysis, trend analysis, topic monitoring, and social media research.
+
+In the original version of this blog, we used **Tweepy** with Twitter API v1.1 and `api.search_tweets`. That approach was common in 2022.
+
+Today, the safer and more modern way is to use:
+
+- X Developer account
+- X API v2
+- Tweepy `Client`
+- bearer token
+- environment variables
+- pagination
+- pandas DataFrame
+- CSV export
+
+In this tutorial, we will update the old workflow and collect public posts using Tweepy and the X API v2.
+
+> I will still use the word "tweet" in some places because many developers still search for "tweet scraping with Tweepy", but the platform now uses "posts".
+
+## Important Note About Access
+
+X/Twitter API access has changed a lot since 2022. Some endpoints, limits, and pricing depend on your developer access level and current plan.
+
+So, before running the code, check:
+
+- whether your developer account is active
+- whether your app has access to the endpoint
+- whether your plan allows recent search
+- whether you have enough monthly or daily quota
+- whether your use case follows X Developer Policy
+
+Do not scrape private content, bypass login walls, collect sensitive personal data unnecessarily, or use this data for spam.
+
+## What This Tutorial Covers
+
+We will cover:
+
+- creating a developer app
+- getting API credentials
+- storing credentials safely
+- installing Tweepy
+- using `tweepy.Client`
+- searching recent public posts
+- paginating results
+- extracting post and user metadata
+- saving results as CSV
+- loading results into pandas
+- common problems and fixes
+- what to do next with the collected data
+
+## Getting API Keys
+
+First, you need an X Developer account.
+
+Go to the developer portal and create a project/app. Then save the credentials.
+
+You may see keys such as:
+
+- API Key
+- API Key Secret
+- Bearer Token
+- Access Token
+- Access Token Secret
+
+For recent search with API v2, the simplest setup usually uses the **Bearer Token**.
+
+Developer app setup screenshot:
+
 ![](https://q-viper.github.io/assets/twitter_bot/bot_name.png)
- 
-* Generate and save API Keys.
- 
+
+API key screenshot:
+
 ![](https://q-viper.github.io/assets/twitter_bot/apikey.png)
- 
- 
-### Installing Tweepy
- 
- 
+
+Do not share these keys publicly.
+
+## Store API Keys Safely
+
+Do not write API keys directly in the code.
+
+Bad:
+
 ```python
-!pip install git+https://github.com/tweepy/tweepy.git
+bearer_token = "my-real-token"
 ```
- 
-    Collecting git+https://github.com/tweepy/tweepy.git
-      Cloning https://github.com/tweepy/tweepy.git to c:\users\dell\appdata\local\temp\pip-req-build-div0g8k4
-    Requirement already satisfied: oauthlib<4,>=3.2.0 in c:\users\dell\appdata\roaming\python\python38\site-packages (from tweepy==4.10.0) (3.2.0)
-    Requirement already satisfied: requests<3,>=2.27.0 in c:\users\dell\appdata\roaming\python\python38\site-packages (from tweepy==4.10.0) (2.27.1)
-    Requirement already satisfied: requests-oauthlib<2,>=1.2.0 in c:\programdata\anaconda3\lib\site-packages (from tweepy==4.10.0) (1.3.0)
-    Requirement already satisfied: charset-normalizer~=2.0.0 in c:\users\dell\appdata\roaming\python\python38\site-packages (from requests<3,>=2.27.0->tweepy==4.10.0) (2.0.7)
-    Requirement already satisfied: urllib3<1.27,>=1.21.1 in c:\programdata\anaconda3\lib\site-packages (from requests<3,>=2.27.0->tweepy==4.10.0) (1.26.4)
-    Requirement already satisfied: idna<4,>=2.5 in c:\programdata\anaconda3\lib\site-packages (from requests<3,>=2.27.0->tweepy==4.10.0) (2.10)
-    Requirement already satisfied: certifi>=2017.4.17 in c:\programdata\anaconda3\lib\site-packages (from requests<3,>=2.27.0->tweepy==4.10.0) (2020.12.5)
-    Building wheels for collected packages: tweepy
-      Building wheel for tweepy (setup.py): started
-      Building wheel for tweepy (setup.py): finished with status 'done'
-      Created wheel for tweepy: filename=tweepy-4.10.0-py3-none-any.whl size=95239 sha256=21aef993404498afa5f673cece5e8ee6a9c82b6b89c7b063c963858021692b03
-      Stored in directory: C:\Users\Dell\AppData\Local\Temp\pip-ephem-wheel-cache-yi90v1ry\wheels\ad\05\51\a78f66d15b87f9c623d2f3afc4401660ac4219e526c787fb8b
-    Successfully built tweepy
-    Installing collected packages: tweepy
-      Attempting uninstall: tweepy
-        Found existing installation: tweepy 4.8.0
-        Uninstalling tweepy-4.8.0:
-          Successfully uninstalled tweepy-4.8.0
-    Successfully installed tweepy-4.10.0
-    
- 
-      Running command git clone -q https://github.com/tweepy/tweepy.git 'C:\Users\Dell\AppData\Local\Temp\pip-req-build-div0g8k4'
-    
- 
-### Preparing Keys
- 
- 
+
+Better:
+
 ```python
-api_key="api_key here"
-secret="secret key here"
-bearer="bearer here"
-access_token="access_token here"
-access_token_secret="access_token_secret here"
+bearer_token = os.environ["X_BEARER_TOKEN"]
 ```
- 
-### Import and prepare API Object
-Pass api_key, secret, access_token, access_token_secret into the OAuthHandler.
- 
- 
+
+Create a `.env` file:
+
+```text
+X_BEARER_TOKEN=your_bearer_token_here
+```
+
+Add `.env` to `.gitignore`:
+
+```text
+.env
+__pycache__/
+*.pyc
+*.csv
+```
+
+Install `python-dotenv`:
+
+```bash
+pip install python-dotenv
+```
+
+Now your code can load the token safely.
+
+## Install Tweepy
+
+Install Tweepy from PyPI:
+
+```bash
+pip install tweepy pandas python-dotenv
+```
+
+The original post installed Tweepy from GitHub:
+
+```bash
+pip install git+https://github.com/tweepy/tweepy.git
+```
+
+That can be useful when testing development versions, but for a normal project, PyPI is simpler and more stable.
+
+## Import Libraries
+
+```python
+import os
+from pathlib import Path
+
+import pandas as pd
+import tweepy
+from dotenv import load_dotenv
+```
+
+Load the environment variables:
+
+```python
+load_dotenv()
+
+BEARER_TOKEN = os.environ["X_BEARER_TOKEN"]
+```
+
+## Create Tweepy Client
+
+With X API v2, use `tweepy.Client`.
+
+```python
+client = tweepy.Client(
+    bearer_token=BEARER_TOKEN,
+    wait_on_rate_limit=True
+)
+```
+
+The `wait_on_rate_limit=True` option tells Tweepy to wait automatically when the rate limit is reached.
+
+## Legacy v1.1 Code
+
+The old version of this blog used OAuth 1.0a and API v1.1.
+
 ```python
 import tweepy as tw
- 
-api_key= api_key
-api_secret= secret
- 
- 
+
 auth = tw.OAuthHandler(api_key, api_secret)
 auth.set_access_token(access_token, access_token_secret)
-api = tw.API(auth, wait_on_rate_limit=True)
- 
-```
- 
-### Making First API Call
- 
- 
-```python
-key_word="Funny"
-max_items=5
-for tweet in tw.Cursor(api.search_tweets,
-        q=key_word, count=max_items).items(max_items):
-    print(tweet.text)
-```
- 
-    RT @SocDoneLeft: still support the Socialist Agenda? https://t.co/qWYlwscPuD
-    RT @hiraiboostan: i know it might sound weird but twice really did save me in some ways. they helped me feel less lonely and opened a door…
-    RT @memorytrain2012: 下北沢クラブキューに誘っていただきました。近藤さん(ex.PEALOUT)率いるmy funny hitchhiker、知り合いからずっと話を聞いていたthe MADRASとの3マンライブ。大先輩に囲まれて緊張感ありますが突然少年は遠慮…
-    I mean...
-    
-    (https://t.co/cOvCZLjJVs)
-    #meme #memes #funny #joke #memebot https://t.co/HEi2bsOytd
-    RT @IcyJaime: “are you ok?” nah but l’m funny
-    
- 
-In the above example, we searched for the keyword Funny and took only 5 items.
- 
-### Storing Tweets as CSV and DataFrame
- 
-Since we have already made some calls, let's create DataFrame where all the tweets will be stored. 
- 
- 
-```python
-import json,csv,time,os
-def get_related_tweets(key_words, language="en", max_tweets=50, max_items=10):
-    fname=language+str(time.time())+".csv"
-    print(f"Filename {fname}")
-    
-    count=0
-    tweets=max_tweets
-    
-    for key_word in key_words:
-        print(f"Current Keyword: {key_word}")
-        for tweet in tw.Cursor(api.search_tweets,
-                               q=key_word, count=max_items).items(max_items):
-            
-            tweet_created_at = []
-            text = []
-            user=[]
-            hashtags = []
-            user_mentions = []
-            in_reply = []
-            protected = []
-            followers_count = [] 
-            friends_count = []
-            listed_count = []
-            created_at = []
-            favourites_count = []
-            geo_enabled = []
-            verified =[]
-            statuses_count=[]
-            coordinates=[]
-            is_quote_status=[]
-            retweet_count=[]
-            favorited=[]
-            retweeted=[]
-            source = []
-            place=[]
-            lang=[]
-            kwd=[]
-            ids=[]
-            locations=[]
-            description=[]
- 
-            if tweet.lang!=language:
-                continue
-            count+=1
-            try:
-              tweet_created_at.append(tweet.created_at)
-              status = api.get_status(tweet.id, tweet_mode="extended")
-              try:
-                  txt = status.retweeted_status.full_text
-              except AttributeError:  
-                  txt = status.full_text
- 
-              description.append(tweet.user.description)
-              locations.append(tweet.user.location)
-              ids.append(tweet.id)
-              text.append(txt)
-              user.append(tweet.user.screen_name)
-              hashtags.append(tweet.entities["hashtags"])
-              user_mentions.append(len(tweet.entities["user_mentions"]))
-              in_reply.append(tweet.in_reply_to_status_id)
-              protected.append(tweet.user.protected)
-              followers_count.append(tweet.user.followers_count)
-              friends_count.append(tweet.user.friends_count)
-              listed_count.append(tweet.user.listed_count)
-              created_at.append(tweet.user.created_at)
-              favourites_count.append(tweet.user.favourites_count)
-              geo_enabled.append(tweet.user.geo_enabled)
-              verified.append(tweet.user.verified)
-              statuses_count.append(tweet.user.statuses_count)
-              coordinates.append(tweet.coordinates)
-              is_quote_status.append(tweet.is_quote_status)
-              retweet_count.append(tweet.retweet_count)
-              favorited.append(tweet.favorited)
-              retweeted.append(tweet.retweeted)
-              source.append(tweet.source)
-              place.append(tweet.place)
-              lang.append(tweet.lang)
-              kwd.append(key_word)
- 
-              dict_data={"id":ids,'tweet_created_at':tweet_created_at, 
-                                    'text': text, 'user': user, "bio":description,"location":locations,
-                                    "hashtags":hashtags, "user_mentions":user_mentions,
-                                    "in_reply":in_reply, "protected":protected, "followers_count":followers_count,
-                                    "friends_count":friends_count, "listed_count":listed_count, "created_at":created_at,
-                                    "favourites_count":favourites_count, "geo_enabled":geo_enabled, "verified":verified,
-                                    "statuses_count":statuses_count, "coordinates":coordinates, "is_quote_status":is_quote_status,
-                                    "retweet_count":retweet_count,
-                                    "retweeted":retweeted,"lang":lang,
-                                    "source":source,"place":place,"kwd":key_word}
-              csv_columns=list(dict_data.keys())
-              dict_data = {k:v[0] for k,v in dict_data.items()}
-              if os.path.isfile(fname):  
-                # print("File Exists")
-                pass
-              else:
-                # print("File does not exist")
-                with open(fname, 'a', encoding='utf-8') as csvfile:
-                  writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
-                  writer.writeheader()
- 
-              with open(fname, 'a', encoding='utf-8') as csvfile:
-                  writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
-                  for data in [dict_data]:
-                      writer.writerow(data)
- 
-              if count>=tweets:
-                break
-            except:
-              print("Something is wrong. Skipping this tweet.")
-    
-    return pd.read_csv(fname, parse_dates=["tweet_created_at","created_at"])
-```
- 
-Above function takes keywords, language and number of max_tweets and max_items which will be used in the API. 
-* Prepare a file name based on the current timestamp, so that there will be no repeat.
-* Prepare count and max tweets number so that we will be getting only max_tweets number of tweets.
-* We loop onto the keyword.
-* Loop into the results given by Cursor. We pass `api.search_tweets`, which is called by the `Cursor`.
-* Prepare lists to hold the important fields like tweet date, account date, user, tweet text and so on.
-* If the current language of the tweet is not the language we wanted, then we will skip the current result.
-* We append all the important values into their respective lists and finally create a dictionary. 
-* Then write that dictionary using `csv.DictWriter`
-* Finally read that csv file as a dataframe and return it.
- 
- 
-```python
- 
-keywords=["climate","funny"]
-tweets_df = get_related_tweets(keywords)
-tweets_df
-```
- 
-    Filename en1654358920.3398395.csv
-    Current Keyword: climate
-    Current Keyword: funny
-    
- 
- 
-## What's next?
-We completed the tweet scraping part but what next?
-* Performing EDA based on some topic like COVID, College and so on.
-* We could use tweets from tweet scraping to do Sentiment Analysis based on the tweet text.
-* Performing Tweet Generation using Some Markov Models.
- 
- 
-For more contents like this, please subscribe to our [news letter](https://dataqoil.com/newsletter/).
- 
- 
 
+api = tw.API(
+    auth,
+    wait_on_rate_limit=True
+)
+```
+
+Then it used:
+
+```python
+tw.Cursor(
+    api.search_tweets,
+    q=key_word,
+    count=max_items
+).items(max_items)
+```
+
+This was common in older tutorials. For new projects, prefer the API v2 client shown above.
+
+## Make First Search API Call
+
+Let us search recent public posts about a topic.
+
+```python
+query = "climate lang:en -is:retweet"
+
+response = client.search_recent_tweets(
+    query=query,
+    max_results=10,
+    tweet_fields=[
+        "id",
+        "text",
+        "created_at",
+        "lang",
+        "public_metrics",
+        "source",
+    ]
+)
+
+for tweet in response.data or []:
+    print(tweet.id, tweet.text[:100])
+```
+
+The query means:
+
+- `climate`: search keyword
+- `lang:en`: English posts
+- `-is:retweet`: exclude retweets/reposts
+
+This gives a cleaner dataset for text analysis.
+
+## About Recent Search
+
+Recent search returns posts from the recent search window supported by your API access. It is good for small data science experiments, dashboards, and topic monitoring.
+
+If you need older historical data, you may need a different endpoint, access level, or product.
+
+## Useful Query Operators
+
+Examples:
+
+```text
+climate lang:en -is:retweet
+"machine learning" lang:en -is:retweet
+python OR pandas lang:en -is:retweet
+#datascience lang:en -is:retweet
+from:openai
+to:openai
+url:github.com
+has:links
+has:media
+```
+
+Good queries make the collected data much cleaner.
+
+## Collect Posts with Pagination
+
+One API call usually returns only a limited number of posts. To collect more, use pagination.
+
+Tweepy provides `Paginator`.
+
+```python
+def search_posts(
+    client,
+    query,
+    max_posts=100,
+    max_results_per_page=100,
+):
+    """Search recent public posts using X API v2 and Tweepy."""
+    posts = []
+
+    paginator = tweepy.Paginator(
+        client.search_recent_tweets,
+        query=query,
+        max_results=max_results_per_page,
+        tweet_fields=[
+            "id",
+            "text",
+            "created_at",
+            "lang",
+            "public_metrics",
+            "source",
+            "conversation_id",
+            "possibly_sensitive",
+            "entities",
+        ],
+        user_fields=[
+            "id",
+            "username",
+            "name",
+            "created_at",
+            "description",
+            "location",
+            "verified",
+            "public_metrics",
+        ],
+        expansions=[
+            "author_id",
+        ],
+    )
+
+    for response in paginator:
+        if response.data is None:
+            continue
+
+        users = {}
+
+        if response.includes and "users" in response.includes:
+            users = {
+                user.id: user
+                for user in response.includes["users"]
+            }
+
+        for tweet in response.data:
+            user = users.get(tweet.author_id)
+
+            public_metrics = tweet.public_metrics or {}
+            user_metrics = user.public_metrics if user else {}
+
+            row = {
+                "tweet_id": tweet.id,
+                "tweet_created_at": tweet.created_at,
+                "text": tweet.text,
+                "lang": tweet.lang,
+                "source": tweet.source,
+                "conversation_id": tweet.conversation_id,
+                "possibly_sensitive": tweet.possibly_sensitive,
+                "retweet_count": public_metrics.get("retweet_count"),
+                "reply_count": public_metrics.get("reply_count"),
+                "like_count": public_metrics.get("like_count"),
+                "quote_count": public_metrics.get("quote_count"),
+                "author_id": tweet.author_id,
+                "username": user.username if user else None,
+                "name": user.name if user else None,
+                "user_created_at": user.created_at if user else None,
+                "user_description": user.description if user else None,
+                "user_location": user.location if user else None,
+                "user_verified": user.verified if user else None,
+                "user_followers_count": user_metrics.get("followers_count") if user else None,
+                "user_following_count": user_metrics.get("following_count") if user else None,
+                "user_tweet_count": user_metrics.get("tweet_count") if user else None,
+                "query": query,
+            }
+
+            posts.append(row)
+
+            if len(posts) >= max_posts:
+                return pd.DataFrame(posts)
+
+    return pd.DataFrame(posts)
+```
+
+Use it:
+
+```python
+df = search_posts(
+    client=client,
+    query="climate lang:en -is:retweet",
+    max_posts=100
+)
+
+df.head()
+```
+
+## Save Posts to CSV
+
+```python
+output_dir = Path("data")
+output_dir.mkdir(exist_ok=True)
+
+output_path = output_dir / "x_posts_climate.csv"
+
+df.to_csv(
+    output_path,
+    index=False,
+    encoding="utf-8"
+)
+
+print(f"Saved {len(df)} rows to {output_path}")
+```
+
+Read it later:
+
+```python
+df = pd.read_csv(
+    "data/x_posts_climate.csv",
+    parse_dates=["tweet_created_at", "user_created_at"]
+)
+```
+
+## Search Multiple Keywords
+
+The original function accepted multiple keywords. We can keep the same idea.
+
+```python
+def search_multiple_topics(
+    client,
+    keywords,
+    language="en",
+    posts_per_keyword=100,
+):
+    all_frames = []
+
+    for keyword in keywords:
+        query = f"{keyword} lang:{language} -is:retweet"
+
+        print(f"Searching query: {query}")
+
+        topic_df = search_posts(
+            client=client,
+            query=query,
+            max_posts=posts_per_keyword
+        )
+
+        topic_df["keyword"] = keyword
+
+        all_frames.append(topic_df)
+
+    if not all_frames:
+        return pd.DataFrame()
+
+    return pd.concat(
+        all_frames,
+        ignore_index=True
+    )
+```
+
+Use it:
+
+```python
+keywords = [
+    "climate",
+    "funny",
+]
+
+tweets_df = search_multiple_topics(
+    client=client,
+    keywords=keywords,
+    language="en",
+    posts_per_keyword=50
+)
+
+tweets_df.head()
+```
+
+Save:
+
+```python
+tweets_df.to_csv(
+    "data/x_posts_multiple_topics.csv",
+    index=False,
+    encoding="utf-8"
+)
+```
+
+## Extract Hashtags
+
+If you request `entities`, some posts may include hashtags.
+
+```python
+def extract_hashtags(entities):
+    if not isinstance(entities, dict):
+        return []
+
+    hashtags = entities.get("hashtags", [])
+
+    return [
+        item.get("tag")
+        for item in hashtags
+        if item.get("tag")
+    ]
+```
+
+If the `entities` column is stored as a dictionary in memory:
+
+```python
+df["hashtags"] = df["entities"].apply(extract_hashtags)
+```
+
+If you save and reload CSV, dictionaries may become strings. In that case, store hashtags separately during collection if you need them.
+
+## Safer Minimal Data Collection
+
+The old version collected many user fields. For many analysis tasks, you do not need all of them.
+
+A safer minimal dataset can include:
+
+- post ID
+- post text
+- created date
+- language
+- public metrics
+- query keyword
+
+Avoid collecting unnecessary personal profile fields unless you have a clear reason.
+
+Example minimal row:
+
+```python
+row = {
+    "tweet_id": tweet.id,
+    "tweet_created_at": tweet.created_at,
+    "text": tweet.text,
+    "lang": tweet.lang,
+    "like_count": public_metrics.get("like_count"),
+    "retweet_count": public_metrics.get("retweet_count"),
+    "reply_count": public_metrics.get("reply_count"),
+    "quote_count": public_metrics.get("quote_count"),
+    "query": query,
+}
+```
+
+This is better for privacy and easier for text analysis.
+
+## Complete Script
+
+Here is a complete beginner-friendly script.
+
+```python
+import os
+from pathlib import Path
+
+import pandas as pd
+import tweepy
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+BEARER_TOKEN = os.environ["X_BEARER_TOKEN"]
+
+
+def create_client():
+    return tweepy.Client(
+        bearer_token=BEARER_TOKEN,
+        wait_on_rate_limit=True
+    )
+
+
+def search_posts(
+    client,
+    query,
+    max_posts=100,
+    max_results_per_page=100,
+):
+    posts = []
+
+    paginator = tweepy.Paginator(
+        client.search_recent_tweets,
+        query=query,
+        max_results=max_results_per_page,
+        tweet_fields=[
+            "id",
+            "text",
+            "created_at",
+            "lang",
+            "public_metrics",
+            "source",
+            "conversation_id",
+            "possibly_sensitive",
+            "entities",
+        ],
+        user_fields=[
+            "id",
+            "username",
+            "name",
+            "created_at",
+            "description",
+            "location",
+            "verified",
+            "public_metrics",
+        ],
+        expansions=[
+            "author_id",
+        ],
+    )
+
+    for response in paginator:
+        if response.data is None:
+            continue
+
+        users = {}
+
+        if response.includes and "users" in response.includes:
+            users = {
+                user.id: user
+                for user in response.includes["users"]
+            }
+
+        for tweet in response.data:
+            user = users.get(tweet.author_id)
+
+            public_metrics = tweet.public_metrics or {}
+            user_metrics = user.public_metrics if user else {}
+
+            posts.append({
+                "tweet_id": tweet.id,
+                "tweet_created_at": tweet.created_at,
+                "text": tweet.text,
+                "lang": tweet.lang,
+                "source": tweet.source,
+                "conversation_id": tweet.conversation_id,
+                "possibly_sensitive": tweet.possibly_sensitive,
+                "retweet_count": public_metrics.get("retweet_count"),
+                "reply_count": public_metrics.get("reply_count"),
+                "like_count": public_metrics.get("like_count"),
+                "quote_count": public_metrics.get("quote_count"),
+                "author_id": tweet.author_id,
+                "username": user.username if user else None,
+                "name": user.name if user else None,
+                "user_created_at": user.created_at if user else None,
+                "user_description": user.description if user else None,
+                "user_location": user.location if user else None,
+                "user_verified": user.verified if user else None,
+                "user_followers_count": user_metrics.get("followers_count") if user else None,
+                "user_following_count": user_metrics.get("following_count") if user else None,
+                "user_tweet_count": user_metrics.get("tweet_count") if user else None,
+                "query": query,
+            })
+
+            if len(posts) >= max_posts:
+                return pd.DataFrame(posts)
+
+    return pd.DataFrame(posts)
+
+
+def search_multiple_topics(
+    client,
+    keywords,
+    language="en",
+    posts_per_keyword=100,
+):
+    all_frames = []
+
+    for keyword in keywords:
+        query = f"{keyword} lang:{language} -is:retweet"
+
+        print(f"Searching query: {query}")
+
+        topic_df = search_posts(
+            client=client,
+            query=query,
+            max_posts=posts_per_keyword
+        )
+
+        topic_df["keyword"] = keyword
+
+        all_frames.append(topic_df)
+
+    if not all_frames:
+        return pd.DataFrame()
+
+    return pd.concat(
+        all_frames,
+        ignore_index=True
+    )
+
+
+def main():
+    client = create_client()
+
+    keywords = [
+        "climate",
+        "funny",
+    ]
+
+    df = search_multiple_topics(
+        client=client,
+        keywords=keywords,
+        language="en",
+        posts_per_keyword=50
+    )
+
+    output_dir = Path("data")
+    output_dir.mkdir(exist_ok=True)
+
+    output_path = output_dir / "x_posts.csv"
+
+    df.to_csv(
+        output_path,
+        index=False,
+        encoding="utf-8"
+    )
+
+    print(df.head())
+    print(f"Saved {len(df)} posts to {output_path}")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## Simple EDA After Collection
+
+After saving posts, you can do a quick EDA.
+
+```python
+df = pd.read_csv(
+    "data/x_posts.csv",
+    parse_dates=["tweet_created_at", "user_created_at"]
+)
+
+df.shape
+```
+
+Check languages:
+
+```python
+df["lang"].value_counts()
+```
+
+Top keywords:
+
+```python
+df["keyword"].value_counts()
+```
+
+Most liked posts:
+
+```python
+df.sort_values(
+    "like_count",
+    ascending=False
+)[["tweet_created_at", "username", "text", "like_count"]].head()
+```
+
+Posts over time:
+
+```python
+df.set_index("tweet_created_at").resample("H").size().plot()
+```
+
+## Text Cleaning for Sentiment Analysis
+
+For sentiment analysis, clean text first.
+
+```python
+import re
+
+
+def clean_text(text):
+    text = str(text)
+
+    text = re.sub(r"http\S+", "", text)
+    text = re.sub(r"@\w+", "", text)
+    text = re.sub(r"#", "", text)
+    text = re.sub(r"\s+", " ", text)
+
+    return text.strip()
+
+
+df["clean_text"] = df["text"].apply(clean_text)
+```
+
+Now the text is easier to use for:
+
+- sentiment analysis
+- topic modelling
+- word clouds
+- keyword extraction
+- text classification
+
+## Common Problems and Fixes
+
+### Problem 1: 401 Unauthorized
+
+Check:
+
+- bearer token is correct
+- `.env` is loaded
+- token has not been revoked
+- app is active
+
+### Problem 2: 403 Forbidden
+
+Possible reasons:
+
+- endpoint is not available in your access level
+- app permissions are not correct
+- query requires access you do not have
+- project/app setup is incomplete
+
+### Problem 3: 429 Too Many Requests
+
+You hit a rate limit.
+
+Fixes:
+
+- use `wait_on_rate_limit=True`
+- reduce `max_posts`
+- reduce request frequency
+- collect data in smaller batches
+- check your current plan limits
+
+### Problem 4: No Data Returned
+
+Possible reasons:
+
+- query is too narrow
+- language filter removes all results
+- endpoint access is limited
+- there are no recent posts for that query
+- `-is:retweet` removes too many results
+
+Try a broader query:
+
+```text
+climate lang:en
+```
+
+### Problem 5: CSV Encoding Issue
+
+Use:
+
+```python
+encoding="utf-8"
+```
+
+when saving and reading files.
+
+## Ethical Data Use
+
+When collecting social media data, follow these rules:
+
+- collect only what you need
+- respect API terms and rate limits
+- do not collect private data
+- do not bypass protections
+- do not use data for spam
+- avoid exposing personal information in public reports
+- aggregate results when possible
+- be careful with sensitive topics
+- delete data when it is no longer needed
+
+Public does not always mean harmless. Use the data responsibly.
+
+## What Next?
+
+After collecting posts, you can try:
+
+- exploratory data analysis
+- sentiment analysis
+- topic modelling
+- hashtag analysis
+- trend detection
+- bot/spam filtering
+- word clouds
+- classification
+- dashboarding with Streamlit
+- storing posts in a database
+
+For example, this data can be used for a small sentiment analysis project on topics such as climate, sports, movies, or technology.
+
+## Final Thoughts
+
+In this tutorial, we updated the old tweet scraping workflow using **Tweepy** and the modern **X API v2**.
+
+The main changes are:
+
+- use `tweepy.Client` instead of old `API.search_tweets`
+- use a bearer token for recent search
+- store credentials in environment variables
+- use pagination for collecting more posts
+- save clean results into a pandas DataFrame and CSV
+- collect only the fields you actually need
+
+Tweepy still makes it much easier to work with the X/Twitter API, but access rules, endpoints, and limits can change. Always check the current X Developer documentation before building a real project.

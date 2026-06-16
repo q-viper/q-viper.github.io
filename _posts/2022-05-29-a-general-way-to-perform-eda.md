@@ -1,2339 +1,1380 @@
 ---
-title:  "A General Way to Perform an EDA"
-date:   2022-05-29 09:29:17 +0545
+layout: single
+title: "A General Way to Perform Exploratory Data Analysis in Python with pandas, seaborn, Plotly, and Statistics"
+date: 2022-05-29 09:29:17 +0545
+last_modified_at: 2026-06-16
 categories:
-    - EDA
-    - Data Science    
+  - EDA
+  - Data Science
+  - Python
 tags:
-    - Pandas
-    - Python
-
+  - "EDA"
+  - "Exploratory Data Analysis"
+  - "pandas"
+  - "Python"
+  - "seaborn"
+  - "Plotly"
+  - "Statistics"
+  - "IoT Data"
+  - "Data Visualization"
+description: "A beginner-friendly guide to performing exploratory data analysis in Python using pandas, seaborn, Plotly, descriptive statistics, correlation analysis, sampling, hypothesis testing, and automated EDA tools."
+excerpt: "Learn a practical step-by-step way to perform EDA in Python. This tutorial covers data loading, data checks, cleaning, descriptive analysis, distributions, outliers, correlations, sampling, ANOVA, VIF, and automated EDA tools."
 header:
   teaser: assets/general_eda/output_101_1.png
+  og_image: assets/general_eda/output_101_1.png
+  image_description: "AutoViz exploratory data analysis output for IoT telemetry data"
+toc: true
+toc_label: "General EDA Workflow"
+toc_icon: "search"
+toc_sticky: true
+read_time: true
+share: true
+related: true
+classes: wide
 ---
-## Introduction
-Hello everyone, welcome back to another new blog where we will explore different ideas and concept one could perform while performing an EDA. In simple words, this blog is a simple walk-through of an average EDA process which might include (in top down order):
-* **Data Loading**: From various sources (remote, local) and various formats (excel, csv, sql etc.)
-* **Data Check**: This is very important task where we check the data types (numerical, categorical, binary etc) of a data. We often focus on number of missing values.
-* **Data Transformation**: This includes filling up null values, or removing them from the table. We also do some data type conversions if required.
-* **Descriptive Analysis**: This is the heart of any EDA because here, we do lots of statistical tasks like finding mean, median, quartiles, mode, distribution, relationships of fields. We also plot different plots to support the analysis. This is sometimes enough to give insights about the data and if the data is rich and we need to find more insights and make assumptions, we have to do Inferential Analysis.
-* **Inferential Analysis**: This task sometimes is taken into the EDA part but most of the time we do inferential analysis along with model development. However, we do perform different tests (e.g Chi- Square Test) to calculate feature importance. Here we often do tests based on hypothesis and samples drawn from the population.
 
-While walking through these major steps, one will try to answer different questions of analysis like how many times some categorical data has appeared, what is the distribution over a date, what is the performance over certain cases and so on.
+Exploratory Data Analysis, or **EDA**, is one of the most important parts of any data science project. Before building a model, making a dashboard, or presenting insights, we first need to understand the data.
 
-Please follow the following link for the interactive version of this blog [General Way of Doing EDA]({{site.url}}/html_posts/general_way_of_doing_eda.html).
-## Data Loading
+EDA helps us answer questions such as:
 
-### Installing Libraries
+- What columns are available?
+- What do the columns mean?
+- How many rows and columns are there?
+- Are there missing values?
+- Are there outliers?
+- What are the distributions of numerical columns?
+- How are categorical values distributed?
+- Which variables are correlated?
+- Do different groups behave differently?
+- Are there patterns that can later be used for modelling?
 
-```python
-!pip install autoviz
-!pip install seaborn
-!pip install plotly
-!pip install cufflinks
-!pip install pandas
+This post gives a practical, beginner-friendly workflow for doing EDA in Python using:
+
+- pandas
+- NumPy
+- seaborn
+- Matplotlib
+- Plotly
+- statistical tests
+- optional automated EDA tools
+
+An interactive version of the original notebook is available here:
+
+- [General Way of Doing EDA]({{site.url}}/html_posts/general_way_of_doing_eda.html)
+
+## What This Tutorial Covers
+
+We will go through a full EDA workflow:
+
+1. Data loading
+2. Data checking
+3. Data transformation
+4. Descriptive analysis
+5. Distribution analysis
+6. Outlier analysis
+7. Correlation analysis
+8. Group-wise analysis
+9. Sampling
+10. Hypothesis testing
+11. Collinearity and VIF
+12. Automated EDA tools
+
+The goal is not to memorize commands. The goal is to learn a repeatable way to inspect and understand a dataset.
+
+## Dataset
+
+We will use an IoT telemetry dataset originally downloaded from Kaggle.
+
+The dataset contains readings from three IoT devices placed in different environmental conditions.
+
+| Device | Environmental condition |
+|---|---|
+| `00:0f:00:70:91:0a` | stable conditions, cooler and more humid |
+| `1c:bf:ce:15:ec:4d` | highly variable temperature and humidity |
+| `b8:27:eb:bf:9d:51` | stable conditions, warmer and dryer |
+
+The dataset has readings such as:
+
+- carbon monoxide
+- humidity
+- light status
+- LPG
+- motion status
+- smoke
+- temperature
+- timestamp
+- device ID
+
+## EDA Workflow Overview
+
+A general EDA workflow can look like this:
+
+| Step | Goal |
+|---|---|
+| Data loading | Read data from CSV, Excel, SQL, API, or other sources |
+| Data check | Check shape, column names, data types, missing values |
+| Data transformation | Convert dates, clean categories, fix types, handle missing values |
+| Descriptive analysis | Summarize central tendency, spread, and distributions |
+| Visualization | Plot distributions, trends, relationships, and group differences |
+| Inferential analysis | Test assumptions and compare groups statistically |
+| Modelling preparation | Identify useful features, target variables, and modelling risks |
+
+EDA is not always linear. We often go back and forth between these steps.
+
+## Installing Libraries
+
+For this tutorial, install the common libraries:
+
+```bash
+pip install pandas numpy matplotlib seaborn plotly scipy statsmodels
 ```
 
-* Autoviz is for auto visualization but it is heavy and power hungry. 
-* Seaborn is built on top of the matplotlib and is best for making rich static plots.
-* Plotly is for interactive visualization.
-* Cufflinks is for connecting pandas and plotly.
-* Pandas is for data analysis.
+Optional automated EDA tools:
 
-### Importing Libraries
-If you do not have these libraries installed, please install them like below:
+```bash
+pip install autoviz
+```
 
+For profiling tools, package names have changed over time. Older tutorials used:
 
+```bash
+pip install pandas-profiling
+```
 
+Later versions commonly used:
+
+```bash
+pip install ydata-profiling
+```
+
+Depending on when you read this, check the current package documentation before installing profiling tools.
+
+## Importing Libraries
 
 ```python
-import autoviz
-from autoviz.AutoViz_Class import AutoViz_Class
-from pandas_profiling import ProfileReport
-import pandas as pd
+from datetime import datetime
+
 import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
-import warnings
-from plotly.offline import init_notebook_mode, iplot
-import plotly.figure_factory as ff
-import cufflinks
-import plotly.io as pio 
-cufflinks.go_offline()
-cufflinks.set_config_file(world_readable=True, theme='pearl')
-pio.renderers.default = "notebook" # should change by looking into pio.renderers
+import pandas as pd
+import plotly.express as px
+import scipy.stats as stats
+import seaborn as sns
+import statsmodels.api as sm
 
-pd.options.display.max_columns = None
-%matplotlib inline
+from statsmodels.formula.api import ols
+from statsmodels.stats.anova import anova_lm
+from sklearn.linear_model import LinearRegression
 ```
 
-
-In above step, we have told cufflinks to make plotly plots available offline. And if we are working locally on Jupyter Notebook we should make sure have `pio.renderers.default="notebook"`. 
-
-### Reading File
-To make things easier, I am reading file from local storage which is downloaded from [Kaggle](https://www.kaggle.com/garystafford/environmental-sensor-data-132k).
-
-According to the author, the data is collected by 3 IoT devices under different environmental conditions. These environmental conditions plays major role on the analysis later on.
-
-| device            | environmental conditions                 |
-|-------------------|------------------------------------------|
-| 00:0f:00:70:91:0a | stable conditions, cooler and more humid |
-| 1c:bf:ce:15:ec:4d | highly variable temperature and humidity |
-| b8:27:eb:bf:9d:51 | stable conditions, warmer and dryer      |
-
+Optional imports:
 
 ```python
-df=pd.read_csv("iot_telemetry_data.csv")
+from autoviz.AutoViz_Class import AutoViz_Class
 ```
 
+If using a profiling package:
 
 ```python
-
+from ydata_profiling import ProfileReport
 ```
 
-### Viewing Shape of Data
-How many rows and columns are there?
+For old notebooks, you may see:
 
+```python
+from pandas_profiling import ProfileReport
+```
+
+That older import may not work in newer environments.
+
+## Reading the File
+
+Read the data using pandas.
+
+```python
+df = pd.read_csv("iot_telemetry_data.csv")
+```
+
+Check the shape.
 
 ```python
 df.shape
 ```
 
+Original dataset shape:
 
+```text
+(405184, 9)
+```
 
+So, the dataset has many rows but only a small number of columns.
 
-    (405184, 9)
-
-
-
-There are only 9 columns but lots of rows.
-
-### Viewing Top Data
-
+## View the First Rows
 
 ```python
 df.head()
 ```
-  <table>
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>ts</th>
-      <th>device</th>
-      <th>co</th>
-      <th>humidity</th>
-      <th>light</th>
-      <th>lpg</th>
-      <th>motion</th>
-      <th>smoke</th>
-      <th>temp</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1.594512e+09</td>
-      <td>b8:27:eb:bf:9d:51</td>
-      <td>0.004956</td>
-      <td>51.000000</td>
-      <td>False</td>
-      <td>0.007651</td>
-      <td>False</td>
-      <td>0.020411</td>
-      <td>22.700000</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1.594512e+09</td>
-      <td>00:0f:00:70:91:0a</td>
-      <td>0.002840</td>
-      <td>76.000000</td>
-      <td>False</td>
-      <td>0.005114</td>
-      <td>False</td>
-      <td>0.013275</td>
-      <td>19.700001</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1.594512e+09</td>
-      <td>b8:27:eb:bf:9d:51</td>
-      <td>0.004976</td>
-      <td>50.900000</td>
-      <td>False</td>
-      <td>0.007673</td>
-      <td>False</td>
-      <td>0.020475</td>
-      <td>22.600000</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1.594512e+09</td>
-      <td>1c:bf:ce:15:ec:4d</td>
-      <td>0.004403</td>
-      <td>76.800003</td>
-      <td>True</td>
-      <td>0.007023</td>
-      <td>False</td>
-      <td>0.018628</td>
-      <td>27.000000</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1.594512e+09</td>
-      <td>b8:27:eb:bf:9d:51</td>
-      <td>0.004967</td>
-      <td>50.900000</td>
-      <td>False</td>
-      <td>0.007664</td>
-      <td>False</td>
-      <td>0.020448</td>
-      <td>22.600000</td>
-    </tr>
-  </tbody>
-</table>
 
+The original data looked like this:
 
+| ts | device | co | humidity | light | lpg | motion | smoke | temp |
+|---:|---|---:|---:|---|---:|---|---:|---:|
+| 1.594512e+09 | b8:27:eb:bf:9d:51 | 0.004956 | 51.0 | False | 0.007651 | False | 0.020411 | 22.7 |
+| 1.594512e+09 | 00:0f:00:70:91:0a | 0.002840 | 76.0 | False | 0.005114 | False | 0.013275 | 19.7 |
+
+This gives a first feeling for the data.
 
 ## Data Check
 
-### Viewing Data Types
+The first check should be simple:
 
+```python
+df.info()
+```
+
+This shows:
+
+- column names
+- data types
+- non-null counts
+- memory usage
+
+You can also check only data types:
 
 ```python
 df.dtypes
 ```
 
+Original data types were:
 
-
-
-    ts          float64
-    device       object
-    co          float64
-    humidity    float64
-    light          bool
-    lpg         float64
-    motion         bool
-    smoke       float64
-    temp        float64
-    dtype: object
-
-
-
-It seems that we have float data in most of the columns. According to the Author the definition of the columns is
-
-| column   | description          | units      |
-|----------|----------------------|------------|
-| ts       | timestamp of event   | epoch      |
-| device   | unique device name   | string     |
-| co       | carbon monoxide      | ppm (%)    |
-| humidity | humidity             | percentage |
-| light    | light detected?      | boolean    |
-| lpg      | liquid petroleum gas | ppm (%)    |
-| motion   | motion detected?     | boolean    |
-| smoke    | smoke                | ppm (%)    |
-| temp     | temperature          | Fahrenheit |
-
-### Checking Missing Values
-This is very crucial as missing values could lead to false assumption and sometimes we have to remove or replace them. Lets check how many of columns have missing values.
-
-
-```python
-total = df.isnull().sum().sort_values(ascending = False)
-percent = (df.isnull().sum()/df.isnull().count()).sort_values(ascending = False)
-mdf = pd.concat([total, percent], axis=1, keys=['Total', 'Percent'])
-mdf = mdf.reset_index()
-mdf
+```text
+ts          float64
+device       object
+co          float64
+humidity    float64
+light          bool
+lpg         float64
+motion         bool
+smoke       float64
+temp        float64
 ```
 
-    NumExpr defaulting to 8 threads.
-    
+## Column Meaning
 
+| Column | Description | Unit or Type |
+|---|---|---|
+| `ts` | timestamp of event | epoch timestamp |
+| `device` | device ID | string |
+| `co` | carbon monoxide | ppm percentage |
+| `humidity` | humidity | percentage |
+| `light` | light detected | boolean |
+| `lpg` | liquid petroleum gas | ppm percentage |
+| `motion` | motion detected | boolean |
+| `smoke` | smoke | ppm percentage |
+| `temp` | temperature | Fahrenheit in original dataset description |
 
+Understanding column meaning is very important. Never rely only on column names.
 
+## Checking Missing Values
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>index</th>
-      <th>Total</th>
-      <th>Percent</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>ts</td>
-      <td>0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>device</td>
-      <td>0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>co</td>
-      <td>0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>humidity</td>
-      <td>0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>light</td>
-      <td>0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>lpg</td>
-      <td>0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>motion</td>
-      <td>0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>smoke</td>
-      <td>0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>temp</td>
-      <td>0</td>
-      <td>0.0</td>
-    </tr>
-  </tbody>
-</table>
+Missing values can affect analysis and modelling. Check them early.
 
+```python
+missing = pd.DataFrame({
+    "Total": df.isna().sum(),
+    "Percent": df.isna().mean()
+}).sort_values("Total", ascending=False)
 
+missing
+```
 
-It seems that there is no missing data in our dataset. Which is great. But what about outliers? Because outliers also plays huge role in making data modeling tough task. This task falls under the Descriptive Analysis part.
+In the original dataset, there were no missing values.
+
+That is useful, but it does not mean the data is perfect. We still need to check:
+
+- outliers
+- strange values
+- wrong types
+- repeated rows
+- biased groups
+- time gaps
 
 ## Data Transformation
-It seems that we do not have missing data so we do not have to do much to do besides converting time stamp to datetime.But we might need to transform our data based on the outliers later.
 
-### Datetime
-Lets convert timestamp to date time because we will visualize some sort of time series analysis later on.
-
+The dataset has a timestamp column called `ts`. We should convert it into a datetime column.
 
 ```python
-from datetime import datetime
-
-
-df["date"]= df.ts.apply(datetime.fromtimestamp)
+df["date"] = pd.to_datetime(df["ts"], unit="s")
 ```
 
-### Device Name
-Lets make our device little bit readable. Create a new column `device_name` and add the mapped value of environment and device id.
-
+In the original version, the conversion used:
 
 ```python
-d={"00:0f:00:70:91:0a":"cooler,more,humid", 
-   "1c:bf:ce:15:ec:4d":"variable temp/humidity",
-   "b8:27:eb:bf:9d:51":"stable, warmer, dry"}
-df["device_name"] = df.device.apply(lambda x: d[x])
-df
+df["date"] = df.ts.apply(datetime.fromtimestamp)
 ```
 
+The pandas version is shorter and usually faster.
 
+## Create Readable Device Names
 
+Device IDs are hard to read, so create a readable label.
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>ts</th>
-      <th>device</th>
-      <th>co</th>
-      <th>humidity</th>
-      <th>light</th>
-      <th>lpg</th>
-      <th>motion</th>
-      <th>smoke</th>
-      <th>temp</th>
-      <th>date</th>
-      <th>device_name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1.594512e+09</td>
-      <td>b8:27:eb:bf:9d:51</td>
-      <td>0.004956</td>
-      <td>51.000000</td>
-      <td>False</td>
-      <td>0.007651</td>
-      <td>False</td>
-      <td>0.020411</td>
-      <td>22.700000</td>
-      <td>2020-07-12 05:46:34.385975</td>
-      <td>stable, warmer, dry</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1.594512e+09</td>
-      <td>00:0f:00:70:91:0a</td>
-      <td>0.002840</td>
-      <td>76.000000</td>
-      <td>False</td>
-      <td>0.005114</td>
-      <td>False</td>
-      <td>0.013275</td>
-      <td>19.700001</td>
-      <td>2020-07-12 05:46:34.735568</td>
-      <td>cooler,more,humid</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1.594512e+09</td>
-      <td>b8:27:eb:bf:9d:51</td>
-      <td>0.004976</td>
-      <td>50.900000</td>
-      <td>False</td>
-      <td>0.007673</td>
-      <td>False</td>
-      <td>0.020475</td>
-      <td>22.600000</td>
-      <td>2020-07-12 05:46:38.073573</td>
-      <td>stable, warmer, dry</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1.594512e+09</td>
-      <td>1c:bf:ce:15:ec:4d</td>
-      <td>0.004403</td>
-      <td>76.800003</td>
-      <td>True</td>
-      <td>0.007023</td>
-      <td>False</td>
-      <td>0.018628</td>
-      <td>27.000000</td>
-      <td>2020-07-12 05:46:39.589146</td>
-      <td>variable temp/humidity</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1.594512e+09</td>
-      <td>b8:27:eb:bf:9d:51</td>
-      <td>0.004967</td>
-      <td>50.900000</td>
-      <td>False</td>
-      <td>0.007664</td>
-      <td>False</td>
-      <td>0.020448</td>
-      <td>22.600000</td>
-      <td>2020-07-12 05:46:41.761235</td>
-      <td>stable, warmer, dry</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>405179</th>
-      <td>1.595203e+09</td>
-      <td>00:0f:00:70:91:0a</td>
-      <td>0.003745</td>
-      <td>75.300003</td>
-      <td>False</td>
-      <td>0.006247</td>
-      <td>False</td>
-      <td>0.016437</td>
-      <td>19.200001</td>
-      <td>2020-07-20 05:48:33.162015</td>
-      <td>cooler,more,humid</td>
-    </tr>
-    <tr>
-      <th>405180</th>
-      <td>1.595203e+09</td>
-      <td>b8:27:eb:bf:9d:51</td>
-      <td>0.005882</td>
-      <td>48.500000</td>
-      <td>False</td>
-      <td>0.008660</td>
-      <td>False</td>
-      <td>0.023301</td>
-      <td>22.200000</td>
-      <td>2020-07-20 05:48:33.576561</td>
-      <td>stable, warmer, dry</td>
-    </tr>
-    <tr>
-      <th>405181</th>
-      <td>1.595203e+09</td>
-      <td>1c:bf:ce:15:ec:4d</td>
-      <td>0.004540</td>
-      <td>75.699997</td>
-      <td>True</td>
-      <td>0.007181</td>
-      <td>False</td>
-      <td>0.019076</td>
-      <td>26.600000</td>
-      <td>2020-07-20 05:48:36.167959</td>
-      <td>variable temp/humidity</td>
-    </tr>
-    <tr>
-      <th>405182</th>
-      <td>1.595203e+09</td>
-      <td>00:0f:00:70:91:0a</td>
-      <td>0.003745</td>
-      <td>75.300003</td>
-      <td>False</td>
-      <td>0.006247</td>
-      <td>False</td>
-      <td>0.016437</td>
-      <td>19.200001</td>
-      <td>2020-07-20 05:48:36.979522</td>
-      <td>cooler,more,humid</td>
-    </tr>
-    <tr>
-      <th>405183</th>
-      <td>1.595203e+09</td>
-      <td>b8:27:eb:bf:9d:51</td>
-      <td>0.005914</td>
-      <td>48.400000</td>
-      <td>False</td>
-      <td>0.008695</td>
-      <td>False</td>
-      <td>0.023400</td>
-      <td>22.200000</td>
-      <td>2020-07-20 05:48:37.264313</td>
-      <td>stable, warmer, dry</td>
-    </tr>
-  </tbody>
-</table>
+```python
+device_map = {
+    "00:0f:00:70:91:0a": "cooler, more humid",
+    "1c:bf:ce:15:ec:4d": "variable temp/humidity",
+    "b8:27:eb:bf:9d:51": "stable, warmer, dry",
+}
 
+df["device_name"] = df["device"].map(device_map)
+```
 
+Check whether all devices were mapped:
+
+```python
+df["device_name"].isna().sum()
+```
+
+If this returns a value above zero, there may be unknown devices.
+
+## Convert Boolean Columns When Needed
+
+Boolean columns can be useful as boolean values, but for some statistical or ML tasks, integer values are easier.
+
+```python
+df["light_int"] = df["light"].astype(int)
+df["motion_int"] = df["motion"].astype(int)
+```
+
+For EDA plots, booleans are usually fine. For modelling, explicit integer conversion can make behaviour clearer.
 
 ## Descriptive Analysis
-Descriptive Statistics is all about describing the data in the terms of some numbers, charts, graphs or plots. In descriptive statistics, our focus will be on the summary of the data like mean, spread, quartiles, percentiles and so on.
 
-Lets get little bit deep into the descriptive analysis here, we will measure:
-* Central tendency which focuses on the average.
-* Variability (measure of dispersion) which focuses on how far the data has spreaded.
-* Distribution (Frequency distribution) which focuses of number of times something occured.
+Descriptive analysis means describing data using numbers and plots.
 
-### Frequency Distribution
+It usually includes:
 
+- count
+- mean
+- median
+- standard deviation
+- minimum
+- maximum
+- quartiles
+- frequency counts
+- histograms
+- box plots
 
-#### What is number of observations for each device?
+## Frequency Distribution
 
+### Number of Observations by Device
 
 ```python
-df.groupby("device_name").ts.count().rename("Counts").reset_index().iplot(kind="pie", labels="device_name", values="Counts")
+device_counts = (
+    df["device_name"]
+    .value_counts()
+    .rename_axis("device_name")
+    .reset_index(name="count")
+)
+
+device_counts
 ```
-![]({{site.url}}/assets/general_eda/pie1.png)     
 
-
-##### Insights
-There seems to be high number of records from the device which was kept on stable, warmer and dry place.
-
-#### What is the distribution of a field over a time?
-This question can be done on the time series analysis but we are not focusing on that in this blog.
-
-We have a date time column prepared already from a timestamp. Lets use that column here.
-
+Plot with Plotly:
 
 ```python
-cols = [i for i in df.columns if i not in ["date", "ts", "device", "device_name"]]
-for c in cols:
-    plt.figure(figsize=(15, 10))
-    sns.scatterplot(data=df, x="date", y=c, hue="device_name")
-    plt.title(label=f"Distribution of {c} over a time for each Device")
+fig = px.pie(
+    device_counts,
+    names="device_name",
+    values="count",
+    title="Number of Observations by Device"
+)
+
+fig.show()
+```
+
+Original output:
+
+![]({{site.url}}/assets/general_eda/pie1.png)
+
+### Insight
+
+The device in the stable, warmer, and dry place had the highest number of records. This means the overall dataset may be biased toward that device.
+
+That is why group-wise analysis is important.
+
+## Distribution Over Time
+
+We created a `date` column, so we can now inspect how each field changes over time.
+
+```python
+sensor_cols = [
+    "co",
+    "humidity",
+    "light",
+    "lpg",
+    "motion",
+    "smoke",
+    "temp",
+]
+
+for col in sensor_cols:
+    plt.figure(figsize=(15, 8))
+
+    sns.scatterplot(
+        data=df,
+        x="date",
+        y=col,
+        hue="device_name",
+        s=8
+    )
+
+    plt.title(f"Distribution of {col} over time by device")
+    plt.xlabel("Date")
+    plt.ylabel(col)
     plt.show()
 ```
 
+Original outputs:
 
-    
 ![png]({{site.url}}/assets/general_eda/output_31_0.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_31_1.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_31_2.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_31_3.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_31_4.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_31_5.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_31_6.png)
-    
 
+### Time-Based Insights
 
-##### Insights
-* There seems to be high spikes in CO recorded by cooler,more humid place's device.
-* Humidity seems to be normal for all 3 devices but there is not normal flow for device of cooler, more humid place.
-* And LPG seems to decreasing for cooler, more humid and increasing for stable, warmer dry place's device.
-* And so on.
+From the original plots:
 
-#### What is the distribution of each Columns?
+- CO had visible spikes for the cooler and more humid device.
+- Humidity was different across devices.
+- LPG decreased for the cooler, more humid device and increased for the stable, warmer, dry device.
+- Different devices followed different patterns over time.
 
+This already tells us that overall analysis may hide important group-level patterns.
 
+## Distribution of a Single Column
 
-```python
-df.co.iplot(kind="hist", xTitle="ppm in %", yTitle="Frequency", title="Frequency Distribution of CO")
-```
-
-![]({{site.url}}/assets/general_eda/hist1.png)     
-
+For example, look at `co`.
 
 ```python
-# df.co.plot(kind="hist", title="Frequency Distribution of CO")
-plt.figure(figsize=(8,5))
-sns.distplot(df.co, kde=False, color='red', bins=100)
-plt.title('Frequency Distribution of CO As a Whole', fontsize=18)
-plt.xlabel('Units in ppm (%)', fontsize=16)
-plt.ylabel('Frequency', fontsize=16)
+fig = px.histogram(
+    df,
+    x="co",
+    nbins=100,
+    title="Frequency Distribution of CO"
+)
+
+fig.show()
 ```
 
+Original Plotly output:
 
+![]({{site.url}}/assets/general_eda/hist1.png)
 
+With seaborn:
 
-    Text(0, 0.5, 'Frequency')
+```python
+plt.figure(figsize=(8, 5))
 
+sns.histplot(
+    data=df,
+    x="co",
+    bins=100
+)
 
+plt.title("Frequency Distribution of CO")
+plt.xlabel("CO in ppm (%)")
+plt.ylabel("Frequency")
+plt.show()
+```
 
+Original output:
 
-    
 ![png]({{site.url}}/assets/general_eda/output_35_1.png)
-    
 
+In older code, `sns.distplot()` was used. In newer seaborn versions, use `sns.histplot()` or `sns.displot()` instead.
 
+## Distribution by Device
 
 ```python
-plt.figure(figsize=(18,10))
-sns.histplot(data=df, x="co", hue="device_name")
-plt.title('Frequency Distribution of CO with Device', fontsize=18)
-plt.xlabel('Units in ppm (%)', fontsize=16)
-plt.ylabel('Frequency', fontsize=16)
+plt.figure(figsize=(18, 10))
+
+sns.histplot(
+    data=df,
+    x="co",
+    hue="device_name",
+    bins=100
+)
+
+plt.title("Frequency Distribution of CO by Device")
+plt.xlabel("CO in ppm (%)")
+plt.ylabel("Frequency")
+plt.show()
 ```
 
+Original output:
 
-
-
-    Text(0, 0.5, 'Frequency')
-
-
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_36_1.png)
-    
 
+### CO Insights
 
-##### CO Insights\
-* It seems that there is huge number of CO readings for ppm 0.004 to 0.006.
-* There is some readings of 0.012 too which might be a outliers in our case and we will later visualize it based on the device.
-* The device starting with b8 seems to have read much CO. This device was placed on stable conditions, dry places.
+From the original analysis:
 
-##### All
-Lets try to visualize histogram of each fields based on device name.
+- Many CO readings were between 0.004 and 0.006.
+- Some values were much higher and may be outliers.
+- The stable, warmer, dry device recorded higher CO values overall.
 
+## Histograms for All Sensor Columns
 
 ```python
-for c in [i for i in df.columns if i not in ["date", "ts", "device", "device_name"]]:
-    plt.figure(figsize=(18,10))
-    sns.histplot(data=df, x=c, hue="device_name")
-    plt.title(f'Frequency Distribution of {c}', fontsize=18)
-    plt.xlabel(f'Values of {c}', fontsize=16)
-    plt.ylabel('Frequency', fontsize=16)
+for col in sensor_cols:
+    plt.figure(figsize=(18, 10))
+
+    sns.histplot(
+        data=df,
+        x=col,
+        hue="device_name",
+        bins=100
+    )
+
+    plt.title(f"Frequency Distribution of {col}")
+    plt.xlabel(col)
+    plt.ylabel("Frequency")
     plt.show()
 ```
 
+Original outputs:
 
-    
 ![png]({{site.url}}/assets/general_eda/output_39_0.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_39_1.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_39_2.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_39_3.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_39_4.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_39_5.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_39_6.png)
-    
 
+### Distribution Insights
 
-##### All Insights
-* Temp seems to be distributed largely for device which was in variable temp.
-* Smoke seems to be distributed largely for device which was in cooler temp.
-* LPG seems to be distributed largely for device which was in cooler temp.
+The original EDA showed:
 
+- Temperature varied most for the variable temperature/humidity device.
+- Smoke was more spread for the cooler device.
+- LPG was also more spread for the cooler device.
+- The three devices had clearly different environmental profiles.
+
+## Central Tendency and Spread
+
+Use `describe()` to summarize numerical columns.
 
 ```python
+numeric_cols = [
+    "co",
+    "humidity",
+    "lpg",
+    "smoke",
+    "temp",
+]
 
+df[numeric_cols].describe()
 ```
 
-### Central Tendency
-Lets view the summary of each numerical data first.
+This gives:
 
-#### Overall Insights
+- count
+- mean
+- standard deviation
+- minimum
+- quartiles
+- maximum
 
+## Box Plot for Overall Data
 
 ```python
-df[[i for i in df.columns if i not in ["date", "ts", "device", "device_name"]]].describe()
+df[numeric_cols].plot(
+    kind="box",
+    subplots=True,
+    figsize=(16, 6),
+    layout=(1, len(numeric_cols))
+)
+
+plt.tight_layout()
+plt.show()
 ```
 
+Original Plotly output:
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>co</th>
-      <th>humidity</th>
-      <th>lpg</th>
-      <th>smoke</th>
-      <th>temp</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>405184.000000</td>
-      <td>405184.000000</td>
-      <td>405184.000000</td>
-      <td>405184.000000</td>
-      <td>405184.000000</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>0.004639</td>
-      <td>60.511694</td>
-      <td>0.007237</td>
-      <td>0.019264</td>
-      <td>22.453987</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>0.001250</td>
-      <td>11.366489</td>
-      <td>0.001444</td>
-      <td>0.004086</td>
-      <td>2.698347</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>0.001171</td>
-      <td>1.100000</td>
-      <td>0.002693</td>
-      <td>0.006692</td>
-      <td>0.000000</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>0.003919</td>
-      <td>51.000000</td>
-      <td>0.006456</td>
-      <td>0.017024</td>
-      <td>19.900000</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>0.004812</td>
-      <td>54.900000</td>
-      <td>0.007489</td>
-      <td>0.019950</td>
-      <td>22.200000</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>0.005409</td>
-      <td>74.300003</td>
-      <td>0.008150</td>
-      <td>0.021838</td>
-      <td>23.600000</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>0.014420</td>
-      <td>99.900002</td>
-      <td>0.016567</td>
-      <td>0.046590</td>
-      <td>30.600000</td>
-    </tr>
-  </tbody>
-</table>
+![]({{site.url}}/assets/general_eda/box1.png)
 
+Box plots help us see:
 
+- median
+- spread
+- skewness
+- outliers
 
+## Group-Wise Descriptive Analysis
+
+Overall statistics can be misleading because each device is placed in a different environment.
+
+So, compare statistics by device.
 
 ```python
-cols = [i for i in df.columns if i not in ["date", "ts", "device", "device_name", "motion", "light"]]
-
-df[cols].iplot(kind="box", subplots=True)
+df.groupby("device_name")[numeric_cols].describe()
 ```
 
-![]({{site.url}}/assets/general_eda/box1.png)     
-
-
-* By hovering over each subplots, we could get the min, max, mean, median values. 
-* Looking over how the horizontal lines are placed, we could make assumptions like how much is the data skewed.
-* It seems there there is high deviation in temperature and humidity which means there could be outliers.
-
-#### Insights Based on Device
-Since our overall data might be biased, we have to look into insights based on device. But why biased? The reasons are:
-* Each device was on distinct environment
-* Each device have different numbers of recordings 
-
+This produces a large table. For easier interpretation, plot box plots per device.
 
 ```python
-df[[i for i in df.columns if i not in ["date", "ts", "device"]]].groupby("device_name").describe()
-```
+for device in df["device_name"].unique():
+    subset = df[df["device_name"] == device]
 
+    subset[numeric_cols].plot(
+        kind="box",
+        subplots=True,
+        figsize=(16, 6),
+        layout=(1, len(numeric_cols)),
+        title=f"Box Plot for {device}"
+    )
 
-
-
-<table border="1" class="dataframe">
-  <thead>
-    <tr>
-      <th></th>
-      <th colspan="8" halign="left">co</th>
-      <th colspan="8" halign="left">humidity</th>
-      <th colspan="8" halign="left">lpg</th>
-      <th colspan="8" halign="left">smoke</th>
-      <th colspan="8" halign="left">temp</th>
-    </tr>
-    <tr>
-      <th></th>
-      <th>count</th>
-      <th>mean</th>
-      <th>std</th>
-      <th>min</th>
-      <th>25%</th>
-      <th>50%</th>
-      <th>75%</th>
-      <th>max</th>
-      <th>count</th>
-      <th>mean</th>
-      <th>std</th>
-      <th>min</th>
-      <th>25%</th>
-      <th>50%</th>
-      <th>75%</th>
-      <th>max</th>
-      <th>count</th>
-      <th>mean</th>
-      <th>std</th>
-      <th>min</th>
-      <th>25%</th>
-      <th>50%</th>
-      <th>75%</th>
-      <th>max</th>
-      <th>count</th>
-      <th>mean</th>
-      <th>std</th>
-      <th>min</th>
-      <th>25%</th>
-      <th>50%</th>
-      <th>75%</th>
-      <th>max</th>
-      <th>count</th>
-      <th>mean</th>
-      <th>std</th>
-      <th>min</th>
-      <th>25%</th>
-      <th>50%</th>
-      <th>75%</th>
-      <th>max</th>
-    </tr>
-    <tr>
-      <th>device_name</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>cooler,more,humid</th>
-      <td>111815.0</td>
-      <td>0.003527</td>
-      <td>0.001479</td>
-      <td>0.001171</td>
-      <td>0.002613</td>
-      <td>0.003230</td>
-      <td>0.004116</td>
-      <td>0.014420</td>
-      <td>111815.0</td>
-      <td>75.444361</td>
-      <td>1.975801</td>
-      <td>1.1</td>
-      <td>74.400002</td>
-      <td>75.400002</td>
-      <td>76.500000</td>
-      <td>99.900002</td>
-      <td>111815.0</td>
-      <td>0.005893</td>
-      <td>0.001700</td>
-      <td>0.002693</td>
-      <td>0.004815</td>
-      <td>0.005613</td>
-      <td>0.006689</td>
-      <td>0.016567</td>
-      <td>111815.0</td>
-      <td>0.015489</td>
-      <td>0.004809</td>
-      <td>0.006692</td>
-      <td>0.012445</td>
-      <td>0.014662</td>
-      <td>0.017682</td>
-      <td>0.046590</td>
-      <td>111815.0</td>
-      <td>19.362552</td>
-      <td>0.643786</td>
-      <td>0.0</td>
-      <td>19.100000</td>
-      <td>19.4</td>
-      <td>19.700001</td>
-      <td>20.200001</td>
-    </tr>
-    <tr>
-      <th>stable, warmer, dry</th>
-      <td>187451.0</td>
-      <td>0.005560</td>
-      <td>0.000559</td>
-      <td>0.004646</td>
-      <td>0.005079</td>
-      <td>0.005439</td>
-      <td>0.005993</td>
-      <td>0.007955</td>
-      <td>187451.0</td>
-      <td>50.814077</td>
-      <td>1.888926</td>
-      <td>45.1</td>
-      <td>49.600000</td>
-      <td>50.900000</td>
-      <td>52.100000</td>
-      <td>63.300000</td>
-      <td>187451.0</td>
-      <td>0.008306</td>
-      <td>0.000599</td>
-      <td>0.007301</td>
-      <td>0.007788</td>
-      <td>0.008183</td>
-      <td>0.008778</td>
-      <td>0.010774</td>
-      <td>187451.0</td>
-      <td>0.022288</td>
-      <td>0.001720</td>
-      <td>0.019416</td>
-      <td>0.020803</td>
-      <td>0.021931</td>
-      <td>0.023640</td>
-      <td>0.029422</td>
-      <td>187451.0</td>
-      <td>22.279969</td>
-      <td>0.481902</td>
-      <td>21.0</td>
-      <td>21.900000</td>
-      <td>22.3</td>
-      <td>22.600000</td>
-      <td>24.100000</td>
-    </tr>
-    <tr>
-      <th>variable temp/humidity</th>
-      <td>105918.0</td>
-      <td>0.004183</td>
-      <td>0.000320</td>
-      <td>0.003391</td>
-      <td>0.003931</td>
-      <td>0.004089</td>
-      <td>0.004391</td>
-      <td>0.006224</td>
-      <td>105918.0</td>
-      <td>61.910247</td>
-      <td>8.944792</td>
-      <td>1.6</td>
-      <td>55.599998</td>
-      <td>59.599998</td>
-      <td>65.300003</td>
-      <td>92.000000</td>
-      <td>105918.0</td>
-      <td>0.006764</td>
-      <td>0.000373</td>
-      <td>0.005814</td>
-      <td>0.006470</td>
-      <td>0.006657</td>
-      <td>0.007009</td>
-      <td>0.009022</td>
-      <td>105918.0</td>
-      <td>0.017895</td>
-      <td>0.001055</td>
-      <td>0.015224</td>
-      <td>0.017064</td>
-      <td>0.017592</td>
-      <td>0.018589</td>
-      <td>0.024341</td>
-      <td>105918.0</td>
-      <td>26.025511</td>
-      <td>2.026427</td>
-      <td>0.0</td>
-      <td>24.299999</td>
-      <td>25.9</td>
-      <td>27.299999</td>
-      <td>30.600000</td>
-    </tr>
-  </tbody>
-</table>
-
-
-
-It is hard to get any insights from above table. Lets view it by looping.
-
-
-```python
-for d in df.device_name.unique():
-    df.query(f"device_name=='{d}'")[cols].iplot(kind="box", subplots=True, title=f"Box Plot of device placed at {d}")
-```
-
-![]({{site.url}}/assets/general_eda/box2.png) 
-
-![]({{site.url}}/assets/general_eda/box3.png) 
-
-![]({{site.url}}/assets/general_eda/box4.png) 
-
-If we observe plots clearly, there can be seen significant difference in each for the column `temp`.
-* CO recorded seems to be higher for a device placed at variable temp. But much spread is of stable, warmer and dry.
-* Humidity recorded seems to be lower for stable, warmer dry place's device.
-* LPG recorded seems to be well spread on stable, warmer place's device.
-* Smoke recorded seems to be spread for stable warmer dry place's device.
-* Temperature is self explained that it is lower for cooler place. And so on.
-
-#### Finding Outliers
-
-
-```python
-for c in cols:
-    plt.figure(figsize=(15,8))
-    sns.boxplot(x="device_name", y=c, data=df)
-    plt.title(label=f"Box Plot of {c}")
+    plt.tight_layout()
     plt.show()
 ```
 
+Original outputs:
 
-    
+![]({{site.url}}/assets/general_eda/box2.png)
+
+![]({{site.url}}/assets/general_eda/box3.png)
+
+![]({{site.url}}/assets/general_eda/box4.png)
+
+## Finding Outliers
+
+Box plots are also useful for outlier detection.
+
+```python
+for col in numeric_cols:
+    plt.figure(figsize=(15, 8))
+
+    sns.boxplot(
+        data=df,
+        x="device_name",
+        y=col
+    )
+
+    plt.title(f"Box Plot of {col} by Device")
+    plt.xticks(rotation=15)
+    plt.show()
+```
+
+Original outputs:
+
 ![png]({{site.url}}/assets/general_eda/output_53_0.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_53_1.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_53_2.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_53_3.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_53_4.png)
-    
 
+### Outlier Insights
 
-Outliers are those for which points are away from the horizontal bars.
-* There seems to be high outliers in **co** for device which was in **cooler, more humid**.
-* There seems to be high outliers in **humidity** for device which was in **cooler, more humid** and **variable temp/humidity**.
-* There seems to be high outliers in **LPG** for device which was in **cooler, more humid**.
-* There seems to be high outliers in **smoke** for device which was in **cooler, more humid**.
-* There seems to be high outliers in **temp** for device which was in c**variable temp/humidity**.
+The original analysis suggested:
 
-### Correlations
-Lets find Pearson's correlation, whose range lies from -1 to 1. Value of -1 means negatively correlated where as +1 means highly correlated.
+- CO had many outliers for the cooler, more humid device.
+- Humidity had outliers for cooler, more humid and variable temp/humidity devices.
+- LPG had outliers for the cooler, more humid device.
+- Smoke had outliers for the cooler, more humid device.
+- Temperature had outliers for the variable temp/humidity device.
 
-#### Overall
+Outliers are not always wrong. In sensor data, they may represent real events, sensor noise, or calibration issues.
 
+## Correlation Analysis
 
-```python
-df.corr().iplot(kind="heatmap")
-```
+Correlation measures how strongly two variables move together.
 
-![]({{site.url}}/assets/general_eda/cor1.png) 
-
+The most common correlation is Pearson correlation.
 
 ```python
-df.corr()
+corr = df[numeric_cols + ["light_int", "motion_int"]].corr()
+
+corr
 ```
 
-
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>ts</th>
-      <th>co</th>
-      <th>humidity</th>
-      <th>light</th>
-      <th>lpg</th>
-      <th>motion</th>
-      <th>smoke</th>
-      <th>temp</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>ts</th>
-      <td>1.000000</td>
-      <td>0.025757</td>
-      <td>0.017752</td>
-      <td>-0.020868</td>
-      <td>0.014178</td>
-      <td>-0.006911</td>
-      <td>0.016349</td>
-      <td>0.074443</td>
-    </tr>
-    <tr>
-      <th>co</th>
-      <td>0.025757</td>
-      <td>1.000000</td>
-      <td>-0.656750</td>
-      <td>-0.230197</td>
-      <td>0.997331</td>
-      <td>-0.000706</td>
-      <td>0.998192</td>
-      <td>0.110905</td>
-    </tr>
-    <tr>
-      <th>humidity</th>
-      <td>0.017752</td>
-      <td>-0.656750</td>
-      <td>1.000000</td>
-      <td>0.079703</td>
-      <td>-0.672113</td>
-      <td>-0.009826</td>
-      <td>-0.669863</td>
-      <td>-0.410427</td>
-    </tr>
-    <tr>
-      <th>light</th>
-      <td>-0.020868</td>
-      <td>-0.230197</td>
-      <td>0.079703</td>
-      <td>1.000000</td>
-      <td>-0.208926</td>
-      <td>0.033594</td>
-      <td>-0.212969</td>
-      <td>0.747485</td>
-    </tr>
-    <tr>
-      <th>lpg</th>
-      <td>0.014178</td>
-      <td>0.997331</td>
-      <td>-0.672113</td>
-      <td>-0.208926</td>
-      <td>1.000000</td>
-      <td>0.000232</td>
-      <td>0.999916</td>
-      <td>0.136396</td>
-    </tr>
-    <tr>
-      <th>motion</th>
-      <td>-0.006911</td>
-      <td>-0.000706</td>
-      <td>-0.009826</td>
-      <td>0.033594</td>
-      <td>0.000232</td>
-      <td>1.000000</td>
-      <td>0.000062</td>
-      <td>0.037649</td>
-    </tr>
-    <tr>
-      <th>smoke</th>
-      <td>0.016349</td>
-      <td>0.998192</td>
-      <td>-0.669863</td>
-      <td>-0.212969</td>
-      <td>0.999916</td>
-      <td>0.000062</td>
-      <td>1.000000</td>
-      <td>0.131891</td>
-    </tr>
-    <tr>
-      <th>temp</th>
-      <td>0.074443</td>
-      <td>0.110905</td>
-      <td>-0.410427</td>
-      <td>0.747485</td>
-      <td>0.136396</td>
-      <td>0.037649</td>
-      <td>0.131891</td>
-      <td>1.000000</td>
-    </tr>
-  </tbody>
-</table>
-
-
-
-
-* CO have high positive correlation with LPG, Smoke. Negative with Light and Humidity.
-* Humidity have negative correlation with smoke, temp, LPG, CO which means that as Humidity increases these fields decreases.
-* Light have high correlation with temp. 
-* Smoke have high correlation with LPG, CO but negative with humidity.
-* And so on.
-
-#### For Each Device
-Again, our data is biased and we have to further analyze it for distinct device.
-
+Plot it:
 
 ```python
-for d in df.device_name.unique():
-    corr=df.query(f"device_name=='{d}'").corr()
-    print(corr)
-    corr.iplot(kind="heatmap", title=f"Correlation of fields for device at {d}")
+plt.figure(figsize=(10, 8))
+
+sns.heatmap(
+    corr,
+    annot=True,
+    cmap="coolwarm",
+    center=0
+)
+
+plt.title("Correlation Matrix")
+plt.show()
 ```
 
-                    ts        co  humidity     light       lpg    motion  \
-    ts        1.000000  0.696208  0.042347 -0.112667  0.703218 -0.009851   
-    co        0.696208  1.000000 -0.077022 -0.095929  0.999845 -0.003513   
-    humidity  0.042347 -0.077022  1.000000 -0.042066 -0.079296 -0.007169   
-    light    -0.112667 -0.095929 -0.042066  1.000000 -0.096124  0.007202   
-    lpg       0.703218  0.999845 -0.079296 -0.096124  1.000000 -0.003606   
-    motion   -0.009851 -0.003513 -0.007169  0.007202 -0.003606  1.000000   
-    smoke     0.701994  0.999895 -0.078891 -0.096093  0.999995 -0.003590   
-    temp      0.149731 -0.035695 -0.372977  0.008124 -0.033369 -0.000086   
-    
-                 smoke      temp  
-    ts        0.701994  0.149731  
-    co        0.999895 -0.035695  
-    humidity -0.078891 -0.372977  
-    light    -0.096093  0.008124  
-    lpg       0.999995 -0.033369  
-    motion   -0.003590 -0.000086  
-    smoke     1.000000 -0.033786  
-    temp     -0.033786  1.000000  
-    
-      
-![]({{site.url}}/assets/general_eda/cor2.png) 
+Original output:
 
-                    ts        co  humidity     light       lpg    motion  \
-    ts        1.000000 -0.322829  0.298280 -0.034300 -0.331622  0.004054   
-    co       -0.322829  1.000000 -0.221073 -0.048450  0.994789 -0.005022   
-    humidity  0.298280 -0.221073  1.000000 -0.169963 -0.227099  0.022255   
-    light    -0.034300 -0.048450 -0.169963  1.000000 -0.047746  0.018596   
-    lpg      -0.331622  0.994789 -0.227099 -0.047746  1.000000 -0.005482   
-    motion    0.004054 -0.005022  0.022255  0.018596 -0.005482  1.000000   
-    smoke    -0.330315  0.996474 -0.226195 -0.047971  0.999835 -0.005404   
-    temp      0.043851 -0.296603  0.293223 -0.053637 -0.301287  0.001910   
-    
-                 smoke      temp  
-    ts       -0.330315  0.043851  
-    co        0.996474 -0.296603  
-    humidity -0.226195  0.293223  
-    light    -0.047971 -0.053637  
-    lpg       0.999835 -0.301287  
-    motion   -0.005404  0.001910  
-    smoke     1.000000 -0.300719  
-    temp     -0.300719  1.000000  
-    
+![]({{site.url}}/assets/general_eda/cor1.png)
 
-![]({{site.url}}/assets/general_eda/cor3.png) 
+### Overall Correlation Insights
 
-                    ts        co  humidity  light       lpg    motion     smoke  \
-    ts        1.000000 -0.165952 -0.012370    NaN -0.167243 -0.007758 -0.167018   
-    co       -0.165952  1.000000 -0.313322    NaN  0.999907  0.013455  0.999937   
-    humidity -0.012370 -0.313322  1.000000    NaN -0.314211 -0.011879 -0.314058   
-    light          NaN       NaN       NaN    NaN       NaN       NaN       NaN   
-    lpg      -0.167243  0.999907 -0.314211    NaN  1.000000  0.013532  0.999997   
-    motion   -0.007758  0.013455 -0.011879    NaN  0.013532  1.000000  0.013518   
-    smoke    -0.167018  0.999937 -0.314058    NaN  0.999997  0.013518  1.000000   
-    temp      0.320340  0.044866 -0.397001    NaN  0.044504  0.021263  0.044566   
-    
-                  temp  
-    ts        0.320340  
-    co        0.044866  
-    humidity -0.397001  
-    light          NaN  
-    lpg       0.044504  
-    motion    0.021263  
-    smoke     0.044566  
-    temp      1.000000  
-    
-![]({{site.url}}/assets/general_eda/cor4.png) 
+From the original analysis:
 
+- CO had high positive correlation with LPG and smoke.
+- Humidity had negative correlation with CO, LPG, smoke, and temperature.
+- Light had strong positive correlation with temperature.
+- Smoke had very high positive correlation with LPG and CO.
 
-* One valuable insight can be found in first plot where there is high correlation between time and smoke, then co for device at stable and warmer place. 
-* But there is negative correlation between time and smoke for other two devices.
+## Correlation by Device
 
-### Conclusion from Descriptive Analysis
+Overall correlation may hide group-specific relationships. So, calculate correlation for each device separately.
 
-As we could see on the above plots and correlation plots, values, we could say that we can not make any judgment based on the overall data because the relationship between fields is different for different place. This could be found in real world that we often have to sub divide the data and perform distinct tests, operations for each. Now we will move on to the next part of our analysis which is Inferential Analysis.
+```python
+for device in df["device_name"].unique():
+    subset = df[df["device_name"] == device]
+
+    corr = subset[numeric_cols + ["light_int", "motion_int"]].corr()
+
+    plt.figure(figsize=(10, 8))
+
+    sns.heatmap(
+        corr,
+        annot=True,
+        cmap="coolwarm",
+        center=0
+    )
+
+    plt.title(f"Correlation Matrix for {device}")
+    plt.show()
+```
+
+Original outputs:
+
+![]({{site.url}}/assets/general_eda/cor2.png)
+
+![]({{site.url}}/assets/general_eda/cor3.png)
+
+![]({{site.url}}/assets/general_eda/cor4.png)
+
+### Device-Level Correlation Insights
+
+The relationship between features changed by device.
+
+For one device, time had positive correlation with smoke and CO. For other devices, the relationship was different or negative.
+
+This is a major EDA lesson:
+
+> Do not trust only the overall correlation matrix when your dataset contains different groups.
+
+## Conclusion from Descriptive Analysis
+
+From the descriptive analysis, we learned:
+
+- The dataset is not balanced across devices.
+- Each device is in a different environment.
+- Feature distributions differ by device.
+- Some columns have outliers.
+- CO, LPG, and smoke are strongly related.
+- Overall analysis hides important group-level differences.
+
+This gives a strong basis for later modelling.
 
 ## Inferential Data Analysis
 
-In Inferential Statistics, we take a step forward from the descriptive information we had and try to make some inferences or predictions. In general case, we try to prove, estimate and hypothesize something by taking a sample from the population. Mainly in inferential statistics, our focus will be on making conclusion about something. 
+Descriptive analysis tells us what happened in the data.
 
-From our descriptive analysis, we knew that there is difference in correlation values of fields for each device and lets focus our test, hypothesis based on that. There are lots of thing we could inference and test here and I think sky is the limit. Also, looking over the time series analysis, there was distinct grouping of each field for distinct devices.
+Inferential analysis asks whether the patterns are strong enough to support broader conclusions.
 
-In all of the inferential analysis there there are mainly two things we do:
-* Making inferences or predictions about the population. Example,the average age of the passengers is 29 years.
-* Making and testing hypothesis about the populations. Example, whether the survival rate of one gender differs from another’s.
+In inferential statistics, we often:
 
-### Sampling
-Sampling is a concept of taking a small part of a population data with (or without) a hope of having a central tendency of population. Sampling is done when size of the population is high. 
+- take samples
+- estimate population properties
+- test hypotheses
+- compare groups
+- measure association
+- decide whether differences are statistically significant
 
-Sampling is very popular in risk analyzing. For example, if a bulb company manufactures bulbs then in order to find the durability, they often take small sample and test on it. Similarly, in data collection types like questionnaire, we often make assumptions based on small number of data and try to claim something about a population. If we want to find out what is the ratio of smokers in male/female gender then we will collect small data and perform some tests to claim some conclusion and apply that in the population.
+## Sampling
 
-While working with a sample two terms are used to represent sample and population metrics:
-* **Statistics**: It is a measure or metric of sample. e.g. sample average CO.
-* **Parameter**: It is a measure or metric of a population. e.g. population average CO.
+Sampling means taking a smaller subset from a larger population.
 
-#### Problems with Sampling
-* Sample simply means to draw out the subset of the data from the population and whose size should always be smaller than that of the population. One major problem could be found in sampling is that the mean and variance of sample might not ressemble the population. It is often called as sample error.
+This is useful when:
 
-In Pandas, we could take sample easily. So lets take a sample of size 10k from the population of size 405184.
+- the dataset is large
+- full analysis is expensive
+- we want to estimate population properties
+- we want to test methods quickly
 
-
-```python
-sample1=df.sample(n=10000)
-sd = sample1[cols].describe()
-sd
-```
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>co</th>
-      <th>humidity</th>
-      <th>lpg</th>
-      <th>smoke</th>
-      <th>temp</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>10000.000000</td>
-      <td>10000.000000</td>
-      <td>10000.000000</td>
-      <td>10000.000000</td>
-      <td>10000.000000</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>0.004658</td>
-      <td>60.409360</td>
-      <td>0.007259</td>
-      <td>0.019327</td>
-      <td>22.423650</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>0.001250</td>
-      <td>11.344686</td>
-      <td>0.001443</td>
-      <td>0.004084</td>
-      <td>2.650209</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>0.001171</td>
-      <td>4.200000</td>
-      <td>0.002693</td>
-      <td>0.006692</td>
-      <td>5.900000</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>0.003924</td>
-      <td>51.000000</td>
-      <td>0.006462</td>
-      <td>0.017042</td>
-      <td>19.900000</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>0.004828</td>
-      <td>54.600000</td>
-      <td>0.007508</td>
-      <td>0.020004</td>
-      <td>22.200000</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>0.005460</td>
-      <td>74.300003</td>
-      <td>0.008206</td>
-      <td>0.021998</td>
-      <td>23.400000</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>0.013180</td>
-      <td>91.599998</td>
-      <td>0.015524</td>
-      <td>0.043461</td>
-      <td>30.600000</td>
-    </tr>
-  </tbody>
-</table>
-
-
-
+Take a sample:
 
 ```python
-pod = df[cols].describe()
-pod
+sample_df = df.sample(
+    n=10000,
+    random_state=42
+)
 ```
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>co</th>
-      <th>humidity</th>
-      <th>lpg</th>
-      <th>smoke</th>
-      <th>temp</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>405184.000000</td>
-      <td>405184.000000</td>
-      <td>405184.000000</td>
-      <td>405184.000000</td>
-      <td>405184.000000</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>0.004639</td>
-      <td>60.511694</td>
-      <td>0.007237</td>
-      <td>0.019264</td>
-      <td>22.453987</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>0.001250</td>
-      <td>11.366489</td>
-      <td>0.001444</td>
-      <td>0.004086</td>
-      <td>2.698347</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>0.001171</td>
-      <td>1.100000</td>
-      <td>0.002693</td>
-      <td>0.006692</td>
-      <td>0.000000</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>0.003919</td>
-      <td>51.000000</td>
-      <td>0.006456</td>
-      <td>0.017024</td>
-      <td>19.900000</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>0.004812</td>
-      <td>54.900000</td>
-      <td>0.007489</td>
-      <td>0.019950</td>
-      <td>22.200000</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>0.005409</td>
-      <td>74.300003</td>
-      <td>0.008150</td>
-      <td>0.021838</td>
-      <td>23.600000</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>0.014420</td>
-      <td>99.900002</td>
-      <td>0.016567</td>
-      <td>0.046590</td>
-      <td>30.600000</td>
-    </tr>
-  </tbody>
-</table>
-
-
-
-The result will come different each time for the sample because it will have random samples each time. But lets find the difference of sample statistics from population parameters.
-
+Compare sample statistics with population statistics.
 
 ```python
-pod-sd
+population_stats = df[numeric_cols].describe()
+sample_stats = sample_df[numeric_cols].describe()
+
+population_stats - sample_stats
 ```
 
+In the original experiment, the sample statistics were close to the population statistics, but not exactly the same.
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>co</th>
-      <th>humidity</th>
-      <th>lpg</th>
-      <th>smoke</th>
-      <th>temp</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>3.951840e+05</td>
-      <td>395184.000000</td>
-      <td>3.951840e+05</td>
-      <td>395184.000000</td>
-      <td>395184.000000</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>-1.939797e-05</td>
-      <td>0.102334</td>
-      <td>-2.223391e-05</td>
-      <td>-0.000063</td>
-      <td>0.030337</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>8.081408e-08</td>
-      <td>0.021803</td>
-      <td>7.320333e-07</td>
-      <td>0.000002</td>
-      <td>0.048138</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>0.000000e+00</td>
-      <td>-3.100000</td>
-      <td>0.000000e+00</td>
-      <td>0.000000</td>
-      <td>-5.900000</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>-5.239762e-06</td>
-      <td>0.000000</td>
-      <td>-6.243145e-06</td>
-      <td>-0.000018</td>
-      <td>0.000000</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>-1.696835e-05</td>
-      <td>0.300000</td>
-      <td>-1.909604e-05</td>
-      <td>-0.000054</td>
-      <td>0.000000</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>-5.135261e-05</td>
-      <td>0.000000</td>
-      <td>-5.590530e-05</td>
-      <td>-0.000160</td>
-      <td>0.200000</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>1.240580e-03</td>
-      <td>8.300003</td>
-      <td>1.043818e-03</td>
-      <td>0.003129</td>
-      <td>0.000000</td>
-    </tr>
-  </tbody>
-</table>
+That difference is called sampling error.
 
+## Point Estimation and Interval Estimation
 
+### Point Estimation
 
-In above table we can see that some value is higher for population while some is for sample.
+A point estimate gives one value.
 
-### Estimation
-While working with prediction/hypothesis in inferential analysis, we often have to deal with two types of estimates:
-* **Point Estimation**: It is simply a single value estimation for example the sample mean CO is equal to the population mean CO.
-* **Interval Estimation**: This estimation is based on finding a value in some range. For example the confidence interval is used in tests like Chi Square, t-test etc. In above example we have seen that there is difference in the trend of field value for each device. But is it significantly different that we should consider each as distinct?
+Example:
 
+```text
+Sample mean CO = 0.0046
+```
 
-In above example, we could do point estimation like the Temp mean of sample will be equal to population. Example of interval can be, the population mean of Temp will be around 5% left/right of sample.
+### Interval Estimation
 
-### Test
-Once we are done taking samples and made some estimations, our next step is to test whether we will be able to claim such. So we will test our assumption. This step is known as test.
+An interval estimate gives a range.
 
-There are lots of test based upon the nature of estimation, calculation and prediction but all of those can be divided into 3 categories:
-* Comparison Test
-* Correlation Test
-* Regression Test
+Example:
 
-Based on parameters, we can also categorize tests into two groups:
-* **Parametric Test**: Parametric tests are those in which we work with parameters like mean and variance. One example of this test is t-test.
-* **Non Parametric Test**: These tests are non parametric because does not use parameters in the hypothesis. One example is Mann Whitney U test.
+```text
+Population mean CO may lie between 0.0045 and 0.0047
+```
 
-Based on the measurement (Nominal, Ordinal, Interval and Ratio) of the data we can choose best test for our data. 
+Confidence intervals are commonly used for interval estimation.
 
+## Hypothesis Testing
 
-### Terms Widely Used in Testing
-* **Confidence Interval**: Confidence interval is all about giving some room for the error. Which is often used with tests. For example, if we are trying to make a test where we have set our hypothesis that the average CO recorded by device first is not more than 2% of device second. Here we are giving some room for possible error.
-* **Confidence Level**: It sounds similar to confidence interval but no it is not. But these two terms are related to each other. Confidence level tells us how much probability is there that the sample statistics or estimated parameter lies within the confidence interval. For example, if we set the confidence level to 5%, then we will be claiming that if there are 100 tests done, at max 5 will be predicting wrong prediction. Or in other words, out of 100 tests, 95 tests will have the estimated value lie within the confidence interval.
-* **Hypothesis**: As the term suggests, hypothesis is something that we are assuming to happen. In Hypothesis testing, we will have different hypothesis against the default or null hypothesis. Those hypothesis against the default are known as alternative hypothesis.
+Hypothesis testing helps us test assumptions.
 
-### Comparison Test
-This kind of test is mostly done where we will compare the parameters, metrics between different samples or population vs sample. Generally we perform parametric tests here.
+A typical test has:
 
-Test|Parametric|Comparison With|No. Samples|
-----|----|----|-----|
-t-test|Yes|Mean, Variance|2|
-ANOVA|Yes|Variance, Mean|3+|
-Mann-Whitney U (Wilcoxon Rank Sum)|No|Sum of rankings|2|
-Wilcoxon Signed Rank|	No|	Distributions|2|
-Kruskal-Wallis H|	No|	Mean Rankings|	3+|
-Mood’s Median|	No|	Medians|	2+|
+- null hypothesis
+- alternative hypothesis
+- significance level
+- test statistic
+- p-value
+- conclusion
 
-#### Is the mean value of each fields same for each device's recorded data?
-ANOVA means Analysis of Variance. This test is used when we have to compare statistics between two or more samples. If we have two sample, we will use t-test.
+Example:
 
-Lets test it by assuming 5% of alpha value which is significance level. We assume that if there will be 5 wrong prediction out of 100, then we will ignore it.
+```text
+H0: Mean temperature is the same for all devices.
+H1: At least one device has a different mean temperature.
+```
 
-* Null Hypothesis: There is no difference in mean values of each devices.
-* Alternate Hypothesis: There is significant difference in mean value for each devices.
+If the p-value is below the chosen alpha level, we reject the null hypothesis.
 
+A common alpha value is:
 
+```text
+0.05
+```
 
+This means a 5% significance level.
+
+## Types of Statistical Tests
+
+| Test Type | Used For |
+|---|---|
+| Comparison tests | Compare groups |
+| Correlation tests | Measure association |
+| Regression tests | Estimate relationships |
+| Non-parametric tests | Compare groups without strong distribution assumptions |
+
+## Comparison Tests
+
+| Test | Parametric | Comparison | Number of Samples |
+|---|---|---|---|
+| t-test | Yes | mean | 2 |
+| ANOVA | Yes | mean/variance | 3+ |
+| Mann-Whitney U | No | rank distribution | 2 |
+| Wilcoxon Signed Rank | No | paired distribution | 2 |
+| Kruskal-Wallis H | No | rank distribution | 3+ |
+| Mood's Median | No | medians | 2+ |
+
+## ANOVA: Are Device Means Different?
+
+We have three devices. We want to test whether the mean value of each numeric field is significantly different across devices.
+
+Hypotheses:
+
+```text
+H0: There is no difference in mean values between devices.
+H1: At least one device has a different mean value.
+```
+
+Using statsmodels:
 
 ```python
-import statsmodels.api as sm
-from statsmodels.formula.api import ols
-from statsmodels.stats.anova import anova_lm
+for col in numeric_cols:
+    formula = f"{col} ~ C(device_name)"
 
-# formula = 'len ~ C(supp) + C(dose) + C(supp):C(dose)'
-for c in cols:
-    formula = f'{c} ~ device_name'
-    model = ols(formula, data=df).fit()
-    aov_table = anova_lm(model,typ=2)
+    model = ols(
+        formula,
+        data=df
+    ).fit()
+
+    aov_table = anova_lm(
+        model,
+        typ=2
+    )
+
+    print(col)
     print(aov_table)
+    print()
 ```
 
-                   sum_sq        df              F  PR(>F)
-    device_name  0.319266       2.0  206081.057177     0.0
-    Residual     0.313859  405181.0            NaN     NaN
-                       sum_sq        df              F  PR(>F)
-    device_name  4.276879e+07       2.0  904472.329682     0.0
-    Residual     9.579674e+06  405181.0            NaN     NaN
-                   sum_sq        df              F  PR(>F)
-    device_name  0.439852       2.0  219945.965812     0.0
-    Residual     0.405145  405181.0            NaN     NaN
-                   sum_sq        df              F  PR(>F)
-    device_name  3.506427       2.0  217991.815523     0.0
-    Residual     3.258695  405181.0            NaN     NaN
-                       sum_sq        df              F  PR(>F)
-    device_name  2.425356e+06       2.0  936247.353097     0.0
-    Residual     5.248123e+05  405181.0            NaN     NaN
-    
-
-It seems that that the p value is smaller than 5%, thus we reject the null hypothesis and claim that there is significant difference in mean values of fields of each device. But lets use ANOVA from SciPy's stats and result must be same.
-
+Using SciPy:
 
 ```python
-import scipy.stats as stats
+for col in numeric_cols:
+    groups = [
+        group[col].dropna()
+        for _, group in df.groupby("device_name")
+    ]
 
+    result = stats.f_oneway(*groups)
 
-for c in cols:
-    devs = df.device_name.unique()
-    groups = df.groupby("device_name").groups
-
-    co0 = df[c][groups[devs[0]]]
-    co1 = df[c][groups[devs[1]]]
-    co2 = df[c][groups[devs[2]]]
-
-    print(stats.f_oneway(co0, co1, co2))
+    print(col, result)
 ```
 
-    F_onewayResult(statistic=206081.05717747274, pvalue=0.0)
-    F_onewayResult(statistic=904472.329681998, pvalue=0.0)
-    F_onewayResult(statistic=219945.96581178883, pvalue=0.0)
-    F_onewayResult(statistic=217991.81552333018, pvalue=0.0)
-    F_onewayResult(statistic=936247.3530974094, pvalue=0.0)
-    
+In the original analysis, the p-values were very small. Therefore, we rejected the null hypothesis and concluded that the mean sensor readings were significantly different across devices.
 
+## Correlation Tests
 
-```python
+Correlation tests measure association between variables.
 
-```
+| Test | Parametric | Data Type |
+|---|---|---|
+| Pearson correlation | Yes | interval/ratio |
+| Spearman correlation | No | ordinal/interval/ratio |
+| Chi-square test of independence | No | nominal/ordinal |
 
-### Correlation Test
-Correlation tests are done to calculate the strength of the association between data. 
+## Pearson Correlation
 
-Test|	Parametric|	Data Type|
----|---|---|
-Pearson’s r|	Yes|	Interval/Ratio
-Spearman’s r|	No|	Ordinal/Interval/Ratio
-Chi Square Test of Independence|No|	Nominal/Ordinal
+Pearson correlation measures linear relationship.
 
-Pearson's r test is statistically powerful than Spearman's but Spearman's test is appropriate for interval and ratio type of data.
+The coefficient ranges from -1 to 1.
 
-Only Chi Square Test of Independence is the only test that can be used with nominal variables.
+- `1` means perfect positive linear relationship
+- `0` means no linear relationship
+- `-1` means perfect negative linear relationship
 
-#### Pearson's and Spearman's Test
-##### Pearson's Test For Linear Relationship Between Variables
-
-The coefficient returns a value between -1 and 1 that represents the limits of correlation from a full negative correlation to a full positive correlation. A value of 0 means no correlation. The value must be interpreted, where often a value below -0.5 or above 0.5 indicates a notable correlation, and values below those values suggests a less notable correlation.
-
-A formula is:
+Pearson correlation formula:
 
 ![](https://wikimedia.org/api/rest_v1/media/math/render/svg/0a96c914bb811b84698b4d4118794cf4c8167ca7)
+
 *From Wikipedia*
 
-We have already done this test on the Descriptive Analysis Part.
+We already used Pearson correlation in the descriptive analysis.
 
+## Spearman Correlation
 
+Spearman correlation measures monotonic relationship. It is useful when the relationship is not strictly linear or when we do not want to assume normality.
 
-
-##### Spearman’s Correlation: Non-Linear Relationship between two variables.
-Two variables may be related by a nonlinear relationship, such that the relationship is stronger or weaker across the distribution of the variables. In this case Spearman's correlation is used.
-
-Pearson correlation assumes the data is normally distributed. However, Spearman does not make any assumption on the distribution of the data. That is the main difference between these two.
+Spearman formula:
 
 ![](https://wikimedia.org/api/rest_v1/media/math/render/svg/ee94267b983c2f16be1d3c61556e264762d5cba9)
+
 *From Wikipedia*
 
-
+Calculate Spearman correlation:
 
 ```python
-df.corr("spearman")
+spearman_corr = df[numeric_cols + ["light_int", "motion_int"]].corr(
+    method="spearman"
+)
+
+spearman_corr
 ```
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>ts</th>
-      <th>co</th>
-      <th>humidity</th>
-      <th>light</th>
-      <th>lpg</th>
-      <th>motion</th>
-      <th>smoke</th>
-      <th>temp</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>ts</th>
-      <td>1.000000</td>
-      <td>0.077576</td>
-      <td>0.051555</td>
-      <td>-0.020867</td>
-      <td>0.077576</td>
-      <td>-0.006917</td>
-      <td>0.077576</td>
-      <td>0.055377</td>
-    </tr>
-    <tr>
-      <th>co</th>
-      <td>0.077576</td>
-      <td>1.000000</td>
-      <td>-0.764622</td>
-      <td>-0.337479</td>
-      <td>1.000000</td>
-      <td>-0.003210</td>
-      <td>1.000000</td>
-      <td>0.121469</td>
-    </tr>
-    <tr>
-      <th>humidity</th>
-      <td>0.051555</td>
-      <td>-0.764622</td>
-      <td>1.000000</td>
-      <td>0.210620</td>
-      <td>-0.764622</td>
-      <td>-0.006705</td>
-      <td>-0.764622</td>
-      <td>-0.334038</td>
-    </tr>
-    <tr>
-      <th>light</th>
-      <td>-0.020867</td>
-      <td>-0.337479</td>
-      <td>0.210620</td>
-      <td>1.000000</td>
-      <td>-0.337479</td>
-      <td>0.033594</td>
-      <td>-0.337479</td>
-      <td>0.713951</td>
-    </tr>
-    <tr>
-      <th>lpg</th>
-      <td>0.077576</td>
-      <td>1.000000</td>
-      <td>-0.764622</td>
-      <td>-0.337479</td>
-      <td>1.000000</td>
-      <td>-0.003210</td>
-      <td>1.000000</td>
-      <td>0.121469</td>
-    </tr>
-    <tr>
-      <th>motion</th>
-      <td>-0.006917</td>
-      <td>-0.003210</td>
-      <td>-0.006705</td>
-      <td>0.033594</td>
-      <td>-0.003210</td>
-      <td>1.000000</td>
-      <td>-0.003210</td>
-      <td>0.033095</td>
-    </tr>
-    <tr>
-      <th>smoke</th>
-      <td>0.077576</td>
-      <td>1.000000</td>
-      <td>-0.764622</td>
-      <td>-0.337479</td>
-      <td>1.000000</td>
-      <td>-0.003210</td>
-      <td>1.000000</td>
-      <td>0.121469</td>
-    </tr>
-    <tr>
-      <th>temp</th>
-      <td>0.055377</td>
-      <td>0.121469</td>
-      <td>-0.334038</td>
-      <td>0.713951</td>
-      <td>0.121469</td>
-      <td>0.033095</td>
-      <td>0.121469</td>
-      <td>1.000000</td>
-    </tr>
-  </tbody>
-</table>
+In the original analysis, Spearman correlation again showed strong relationships between CO, LPG, and smoke.
 
+## Chi-Square Test
 
+Chi-square test of independence is useful for categorical variables.
 
-#### Insights
-Some of notable insights:
-* High +ve correlation of co with lpg, smoke.
-* High -ve correlation of humidity with co, lpg.
-* High +ve correlation of light with temp.
-* And so on.
+It is commonly used when we want to know whether two categorical variables are associated.
 
-#### Chi Square Test
-**[When to use Chi Square?](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3900058/)**
+Hypotheses:
 
-The Chi-square test is a non-parametric statistic, also called a distribution free test. Non-parametric tests should be used when any one of the following conditions pertains to the data:
+```text
+H0: The two variables are independent.
+H1: The two variables are associated.
+```
 
-* The level of measurement of all the variables is nominal or ordinal.
-* The sample sizes of the study groups are unequal; for the χ2 the groups may be of equal size or unequal size whereas some parametric tests require groups of equal or approximately equal size.
-* The original data were measured at an interval or ratio level, but violate one of the following assumptions of a parametric test:
-    * The distribution of the data was seriously skewed or kurtotic (parametric tests assume approximately normal distribution of the dependent variable), and thus the researcher must use a distribution free statistic rather than a parametric statistic.
-    * The data violate the assumptions of equal variance or homoscedasticity.
-    * For any of a number of reasons (1), the continuous data were collapsed into a small number of categories, and thus the data are no longer interval or ratio.
-    
-**Note:**
+Example:
 
-* **Null Hypothesis(H0):** Two variables are not dependent. (no association between the two variables)
-* **Alternate Hypothesis(H1):** There is relationship between variables. 
+```python
+table = pd.crosstab(
+    df["light"],
+    df["motion"]
+)
 
+chi2, p_value, dof, expected = stats.chi2_contingency(table)
 
-* If Statistic >= Critical Value: significant result, reject null hypothesis (H0), dependent.
-* If Statistic < Critical Value: not significant result, fail to reject null hypothesis (H0), independent.
+print("Chi-square:", chi2)
+print("p-value:", p_value)
+print("Degrees of freedom:", dof)
+```
 
-In terms of a p-value and a chosen significance level (alpha), the test can be interpreted as follows:
+If `p_value <= 0.05`, we reject the null hypothesis and conclude that the variables are associated.
 
-* If p-value <= alpha: significant result, reject null hypothesis (H0), dependent.
-* If p-value > alpha: not significant result, fail to reject null hypothesis (H0), independent.
+## Collinearity and Multicollinearity
 
-We do not have nominal data here thus we will not perform any test here yet.
+Correlation and collinearity are related but not exactly the same.
 
-#### Collinearity vs Multicollinearity
-Correlation and collinearity are similar things with few differences:
-* Correlation measures the relationship strength and direction of the relationship between two fields in our data.
-* Collinearity is a situation where two fields are linearly associated (high correlation) and they are used as predictors for the target.
-* Multicollinearity is a case if collinearity where a there exists linear relationship with two or more features.
+- Correlation measures relationship between two variables.
+- Collinearity happens when two predictor variables are strongly linearly related.
+- Multicollinearity happens when multiple predictor variables are linearly related.
 
-While training ML models, it is important that we remove those features that exhibit multicollinearity and we could do so by calculating VIF (Variance Inflation Factor). VIF allows us to determine the strength of correlation between other variables.
-VIF calculates how much the variance of a coefficient is inflated because of its linear dependencies with other predictors. Hence its name.
+Multicollinearity can make regression models unstable because it becomes hard to separate the individual effect of each feature.
 
-Referenced from [here](https://towardsdatascience.com/statistics-in-python-collinearity-and-multicollinearity-4cc4dcd82b3f).
+## Variance Inflation Factor
+
+Variance Inflation Factor, or **VIF**, helps detect multicollinearity.
+
+A common interpretation is:
+
+| VIF | Meaning |
+|---:|---|
+| 1 | no correlation |
+| 1 to 5 | moderate correlation |
+| above 5 | high correlation |
+| above 10 | serious concern |
+
+VIF formula uses R2 from regressing one feature against the other features.
 
 ![](https://miro.medium.com/max/223/1*kh_lcXAhwdfRarDKkpsSBg.png)
 
-* `(1-R**2)` is known as tolerance factor.
-
-R-squared (R2) is a statistical measure that represents the proportion of the variance for a dependent variable that's explained by an independent variable or variables in a regression model
-
-Referenced from [here](https://www.investopedia.com/terms/r/r-squared.asp).
-
-Interpreting VIF:
-* 1 — features are not correlated
-* 1<VIF<5 — features are moderately correlated
-* VIF>5 — features are highly correlated
-* VIF>10 — high correlation between features and is cause for concern
-
+## Calculate VIF Manually
 
 ```python
-from sklearn.linear_model import LinearRegression
-def calculate_vif(df, features):    
-    vif, tolerance = {}, {}
-    # all the features that you want to examine
+def calculate_vif(data, features):
+    """Calculate VIF and tolerance for selected features."""
+    vif_values = {}
+    tolerance_values = {}
+
     for feature in features:
-        # extract all the other features you will regress against
-        X = [f for f in features if f != feature]        
-        X, y = df[X], df[feature]
-        # extract r-squared from the fit
-        r2 = LinearRegression().fit(X, y).score(X, y)                
-        
-        # calculate tolerance
-        tolerance[feature] = 1 - r2
-        # calculate VIF
-        vif[feature] = 1/(tolerance[feature])
-    # return VIF DataFrame
-    return pd.DataFrame({'VIF': vif, 'Tolerance': tolerance})
+        other_features = [
+            f for f in features
+            if f != feature
+        ]
+
+        X = data[other_features]
+        y = data[feature]
+
+        r2 = LinearRegression().fit(X, y).score(X, y)
+
+        tolerance = 1 - r2
+        vif = 1 / tolerance
+
+        tolerance_values[feature] = tolerance
+        vif_values[feature] = vif
+
+    return pd.DataFrame({
+        "VIF": vif_values,
+        "Tolerance": tolerance_values
+    })
 ```
 
-Now calculating VIF of our columns with each other.
-
+Use it:
 
 ```python
-calculate_vif(df=df, features=[c for c in df.columns if c not in ["device", "device_name", "date"]])
+vif_df = calculate_vif(
+    data=df,
+    features=numeric_cols + ["light_int", "motion_int"]
+)
+
+vif_df
 ```
 
+In the original analysis, CO, LPG, and smoke had very high VIF values. This confirms the strong multicollinearity between these fields.
 
+## What to Do with Multicollinearity?
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>VIF</th>
-      <th>Tolerance</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>ts</th>
-      <td>1.124875e+00</td>
-      <td>8.889881e-01</td>
-    </tr>
-    <tr>
-      <th>co</th>
-      <td>8.709637e+04</td>
-      <td>1.148153e-05</td>
-    </tr>
-    <tr>
-      <th>humidity</th>
-      <td>3.618642e+00</td>
-      <td>2.763468e-01</td>
-    </tr>
-    <tr>
-      <th>light</th>
-      <td>4.123083e+00</td>
-      <td>2.425369e-01</td>
-    </tr>
-    <tr>
-      <th>lpg</th>
-      <td>1.872582e+06</td>
-      <td>5.340219e-07</td>
-    </tr>
-    <tr>
-      <th>motion</th>
-      <td>1.001580e+00</td>
-      <td>9.984225e-01</td>
-    </tr>
-    <tr>
-      <th>smoke</th>
-      <td>2.765493e+06</td>
-      <td>3.615991e-07</td>
-    </tr>
-    <tr>
-      <th>temp</th>
-      <td>4.835901e+00</td>
-      <td>2.067867e-01</td>
-    </tr>
-  </tbody>
-</table>
+Possible actions:
 
+- remove one of the highly correlated features
+- combine related features
+- use PCA
+- use regularized models such as Ridge or Lasso
+- use tree-based models if interpretation of coefficients is not the main goal
 
-
-In above table, we can see that, 
-* LPG, Smoke, CO have high correlation between other features and thus it can be our concerned features.
-* Also Temp, Humidity seems to be having good correlation but Time stamp, motion, does not seem to be having good relationships.
-
-Lets remove `co` as highly correlated feature and calculating VIF again to see what effect can be seen.
-
+For example, remove `co` and calculate VIF again:
 
 ```python
-calculate_vif(df=df, features=[c for c in df.columns if c not in ["device", "device_name", "date", "co"]])
+features_without_co = [
+    col for col in numeric_cols + ["light_int", "motion_int"]
+    if col != "co"
+]
+
+calculate_vif(
+    data=df,
+    features=features_without_co
+)
 ```
 
+The original result showed that removing one gas-related variable reduced VIF values for the others.
 
+## Regression Tests
 
+Regression tests estimate relationships between dependent and independent variables.
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>VIF</th>
-      <th>Tolerance</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>ts</th>
-      <td>1.085452</td>
-      <td>0.921275</td>
-    </tr>
-    <tr>
-      <th>humidity</th>
-      <td>3.079545</td>
-      <td>0.324723</td>
-    </tr>
-    <tr>
-      <th>light</th>
-      <td>4.023971</td>
-      <td>0.248511</td>
-    </tr>
-    <tr>
-      <th>lpg</th>
-      <td>7206.123295</td>
-      <td>0.000139</td>
-    </tr>
-    <tr>
-      <th>motion</th>
-      <td>1.001578</td>
-      <td>0.998424</td>
-    </tr>
-    <tr>
-      <th>smoke</th>
-      <td>7185.519140</td>
-      <td>0.000139</td>
-    </tr>
-    <tr>
-      <th>temp</th>
-      <td>4.833069</td>
-      <td>0.206908</td>
-    </tr>
-  </tbody>
-</table>
+| Regression Type | Predictor | Outcome |
+|---|---|---|
+| Simple Linear Regression | 1 interval/ratio predictor | 1 interval/ratio outcome |
+| Multiple Linear Regression | 2+ interval/ratio predictors | 1 interval/ratio outcome |
+| Logistic Regression | 1+ predictors | binary outcome |
+| Nominal Regression | 1+ predictors | nominal outcome |
+| Ordinal Regression | 1+ predictors | ordinal outcome |
 
+In this dataset, CO, LPG, and smoke are highly related. That can later become a modelling question, such as:
 
-
-The change can be seen in the terms that the VIF of LPG, Smoke has also decreased. It is sure that these 3 fields have high collinearity. Now again removing feature `smoke` and calculating VIF.
-
-
-```python
-calculate_vif(df=df, features=[c for c in df.columns if c not in ["device", "device_name", "date", "smoke"]])
+```text
+Can we predict CO from LPG and smoke?
 ```
 
+This is continued in the next modelling blog.
 
+## Automated EDA Tools
 
+Manual EDA is important because it gives deeper understanding. But automated EDA tools can quickly generate summaries and plots.
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>VIF</th>
-      <th>Tolerance</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>ts</th>
-      <td>1.081658</td>
-      <td>0.924507</td>
-    </tr>
-    <tr>
-      <th>co</th>
-      <td>226.300545</td>
-      <td>0.004419</td>
-    </tr>
-    <tr>
-      <th>humidity</th>
-      <td>3.096043</td>
-      <td>0.322993</td>
-    </tr>
-    <tr>
-      <th>light</th>
-      <td>4.017793</td>
-      <td>0.248893</td>
-    </tr>
-    <tr>
-      <th>lpg</th>
-      <td>231.395623</td>
-      <td>0.004322</td>
-    </tr>
-    <tr>
-      <th>motion</th>
-      <td>1.001578</td>
-      <td>0.998425</td>
-    </tr>
-    <tr>
-      <th>temp</th>
-      <td>4.832018</td>
-      <td>0.206953</td>
-    </tr>
-  </tbody>
-</table>
+Examples:
 
+- AutoViz
+- ydata-profiling or its current successor package
+- Sweetviz
+- D-Tale
 
-
-The changes seems to be more reflected. And it is clear that smoke have more collinearity than that of co with others. But again checking by removing LPG and calculating VIF.
-
+## AutoViz Example
 
 ```python
-calculate_vif(df=df, features=[c for c in df.columns if c not in ["device", "device_name", "date", "lpg"]])
-```
+from autoviz.AutoViz_Class import AutoViz_Class
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>VIF</th>
-      <th>Tolerance</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>ts</th>
-      <td>1.080860</td>
-      <td>0.925189</td>
-    </tr>
-    <tr>
-      <th>co</th>
-      <td>335.166702</td>
-      <td>0.002984</td>
-    </tr>
-    <tr>
-      <th>humidity</th>
-      <td>3.101372</td>
-      <td>0.322438</td>
-    </tr>
-    <tr>
-      <th>light</th>
-      <td>4.016575</td>
-      <td>0.248968</td>
-    </tr>
-    <tr>
-      <th>motion</th>
-      <td>1.001578</td>
-      <td>0.998425</td>
-    </tr>
-    <tr>
-      <th>smoke</th>
-      <td>341.732959</td>
-      <td>0.002926</td>
-    </tr>
-    <tr>
-      <th>temp</th>
-      <td>4.831788</td>
-      <td>0.206963</td>
-    </tr>
-  </tbody>
-</table>
-
-
-The effects are similar to the case where we removed smoke.
-
-### Regression Tests
-Regression tests are done where we try to estimate some parameter. If we have one dependent and one independent variable then we will be using simple linear regression like $y=mx+c$. If we have multiple variables then it will be mulilinear regression. But besides linear, there is logistic regression which tries to classify between two class. 
-
-The regression test examines whether the change is dependent variable have any effect in the independent variable or not.
-
-Test|	Predictor|	Outcome |
-----|-----|-----|
-Simple Linear|	1 interval/ratio|	1 interval/ratio|
-Multi Linear|	2+ interval/ratio	|1 interval/ratio|
-Logistic regression	|1+ |	1 binary|
-Nominal regression	|1+ |	1 nominal|
-Ordinal regression	|1+ |	1 ordinal|
-
-The linear relationship between features has been already discovered like the rise in CO has something to do with LPG and Smoke thus we can skip this test for now.
-
-## Using Autoviz for Fast EDA
-Autoviz is a kind of auto EDA tool which performs lots of EDA and plots graphs and provides some valuable insights. However, manual EDA always gives much insights if we have time to perform one. And using Pandas profiler, we can get insights like correlation in terms of sentence.
-
-
-```python
 av = AutoViz_Class()
-dfa = av.AutoViz("iot_telemetry_data.csv")
 
+report_df = av.AutoViz(
+    "iot_telemetry_data.csv"
+)
 ```
 
-        max_rows_analyzed is smaller than dataset shape 405184...
-            randomly sampled 150000 rows from read CSV file
-    Shape of your Data Set loaded: (150000, 9)
-    ############## C L A S S I F Y I N G  V A R I A B L E S  ####################
-    Classifying variables in data set...
-        9 Predictors classified...
-            No variables removed since no ID or low-information variables found in data set
-    Since Number of Rows in data 150000 exceeds maximum, randomly sampling 150000 rows for EDA...
-    Number of All Scatter Plots = 21
-    
+Original AutoViz outputs:
 
-
-    
 ![png]({{site.url}}/assets/general_eda/output_101_1.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_101_2.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_101_3.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_101_4.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_101_5.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/general_eda/output_101_6.png)
-    
 
+AutoViz can quickly generate many plots, but it should not replace manual thinking.
 
-    Time to run AutoViz = 35 seconds 
-    
-     ###################### AUTO VISUALIZATION Completed ########################
-    
+## Profiling Report Example
 
-As we can see in the above outputs, there are lots of plots to find outliers, relationships and so on. Most of them are done by us manually on earlier steps but if we are on hurry and want to grasp insight as soon as possible, Autoviz is highly recommended. Pandas Profiling is even richer and it gives us interactive way to tune between different aspects of EDA like correlation, null counts, plots and so on. But this blog doesn't contain the result because this is a static blog. :)
+A profiling report can summarize a dataset with one command.
 
+Example with newer profiling import style:
 
 ```python
-ProfileReport(dfa)
+from ydata_profiling import ProfileReport
+
+profile = ProfileReport(
+    df,
+    title="IoT Telemetry Data Profiling Report",
+    explorative=True
+)
+
+profile.to_file("eda_report.html")
 ```
+
+Older notebooks may use:
+
+```python
+from pandas_profiling import ProfileReport
+```
+
+If that fails, check the current package name and migration instructions.
+
+## Practical EDA Checklist
+
+Here is a simple checklist you can reuse.
+
+### 1. Basic Checks
+
+```python
+df.shape
+df.head()
+df.info()
+df.describe()
+df.isna().sum()
+```
+
+### 2. Data Types
+
+Check:
+
+- numeric columns
+- categorical columns
+- boolean columns
+- datetime columns
+
+### 3. Missing Values
+
+Check:
+
+- missing count
+- missing percentage
+- missing patterns by group
+
+### 4. Distributions
+
+Use:
+
+- histograms
+- KDE plots
+- box plots
+- violin plots
+
+### 5. Group Comparisons
+
+Compare distributions by:
+
+- class
+- device
+- location
+- time period
+- category
+
+### 6. Correlations
+
+Check:
+
+- Pearson correlation
+- Spearman correlation
+- correlation by group
+- multicollinearity
+
+### 7. Outliers
+
+Use:
+
+- box plots
+- IQR rule
+- z-score
+- domain-specific limits
+
+### 8. Statistical Tests
+
+Use tests only when the question is clear.
+
+Examples:
+
+- t-test for two group means
+- ANOVA for 3+ group means
+- Chi-square for categorical association
+- correlation tests for association
+
+### 9. Write Insights
+
+For every plot, write a sentence:
+
+```text
+What does this show?
+Why does it matter?
+What should we check next?
+```
+
+EDA without written insight is just plotting.
+
+## Common EDA Mistakes
+
+### Mistake 1: Looking Only at Overall Data
+
+Overall summaries can hide group-level patterns. Always check important groups separately.
+
+### Mistake 2: Ignoring Data Meaning
+
+A column name is not enough. Understand units, collection method, and real-world context.
+
+### Mistake 3: Treating Outliers as Errors
+
+Outliers may be real events. Investigate before removing them.
+
+### Mistake 4: Confusing Correlation with Causation
+
+Correlation means variables move together. It does not prove that one causes the other.
+
+### Mistake 5: Using Deprecated Code
+
+Older tutorials may use deprecated functions such as `sns.distplot()` or old profiling package names. Update code when needed.
+
+### Mistake 6: Not Saving Findings
+
+Write down insights clearly. Good EDA should create a story.
+
+## Key Findings from This Dataset
+
+From this EDA, we found:
+
+- The dataset has no missing values.
+- The devices have different numbers of records.
+- Each device was placed in a different environment.
+- Temperature and humidity patterns differ strongly by device.
+- CO, LPG, and smoke are highly correlated.
+- Overall correlation is not enough because device-level relationships differ.
+- Some features have outliers, especially for the cooler, more humid device.
+- ANOVA suggests sensor means differ significantly across devices.
+- VIF shows strong multicollinearity among CO, LPG, and smoke.
+
+These findings directly motivate the next step: modelling.
+
+## Final Thoughts
+
+In this blog, we walked through a general way to perform **Exploratory Data Analysis in Python**. We loaded data, checked structure, transformed timestamps, created readable labels, analyzed distributions, studied outliers, compared devices, checked correlations, performed sampling, ran ANOVA, and calculated VIF.
+
+The most important lesson is:
+
+> EDA is not just plotting. EDA is asking better questions about the data.
+
+Good EDA helps us understand what is trustworthy, what is suspicious, what is useful, and what should be tested next.
+
+In the next step, we can use these findings to build clustering, regression, and classification models.
