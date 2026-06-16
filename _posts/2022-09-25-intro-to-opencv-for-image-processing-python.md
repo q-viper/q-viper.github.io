@@ -1,785 +1,792 @@
 ---
-title:  Intro to OpenCV for Image Processing with Python
-date:   2022-09-25 01:29:17 +0545
+layout: single
+title: "OpenCV Image Processing in Python: Beginner Guide with Examples"
+date: 2022-09-25 01:29:17 +0545
+last_modified_at: 2026-06-16
 categories:
-    - Python
-    - OpenCV
+  - Python
+  - OpenCV
+  - Computer Vision
 tags:
-    - OpenCV
-    - image processing
+  - "OpenCV"
+  - "Python"
+  - "Image processing"
+  - "Computer vision"
+  - "Image filtering"
+  - "Edge detection"
+  - "Canny edge detection"
+  - "Hough transform"
+  - "Haar cascade"
+  - "Contours"
+  - "Color tracking"
+description: "A beginner-friendly OpenCV image processing tutorial in Python covering image reading, color channels, transforms, masking, filtering, thresholding, edge detection, Hough transform, contours, Haar cascades, YOLO, and color tracking."
+excerpt: "Learn the basics of OpenCV image processing in Python with practical examples for reading images, color conversion, masking, filtering, edge detection, Hough transform, contours, face detection, YOLO, and color tracking."
 header:
   teaser: assets/intro_opencv/conv out.png
+  og_image: assets/intro_opencv/conv out.png
+  image_description: "High-pass filtering output from an OpenCV image processing tutorial"
+toc: true
+toc_label: "OpenCV Image Processing"
+toc_icon: "image"
+toc_sticky: true
+read_time: true
+share: true
+related: true
+classes: wide
 ---
-OpenCV is a multi-platform Image Processing tool which provides lots of algorithms and processes. This notebook was written in 2019 by me when I was just learning, and I missed to add the author of images used from the internet. All images are taken from the internet and credit goes to original authors.
 
-## Contains
-* Introduction
-* Image Representation
-* Image Channels
-* Image Transforms
-* Image Masking
-* Image Filtering
-* Edge Detection
-* Hough Transform
-* Haar Cascade for Face Detection
+**OpenCV** is one of the most popular libraries for image processing and computer vision. It provides many tools for reading images, changing color spaces, filtering, thresholding, edge detection, contour detection, video processing, face detection, and even deep learning-based object detection.
 
-## Introduction
-* OpenCV was written and originally used on C++ but now, it can be used in Java, Android, C# as well as Unity3D.
-* OpenCV can almost do every image processing tasks like filtering, edge detection, transforming, thresholding, video capturing, contour detection and so on.
-* Installation: <code>pip install opencv-python</code> or install using whl file
-* We will import OpenCv as <code>import cv2</code>
+This post is an introduction to **OpenCV image processing in Python**. I originally wrote this notebook in 2019 when I was just learning computer vision. I have now cleaned it up, improved the explanations, and made it easier to follow as a beginner tutorial.
 
-## Image Representation
-* Image as digital, is stored as array of pixels(Picture Elements) and can be viewed as 2d plot.
-* Image has channels, RGB means Red, Green and Blue respectively. Grayscale image has one channel only.
-* Each pixel values will be on the range of 0 to 255, if image is 8bit. 0 means the leas intensity of the pixel and 255 represents the maximum intensity of the pixel.
-* Shape of image is determined by rows/columns present in it.
-* A RGB image of dimension 100 by 100 will contain 3000 pixels(100 * 100 * 3)
-* We can read image using simple <code>image = cv2.imread(imagepath, colorspace)</code>. Here colorspace is a flag 0 or 1. 0 is Grayscale and 1 is RGB.
-* A image stores pixels on bits value. A Grayscale image will contain 8 bits pixels.(i.e. one pixel value ranges from 0 to 255 which is 2^8 - 1).
+> Note: Some example images used in the original notebook were collected from the internet when I was learning. Credit belongs to the original image authors.
 
-## Image Channels
-* Image can have at least 1 channel(i.e grayscale)
-* RGB image have 3 channels i.e Red, Green, Blue
-* Grayscale image have only one color channel i.e Black
-* Storage required for image can be calculated as [(Height in pixels) x (length in pixels) x (bit depth)] / 8 / 1024 = image size in kilobytes (KB) ex. RGB image of 100 by 100 allocates at most 37kb
-* We can view each channel of image just like numpy array accessing. Ex. for a BGR image, we can get Blue channel as <code>blue_channel = image[::0]</code>
-* Converting colorspace on RGB can be done on OpenCv using  <code>cv2.cvtColor(image, cv2.COLOR_RGB)</code>. OpenCv allows lots of colorspaces like HSV, RGBA etc.
+## What This Tutorial Covers
 
-## Image Transforms
-* Since image can be taken as geometrical shape, we can apply basic geometrical transformations like rotation, zooming etc
-* While zooming, we add pixel values(ex. avg. of two pixels)
-* While shrinking, we remove pixels(ex. add avg. of two pixels and remove consecutive)
-* Resizing image on OpenCv can be done using code:  <code> cv2.resize(image, (shape), (ratios))</code>
+In this OpenCV Python tutorial, we will cover:
 
-## Image Thresholding
-* Thresholding a image converts image pixels into certain values based on the limit of pixels.
-* On OpenCv we can threshold image using code:<code>cv2.threshold(image, lower_range, high_range, value)</code>
-* Additionally we have Binary thresholding and Otsu as well.
+- OpenCV installation
+- image representation
+- image reading and display
+- BGR vs RGB color channels
+- grayscale conversion
+- image transforms
+- image masking
+- image filtering
+- high-pass and low-pass filters
+- image thresholding
+- Canny edge detection
+- Hough transform for line detection
+- Haar cascade face detection
+- contours
+- color tracking with HSV
+- a short introduction to YOLO object detection with OpenCV DNN
 
-## Image Masking
-* Masking an image with some filter or mask.
-* Adding some image in front of some other image.
-* Removing background from image or moving object to other background.
-* This can be done after we remove the background pixel from masking image.
-* Note that black color must be the background or we must convert it. Because adding black pixels to any other pixels won't affect.
+## What Is OpenCV?
 
-## Image filtering
-* Image filtering have huge importance on Computer Vision.
-* Image filtering uses the concept of image convolution.
-* Convolution process uses a small filter(window or kernel) to run over entire image and does elementwise multiplication and sum all.  
-* Popular image filtering filters are low-pass and high-pass.
-* Image filtering applications includes: image averaging, image sharpening, image blurring, edge detection etc
-* One of popular filter is Sobel filter done for edge detection.
-* High-pass are for sharpening image, enhance features and finding edges.
-* Filters are convolutional kernels, ex [[0 -1 0] [-1 4 -1] [0 -1 0]]. Finds change between current and neighbor pixels.
-* If output of convolution is 0 or its -ve then its darken else brighter.
-* Example of edge detection using high-pass filter: 
-    <img src ="({{site.url}}/assets/intro_opencv/conv out.png">
-    <center> High-pass filtering image </center>
-* Convolution process: 
-    <img src = "https://www.researchgate.net/publication/334105601/figure/fig2/AS:774948163420160@1561773448507/A-schematic-of-convolution-and-pooling-processes-in-CNN-a-convolution-process-and-b.ppm">
-    <center> Inside Grayscale image </center>
-    
-### High pass vs low pass filters
-* High-pass are for sharpening image, enhance features and finding edges. 
-* Filters are convolutional kernels, ex [[0 -1 0] [-1 4 -1] [0 -1 0]]. Finds change between current and neighbor pixels.
-* If output of convolution is 0 then no change if its -ve then its darken else brighter.
-* For horizontal use ex [[-1 2 -1] [0 0 0] [-1 2 -1]].
-* Low pass filters are used for image smoothing and blurring purposes.
- 
-## Edge Detection
-* High-pass filters like Sobel filer is used for convolution process,
-* Edge Detection is used to detect objects and many other ROI extraction of images,
-* Sobel filter for detecting horizontal line is [[ -1, 0, 1], [ -2, 0, 2], [ -1, 0, 1]] and known as called sobel_x.
-* Sobel filter for detectin vertical line is [[ -1, -2, -1], [ 0, 0, 0], [ 1, 2, 1]] and known as sobel_y.
-* Applications of Edge Detection includes extracting border of image,
-* Sobel filters can be written using simple numpy array,
-* We can apply any 2D filters using code <code> cv2.filter2D(image, depth, kernel) </code>. Kernel should be square array.
-* Even better edge detection we can use Canny Edge Detection method.
+OpenCV stands for **Open Source Computer Vision Library**. It was originally written in C and C++, but it can now be used from Python, Java, Android, C#, and other platforms.
 
-### Canny edge detector
-Combination of processes:
-* Noise filteration using Gaussian Blur
-* Then Sobel filters
-* Uses NMS for isolate strongest edges
-* Hysteresis thresholding for best edges
-* Can be implemented using <code>cv2.Canny(stripes, low, high)</code>
+OpenCV can be used for many computer vision tasks, such as:
 
+- reading and writing images
+- reading videos and webcams
+- image resizing and rotation
+- image filtering and blurring
+- image thresholding
+- edge detection
+- contour detection
+- object tracking
+- face detection
+- feature detection
+- camera calibration
+- deep learning inference with DNN models
 
-## Hough Transform
-* Most popular line detection algorithm.
-* Can even detect other geometrical shapes like circle, ellipse etc
-* A line can be represented as y = mx+c or in parametric form, z = x * cos(theta) + y * cos(theta) where z is perpendicular distance from origin to line. 'theta' is angle formed by perpendicular line to line.
-* Other shapes can be detected using their respective equations
-* Applications includes finding geometrical shapes like lines on image
-* Can be implemented using <code>cv2.HoughLinesP(canny_img, rho, theta, threshold, np.array([]), max_line_length, max_line_gap)</code>
+For Python users, OpenCV is usually imported as `cv2`.
 
-## Haar Cascade for Face detection
-* Haar cascade extracts features from images using a kind of `filter`, similar to the concept of the convolutional kernel 
-* These are pre-trained XML files which gives the bounding box coordinates of detected face.
+## Install OpenCV in Python
 
-## Contours
-* Contours are simple curves that are joined around a object of same color or intensity.
-* For example if we want to extract a edges of bottle, the contour curve will be around the bottle edges only. 
-* On OpenCv, contour can be drawn easily extracted and drawn.
+You can install OpenCV with pip:
 
-## YOLO(You Only Look Once)
-
-* Introduction
-* Setup
-* Implementation
-
-## Introduction
-* Original Paper on https://arxiv.org/abs/1506.02640
-* Uses COCO Dataset of 80 classes 
-* YOLO is currently the most fastest object detection concept currently and can be used on Real Time also
-
-## Setup
-* We will use pretrained model, and labels 
-* We can use YOLO Pretrained model by downloading weights from https://pjreddie.com/media/files/yolov3.weights
-* We can use configuration from https://github.com/pjreddie/darknet/blob/master/cfg/yolov3.cfg
-* We can use COCO Dataset labels from https://github.com/pjreddie/darknet/blob/master/data/coco.names
-* YOLO is simple to setup and can be used from even OpenCV
-
-## Implementation
-* Simple functions of OpenCv can be used to implement YOLO
-* We can make a DNN of YOLO using config file from code:
-
-```python
-#create the DNN with existing weights and configurations
-net = cv2.dnn.readNet('yolov3.weights', 'yolov3.cfg')
-#get the layer names
-layer_names = net.getLayerNames()
-#get o/p layer
-output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
+```bash
+pip install opencv-python
 ```
 
-* Then we will have to get blob from image and pass it to YOLO model of input shape
+If you also need extra modules, you can install:
 
-```python
-#get blob from img..img, scaleFactor, size, means of channel, RGB?
-blob = cv2.dnn.blobFromImage(img, 0.00392, (416, 416), (0, 0, 0), True, crop = False)         
-#send image to input layer
-net.setInput(blob)       
-#get output of model
-outs = net.forward(output_layers)
+```bash
+pip install opencv-contrib-python
 ```
 
-* Output of model will contain center coo., height, width, class ids, prediction scores 
-* We will used NMS(Non Max Suppression) to eliminate multiple bounding boxes around same object
+For most beginner image processing tasks, `opencv-python` is enough.
 
+## Import Required Packages
 
-## Imports and Image Reading
 ```python
-# import dependencies
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-#check versions
 print(cv2.__version__)
-
 ```
 
-    4.5.2
-    
+We use:
 
+- `cv2` for OpenCV operations
+- `numpy` because images are stored as arrays
+- `matplotlib` to display images in notebooks
 
-```python
-# read image
-fg = cv2.imread('({{site.url}}/assets/intro_opencv/petal.jpg', 1) # 1 reads as BGR 0 reads as Grayscale
-fg = cv2.resize(fg, (425, 425))
+## Image Representation
 
-#shape of image
-print(fg.shape)
+A digital image is stored as a grid of pixels. Each pixel contains intensity values.
 
+For an 8-bit grayscale image:
 
-#show image
-cv2.imshow('fg', fg)
-cv2.waitKey() # wait for milisecond
-cv2.destroyAllWindows()
+- `0` means black
+- `255` means white
+- values between 0 and 255 represent different gray levels
 
+For a color image, each pixel usually contains three values:
 
+- Red
+- Green
+- Blue
+
+A color image with shape `(100, 100, 3)` has:
+
+```text
+100 rows
+100 columns
+3 color channels
 ```
 
-    (425, 425, 3)
-    
+So it contains:
 
-
-```python
-print(fg.reshape(1, -1))
-```
-
-    [[255 255 255 ... 255 255 255]]
-    
-
-
-```python
-img = cv2.imread('({{site.url}}/assets/intro_opencv/everest.jpg')
-
-plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY).T)
-```
-
-
-
-
-    <matplotlib.image.AxesImage at 0x1735fce2ca0>
-
-
-
-
-    
-![png]({{site.url}}/assets/intro_opencv/output_8_1.png)
-    
-
-
-
-```python
-
-```
-
-
-```python
-
+```text
+100 * 100 * 3 = 30000 values
 ```
 
 ## Image Channels
 
+An image can have different numbers of channels.
+
+| Image Type | Channels | Example Shape |
+|---|---:|---|
+| Grayscale | 1 | `(height, width)` |
+| RGB image | 3 | `(height, width, 3)` |
+| RGBA image | 4 | `(height, width, 4)` |
+
+OpenCV reads color images in **BGR** order, not RGB. This is one of the most common beginner mistakes.
+
+Matplotlib expects RGB images. So, before showing an OpenCV image with Matplotlib, we usually convert BGR to RGB.
 
 ```python
-# showing using matplotlib is easy way
-plt.imshow(np.array(fg))
-plt.title('BGR image')
-plt.show()
+rgb_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2RGB)
 ```
 
+## Read an Image with OpenCV
 
-    
-![png]({{site.url}}/assets/intro_opencv/output_12_0.png)
-    
-
-
-> OpenCv reads image as BGR format but matplotlib reads as RGB so we need to convert BGR to RGB
-
+OpenCV reads images using `cv2.imread`.
 
 ```python
-# Color changing
+image = cv2.imread("assets/intro_opencv/petal.jpg", 1)
+```
+
+The second argument is a flag:
+
+- `1` reads the image as a color image
+- `0` reads the image as grayscale
+- `-1` reads the image unchanged
+
+Example:
+
+```python
+fg = cv2.imread("assets/intro_opencv/petal.jpg", 1)
+fg = cv2.resize(fg, (425, 425))
+
+print(fg.shape)
+```
+
+Output:
+
+```text
+(425, 425, 3)
+```
+
+## Display an Image with OpenCV
+
+In a normal Python script, you can use:
+
+```python
+cv2.imshow("image", fg)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
+
+In Jupyter notebooks, Matplotlib is usually easier.
+
+```python
 rgb_fg = cv2.cvtColor(fg, cv2.COLOR_BGR2RGB)
+
 plt.imshow(rgb_fg)
-plt.title('RGB image')
+plt.title("RGB image")
+plt.axis("off")
 plt.show()
 ```
 
+## Display a Grayscale Image
 
-    
+```python
+img = cv2.imread("assets/intro_opencv/everest.jpg")
+
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+plt.imshow(gray, cmap="gray")
+plt.axis("off")
+plt.show()
+```
+
+![png]({{site.url}}/assets/intro_opencv/output_8_1.png)
+
+## BGR vs RGB in OpenCV
+
+OpenCV reads images in BGR format. Matplotlib reads images in RGB format. If you directly show an OpenCV image with Matplotlib, the colors may look wrong.
+
+```python
+plt.imshow(np.array(fg))
+plt.title("BGR image shown with Matplotlib")
+plt.axis("off")
+plt.show()
+```
+
+![png]({{site.url}}/assets/intro_opencv/output_12_0.png)
+
+Now convert BGR to RGB.
+
+```python
+rgb_fg = cv2.cvtColor(fg, cv2.COLOR_BGR2RGB)
+
+plt.imshow(rgb_fg)
+plt.title("RGB image")
+plt.axis("off")
+plt.show()
+```
+
 ![png]({{site.url}}/assets/intro_opencv/output_14_0.png)
-    
 
+## Split Image Channels
 
+We can access individual image channels using NumPy indexing.
 
 ```python
-# lets see image channels
+red = np.zeros_like(rgb_fg, dtype=np.uint8)
+red[:, :, 0] = rgb_fg[:, :, 0]
 
-red = np.zeros_like(rgb_fg).astype(np.uint8) 
-red[:,:,0]=rgb_fg[:,:,0] # red channel
-
-plt.imshow(red) 
+plt.imshow(red)
+plt.axis("off")
 plt.show()
 
-green = np.zeros_like(rgb_fg).astype(np.uint8) 
-green[:,:,1]=rgb_fg[:,:,1] # green channel
+green = np.zeros_like(rgb_fg, dtype=np.uint8)
+green[:, :, 1] = rgb_fg[:, :, 1]
 
-plt.imshow(green) 
+plt.imshow(green)
+plt.axis("off")
 plt.show()
 ```
 
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_15_0.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_15_1.png)
-    
 
+This helps us understand how each color channel contributes to the final image.
 
-## Image Transform
+## Image Transformations
 
+Images can be transformed geometrically. Common transformations include:
+
+- resizing
+- rotation
+- translation
+- flipping
+- cropping
+- affine transformation
+- perspective transformation
+
+### Resize an Image
 
 ```python
+resized = cv2.resize(fg, (425, 425))
+```
 
+### Rotate an Image
+
+```python
 gray_fg = cv2.cvtColor(fg, cv2.COLOR_BGR2GRAY)
-# Image Transform
-rows,cols = gray_fg.shape
 
-M = cv2.getRotationMatrix2D((cols/2,rows/2),40,1)
-dst = cv2.warpAffine(fg,M,(cols,rows))
+rows, cols = gray_fg.shape
 
-plt.imshow(dst)
+matrix = cv2.getRotationMatrix2D((cols / 2, rows / 2), 40, 1)
+rotated = cv2.warpAffine(fg, matrix, (cols, rows))
+
+plt.imshow(cv2.cvtColor(rotated, cv2.COLOR_BGR2RGB))
+plt.axis("off")
 plt.show()
 ```
 
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_17_0.png)
-    
 
+The function `cv2.getRotationMatrix2D` creates a rotation matrix. Then `cv2.warpAffine` applies the transformation.
 
 ## Image Masking
 
+Image masking means selecting only a part of an image based on a condition. A mask is usually a binary image where:
+
+- white pixels mean keep this part
+- black pixels mean remove this part
+
+Masking can be used for:
+
+- background removal
+- object extraction
+- color-based selection
+- image blending
+- region of interest extraction
+
+## Basic Image Masking Example
+
+First, read the background image.
 
 ```python
-# lets read a pyramid image
-pyramid = cv2.imread('({{site.url}}/assets/intro_opencv/pyramid.jpg', 1)
+pyramid = cv2.imread("assets/intro_opencv/pyramid.jpg", 1)
 
-#reshape pyramid to shape of flag
 print(pyramid.shape)
 
 pyramid = cv2.resize(pyramid, (425, 425))
 
 rgb_pyramid = cv2.cvtColor(pyramid, cv2.COLOR_BGR2RGB)
+
 plt.imshow(rgb_pyramid)
+plt.axis("off")
 plt.show()
 ```
 
-    (417, 471, 3)
-    
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_19_1.png)
-    
 
-
+Convert both images to grayscale.
 
 ```python
-# convert both fg and pyramid into grayscale
-
 gray_fg = cv2.cvtColor(rgb_fg, cv2.COLOR_BGR2GRAY)
 gray_pyramid = cv2.cvtColor(rgb_pyramid, cv2.COLOR_BGR2GRAY)
 
-plt.imshow(gray_fg)
+plt.imshow(gray_fg, cmap="gray")
+plt.axis("off")
 plt.show()
 
-plt.imshow(gray_pyramid)
+plt.imshow(gray_pyramid, cmap="gray")
+plt.axis("off")
 plt.show()
 ```
 
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_20_0.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_20_1.png)
-    
 
-
+Create a mask.
 
 ```python
-# create a mask of flag
+lower_value = np.array([0, 0, 0])
+higher_value = np.array([220, 220, 220])
 
-lv = np.array([0, 0, 0])
-hv = np.array([220, 220, 220])
+mask = cv2.inRange(fg, lower_value, higher_value)
 
-mask = cv2.inRange(fg, lv, hv)
-plt.imshow(mask)
+plt.imshow(mask, cmap="gray")
+plt.axis("off")
 plt.show()
-
-
 ```
 
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_21_0.png)
-    
 
-
+Apply the mask.
 
 ```python
 masked_img = rgb_fg.copy()
 masked_img[mask != 255] = [0, 0, 0]
+
 plt.imshow(masked_img)
+plt.axis("off")
 plt.show()
 ```
 
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_22_0.png)
-    
 
-
+Now combine the foreground and background.
 
 ```python
-bg_cpy = rgb_pyramid.copy()
-bg_cpy[mask == 255] = [0, 0, 0]
+bg_copy = rgb_pyramid.copy()
+bg_copy[mask == 255] = [0, 0, 0]
 
-plt.imshow(bg_cpy)
+plt.imshow(bg_copy)
+plt.axis("off")
 plt.show()
 
-final = bg_cpy + masked_img
+final = bg_copy + masked_img
+
 plt.imshow(final)
+plt.axis("off")
 plt.show()
 ```
 
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_23_0.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_23_1.png)
-    
 
-
-### All Codes
-
+## Full Masking Example
 
 ```python
-## Stackking up
-
-# read image
-fg = cv2.imread('({{site.url}}/assets/intro_opencv/rose.jpg', 1) # 1 reads as BGR 0 reads as Grayscale
+# Read foreground image
+fg = cv2.imread("assets/intro_opencv/rose.jpg", 1)
 fg = cv2.resize(fg, (425, 425))
 
-
-# Color changing
+# Convert BGR to RGB
 rgb_fg = cv2.cvtColor(fg, cv2.COLOR_BGR2RGB)
+
 plt.imshow(rgb_fg)
-plt.title('RGB image')
+plt.title("RGB image")
+plt.axis("off")
 plt.show()
 
+# Read background image
+pyramid = cv2.imread("assets/intro_opencv/everest.jpg", 1)
 
-# lets read a pyramid image
-pyramid = cv2.imread('({{site.url}}/assets/intro_opencv/everest.jpg', 1)
-
-#reshape pyramid to shape of flag
 print(pyramid.shape)
 
 pyramid = cv2.resize(pyramid, (425, 425))
 
 rgb_pyramid = cv2.cvtColor(pyramid, cv2.COLOR_BGR2RGB)
+
 plt.imshow(rgb_pyramid)
+plt.axis("off")
 plt.show()
 
-
-# convert both flag and pyramid into grayscale
-
+# Convert both images to grayscale
 gray_fg = cv2.cvtColor(rgb_fg, cv2.COLOR_BGR2GRAY)
 gray_pyramid = cv2.cvtColor(rgb_pyramid, cv2.COLOR_BGR2GRAY)
 
-plt.imshow(gray_fg)
+plt.imshow(gray_fg, cmap="gray")
+plt.axis("off")
 plt.show()
 
-plt.imshow(gray_pyramid)
+plt.imshow(gray_pyramid, cmap="gray")
+plt.axis("off")
 plt.show()
 
+# Create mask
+lower_value = np.array([0, 0, 0])
+higher_value = np.array([220, 220, 255])
 
-# create a mask of flag
+mask = cv2.inRange(fg, lower_value, higher_value)
 
-lv = np.array([0, 0, 0])
-hv = np.array([220, 220, 255])
-
-mask = cv2.inRange(fg, lv, hv)
-plt.imshow(mask)
+plt.imshow(mask, cmap="gray")
+plt.axis("off")
 plt.show()
 
-
+# Apply mask on foreground
 masked_img = rgb_fg.copy()
 masked_img[mask != 255] = [0, 0, 0]
+
 plt.imshow(masked_img)
+plt.axis("off")
 plt.show()
 
-bg_cpy = rgb_pyramid.copy()
-bg_cpy[mask == 255] = [0, 0, 0]
+# Remove masked area from background
+bg_copy = rgb_pyramid.copy()
+bg_copy[mask == 255] = [0, 0, 0]
 
-plt.imshow(bg_cpy)
+plt.imshow(bg_copy)
+plt.axis("off")
 plt.show()
 
-final = bg_cpy + masked_img
+# Combine images
+final = bg_copy + masked_img
+
 plt.imshow(final)
+plt.axis("off")
 plt.show()
 ```
 
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_25_0.png)
-    
 
-
-    (2104, 3157, 3)
-    
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_25_2.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_25_3.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_25_4.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_25_5.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_25_6.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_25_7.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_25_8.png)
-    
-
 
 ### Exercise
-* Use image with different background color for masking
 
-## High pass vs low pass filters
- * Highpass are for sharpening image, enhance features and finding edges. 
- * Filters are convolutional kernels, ex [[0 -1 0] [-1 4 -1] [0 -1 0]]. Finds change between current and neighbor pixels.
- * If output of convolution is 0 then no change if its -ve then its darken else brighter.
- * For horizontal use ex [[-1 2 -1] [0 0 0] [-1 2 -1]].
- 
- 
+Try using an image with a different background color and create a new mask for it.
 
+## Image Filtering
+
+Image filtering is very important in computer vision. It is used for:
+
+- blurring
+- sharpening
+- noise removal
+- edge detection
+- feature enhancement
+
+Filtering usually works through **convolution**. A small matrix called a kernel moves over the image. At each position, it multiplies nearby pixel values and creates a new output value.
+
+## Convolution in Image Processing
+
+A convolution kernel can look like this:
 
 ```python
-# lets make a show function
-
-def show(img, t = 'image', cmap='gray'):
-    fig = plt.figure(figsize=(20,20))
-    ax = fig.add_subplot(111)
-    ax.imshow(img,cmap)
-    plt.title(t)
-    plt.show()
-
+kernel = np.array([
+    [0, -1, 0],
+    [-1, 4, -1],
+    [0, -1, 0]
+])
 ```
 
+This type of kernel can highlight changes between neighboring pixels.
+
+A high-pass filtering example:
+
+![High-pass filtering image]({{site.url}}/assets/intro_opencv/conv out.png)
+
+A convolution process example:
+
+<img src="https://www.researchgate.net/publication/334105601/figure/fig2/AS:774948163420160@1561773448507/A-schematic-of-convolution-and-pooling-processes-in-CNN-a-convolution-process-and-b.ppm" alt="Convolution and pooling process diagram">
+
+## High-Pass vs Low-Pass Filters
+
+### High-Pass Filters
+
+High-pass filters are used for:
+
+- sharpening
+- enhancing features
+- detecting edges
+- highlighting sudden intensity changes
+
+Example kernel:
 
 ```python
-stripes = cv2.imread('({{site.url}}/assets/intro_opencv/coin.png', 0)
+np.array([
+    [0, -1, 0],
+    [-1, 4, -1],
+    [0, -1, 0]
+])
+```
+
+### Low-Pass Filters
+
+Low-pass filters are used for:
+
+- smoothing
+- blurring
+- reducing noise
+- removing small details
+
+Examples include:
+
+- mean blur
+- box blur
+- Gaussian blur
+- median blur
+
+## Helper Function to Show Images
+
+```python
+def show(img, title="image", cmap="gray"):
+    plt.figure(figsize=(10, 10))
+    plt.imshow(img, cmap=cmap)
+    plt.title(title)
+    plt.axis("off")
+    plt.show()
+```
+
+## Sobel Edge Filtering
+
+Sobel filters are used to detect changes in horizontal and vertical directions.
+
+```python
+stripes = cv2.imread("assets/intro_opencv/coin.png", 0)
+
 show(stripes)
 
 # Sobel x
-kernel1 = np.array([[ -1, 0, 1],
-                 [ -2, 0, 2],
-                 [ -1, 0, 1]])
+kernel_x = np.array([
+    [-1, 0, 1],
+    [-2, 0, 2],
+    [-1, 0, 1]
+])
 
-filtered = cv2.filter2D(stripes, -1, kernel1)
-show(filtered, 'Sobel_x')
+filtered_x = cv2.filter2D(stripes, -1, kernel_x)
+show(filtered_x, "Sobel X")
 
 # Sobel y
-kernel2 = np.array([[ -1, -2, -1],
-                 [ 0, 0, 0],
-                 [ 1, 2, 1]])
+kernel_y = np.array([
+    [-1, -2, -1],
+    [0, 0, 0],
+    [1, 2, 1]
+])
 
-filtered = cv2.filter2D(stripes, -1, kernel2)
-show(filtered, 'Sobel_y')
+filtered_y = cv2.filter2D(stripes, -1, kernel_y)
+show(filtered_y, "Sobel Y")
 
-
-kernel = kernel1 + kernel2
+kernel = kernel_x + kernel_y
 
 filtered = cv2.filter2D(stripes, -1, kernel)
-show(filtered, 'Sobel')
-
+show(filtered, "Sobel")
 ```
 
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_29_0.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_29_1.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_29_2.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_29_3.png)
-    
-
 
 ### Exercise
-* Use different filters of highpass/lowpass
 
+Try different high-pass and low-pass kernels and compare the output.
 
-## Low-pass Filters
-* Blurring of image smoothen the image.
-* We use low-pass filters for that.
-* Low pass filters are mean filters, median filters weighted mean filters gaussian blur etc.
-* Median blur removes salt and pepper noise.
-* Averaging by: <code>cv2.blur(img, depth, kernel) or cv2.boxFilter(img, depth, kernel, normalize..)</code>
-* Gaussian blur by: <code> cv2.GaussainBlur(img, kernel, depth), cv2.getGaussianKernel(size, sigmax, sigmay)</code>
-* Median blur:<code>cv2.medianBlur(img, 4)</code> removes 40% of salt and pepper noise.
+## Low-Pass Filters and Blurring
 
+Low-pass filters smooth the image. They are useful for reducing noise.
+
+Common OpenCV blurring functions include:
 
 ```python
-noise = cv2.imread('({{site.url}}/assets/intro_opencv/noise.png', 0)
-show(noise)
-kernel = np.ones([7, 7], dtype = np.float32)/255
-blurred = cv2.filter2D(noise, -1, kernel)
-show(blurred)
-
-blurred = cv2.blur(noise, (5, 5))
-show(blurred)
-
-blurred = cv2.GaussianBlur(noise, (5, 5), -1)
-show(blurred)
-
-blurred = cv2.medianBlur(noise, 9)
-show(blurred)
+cv2.blur(image, (5, 5))
+cv2.GaussianBlur(image, (5, 5), 0)
+cv2.medianBlur(image, 9)
 ```
 
+Example:
 
-    
+```python
+noise = cv2.imread("assets/intro_opencv/noise.png", 0)
+
+show(noise)
+
+kernel = np.ones([7, 7], dtype=np.float32) / 255
+
+blurred = cv2.filter2D(noise, -1, kernel)
+show(blurred, "Custom blur")
+
+blurred = cv2.blur(noise, (5, 5))
+show(blurred, "Average blur")
+
+blurred = cv2.GaussianBlur(noise, (5, 5), 0)
+show(blurred, "Gaussian blur")
+
+blurred = cv2.medianBlur(noise, 9)
+show(blurred, "Median blur")
+```
+
 ![png]({{site.url}}/assets/intro_opencv/output_32_0.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_32_1.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_32_2.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_32_3.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_32_4.png)
-    
 
+Median blur is useful for salt-and-pepper noise.
 
 ## Image Thresholding
 
+Thresholding converts an image into a binary or limited-value image based on pixel intensity.
 
 ```python
-# Threshold
-retval, thresholded = cv2.threshold(filtered, 100, 200, cv2.THRESH_BINARY)
+retval, thresholded = cv2.threshold(
+    filtered,
+    100,
+    200,
+    cv2.THRESH_BINARY
+)
+
 show(thresholded)
 ```
 
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_34_0.png)
-    
 
+Common thresholding methods include:
+
+- binary thresholding
+- inverse binary thresholding
+- adaptive thresholding
+- Otsu thresholding
 
 ### Exercise
-* Use different blurring filters
-* Use differnt kernels for filtering
 
-## Canny edge detector
-Combination of processes:
-* Noise filteration using Gaussian Blur
-* Then Sobel filters
-* Uses NMS for isolate strongest edges
-* Hysteresis thresholding for best edges
+Try different threshold values and compare the results.
 
+## Canny Edge Detection
+
+Canny edge detection is a popular edge detection method. It combines several steps:
+
+1. noise reduction using Gaussian blur
+2. gradient calculation using Sobel filters
+3. non-maximum suppression
+4. hysteresis thresholding
+
+OpenCV implementation:
 
 ```python
-# parameters
-
 low = 10
 high = 250
-
 
 canny_img = cv2.Canny(stripes, low, high)
 
 show(canny_img, "Canny")
 ```
 
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_37_0.png)
-    
 
+Canny edge detection is useful for object boundaries, shape extraction, and line detection.
 
+## Hough Transform
+
+The **Hough Transform** is a popular method for detecting lines and shapes.
+
+It can detect:
+
+- lines
+- circles
+- other geometric shapes with proper equations
+
+First, read the image and apply Canny edge detection.
 
 ```python
-# Hough transform
-img = cv2.imread('({{site.url}}/assets/intro_opencv/flag.jpg', 0)
+img = cv2.imread("assets/intro_opencv/flag.jpg", 0)
+
 show(img)
 
 canny_img = cv2.Canny(img, low, high)
+
 show(canny_img)
 ```
 
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_38_0.png)
-    
 
-
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_38_1.png)
-    
 
-
-## Hough Transform for line detection
-
-
+## Hough Transform for Line Detection
 
 ```python
-#parameters
 rho = 1
 theta = np.pi / 180
 threshold = 60
 max_line_length = 50
 max_line_gap = 50
 
-
-lines = cv2.HoughLinesP(canny_img, rho, theta, threshold, np.array([]), max_line_length, max_line_gap)
+lines = cv2.HoughLinesP(
+    canny_img,
+    rho,
+    theta,
+    threshold,
+    np.array([]),
+    max_line_length,
+    max_line_gap
+)
 
 line_img = img.copy()
+
 for line in lines:
     for x1, y1, x2, y2 in line:
         cv2.line(line_img, (x1, y1), (x2, y2), (0, 255, 0), 2)
@@ -787,136 +794,248 @@ for line in lines:
 show(line_img)
 ```
 
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_40_0.png)
-    
 
+Hough Transform is useful when we want to detect lines in roads, documents, lanes, borders, or geometric objects.
 
-## Haar-cascades
+## Haar Cascade for Face Detection
 
+Haar cascade is a classical object detection method. It uses pre-trained XML files to detect objects such as faces and eyes.
+
+OpenCV includes some Haar cascade XML files.
 
 ```python
-# Haar Cascade
-img = cv2.imread("({{site.url}}/assets/intro_opencv/xmen.jpg", 1)
+img = cv2.imread("assets/intro_opencv/xmen.jpg", 1)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-# locate XML Haar Cascade file(it will be inside site packages/cv2/data)
-cascade_dir = "C:\ProgramData\Anaconda3\Lib\site-packages\cv2\data/"
+cascade_dir = "C:/ProgramData/Anaconda3/Lib/site-packages/cv2/data/"
 
-# face_cascade 
-face_cascade = cv2.CascadeClassifier(cascade_dir + 'haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier(
+    cascade_dir + "haarcascade_frontalface_default.xml"
+)
 
-# eye_cascade
-eye_cascade = cv2.CascadeClassifier(cascade_dir + 'haarcascade_eye.xml')
+eye_cascade = cv2.CascadeClassifier(
+    cascade_dir + "haarcascade_eye.xml"
+)
 
-# find bounding box coordinates of faces
 faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-d=100
-shape = gray.shape
-# loop through each faces and draw a rectangle
-for (x,y,w,h) in faces:
-    y = np.clip(y-d, 0, y)
-    x = np.clip(x-d, 0, x)
-    w = np.clip(w+2*d, 0, shape[0]-x)
-    h = np.clip(h+2*d, 0, shape[1]-y)
-    img = cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-    roi_gray = gray[y:y+h, x:x+w]
-    roi_color = img[y:y+h, x:x+w]
-#     eyes = eye_cascade.detectMultiScale(roi_gray)
-    
-#     for (ex,ey,ew,eh) in eyes:
-#         cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
+
+padding = 100
+height, width = gray.shape
+
+for (x, y, w, h) in faces:
+    y = np.clip(y - padding, 0, y)
+    x = np.clip(x - padding, 0, x)
+    w = np.clip(w + 2 * padding, 0, width - x)
+    h = np.clip(h + 2 * padding, 0, height - y)
+
+    img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
 show(cv2.cvtColor(img, cv2.COLOR_BGR2RGBA))
 ```
 
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_42_0.png)
-    
-
 
 ### Exercise
-* Use different haarcascades
 
-## Contours in OpenCv
+Try other Haar cascade XML files and detect eyes, smiles, or full bodies.
 
-Contours are simple curves that are joined around a object of same color or intensity. For example if we want to extract a edges of bottle, the contour curve will be around the bottle edges only. On OpenCv, contour can be drawn easily extracted and drawn.
+## Contours in OpenCV
 
+Contours are curves that join continuous points along an object boundary. They are useful for shape detection and object boundary extraction.
 
+For example, if we want to extract the boundary of a bottle, the contour will follow the bottle edges.
 
 ```python
-img = cv2.imread('({{site.url}}/assets/intro_opencv/flag.jpg')
-img_gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+img = cv2.imread("assets/intro_opencv/flag.jpg")
+img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-_, thresh = cv2.threshold(img_gray, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-# show(thresh)
+_, thresh = cv2.threshold(
+    img_gray,
+    0,
+    255,
+    cv2.THRESH_BINARY + cv2.THRESH_OTSU
+)
 
-# ret, thresh = cv2.threshold(img_gray, 127, 255,0)
-contours,hierarchy = cv2.findContours(thresh,2,1) # Gives contours points
+contours, hierarchy = cv2.findContours(
+    thresh,
+    cv2.RETR_TREE,
+    cv2.CHAIN_APPROX_SIMPLE
+)
 
 cnt = contours[0]
 
-# find the convex hull
-hull = cv2.convexHull(cnt,returnPoints = False)
+hull = cv2.convexHull(cnt, returnPoints=False)
 
-
-defects = cv2.convexityDefects(cnt,hull)
+defects = cv2.convexityDefects(cnt, hull)
 
 for i in range(defects.shape[0]):
-    s,e,f,d = defects[i,0]
+    s, e, f, d = defects[i, 0]
+
     start = tuple(cnt[s][0])
     end = tuple(cnt[e][0])
     far = tuple(cnt[f][0])
-    cv2.line(img,start,end,[0,255,0],2)
-    cv2.circle(img,far,5,[0,0,255],-1)
+
+    cv2.line(img, start, end, [0, 255, 0], 2)
+    cv2.circle(img, far, 5, [0, 0, 255], -1)
 
 show(img)
 ```
 
-
-    
 ![png]({{site.url}}/assets/intro_opencv/output_45_0.png)
 
+Contours are useful for:
 
-## Color tracking on OpenCv
-Using HSV colorspace, we can track any object very easily. HSV stands for Hue, S for Saturation and V for Value. Hue range is [0,179], Saturation range is [0,255] and Value range is [0,255]. Lets track white.  
+- shape detection
+- object counting
+- document boundary extraction
+- hand gesture detection
+- measuring object area
+- finding object outlines
 
+## Color Tracking in OpenCV
+
+Color tracking is easier in HSV color space.
+
+HSV stands for:
+
+- Hue
+- Saturation
+- Value
+
+In OpenCV:
+
+- Hue range is usually `0` to `179`
+- Saturation range is `0` to `255`
+- Value range is `0` to `255`
+
+The example below tracks white color using a webcam.
 
 ```python
-# Open Camera
+import cv2
+import numpy as np
+
 cap = cv2.VideoCapture(0)
 
-# While camera is on
-while(1):
+while True:
+    ret, frame = cap.read()
 
-    # Take each frame
-    _, frame = cap.read()
+    if not ret:
+        break
 
-    # Convert BGR to HSV
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    # take lower and upper white color range
-    lower_white = np.array([0,0, 0], dtype=np.uint8)
-    upper_white = np.array([20,20,255], dtype=np.uint8)
+    lower_white = np.array([0, 0, 0], dtype=np.uint8)
+    upper_white = np.array([20, 20, 255], dtype=np.uint8)
 
-    # Threshold the HSV image to get only white colors
     mask = cv2.inRange(hsv, lower_white, upper_white)
 
-    # Bitwise-AND mask and original image
-    res = cv2.bitwise_and(frame,frame, mask= mask)
+    result = cv2.bitwise_and(frame, frame, mask=mask)
 
-    cv2.imshow('frame',frame)
-    cv2.imshow('mask',mask)
-    cv2.imshow('res',res)
-    k = cv2.waitKey(5) & 0xFF
-    if k == 27:
+    cv2.imshow("frame", frame)
+    cv2.imshow("mask", mask)
+    cv2.imshow("result", result)
+
+    key = cv2.waitKey(5) & 0xFF
+
+    if key == 27:
         break
-        
 
 cap.release()
 cv2.destroyAllWindows()
-
 ```
- 
+
+This can be modified to track other colors by changing the lower and upper HSV ranges.
+
+## Introduction to YOLO with OpenCV DNN
+
+YOLO means **You Only Look Once**. It is an object detection method that can detect multiple objects in an image.
+
+The original YOLO paper is available here:
+
+- [YOLO paper](https://arxiv.org/abs/1506.02640)
+
+YOLO models trained on COCO can detect common object classes such as person, car, dog, bottle, chair, and many more.
+
+## YOLO Setup
+
+For classic YOLOv3 with OpenCV DNN, you need:
+
+- YOLOv3 weights
+- YOLOv3 configuration file
+- COCO class labels
+
+Original resources:
+
+- Weights: `https://pjreddie.com/media/files/yolov3.weights`
+- Config: `https://github.com/pjreddie/darknet/blob/master/cfg/yolov3.cfg`
+- Labels: `https://github.com/pjreddie/darknet/blob/master/data/coco.names`
+
+## Load YOLO with OpenCV
+
+```python
+net = cv2.dnn.readNet("yolov3.weights", "yolov3.cfg")
+
+layer_names = net.getLayerNames()
+
+output_layers = [
+    layer_names[i - 1]
+    for i in net.getUnconnectedOutLayers().flatten()
+]
+```
+
+In older OpenCV versions, `getUnconnectedOutLayers()` may return a different shape, so some examples use `i[0] - 1`.
+
+## Create a Blob and Run YOLO
+
+```python
+blob = cv2.dnn.blobFromImage(
+    img,
+    0.00392,
+    (416, 416),
+    (0, 0, 0),
+    True,
+    crop=False
+)
+
+net.setInput(blob)
+
+outs = net.forward(output_layers)
+```
+
+The output contains:
+
+- bounding box center coordinates
+- width and height
+- class scores
+- confidence values
+
+Usually, we apply **Non-Maximum Suppression**, or **NMS**, to remove duplicate boxes around the same object.
+
+## Common OpenCV Beginner Mistakes
+
+Here are some common mistakes to avoid:
+
+- forgetting that OpenCV reads images as BGR
+- showing BGR images directly with Matplotlib
+- using `cv2.imshow` inside notebooks
+- using wrong image paths
+- not checking whether `cv2.imread` returned `None`
+- mixing grayscale and color images without checking shape
+- using too high or too low threshold values
+- applying filters without understanding the kernel
+- not converting to HSV before color tracking
+- forgetting to release webcam with `cap.release()`
+
+A good habit is to always check:
+
+```python
+if img is None:
+    raise FileNotFoundError("Image path is wrong or image could not be loaded.")
+```
+
+## Final Thoughts
+
+In this post, we covered the basics of **OpenCV image processing in Python**. We learned how images are represented as arrays, how to read and display images, how to work with color channels, and how to apply transformations, masks, filters, thresholding, edge detection, Hough Transform, contours, Haar cascade face detection, YOLO, and color tracking.
+
+OpenCV is a large library, and this post only gives an introduction. The best way to learn OpenCV is to try small projects, change parameters, and observe how the output changes.

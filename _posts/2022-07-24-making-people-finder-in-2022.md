@@ -1,1320 +1,854 @@
 ---
-title:  "Making People Finder in 2022 Using BeautifulSoup"
-date:   2022-07-24 09:29:17 +0545
+layout: single
+title: "Build an Ethical Public Developer Profile Finder in Python with GitHub API, BeautifulSoup, and pandas"
+date: 2022-07-24 09:29:17 +0545
+last_modified_at: 2026-06-16
 categories:
-    - Web Scrapping
-    - BeautifulSoup
+  - Web Scraping
+  - BeautifulSoup
+  - Python
 tags:
-    - scraping
-    - people finding
+  - "GitHub API"
+  - "BeautifulSoup"
+  - "Python"
+  - "Web Scraping"
+  - "Developer Profiles"
+  - "pandas"
+  - "Ethical Scraping"
+  - "Public Data"
+description: "A safer beginner-friendly tutorial on building a public developer profile finder in Python using the GitHub API, BeautifulSoup basics, pandas, and ethical scraping practices."
+excerpt: "Learn how to build a public developer profile finder in Python using GitHub Search API, requests, pandas, and ethical data collection practices."
 header:
   teaser: assets/people_finder/github_search.png
+  og_image: assets/people_finder/github_search.png
+  image_description: "GitHub search result page used in a public developer profile discovery tutorial"
+toc: true
+toc_label: "Developer Profile Finder"
+toc_icon: "user-search"
+toc_sticky: true
+read_time: true
+share: true
+related: true
+classes: wide
 ---
 
-## Introduction
+In this tutorial, we will build a **public developer profile finder in Python**. The goal is to search for public developer profiles based on a keyword, collect basic public profile metadata, store the results in a pandas DataFrame, and do simple analysis.
 
-Hello and welcome back everyone, in this part of the blog I am going to share how can we create our own people finder tool using BeautifulSoup and Python. 
+The original version of this blog was written in 2022 and used BeautifulSoup to scrape Google Search and GitHub HTML pages. That was useful for learning HTML parsing, but it is not the best approach today.
 
-### Why do we need people finder?
-There are lots of benefits of having easier way to find the person. And this might be the best thing for HR companies. Having the list of professionals and their public profile based on their expertise and the experience is one of the rich data. So lets try to make one such data for ourselves.
+A safer and cleaner approach is:
 
-### How will we do it?
-We will automate the search in Search Engine and some search portal like GitHub and then store the result in dataframe then into file. First, we will do google search to find the linkedin profile based on the keyword.
+> Use official APIs when available, respect rate limits, collect only public data, and avoid harvesting private contact information.
 
+So, in this updated version, we will mainly use the **GitHub REST API** to search public developer profiles. We will still discuss BeautifulSoup briefly because it is useful for learning web scraping, but we will avoid scraping pages where terms of service, login walls, or anti-bot systems make scraping inappropriate.
 
-### Installing Dependencies
-For this purpose, we are going to use BeautifulSoup, a python library.
+## What This Tutorial Covers
 
+We will cover:
 
-```python
-!pip install beautifulsoup4
+- what a developer profile finder is
+- ethical rules before scraping public data
+- why scraping Google and LinkedIn is not recommended
+- how to use GitHub Search API
+- how to fetch public GitHub user profile details
+- how to store results in pandas
+- how to clean follower counts
+- how to plot simple profile statistics
+- how to save results as CSV
+- common problems and safer alternatives
+
+## Important Ethical Note
+
+A tool that finds people can easily become privacy-sensitive. So, it is important to set boundaries.
+
+Use this tutorial only for:
+
+- learning API usage
+- learning public data collection
+- analyzing public developer profiles
+- creating a small research or portfolio project
+- finding open-source contributors in a respectful way
+
+Do not use this for:
+
+- spam
+- scraping private data
+- bypassing login walls
+- collecting personal contact details without consent
+- mass outreach
+- building invasive people databases
+- violating website terms of service
+
+Even if data is publicly visible, we should still use it carefully.
+
+## Why Build a Public Developer Profile Finder?
+
+There are legitimate reasons to search public developer profiles:
+
+- finding open-source contributors
+- discovering developers working on a topic
+- building a talent research dashboard
+- finding public portfolios
+- studying open-source communities
+- learning API data collection
+- analyzing public GitHub metadata
+
+For example, a query like:
+
+```text
+machine learning location:Germany
 ```
 
-## Importing Libraries
+can help us discover public GitHub users related to machine learning in Germany.
 
+But the output should be treated as public profile metadata, not as a contact list for spam.
 
-```python
-import pandas as pd
-import requests
-import urllib3
-from bs4 import BeautifulSoup as BS
-import time
-import bs4
-import warnings
-warnings.filterwarnings("ignore")
+## Why Not Scrape Google or LinkedIn?
 
-```
+The original blog started with Google search and LinkedIn profile links.
 
-There are bunch of libraries we will use:
-* Pandas to make dataframe later on.
-* Requests to make HTTP requests.
-* Urllib3 to make manager and headers.
-* BeautifulSoup to scrape and search over the page.
-* Time to show scrape time.
-* Warning to supress the warnings.
-
-## Google Search
-
-Lets use google search to make our first search. Head over to the Google.com and make a first search, `linkedin google engineer`.
+For example:
 
 ![]({{site.url}}/assets/people_finder/google.png)
 
-Whenever we search something in Google, it takes our query into `https://google.com/search?q=` and shows the list of results. But mostly the results are location based.
+This approach has problems:
 
+- Google may block automated scraping
+- search results change by location and time
+- result pages are not stable
+- LinkedIn pages often require login
+- scraping LinkedIn profiles can violate platform rules
+- personal data collection can become privacy-sensitive
 
-```python
+Because of these issues, we should avoid scraping Google and LinkedIn pages for people data.
 
-query="linkedin google engineer"
-url = f"https://google.com/search?q={query}"
+If you need search results, use official APIs or approved services. If you need LinkedIn data, use allowed LinkedIn products and follow their terms.
 
-http = urllib3.PoolManager()
-http.addheaders = [('User-agent', 'Mozilla/61.0')]
-# web_page = http.request('GET',url)
-web_page=requests.get(url)
-soup = BS(web_page.content, 'html5lib')
-# soup
-```
+## Why Use GitHub API?
 
-### Getting All URLs
+GitHub is useful for this project because developer profiles are often intentionally public. Many developers choose to show:
 
-In the search result, there will be a lot of links and we only need links at this moment. So lets find all links using the element `a`.
+- name
+- username
+- bio
+- company
+- location
+- blog or portfolio
+- Twitter/X username
+- follower count
+- public repositories
 
+GitHub also provides an official API, which is better than scraping HTML pages.
 
-```python
-urls = soup.find_all("a")
-# urls
-```
-
-### Getting only URLs that will be relevent
-
-There will be lots of other links which will not be relevant to us at this moment. For example the Google's Sign In page or Privacy Policy so lets do simple check. We will put the name, url of the profile and then role in a dictionary.
-
-
-```python
-profiles = {"names":[],"urls":[],"roles":[]}
-
-for url in urls:
-    href = url.get("href")
-    
-    if "/url?q=" in href and "linkedin" in href and \
-        "accounts.google.com" not in href and "policies.google.com" not in href and "linkedin.com/in" in href:
-        nhref=href.split("=")[1].split("&")[0]
-        
-        print(url.text, nhref)
-        
-        profiles["names"].append(url.text.split("-")[0])
-        profiles["roles"].append(url.text.split("-")[1])
-        profiles["urls"].append(nhref)
-        
-        
-```
-
-    Akshay Miterani - Software Engineer - Google - LinkedInin.linkedin.com › akshay-mite... https://in.linkedin.com/in/akshay-miterani-108827105
-    David Garry - Software Engineer - Google | LinkedInwww.linkedin.com › davidgar... https://www.linkedin.com/in/davidgarry1
-    Betty Chen - Software Engineer - Google | LinkedInwww.linkedin.com › bettyjxch... https://www.linkedin.com/in/bettyjxchen
-    Risab Manandhar - Software Engineer - Google - LinkedInwww.linkedin.com › risab-ma... https://www.linkedin.com/in/risab-manandhar
-    Hai Bi - Software Engineer - Google | LinkedInwww.linkedin.com › ... https://www.linkedin.com/in/hai-bi-b6a10010
-    Sabbir Yousuf Sanny - Software Engineer - Google | LinkedInwww.linkedin.com › ... https://www.linkedin.com/in/sabbir-yousuf-sanny-11aa7a21
-    Delia Lazarescu - Software Engineer - Google - LinkedInca.linkedin.com › delialazarescu https://ca.linkedin.com/in/delialazarescu
-    Shailee Patel - Software Engineer - Google | LinkedInwww.linkedin.com › shailee26 https://www.linkedin.com/in/shailee26
-    Sahil Gaba - Software Engineer - Google | LinkedInwww.linkedin.com › gabag26 https://www.linkedin.com/in/gabag26
-    
-
-### Dataframe of the results
-Dataframes are easy to do data analysis works in Pandas. So lets make one out of above dictionary.
-
-
-```python
-pd.DataFrame(profiles)
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>names</th>
-      <th>urls</th>
-      <th>roles</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Akshay Miterani</td>
-      <td>https://in.linkedin.com/in/akshay-miterani-108...</td>
-      <td>Software Engineer</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>David Garry</td>
-      <td>https://www.linkedin.com/in/davidgarry1</td>
-      <td>Software Engineer</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Betty Chen</td>
-      <td>https://www.linkedin.com/in/bettyjxchen</td>
-      <td>Software Engineer</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Risab Manandhar</td>
-      <td>https://www.linkedin.com/in/risab-manandhar</td>
-      <td>Software Engineer</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Hai Bi</td>
-      <td>https://www.linkedin.com/in/hai-bi-b6a10010</td>
-      <td>Software Engineer</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>Sabbir Yousuf Sanny</td>
-      <td>https://www.linkedin.com/in/sabbir-yousuf-sann...</td>
-      <td>Software Engineer</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>Delia Lazarescu</td>
-      <td>https://ca.linkedin.com/in/delialazarescu</td>
-      <td>Software Engineer</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>Shailee Patel</td>
-      <td>https://www.linkedin.com/in/shailee26</td>
-      <td>Software Engineer</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>Sahil Gaba</td>
-      <td>https://www.linkedin.com/in/gabag26</td>
-      <td>Software Engineer</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-### Pros and Cons of Using Google Search
-* Its easier to make GET requests however it might ask us for security check if made too many request and at that time scraping fails.
-* It is easier to find people as Google's Crawlers already have list of results based on our query and thus we only have to do very little to find right information. But it might be tough to get information by visiting LinkedIn profile.
-* With very little luck, we could visit the person's LinkedIn profile without having to login. So relying in Google Search to find LinkedIn Profile is not much fruitful.
-
-
-## GitHub Search
-
-In the above part, we scraped some of the LinkedIn profiles from the Google Search but we were unable to get portfolio of people. It is quite common among the tech people to have a portfolio and GitHub account. Lets use GitHub's Search to find people based on the keyword. Most people often put their location, company they work for, twitter handle and the portfolio in the GitHub Profile and we are willing to scrape those.
-
-The URL to get result is `https://github.com/search?q=[QUERY]&type=users&p=[PAGE]`. Where QUERY is the query we will search for, type is user and the p for page.
-
-
-```python
-
-query="google engineer"
-url = f"https://github.com/search?q={query}&type=users"
-
-print(f"URL : {url}")
-
-http = urllib3.PoolManager()
-http.addheaders = [('User-agent', 'Mozilla/61.0')]
-# web_page = http.request('GET',url)
-web_page=requests.get(url)
-soup = BS(web_page.content, 'html5lib')
-
-pages = soup.find_all("em", class_="current")[0].get("data-total-pages")
-
-max_page = 5
-
-pages
-```
-
-    URL : https://github.com/search?q=google engineer&type=users
-    
-
-
-
-
-    '100'
-
-
-
-
-
-In above result, we did GET request and received a webpage and upon Inspecting the page, we can see the Elements. From Elements we can find the elements like `dev`, `a` and so on where our desired information will be. Like that, we searched for `em` with class as `current` and it have a `data-total-pages` attribute in it. Upon doing get, one can get the value of it. It seems that there are 100 pages with results.
+The GitHub Search page looks like this:
 
 ![]({{site.url}}/assets/people_finder/github_search.png)
 
-Now we will loop over to those pages to get the information of the user like name and URL of profile.
+Instead of scraping this HTML page, we will use the API.
 
+## Install Dependencies
+
+We will use:
+
+```bash
+pip install requests pandas python-dotenv matplotlib seaborn
+```
+
+These packages are used for:
+
+- `requests`: calling APIs
+- `pandas`: tabular data handling
+- `python-dotenv`: loading environment variables
+- `matplotlib` and `seaborn`: plotting
+
+## Import Libraries
 
 ```python
+import os
+import time
 
-github_profiles = {"name":[], "urls":[]}
+import pandas as pd
+import requests
+from dotenv import load_dotenv
+```
 
-if pages:
-    pages=int(pages)
-    print(f"Total Pages: {pages}")
-    
-    for page in range(1,pages):
-        if page>max_page:
+For plotting:
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+## Use Environment Variables for GitHub Token
+
+GitHub allows unauthenticated API requests, but rate limits are lower. For better reliability, use a GitHub personal access token.
+
+Create a `.env` file:
+
+```text
+GITHUB_TOKEN=your_github_token_here
+```
+
+Add `.env` to `.gitignore`:
+
+```text
+.env
+__pycache__/
+*.pyc
+```
+
+Load the token in Python:
+
+```python
+load_dotenv()
+
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+```
+
+Create headers:
+
+```python
+headers = {
+    "Accept": "application/vnd.github+json",
+}
+
+if GITHUB_TOKEN:
+    headers["Authorization"] = f"Bearer {GITHUB_TOKEN}"
+```
+
+Do not hardcode tokens inside code.
+
+## Search GitHub Users
+
+GitHub has a search endpoint for users.
+
+The query can include keywords and qualifiers.
+
+Example query:
+
+```text
+google engineer type:user
+```
+
+A better query can include location or language-related terms:
+
+```text
+machine learning location:Germany type:user
+```
+
+Let's write a function.
+
+```python
+def search_github_users(query, page=1, per_page=10, headers=None):
+    """Search public GitHub users."""
+    url = "https://api.github.com/search/users"
+
+    params = {
+        "q": query,
+        "page": page,
+        "per_page": per_page
+    }
+
+    response = requests.get(
+        url,
+        params=params,
+        headers=headers,
+        timeout=30
+    )
+
+    response.raise_for_status()
+
+    return response.json()
+```
+
+Use it:
+
+```python
+query = "google engineer type:user"
+
+result = search_github_users(
+    query=query,
+    page=1,
+    per_page=10,
+    headers=headers
+)
+
+result.keys()
+```
+
+The response contains items such as usernames and profile URLs.
+
+## Get Basic Search Results
+
+```python
+items = result["items"]
+
+for item in items:
+    print(item["login"], item["html_url"])
+```
+
+The search result usually includes:
+
+- `login`
+- `id`
+- `html_url`
+- `avatar_url`
+- `type`
+- `score`
+
+But it does not include all profile details. For more details, we need another API call.
+
+## Fetch Public User Profile Details
+
+Use the user endpoint:
+
+```python
+def get_github_user_profile(username, headers=None):
+    """Fetch public GitHub profile details for one user."""
+    url = f"https://api.github.com/users/{username}"
+
+    response = requests.get(
+        url,
+        headers=headers,
+        timeout=30
+    )
+
+    response.raise_for_status()
+
+    return response.json()
+```
+
+Test it:
+
+```python
+profile = get_github_user_profile("octocat", headers=headers)
+
+profile
+```
+
+The profile response can include:
+
+- `login`
+- `name`
+- `html_url`
+- `company`
+- `blog`
+- `location`
+- `bio`
+- `twitter_username`
+- `public_repos`
+- `followers`
+- `following`
+- `created_at`
+
+## Build the Developer Profile Finder
+
+Now let's combine search and profile fetching.
+
+```python
+def collect_github_profiles(query, max_pages=2, per_page=10, delay=1.0):
+    """Collect public GitHub profile details from search results."""
+    profiles = []
+
+    seen_users = set()
+
+    for page in range(1, max_pages + 1):
+        print(f"Searching page {page}")
+
+        search_result = search_github_users(
+            query=query,
+            page=page,
+            per_page=per_page,
+            headers=headers
+        )
+
+        users = search_result.get("items", [])
+
+        if not users:
             break
-        url = f"https://github.com/search?q={query}&type=users&p={page}"
-        print(f"\n Current URL: {url} \n")
-        
-        http = urllib3.PoolManager()
-        http.addheaders = [('User-agent', 'Mozilla/61.0')]
-        
-        web_page=requests.get(url)
-        soup = BS(web_page.content, 'html5lib')
 
-        for a in soup.find_all("a",class_="mr-1"):
+        for user in users:
+            username = user["login"]
 
-            gurl = "https://github.com/"+a.get("href")
-            gname = a.text
+            if username in seen_users:
+                continue
 
-            print(gname, gurl)
+            seen_users.add(username)
 
-            github_profiles["name"].append(gname)
-            github_profiles["urls"].append(gurl)
+            try:
+                profile = get_github_user_profile(
+                    username,
+                    headers=headers
+                )
+
+                profiles.append({
+                    "username": profile.get("login"),
+                    "name": profile.get("name"),
+                    "url": profile.get("html_url"),
+                    "bio": profile.get("bio"),
+                    "company": profile.get("company"),
+                    "location": profile.get("location"),
+                    "portfolio": profile.get("blog"),
+                    "twitter": profile.get("twitter_username"),
+                    "public_repos": profile.get("public_repos"),
+                    "followers": profile.get("followers"),
+                    "following": profile.get("following"),
+                    "created_at": profile.get("created_at"),
+                })
+
+                print(f"Collected: {username}")
+
+                time.sleep(delay)
+
+            except requests.HTTPError as error:
+                print(f"HTTP error for {username}: {error}")
+
+            except Exception as error:
+                print(f"Error for {username}: {error}")
+
+    return profiles
 ```
 
-    Total Pages: 100
-    
-     Current URL: https://github.com/search?q=google engineer&type=users&p=1 
-    
-    Seth Vargo https://github.com//sethvargo
-    Kevin Naughton Jr. https://github.com//kdn251
-    Miguel Ángel Durán https://github.com//midudev
-    Jose Alcérreca https://github.com//JoseAlcerreca
-    Shubham Mathur https://github.com//googleknight
-    Dan Field https://github.com//dnfield
-    Nick Bourdakos https://github.com//bourdakos1
-    Mark https://github.com//MarkEdmondson1234
-    
-     Current URL: https://github.com/search?q=google engineer&type=users&p=2 
-    
-    Pierfrancesco Soffritti https://github.com//PierfrancescoSoffritti
-    Parker Moore https://github.com//parkr
-    Gokmen Goksel https://github.com//gokmen
-    Justin Poehnelt https://github.com//jpoehnelt
-    Sanket Singh https://github.com//singhsanket143
-    Shanqing Cai https://github.com//caisq
-    Adam Silverstein https://github.com//adamsilverstein
-    Mizux https://github.com//Mizux
-    Valerii Iatsko https://github.com//viatsko
-    Zulkarnine Mahmud https://github.com//zulkarnine
-    
-     Current URL: https://github.com/search?q=google engineer&type=users&p=3 
-    
-    Yacine Rezgui https://github.com//yrezgui
-    Zulkarnine Mahmud https://github.com//zulkarnine
-    Google https://github.com//Google987
-    Prateek Narang https://github.com//prateek27
-    Rakina Zata Amni https://github.com//rakina
-    Sriram Sundarraj https://github.com//ssundarraj
-    Irene Ros https://github.com//iros
-    Clément Mihailescu https://github.com//clementmihailescu
-    Márton Braun https://github.com//zsmb13
-    Andrey Kulikov https://github.com//andkulikov
-    
-     Current URL: https://github.com/search?q=google engineer&type=users&p=4 
-    
-    Kate Lovett https://github.com//Piinks
-    Faisal Abid https://github.com//FaisalAbid
-    Viktor Turskyi https://github.com//koorchik
-    Milad Naseri https://github.com//mmnaseri
-    Rahul Ravikumar https://github.com//tikurahul
-    Robert Kubis https://github.com//hostirosti
-    Corey Lynch https://github.com//coreylynch
-    Emma Twersky https://github.com//twerske
-    Shivam Goyal https://github.com//ShivamGoyal1899
-    Abhinay Omkar https://github.com//abhiomkar
-    
-     Current URL: https://github.com/search?q=google engineer&type=users&p=5 
-    
-    Marek Siarkowicz https://github.com//serathius
-    Mais Alheraki https://github.com//pr-Mais
-    Abhinay Omkar https://github.com//abhiomkar
-    Imaculate https://github.com//imaculate
-    Zhixun Tan https://github.com//phisiart
-    Jafer Haider https://github.com//itsjafer
-    Christie Wilson https://github.com//bobcatfish
-    Jason Feinstein https://github.com//jasonwyatt
-    Ryan Sepassi https://github.com//rsepassi
-    Nick Rout https://github.com//ricknout
-    
-
-In above example, we looped for 5 pages and we have stored those info in dictionary `github_profiles`.
-
-Now we will open the profile of a person and extract information like Twitter Handle and Portfolio.
-Lets select a last profile url.
-
+Run it:
 
 ```python
-gurl
+query = "google engineer type:user"
+
+profiles = collect_github_profiles(
+    query=query,
+    max_pages=5,
+    per_page=10,
+    delay=1.0
+)
 ```
 
+The delay helps avoid sending too many requests too quickly.
 
-
-
-    'https://github.com//ricknout'
-
-
-
-Lets visit that url from BS4.
-
+## Convert Results to a DataFrame
 
 ```python
+df = pd.DataFrame(profiles)
 
-http = urllib3.PoolManager()
-http.addheaders = [('User-agent', 'Mozilla/61.0')]
-# web_page = http.request('GET',url)
-web_page=requests.get(gurl)
-soup = BS(web_page.content, 'html5lib')
-# soup
-```
-
-Just like previous time, we should look for the class that holds our information. For headline we can do like below.
-
-
-```python
-headline = soup.find_all("div",class_="p-note user-profile-bio mb-3 js-user-profile-bio f4")[0].text
-headline
-```
-
-
-
-
-    'Android Developer Relations Engineer at Google 🇿🇦'
-
-
-
-For Followers and Following Counts we can do something like below.
-
-
-```python
-followers = soup.find_all("a",class_="Link--secondary no-underline no-wrap")[0].text.strip().split("\n")[0]
-following = soup.find_all("a",class_="Link--secondary no-underline no-wrap")[1].text.strip().split("\n")[0]
-followers,following
-```
-
-
-
-
-    ('510', '29')
-
-
-
-For the information like Twitter handle and Portfolio URL we can do something like below.
-
-
-```python
-vcard = soup.find_all("ul",class_="vcard-details")[0].text
-vcard = [v.strip() for v in vcard.strip().split("\n") if len(v.strip())>0]
-
-vcard
-```
-
-
-
-
-    ['@google', 'Cape Town, South Africa', 'ricknout.dev', 'Twitter', '@ricknout']
-
-
-
-But more easily, we can find these information using Itemprop attribute assigned.
-
-
-```python
-vcard = soup.find_all("ul",class_="vcard-details")[0]
-
-portfolio=None
-home=None
-work=None
-twitter=None
-for vc in vcard.find_all("li"):
-    item=vc.get("itemprop")
-    if item=="url":
-        portfolio=vc.text.strip()
-    if item=="homeLocation":
-        home=vc.text.strip()
-    if item=="worksFor":
-        work=vc.text.strip()
-    if item=="twitter":
-        twitter=vc.text.strip()
-
-portfolio,home,work,twitter
-```
-
-
-
-
-    ('ricknout.dev',
-     'Cape Town, South Africa',
-     '@google',
-     'Twitter\n\n      @ricknout')
-
-
-
-Now let combine above codes to work as a whole.
-
-
-```python
-
-query="google engineer"
-url = f"https://github.com/search?q={query}&type=users"
-
-print(f"URL : {url}")
-
-http = urllib3.PoolManager()
-http.addheaders = [('User-agent', 'Mozilla/61.0')]
-# web_page = http.request('GET',url)
-web_page=requests.get(url)
-soup = BS(web_page.content, 'html5lib')
-
-pages = soup.find_all("em", class_="current")[0].get("data-total-pages")
-
-max_page = 5
-
-github_profiles = {"name":[], "urls":[], "portfolio":[],"headline":[],
-                   "followers":[],"following":[],
-                   "home":[], "work":[], "twitter":[]}
-
-if pages:
-    pages=int(pages)
-    print(f"Total Pages: {pages}. Running upto {max_page}.")
-    
-    for page in range(1,pages):
-        if page>max_page:
-            break
-        url = f"https://github.com/search?q={query}&type=users&p={page}"
-        print(f"\n Current URL: {url} \n")
-        
-        http = urllib3.PoolManager()
-        http.addheaders = [('User-agent', 'Mozilla/61.0')]
-        
-        web_page=requests.get(url)
-        osoup = BS(web_page.content, 'html5lib')
-
-        for a in osoup.find_all("a",class_="mr-1"):
-
-            gurl = "https://github.com/"+a.get("href")
-            gname = a.text
-
-            print(f"Got: {gname}, {gurl}")
-
-            github_profiles["name"].append(gname)
-            github_profiles["urls"].append(gurl)
-            
-            
-            http = urllib3.PoolManager()
-            http.addheaders = [('User-agent', 'Mozilla/61.0')]
-            web_page=requests.get(gurl)
-            soup = BS(web_page.content, 'html5lib')
-            
-            headline = soup.find_all("div",class_="p-note user-profile-bio mb-3 js-user-profile-bio f4")[0].text
-            
-            github_profiles["headline"].append(headline)
-            
-            followers = soup.find_all("a",class_="Link--secondary no-underline no-wrap")[0].text.strip().split("\n")[0]
-            following = soup.find_all("a",class_="Link--secondary no-underline no-wrap")[1].text.strip().split("\n")[0]
-            
-            github_profiles["followers"].append(followers)
-            github_profiles["following"].append(following)
-            
-            vcard = soup.find_all("ul",class_="vcard-details")[0]
-
-            portfolio=None
-            home=None
-            work=None
-            twitter=None
-            for vc in vcard.find_all("li"):
-                item=vc.get("itemprop")
-                if item=="url":
-                    portfolio=vc.text.strip()
-                if item=="homeLocation":
-                    home=vc.text.strip()
-                if item=="worksFor":
-                    work=vc.text.strip()
-                if item=="twitter":
-                    twitter=vc.text.strip().split("\n")[-1].strip()
-            
-            github_profiles["portfolio"].append(portfolio)
-            github_profiles["home"].append(home)
-            github_profiles["work"].append(work)
-            github_profiles["twitter"].append(twitter)
-            
-            
-
-
-            
-            
-            
-```
-
-    URL : https://github.com/search?q=google engineer&type=users
-    Total Pages: 100. Running upto 5.
-    
-     Current URL: https://github.com/search?q=google engineer&type=users&p=1 
-    
-    Got: Seth Vargo, https://github.com//sethvargo
-    Got: Kevin Naughton Jr., https://github.com//kdn251
-    Got: Miguel Ángel Durán, https://github.com//midudev
-    Got: Jose Alcérreca, https://github.com//JoseAlcerreca
-    Got: Shubham Mathur, https://github.com//googleknight
-    Got: Nick Bourdakos, https://github.com//bourdakos1
-    Got: Mark, https://github.com//MarkEdmondson1234
-    Got: Dan Field, https://github.com//dnfield
-    Got: Pierfrancesco Soffritti, https://github.com//PierfrancescoSoffritti
-    
-     Current URL: https://github.com/search?q=google engineer&type=users&p=2 
-    
-    Got: Parker Moore, https://github.com//parkr
-    Got: Gokmen Goksel, https://github.com//gokmen
-    Got: Sanket Singh, https://github.com//singhsanket143
-    Got: Justin Poehnelt, https://github.com//jpoehnelt
-    Got: Shanqing Cai, https://github.com//caisq
-    Got: Valerii Iatsko, https://github.com//viatsko
-    Got: Mizux, https://github.com//Mizux
-    Got: Gabriela D'Ávila Ferrara, https://github.com//gabidavila
-    Got: Zulkarnine Mahmud, https://github.com//zulkarnine
-    
-     Current URL: https://github.com/search?q=google engineer&type=users&p=3 
-    
-    Got: Adam Silverstein, https://github.com//adamsilverstein
-    Got: Yacine Rezgui, https://github.com//yrezgui
-    Got: Google, https://github.com//Google987
-    Got: Prateek Narang, https://github.com//prateek27
-    Got: Rakina Zata Amni, https://github.com//rakina
-    Got: Clément Mihailescu, https://github.com//clementmihailescu
-    Got: Faisal Abid, https://github.com//FaisalAbid
-    Got: Kate Lovett, https://github.com//Piinks
-    Got: Andrey Kulikov, https://github.com//andkulikov
-    Got: Márton Braun, https://github.com//zsmb13
-    
-     Current URL: https://github.com/search?q=google engineer&type=users&p=4 
-    
-    Got: Kate Lovett, https://github.com//Piinks
-    Got: Faisal Abid, https://github.com//FaisalAbid
-    Got: Viktor Turskyi, https://github.com//koorchik
-    Got: Milad Naseri, https://github.com//mmnaseri
-    Got: Rahul Ravikumar, https://github.com//tikurahul
-    Got: Robert Kubis, https://github.com//hostirosti
-    Got: Corey Lynch, https://github.com//coreylynch
-    Got: Emma Twersky, https://github.com//twerske
-    Got: Shivam Goyal, https://github.com//ShivamGoyal1899
-    Got: Abhinay Omkar, https://github.com//abhiomkar
-    
-     Current URL: https://github.com/search?q=google engineer&type=users&p=5 
-    
-    Got: Marek Siarkowicz, https://github.com//serathius
-    Got: Greg Spencer, https://github.com//gspencergoog
-    Got: Mais Alheraki, https://github.com//pr-Mais
-    Got: Jafer Haider, https://github.com//itsjafer
-    Got: Zhixun Tan, https://github.com//phisiart
-    Got: Imaculate, https://github.com//imaculate
-    Got: Christie Wilson, https://github.com//bobcatfish
-    Got: Jason Feinstein, https://github.com//jasonwyatt
-    Got: Nick Rout, https://github.com//ricknout
-    Got: Joe Stanton, https://github.com//JoeStanton
-    
-
-### Turn Result into Dataframe
-In order to do data analysis, it is easier to work with tabular data. So lets convert our above dictionary into dataframe.
-
-
-```python
-df = pd.DataFrame(github_profiles)
-df
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>name</th>
-      <th>urls</th>
-      <th>portfolio</th>
-      <th>headline</th>
-      <th>followers</th>
-      <th>following</th>
-      <th>home</th>
-      <th>work</th>
-      <th>twitter</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Seth Vargo</td>
-      <td>https://github.com//sethvargo</td>
-      <td>https://www.sethvargo.com</td>
-      <td>Engineer @google</td>
-      <td>3.2k</td>
-      <td>5</td>
-      <td>Pittsburgh, PA</td>
-      <td>@google</td>
-      <td>@sethvargo</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Kevin Naughton Jr.</td>
-      <td>https://github.com//kdn251</td>
-      <td>youtube.com/kevinnaughtonjr</td>
-      <td>Software Engineer @google</td>
-      <td>3.8k</td>
-      <td>9</td>
-      <td>New York, New York</td>
-      <td>Google</td>
-      <td>@kevinnaughtonjr</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Miguel Ángel Durán</td>
-      <td>https://github.com//midudev</td>
-      <td>https://midu.dev</td>
-      <td>Software Engineer\n\nGitHub Star 🌟\nGoogle Dev...</td>
-      <td>6.3k</td>
-      <td>10</td>
-      <td>Barcelona</td>
-      <td>@AdevintaSpain</td>
-      <td>@midudev</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Jose Alcérreca</td>
-      <td>https://github.com//JoseAlcerreca</td>
-      <td>twitter.com/ppvi</td>
-      <td>Android Developer Relations Engineer @ Google</td>
-      <td>2.3k</td>
-      <td>0</td>
-      <td>Madrid, Spain</td>
-      <td>@google</td>
-      <td>@ppvi</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Shubham Mathur</td>
-      <td>https://github.com//googleknight</td>
-      <td>https://googleknight.github.io</td>
-      <td>Software engineer II @ MDL Bangalore\n</td>
-      <td>29</td>
-      <td>40</td>
-      <td>Bangalore, India</td>
-      <td>Mckinsey &amp; Company</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>Nick Bourdakos</td>
-      <td>https://github.com//bourdakos1</td>
-      <td>None</td>
-      <td>Software Engineer @google</td>
-      <td>480</td>
-      <td>8</td>
-      <td>New York City</td>
-      <td>@google</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>Mark</td>
-      <td>https://github.com//MarkEdmondson1234</td>
-      <td>https://code.markedmondson.me/</td>
-      <td>Data Engineer @iihnordic  \nGoogle Developer E...</td>
-      <td>783</td>
-      <td>117</td>
-      <td>Copenhagen</td>
-      <td>@iihnordic</td>
-      <td>@HoloMarkeD</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>Dan Field</td>
-      <td>https://github.com//dnfield</td>
-      <td>None</td>
-      <td>Software Engineer @google for @flutter</td>
-      <td>928</td>
-      <td>0</td>
-      <td>None</td>
-      <td>@google</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>Pierfrancesco Soffritti</td>
-      <td>https://github.com//PierfrancescoSoffritti</td>
-      <td>https://pierfrancescosoffritti.com/</td>
-      <td>Software engineer @google</td>
-      <td>566</td>
-      <td>40</td>
-      <td>London, UK</td>
-      <td>@google</td>
-      <td>@psoffritti</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>Parker Moore</td>
-      <td>https://github.com//parkr</td>
-      <td>https://byparker.com</td>
-      <td>🍩 🌎 Senior Engineer. Currently: @google. Forme...</td>
-      <td>1.3k</td>
-      <td>316</td>
-      <td>USA</td>
-      <td>Google</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>Gokmen Goksel</td>
-      <td>https://github.com//gokmen</td>
-      <td>None</td>
-      <td>Software Engineer @google</td>
-      <td>396</td>
-      <td>58</td>
-      <td>San Francisco</td>
-      <td>@google</td>
-      <td>@gokmen</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>Sanket Singh</td>
-      <td>https://github.com//singhsanket143</td>
-      <td>None</td>
-      <td>SDE @google | SDE @linkedin | Google Summer Of...</td>
-      <td>1.7k</td>
-      <td>13</td>
-      <td>India</td>
-      <td>@google</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>Justin Poehnelt</td>
-      <td>https://github.com//jpoehnelt</td>
-      <td>https://justin.poehnelt.com</td>
-      <td>@google, @googleworkspace  Developer Relations...</td>
-      <td>307</td>
-      <td>9</td>
-      <td>United States</td>
-      <td>@google</td>
-      <td>@jpoehnelt</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>Shanqing Cai</td>
-      <td>https://github.com//caisq</td>
-      <td>https://caisq.github.io/</td>
-      <td>Software Engineer @ Google Research</td>
-      <td>343</td>
-      <td>59</td>
-      <td>None</td>
-      <td>Google</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>Valerii Iatsko</td>
-      <td>https://github.com//viatsko</td>
-      <td>None</td>
-      <td>UI Engineer @ Google</td>
-      <td>346</td>
-      <td>55</td>
-      <td>None</td>
-      <td>Google</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>Mizux</td>
-      <td>https://github.com//Mizux</td>
-      <td>http://www.mizux.net</td>
-      <td>OSS Release Engineer @google</td>
-      <td>167</td>
-      <td>81</td>
-      <td>Tours, France</td>
-      <td>@google</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>Gabriela D'Ávila Ferrara</td>
-      <td>https://github.com//gabidavila</td>
-      <td>https://gabi.dev</td>
-      <td>Developer Relations Engineer @google</td>
-      <td>247</td>
-      <td>25</td>
-      <td>New Jersey</td>
-      <td>@google @GoogleCloudPlatform</td>
-      <td>@gabidavila</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>Zulkarnine Mahmud</td>
-      <td>https://github.com//zulkarnine</td>
-      <td>www.zulkarnine.com</td>
-      <td>Software Engineer at Google</td>
-      <td>564</td>
-      <td>0</td>
-      <td>None</td>
-      <td>Google</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>Adam Silverstein</td>
-      <td>https://github.com//adamsilverstein</td>
-      <td>http://www.earthbound.com</td>
-      <td>Developer Relations Engineer @ Google</td>
-      <td>153</td>
-      <td>6</td>
-      <td>Colorado, USA</td>
-      <td>Google</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>Yacine Rezgui</td>
-      <td>https://github.com//yrezgui</td>
-      <td>https://yrezgui.com</td>
-      <td>Creative software engineer.\nDeveloper advocat...</td>
-      <td>513</td>
-      <td>143</td>
-      <td>London, UK</td>
-      <td>Google</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>20</th>
-      <td>Google</td>
-      <td>https://github.com//Google987</td>
-      <td>youtube.com/alittlecoding</td>
-      <td>Software Engineer\nYoutube: a little coding</td>
-      <td>13</td>
-      <td>11</td>
-      <td>India</td>
-      <td>None</td>
-      <td>@arif_decrypted</td>
-    </tr>
-    <tr>
-      <th>21</th>
-      <td>Prateek Narang</td>
-      <td>https://github.com//prateek27</td>
-      <td>www.prateeknarang.com</td>
-      <td>Software Engineer-III at Google, Udemy Instruc...</td>
-      <td>2.4k</td>
-      <td>4</td>
-      <td>Hyderabad</td>
-      <td>Google India</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>22</th>
-      <td>Rakina Zata Amni</td>
-      <td>https://github.com//rakina</td>
-      <td>None</td>
-      <td>Software Engineer @google @chromium 🇮🇩 🇯🇵👩‍💻</td>
-      <td>307</td>
-      <td>22</td>
-      <td>Tokyo, Japan</td>
-      <td>@google</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>23</th>
-      <td>Clément Mihailescu</td>
-      <td>https://github.com//clementmihailescu</td>
-      <td>algoexpert.io/clem</td>
-      <td>Co-Founder &amp; CEO, AlgoExpert | Ex-Google &amp; Ex-...</td>
-      <td>7.5k</td>
-      <td>2</td>
-      <td>None</td>
-      <td>AlgoExpert</td>
-      <td>@clemmihai</td>
-    </tr>
-    <tr>
-      <th>24</th>
-      <td>Faisal Abid</td>
-      <td>https://github.com//FaisalAbid</td>
-      <td>http://www.FaisalAbid.com</td>
-      <td>@google Developer Expert, Entrepreneur, and En...</td>
-      <td>505</td>
-      <td>30</td>
-      <td>Toronto</td>
-      <td>@eirene-cremations @bitstrapped @Shopistry</td>
-      <td>@FaisalAbid</td>
-    </tr>
-    <tr>
-      <th>25</th>
-      <td>Kate Lovett</td>
-      <td>https://github.com//Piinks</td>
-      <td>None</td>
-      <td>Software Engineer at @google for @flutter</td>
-      <td>745</td>
-      <td>10</td>
-      <td>Nashville, TN</td>
-      <td>Google</td>
-      <td>@k8lovett</td>
-    </tr>
-    <tr>
-      <th>26</th>
-      <td>Andrey Kulikov</td>
-      <td>https://github.com//andkulikov</td>
-      <td>http://linkedin.com/in/andkulikov/</td>
-      <td>Software Engineer at Google</td>
-      <td>378</td>
-      <td>0</td>
-      <td>London</td>
-      <td>@google</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>27</th>
-      <td>Márton Braun</td>
-      <td>https://github.com//zsmb13</td>
-      <td>https://zsmb.co/</td>
-      <td>Android Developer Relations Engineer @google, ...</td>
-      <td>418</td>
-      <td>7</td>
-      <td>Budapest, Hungary</td>
-      <td>@google</td>
-      <td>@zsmb13</td>
-    </tr>
-    <tr>
-      <th>28</th>
-      <td>Kate Lovett</td>
-      <td>https://github.com//Piinks</td>
-      <td>None</td>
-      <td>Software Engineer at @google for @flutter</td>
-      <td>745</td>
-      <td>10</td>
-      <td>Nashville, TN</td>
-      <td>Google</td>
-      <td>@k8lovett</td>
-    </tr>
-    <tr>
-      <th>29</th>
-      <td>Faisal Abid</td>
-      <td>https://github.com//FaisalAbid</td>
-      <td>http://www.FaisalAbid.com</td>
-      <td>@google Developer Expert, Entrepreneur, and En...</td>
-      <td>505</td>
-      <td>30</td>
-      <td>Toronto</td>
-      <td>@eirene-cremations @bitstrapped @Shopistry</td>
-      <td>@FaisalAbid</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-
-
-<b>limit_output extension: Maximum message size of 10000 exceeded with 15427 characters</b>
-
-
-
-```python
-df.shape
-```
-
-
-
-
-    (48, 9)
-
-
-
-We were able to scrape about 50 profiles. There are lots of rich information like portfolio of a person and his/her profile headline and twitter handle.
-
-There are few more cleaning needed too. Like The followers and following counts.
-
-
-```python
-df["followers"] = df.followers.apply(lambda x: 1000*float(x.replace("k","")) if "k" in x else float(x))
 df.head()
 ```
 
+This gives a clean table with public profile information.
 
+Example columns:
 
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>name</th>
-      <th>urls</th>
-      <th>portfolio</th>
-      <th>headline</th>
-      <th>followers</th>
-      <th>following</th>
-      <th>home</th>
-      <th>work</th>
-      <th>twitter</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Seth Vargo</td>
-      <td>https://github.com//sethvargo</td>
-      <td>https://www.sethvargo.com</td>
-      <td>Engineer @google</td>
-      <td>3200.0</td>
-      <td>5</td>
-      <td>Pittsburgh, PA</td>
-      <td>@google</td>
-      <td>@sethvargo</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Kevin Naughton Jr.</td>
-      <td>https://github.com//kdn251</td>
-      <td>youtube.com/kevinnaughtonjr</td>
-      <td>Software Engineer @google</td>
-      <td>3800.0</td>
-      <td>9</td>
-      <td>New York, New York</td>
-      <td>Google</td>
-      <td>@kevinnaughtonjr</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Miguel Ángel Durán</td>
-      <td>https://github.com//midudev</td>
-      <td>https://midu.dev</td>
-      <td>Software Engineer\n\nGitHub Star 🌟\nGoogle Dev...</td>
-      <td>6300.0</td>
-      <td>10</td>
-      <td>Barcelona</td>
-      <td>@AdevintaSpain</td>
-      <td>@midudev</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Jose Alcérreca</td>
-      <td>https://github.com//JoseAlcerreca</td>
-      <td>twitter.com/ppvi</td>
-      <td>Android Developer Relations Engineer @ Google</td>
-      <td>2300.0</td>
-      <td>0</td>
-      <td>Madrid, Spain</td>
-      <td>@google</td>
-      <td>@ppvi</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Shubham Mathur</td>
-      <td>https://github.com//googleknight</td>
-      <td>https://googleknight.github.io</td>
-      <td>Software engineer II @ MDL Bangalore\n</td>
-      <td>29.0</td>
-      <td>40</td>
-      <td>Bangalore, India</td>
-      <td>Mckinsey &amp; Company</td>
-      <td>None</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-
-```python
-df["following"] = df.following.apply(lambda x: 1000*float(x.replace("k","")) if "k" in x else float(x))
-df.head()
+```text
+username
+name
+url
+bio
+company
+location
+portfolio
+twitter
+public_repos
+followers
+following
+created_at
 ```
 
+This is much cleaner than scraping profile HTML.
 
+## Save Results to CSV
 
+```python
+df.to_csv("github_profiles.csv", index=False)
+```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+Later, read it again:
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+```python
+df = pd.read_csv("github_profiles.csv")
+```
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>name</th>
-      <th>urls</th>
-      <th>portfolio</th>
-      <th>headline</th>
-      <th>followers</th>
-      <th>following</th>
-      <th>home</th>
-      <th>work</th>
-      <th>twitter</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Seth Vargo</td>
-      <td>https://github.com//sethvargo</td>
-      <td>https://www.sethvargo.com</td>
-      <td>Engineer @google</td>
-      <td>3200.0</td>
-      <td>5.0</td>
-      <td>Pittsburgh, PA</td>
-      <td>@google</td>
-      <td>@sethvargo</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Kevin Naughton Jr.</td>
-      <td>https://github.com//kdn251</td>
-      <td>youtube.com/kevinnaughtonjr</td>
-      <td>Software Engineer @google</td>
-      <td>3800.0</td>
-      <td>9.0</td>
-      <td>New York, New York</td>
-      <td>Google</td>
-      <td>@kevinnaughtonjr</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Miguel Ángel Durán</td>
-      <td>https://github.com//midudev</td>
-      <td>https://midu.dev</td>
-      <td>Software Engineer\n\nGitHub Star 🌟\nGoogle Dev...</td>
-      <td>6300.0</td>
-      <td>10.0</td>
-      <td>Barcelona</td>
-      <td>@AdevintaSpain</td>
-      <td>@midudev</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Jose Alcérreca</td>
-      <td>https://github.com//JoseAlcerreca</td>
-      <td>twitter.com/ppvi</td>
-      <td>Android Developer Relations Engineer @ Google</td>
-      <td>2300.0</td>
-      <td>0.0</td>
-      <td>Madrid, Spain</td>
-      <td>@google</td>
-      <td>@ppvi</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Shubham Mathur</td>
-      <td>https://github.com//googleknight</td>
-      <td>https://googleknight.github.io</td>
-      <td>Software engineer II @ MDL Bangalore\n</td>
-      <td>29.0</td>
-      <td>40.0</td>
-      <td>Bangalore, India</td>
-      <td>Mckinsey &amp; Company</td>
-      <td>None</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+## Clean Profile Data
 
+Some fields may be missing. We can fill missing values.
 
+```python
+df["company"] = df["company"].fillna("")
+df["location"] = df["location"].fillna("")
+df["portfolio"] = df["portfolio"].fillna("")
+df["twitter"] = df["twitter"].fillna("")
+```
 
-### Plotting Followers
+Make sure numeric fields are numeric.
 
-We will use `Seaborn` a library built above Matplotlib.
+```python
+numeric_columns = ["public_repos", "followers", "following"]
 
+for column in numeric_columns:
+    df[column] = pd.to_numeric(df[column], errors="coerce").fillna(0)
+```
+
+## Plot Followers
+
+In the original version, we plotted GitHub followers using Seaborn.
+
+![]({{site.url}}/assets/people_finder/output_44_1.png)
+
+We can do it like this:
 
 ```python
 import seaborn as sns
-sns.set()
+import matplotlib.pyplot as plt
 
+sns.set_theme()
 
-df.followers.hist()
+df["followers"].hist()
+
+plt.xlabel("Followers")
+plt.ylabel("Number of profiles")
+plt.title("Distribution of GitHub Followers")
+plt.show()
 ```
 
+In many GitHub search results, most users have a low follower count and a few users have many followers.
 
-
-
-    <AxesSubplot:>
-
-
-
-
-    
-![]({{site.url}}/assets/people_finder/output_44_1.png)
-    
-
-
-It seems that most people have very less followers.
-
-### Finding Contact Details
-If a profile has portfolio, then there is high chances that the portfolio has contact page too. So again, we can scrape that portfolio and collect such information.
-
-### Pros and Cons of Using GitHub Search
-* It is quite easier to find people in tech based on the skill-set but finding people who work in tech but does not have GitHub profile is not possible.
-* Getting contact details is only possible if a person has the portfolio and that portfolio has it. Either way, its easier than finding the information from LinkedIn Profile.
-* Sometimes the results might not be shown once GitHub suspects something is wrong in our request.
-
+## Sort by Followers
 
 ```python
+top_followed = df.sort_values(
+    by="followers",
+    ascending=False
+)
 
+top_followed[
+    ["username", "name", "url", "followers", "public_repos", "location"]
+].head(10)
 ```
+
+This can help identify highly visible public profiles.
+
+## Filter by Location
+
+```python
+germany_profiles = df[
+    df["location"].str.contains("Germany", case=False, na=False)
+]
+
+germany_profiles.head()
+```
+
+This only works if users have added location information to their public profile.
+
+## Filter by Company or Bio
+
+```python
+google_profiles = df[
+    df["company"].str.contains("google", case=False, na=False)
+    | df["bio"].str.contains("google", case=False, na=False)
+]
+
+google_profiles.head()
+```
+
+This is useful for simple analysis, but remember that profile data is self-reported and may be outdated.
+
+## BeautifulSoup Version: Why It Is Fragile
+
+The original version used BeautifulSoup to parse GitHub HTML pages.
+
+Example idea:
+
+```python
+from bs4 import BeautifulSoup
+import requests
+
+url = "https://github.com/search?q=google+engineer&type=users"
+
+response = requests.get(url)
+
+soup = BeautifulSoup(response.content, "html.parser")
+```
+
+Then it searched for specific CSS classes.
+
+This is fragile because:
+
+- HTML classes can change anytime
+- GitHub may block automated scraping
+- pages may render differently
+- rate limiting and bot detection can happen
+- the API is cleaner and more stable
+
+So, BeautifulSoup is useful for learning HTML parsing, but for GitHub data, the API is the better choice.
+
+## If You Still Use BeautifulSoup
+
+If you use BeautifulSoup for learning, follow these rules:
+
+- check the website's terms of service
+- check `robots.txt` where applicable
+- do not scrape private or login-only pages
+- do not send too many requests
+- add delays between requests
+- identify your user agent honestly where appropriate
+- collect only what you need
+- do not collect sensitive personal data
+- avoid contact harvesting
+
+A minimal example for parsing a normal public HTML page:
+
+```python
+from bs4 import BeautifulSoup
+
+html = """
+<html>
+  <body>
+    <a href="https://example.com/profile">Profile</a>
+  </body>
+</html>
+"""
+
+soup = BeautifulSoup(html, "html.parser")
+
+links = [a.get("href") for a in soup.find_all("a")]
+
+print(links)
+```
+
+This teaches the concept without scraping real people at scale.
+
+## Rate Limits
+
+APIs have rate limits. GitHub has different rate limits for different API resources, and search endpoints have their own limits.
+
+A good habit is to check rate limit status.
+
+```python
+def check_rate_limit(headers=None):
+    url = "https://api.github.com/rate_limit"
+
+    response = requests.get(url, headers=headers, timeout=30)
+    response.raise_for_status()
+
+    return response.json()
+```
+
+Use it:
+
+```python
+rate_limit = check_rate_limit(headers=headers)
+
+rate_limit["resources"]["search"]
+```
+
+If you get rate limited, slow down and wait before making more requests.
+
+## Common Problems and Fixes
+
+### Problem 1: 403 Rate Limit Error
+
+You may be sending too many requests.
+
+Fixes:
+
+- use authentication
+- reduce `per_page`
+- reduce `max_pages`
+- add delay between requests
+- check `/rate_limit`
+- cache results locally
+
+### Problem 2: Empty Results
+
+Your query may be too narrow.
+
+Try:
+
+```text
+machine learning type:user
+```
+
+or:
+
+```text
+python developer location:Germany type:user
+```
+
+### Problem 3: Missing Portfolio or Twitter
+
+Not every GitHub user fills all fields.
+
+This is normal.
+
+### Problem 4: Duplicate Profiles
+
+Use a `seen_users` set.
+
+```python
+seen_users = set()
+```
+
+### Problem 5: Data Is Outdated
+
+GitHub profile data is user-managed. It may be incomplete or outdated.
+
+Do not assume it is fully accurate.
+
+## Privacy and Data Minimization
+
+Even when using public data, collect only what you need.
+
+For example, for a learning project, this is enough:
+
+- username
+- GitHub URL
+- public bio
+- public portfolio link
+- public repository count
+- public followers count
+
+Avoid collecting:
+
+- emails
+- phone numbers
+- private contact details
+- personal social data not needed for the project
+- anything behind login or access controls
+
+## Better Project Ideas
+
+Instead of building a "people finder" for outreach, you can build safer tools such as:
+
+- open-source contributor discovery dashboard
+- GitHub topic explorer
+- public repository analyzer
+- developer portfolio search for your own learning
+- GitHub profile statistics dashboard
+- open-source community map
+- public project recommendation tool
+
+These are useful and less privacy-invasive.
+
+## Full Example
+
+Here is a complete minimal version.
+
+```python
+import os
+import time
+
+import pandas as pd
+import requests
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+
+headers = {
+    "Accept": "application/vnd.github+json",
+}
+
+if GITHUB_TOKEN:
+    headers["Authorization"] = f"Bearer {GITHUB_TOKEN}"
+
+
+def search_github_users(query, page=1, per_page=10):
+    url = "https://api.github.com/search/users"
+
+    params = {
+        "q": query,
+        "page": page,
+        "per_page": per_page
+    }
+
+    response = requests.get(
+        url,
+        params=params,
+        headers=headers,
+        timeout=30
+    )
+
+    response.raise_for_status()
+
+    return response.json()
+
+
+def get_github_user_profile(username):
+    url = f"https://api.github.com/users/{username}"
+
+    response = requests.get(
+        url,
+        headers=headers,
+        timeout=30
+    )
+
+    response.raise_for_status()
+
+    return response.json()
+
+
+def collect_github_profiles(query, max_pages=2, per_page=10, delay=1.0):
+    profiles = []
+    seen_users = set()
+
+    for page in range(1, max_pages + 1):
+        search_result = search_github_users(
+            query=query,
+            page=page,
+            per_page=per_page
+        )
+
+        for item in search_result.get("items", []):
+            username = item["login"]
+
+            if username in seen_users:
+                continue
+
+            seen_users.add(username)
+
+            profile = get_github_user_profile(username)
+
+            profiles.append({
+                "username": profile.get("login"),
+                "name": profile.get("name"),
+                "url": profile.get("html_url"),
+                "bio": profile.get("bio"),
+                "company": profile.get("company"),
+                "location": profile.get("location"),
+                "portfolio": profile.get("blog"),
+                "twitter": profile.get("twitter_username"),
+                "public_repos": profile.get("public_repos"),
+                "followers": profile.get("followers"),
+                "following": profile.get("following"),
+                "created_at": profile.get("created_at"),
+            })
+
+            time.sleep(delay)
+
+    return pd.DataFrame(profiles)
+
+
+if __name__ == "__main__":
+    query = "python developer location:Germany type:user"
+
+    df = collect_github_profiles(
+        query=query,
+        max_pages=3,
+        per_page=10,
+        delay=1.0
+    )
+
+    df.to_csv("github_profiles.csv", index=False)
+
+    print(df.head())
+    print(df.shape)
+```
+
+## Final Thoughts
+
+In this post, we built a safer version of a **public developer profile finder in Python**. The original version used BeautifulSoup to scrape Google and GitHub pages, but the updated version uses the GitHub API, which is cleaner, more stable, and easier to maintain.
+
+The most important lesson is not just technical. It is also ethical:
+
+> Collect only public data, use official APIs when possible, respect rate limits, and avoid turning scraping projects into privacy-invasive tools.
+
+This project is useful for learning APIs, pandas, public data analysis, and basic automation. It can also be extended into a GitHub profile analytics dashboard or open-source contributor discovery tool.

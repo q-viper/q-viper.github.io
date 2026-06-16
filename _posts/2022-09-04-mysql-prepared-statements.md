@@ -1,159 +1,620 @@
 ---
-title:  "MySQL Prepared Statements"
-date:   2022-09-04 01:29:17 +0545
+layout: single
+title: "MySQL Prepared Statements: Beginner Guide with Dynamic Queries and Stored Procedures"
+date: 2022-09-04 01:29:17 +0545
+last_modified_at: 2026-06-16
 categories:
-    - MySQL
+  - MySQL
+  - SQL
+  - Database
 tags:
-    - MySQL
+  - "MySQL"
+  - "Prepared statements"
+  - "SQL"
+  - "Dynamic SQL"
+  - "Stored procedures"
+  - "SQL injection"
+  - "Database tutorial"
+description: "A beginner-friendly guide to MySQL prepared statements, including parameterized queries, dynamic SQL, PREPARE, EXECUTE, DEALLOCATE PREPARE, and stored procedure examples."
+excerpt: "Learn how MySQL prepared statements work, why they are useful, how to use dynamic query values safely, and how to combine prepared statements with stored procedures."
 header:
   teaser: assets/mysql/p2.png
+  og_image: assets/mysql/p2.png
+  image_description: "MySQL prepared statement result shown in MySQL Workbench"
+toc: true
+toc_label: "MySQL Prepared Statements"
+toc_icon: "database"
+toc_sticky: true
+read_time: true
+share: true
+related: true
+classes: wide
 ---
 
-MySQL Prepared Statements are the queries or statements they are prepared in a way that they can be used later on. They are complied while on creation and can be executed later as desired. We might need to run prepared statements many times once its created. Lets get little bit deep into it and how can we used MySQL Prepared Statements to make SQLing easily.
+**MySQL prepared statements** are SQL statements that are written once, prepared by MySQL, and executed later with different values. They are useful when we need to run the same kind of query multiple times or when parts of the query need to be dynamic.
 
-## What Do We need?
-We only need mysql server but for the ease, I am going to use MySQL Workbench because of its nice GUI.
+Prepared statements are commonly used for:
 
-## Why do we need Prepared Statements?
+- parameterized queries
+- repeated SQL execution
+- dynamic filtering
+- dynamic SQL in stored procedures
+- reducing repeated query writing
+- safer handling of user-provided values
 
-### To make dynamic queries.
+In this post, we will learn how prepared statements work in MySQL using simple examples with a `school` database.
 
-Often SQL queries are predetermined and we only have to work with whats known to use only. But when time comes for us to run some query that we do not know yet, and the query itself is not static, we might have to generate a dynamic query and run.
+## What Is a MySQL Prepared Statement?
 
-For this blog, I am going to use new database `School`. Lets create a table student inside a school db.
+A prepared statement is a SQL statement that is prepared first and executed later.
 
-```sql  
-CREATE TABLE school.student(name VARCHAR(255), age INT, gender VARCHAR(255));
-```
-
-Now lets insert some entries in it.
+The basic flow is:
 
 ```sql
-use school;
+PREPARE statement_name FROM @sql_query;
+EXECUTE statement_name USING @value;
+DEALLOCATE PREPARE statement_name;
+```
+
+A prepared statement can contain placeholders. In MySQL, the placeholder is written as `?`.
+
+Example:
+
+```sql
+PREPARE pstmt FROM 'SELECT * FROM student WHERE gender = ?';
+
+SET @gen = 'female';
+
+EXECUTE pstmt USING @gen;
+
+DEALLOCATE PREPARE pstmt;
+```
+
+Here, `?` is replaced by the value stored in `@gen` during execution.
+
+## Why Use Prepared Statements?
+
+Prepared statements are useful for several reasons.
+
+### 1. Reuse Similar Queries
+
+If we need to run the same query many times with different values, prepared statements save time.
+
+For example:
+
+```sql
+SELECT * FROM student WHERE gender = 'female';
+SELECT * FROM student WHERE gender = 'male';
+```
+
+Instead of writing the query again and again, we can prepare it once and only change the value.
+
+### 2. Work with Dynamic Values
+
+Prepared statements make it easy to pass different values into a query.
+
+```sql
+SET @gen = 'female';
+EXECUTE pstmt USING @gen;
+
+SET @gen = 'male';
+EXECUTE pstmt USING @gen;
+```
+
+### 3. Use Dynamic SQL
+
+Sometimes the table name, column name, or operation may change. In such cases, we can build a SQL string using `CONCAT()` and then prepare it.
+
+### 4. Improve Safety for Values
+
+Prepared statements help separate SQL logic from data values. This helps reduce SQL injection risk when values are passed as parameters.
+
+However, there is an important warning:
+
+> Prepared statement placeholders can be used for values, but not directly for table names or column names.
+
+For dynamic table names or column names, we usually build the SQL string manually. In that case, we must validate or whitelist the table and column names carefully.
+
+## What Do We Need?
+
+For this tutorial, we need:
+
+- MySQL Server
+- MySQL Workbench or any SQL client
+
+I will use MySQL Workbench because it has a simple GUI and makes it easy to view query results.
+
+## Create a School Database
+
+Let's create a small database named `school`.
+
+```sql
+CREATE DATABASE IF NOT EXISTS school;
+
+USE school;
+```
+
+Now create a `student` table.
+
+```sql
+CREATE TABLE IF NOT EXISTS student (
+    name VARCHAR(255),
+    age INT,
+    gender VARCHAR(255)
+);
+```
+
+Insert some sample data.
+
+```sql
 INSERT INTO student VALUES ('John', 14, 'male');
 INSERT INTO student VALUES ('Jean', 11, 'female');
 INSERT INTO student VALUES ('Sandra', 17, 'female');
 ```
 
-Now lets create a prepared statement which will show us only students with gender as 'female'.
+Now we have a simple table to test prepared statements.
+
+## Basic Prepared Statement Example
+
+Let's create a prepared statement to show only students with a given gender.
 
 ```sql
-PREPARE ptmt FROM 'select * from student  where  gender =?;';
-set @gen = "female";
-execute ptmt using @gen;
+PREPARE pstmt FROM 'SELECT * FROM student WHERE gender = ?';
+
+SET @gen = 'female';
+
+EXECUTE pstmt USING @gen;
+
+DEALLOCATE PREPARE pstmt;
 ```
 
-And result is:
+Result:
 
 ![]({{site.url}}/assets/mysql/p1.png)
 
-Here, we have just run the statement with dynamic value in where clause. But Can we run dynamic query with table name and column name too? Answer is yes but we have to use `CONCAT` for this too.
+Here, the SQL query is prepared first. Then the value `female` is passed during execution.
+
+## Execute the Same Statement with a Different Value
+
+One benefit of prepared statements is that the same statement can be executed with different values.
 
 ```sql
-set @gen = "female";
-set @tb = "student";
-set @stmt = concat("select * from ", @tb, " where gender = ?;");
+PREPARE pstmt FROM 'SELECT * FROM student WHERE gender = ?';
 
-PREPARE ptmt FROM @stmt;
-execute ptmt using @gen;
+SET @gen = 'female';
+EXECUTE pstmt USING @gen;
+
+SET @gen = 'male';
+EXECUTE pstmt USING @gen;
+
+DEALLOCATE PREPARE pstmt;
 ```
+
+This avoids rewriting the full query.
+
+## Dynamic Query with Table Name
+
+Can we make the table name dynamic too?
+
+Yes, but not with `?`.
+
+This will not work:
+
+```sql
+PREPARE pstmt FROM 'SELECT * FROM ? WHERE gender = ?';
+```
+
+Placeholders are for values, not identifiers such as table names and column names.
+
+To make a table name dynamic, we need to build the SQL string with `CONCAT()`.
+
+```sql
+SET @gen = 'female';
+SET @tb = 'student';
+
+SET @stmt = CONCAT('SELECT * FROM ', @tb, ' WHERE gender = ?;');
+
+PREPARE pstmt FROM @stmt;
+EXECUTE pstmt USING @gen;
+
+DEALLOCATE PREPARE pstmt;
+```
+
+Result:
 
 ![]({{site.url}}/assets/mysql/p2.png)
 
-Here we just created a dynamic statement and used it too. Below is another example of it.
+This works because we created the SQL query string first and then prepared it.
+
+## Important Safety Note for Dynamic Table Names
+
+When building SQL with dynamic table names or column names, be careful.
+
+Do not directly use user input like this:
 
 ```sql
-set @gen = "male";
-set @tb = "student";
-set @col = 'age';
-set @stmt = concat(concat("select ", @col), " from ", @tb, " where gender = ?;");
-
-PREPARE ptmt FROM @stmt;
-execute ptmt using @gen;
+SET @tb = user_input;
 ```
+
+This can be dangerous if the value is not trusted.
+
+A safer approach is to allow only known table names.
+
+For example:
+
+```sql
+SET @tb = 'student';
+
+-- In real applications, validate @tb against allowed table names.
+```
+
+If the table name comes from an application, validate it in the application code before sending it to MySQL.
+
+## Dynamic Query with Column Name
+
+We can also make the selected column dynamic.
+
+```sql
+SET @gen = 'male';
+SET @tb = 'student';
+SET @col = 'age';
+
+SET @stmt = CONCAT('SELECT ', @col, ' FROM ', @tb, ' WHERE gender = ?;');
+
+PREPARE pstmt FROM @stmt;
+EXECUTE pstmt USING @gen;
+
+DEALLOCATE PREPARE pstmt;
+```
+
+Result:
 
 ![]({{site.url}}/assets/mysql/p3.png)
 
+Here, the column name is dynamic and the gender value is passed as a prepared parameter.
 
-Using multiple concats, we can make even more complex statements and run them as prepared statements.
+Again, the column name should be validated or selected from a whitelist.
 
-### To save our time from writing redundant queries
+## Better Formatting for Dynamic SQL
 
-One of the main reason of using MySQL Prepared Statements is to save time from running redundant queries. We might have to run queries with similar nature and mostly we search the term and replace them by our new keyword. Like, we want to search for the number of customers from Sydney with age 35 and below. Queries like above can be run without any hassle but what if we want to view different columns too. We want to view columns like number of max subscription per month of customer from Sydney and number of least subscription per month of customer from California. We have to modify the query itself. But there is an easier way to do that. But first, lets add another table to our example.
+When queries become longer, using multiple `CONCAT()` calls can become hard to read.
 
-```sql
-CREATE TABLE school.teacher(name VARCHAR(255), age INT, gender VARCHAR(255), location varchar(255));
-
-INSERT INTO teacher VALUES ('Harvey', 43, 'male', "Dubai");
-INSERT INTO teacher VALUES ('Joanna', 51, 'female', "California");
-INSERT INTO teacher VALUES ('Harris', 37, 'male', "Sydney");
-INSERT INTO teacher VALUES ('Holly', 43, 'female', "Dubai");
-INSERT INTO teacher VALUES ('Mark', 51, 'male', "California");
-INSERT INTO teacher VALUES ('Henry', 37, 'male', "Sydney");
-```
-
-Now lets search for the average age  of teachers from Dubai. And number of teachers from Sydney. But using single type of statement.
-
-First Statement:
+This is easier:
 
 ```sql
-set @place = "Dubai";
-set @tb = "teacher";
-set @col = 'avg(age)';
-set @stmt = concat(concat("select ", @col), " from ", @tb, " where location = ?;");
+SET @gen = 'male';
+SET @tb = 'student';
+SET @col = 'age';
 
-PREPARE ptmt FROM @stmt;
-execute ptmt using @place;
+SET @stmt = CONCAT(
+    'SELECT ',
+    @col,
+    ' FROM ',
+    @tb,
+    ' WHERE gender = ?;'
+);
+
+PREPARE pstmt FROM @stmt;
+EXECUTE pstmt USING @gen;
+
+DEALLOCATE PREPARE pstmt;
 ```
 
-Second statement:
+This makes the query-building logic clearer.
+
+## Prepared Statements with Multiple Parameters
+
+A prepared statement can use more than one placeholder.
+
+Example:
 
 ```sql
-set @place = "Sydney";
-set @tb = "teacher";
-set @col = 'count(name)';
-set @stmt = concat(concat("select ", @col), " from ", @tb, " where location = ?;");
+PREPARE pstmt FROM 'SELECT * FROM student WHERE gender = ? AND age > ?';
 
-PREPARE ptmt FROM @stmt;
-execute ptmt using @place;
+SET @gen = 'female';
+SET @age = 12;
+
+EXECUTE pstmt USING @gen, @age;
+
+DEALLOCATE PREPARE pstmt;
 ```
 
+This finds female students older than 12.
 
-### Can wrap statements
-With the help of Stored Procedure, MySQL Prepared Statements can be used to wrap statements too.
+## Add a Teacher Table
+
+Now let's add another table named `teacher`.
 
 ```sql
-drop procedure if exists query_runner;
-
-delimiter //
-create procedure query_runner(In tb varchar(255), 
-							IN scol varchar(255), 
-                            IN ocol varchar(255),
-                            IN op varchar(255),
-                            IN oval varchar(255)
-                            ) 
-begin
-set @oval = oval;
-set @stmt = concat ("select ", scol, " from ", tb);
-set @stmt = concat(concat(@stmt, " where "), ocol);
-set @stmt = concat(@stmt, op, "?");
-
-prepare pstmt from @stmt;
-execute pstmt using @oval;
-
-end //
-delimiter ; 
-
-call query_runner("teacher", "*", "age", "<",50);
+CREATE TABLE IF NOT EXISTS teacher (
+    name VARCHAR(255),
+    age INT,
+    gender VARCHAR(255),
+    location VARCHAR(255)
+);
 ```
 
-Result is:
+Insert sample data.
+
+```sql
+INSERT INTO teacher VALUES ('Harvey', 43, 'male', 'Dubai');
+INSERT INTO teacher VALUES ('Joanna', 51, 'female', 'California');
+INSERT INTO teacher VALUES ('Harris', 37, 'male', 'Sydney');
+INSERT INTO teacher VALUES ('Holly', 43, 'female', 'Dubai');
+INSERT INTO teacher VALUES ('Mark', 51, 'male', 'California');
+INSERT INTO teacher VALUES ('Henry', 37, 'male', 'Sydney');
+```
+
+Now we can test prepared statements on a second table.
+
+## Reusing Dynamic Query Structure
+
+Suppose we want to find the average age of teachers from Dubai.
+
+```sql
+SET @place = 'Dubai';
+SET @tb = 'teacher';
+SET @col = 'AVG(age)';
+
+SET @stmt = CONCAT(
+    'SELECT ',
+    @col,
+    ' FROM ',
+    @tb,
+    ' WHERE location = ?;'
+);
+
+PREPARE pstmt FROM @stmt;
+EXECUTE pstmt USING @place;
+
+DEALLOCATE PREPARE pstmt;
+```
+
+Now suppose we want to count teachers from Sydney.
+
+```sql
+SET @place = 'Sydney';
+SET @tb = 'teacher';
+SET @col = 'COUNT(name)';
+
+SET @stmt = CONCAT(
+    'SELECT ',
+    @col,
+    ' FROM ',
+    @tb,
+    ' WHERE location = ?;'
+);
+
+PREPARE pstmt FROM @stmt;
+EXECUTE pstmt USING @place;
+
+DEALLOCATE PREPARE pstmt;
+```
+
+The query shape is the same, but the selected expression and location are different.
+
+This is one reason prepared statements are useful.
+
+## Prepared Statements and Stored Procedures
+
+Prepared statements become even more powerful when combined with stored procedures.
+
+A stored procedure works like a database function. We can pass arguments to it and run SQL logic inside it.
+
+Let's create a procedure that builds and runs a dynamic query.
+
+```sql
+DROP PROCEDURE IF EXISTS query_runner;
+
+DELIMITER //
+
+CREATE PROCEDURE query_runner(
+    IN tb VARCHAR(255),
+    IN scol VARCHAR(255),
+    IN ocol VARCHAR(255),
+    IN op VARCHAR(255),
+    IN oval VARCHAR(255)
+)
+BEGIN
+    SET @oval = oval;
+
+    SET @stmt = CONCAT('SELECT ', scol, ' FROM ', tb);
+    SET @stmt = CONCAT(@stmt, ' WHERE ', ocol);
+    SET @stmt = CONCAT(@stmt, ' ', op, ' ?');
+
+    PREPARE pstmt FROM @stmt;
+    EXECUTE pstmt USING @oval;
+    DEALLOCATE PREPARE pstmt;
+END //
+
+DELIMITER ;
+```
+
+Now call the procedure.
+
+```sql
+CALL query_runner('teacher', '*', 'age', '<', '50');
+```
+
+Result:
+
 ![]({{site.url}}/assets/mysql/p4.png)
 
+This procedure lets us dynamically choose:
 
-MySQL Prepared Statements has better application when used along with Stored Procedure as SP works like a function. We can achieve a lot of benefits using MySQL Prepared Statements and Stored Procedures. But that will be covered in next part.
+- table name
+- selected columns
+- condition column
+- operator
+- comparison value
 
+## Improve Safety in the Stored Procedure
 
-```python
+The above stored procedure is useful for learning, but it is not fully safe for production because it accepts table names, column names, and operators directly.
 
+For production, we should validate inputs.
+
+For example, we can restrict operators:
+
+```sql
+IF op NOT IN ('=', '<', '>', '<=', '>=', '<>') THEN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Invalid operator';
+END IF;
 ```
+
+For table and column names, it is often better to validate them in application code. Another option is to check against known allowed values inside the stored procedure.
+
+## Example with Operator Validation
+
+```sql
+DROP PROCEDURE IF EXISTS safe_query_runner;
+
+DELIMITER //
+
+CREATE PROCEDURE safe_query_runner(
+    IN tb VARCHAR(255),
+    IN scol VARCHAR(255),
+    IN ocol VARCHAR(255),
+    IN op VARCHAR(10),
+    IN oval VARCHAR(255)
+)
+BEGIN
+    IF op NOT IN ('=', '<', '>', '<=', '>=', '<>') THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Invalid operator';
+    END IF;
+
+    SET @oval = oval;
+
+    SET @stmt = CONCAT('SELECT ', scol, ' FROM ', tb);
+    SET @stmt = CONCAT(@stmt, ' WHERE ', ocol, ' ', op, ' ?');
+
+    PREPARE pstmt FROM @stmt;
+    EXECUTE pstmt USING @oval;
+    DEALLOCATE PREPARE pstmt;
+END //
+
+DELIMITER ;
+```
+
+Call it:
+
+```sql
+CALL safe_query_runner('teacher', '*', 'age', '<', '50');
+```
+
+This is still a simple example, but it shows the idea of validating dynamic parts.
+
+## PREPARE, EXECUTE, and DEALLOCATE
+
+MySQL prepared statements usually use three main commands.
+
+### PREPARE
+
+`PREPARE` creates a prepared statement.
+
+```sql
+PREPARE pstmt FROM @stmt;
+```
+
+### EXECUTE
+
+`EXECUTE` runs the prepared statement.
+
+```sql
+EXECUTE pstmt USING @value;
+```
+
+### DEALLOCATE PREPARE
+
+`DEALLOCATE PREPARE` removes the prepared statement.
+
+```sql
+DEALLOCATE PREPARE pstmt;
+```
+
+It is a good habit to deallocate prepared statements after using them.
+
+## Prepared Statements vs Normal SQL Queries
+
+| Feature | Normal Query | Prepared Statement |
+|---|---|---|
+| Query is written once | No | Yes |
+| Can reuse with different values | Manual changes needed | Yes |
+| Supports placeholders | No | Yes |
+| Useful for dynamic values | Limited | Yes |
+| Useful in stored procedures | Yes | Yes |
+| Safer value handling | Depends | Better |
+
+## Common Mistakes
+
+Here are some common mistakes when using MySQL prepared statements.
+
+### Mistake 1: Using ? for Table Names
+
+This does not work:
+
+```sql
+PREPARE pstmt FROM 'SELECT * FROM ? WHERE gender = ?';
+```
+
+The `?` placeholder is for values, not table names.
+
+### Mistake 2: Not Deallocating Prepared Statements
+
+Always clean up when done.
+
+```sql
+DEALLOCATE PREPARE pstmt;
+```
+
+### Mistake 3: Trusting Dynamic Table or Column Names
+
+Values can be passed safely with placeholders, but table names and column names must be validated.
+
+### Mistake 4: Forgetting Spaces in CONCAT
+
+This can create invalid SQL.
+
+Bad:
+
+```sql
+SET @stmt = CONCAT('SELECT * FROM', @tb, 'WHERE age > ?');
+```
+
+Good:
+
+```sql
+SET @stmt = CONCAT('SELECT * FROM ', @tb, ' WHERE age > ?');
+```
+
+### Mistake 5: Making Dynamic SQL Too Complicated
+
+Prepared statements are useful, but too much dynamic SQL can become hard to debug. Use them only when they make the code clearer or more flexible.
+
+## When Should You Use MySQL Prepared Statements?
+
+Use prepared statements when:
+
+- you need to run the same query with different values
+- you want parameterized filtering
+- you need dynamic SQL inside stored procedures
+- you want to reduce repeated query writing
+- you want safer value handling
+- your application sends repeated queries to MySQL
+
+Avoid prepared statements when:
+
+- the query is simple and only runs once
+- dynamic SQL makes the logic harder to understand
+- table and column names come from untrusted input
+- the same result can be achieved with simpler SQL
+
+## Final Thoughts
+
+In this post, we learned the basics of **MySQL prepared statements**. We created prepared statements with placeholders, executed them with different values, built dynamic SQL using `CONCAT()`, and wrapped dynamic logic inside stored procedures.
+
+Prepared statements are useful for dynamic values and repeated SQL execution. They become even more powerful with stored procedures. But when using dynamic table names, column names, or operators, always validate inputs carefully.
+
+This is just the beginning. Prepared statements and stored procedures can be used to build more flexible database logic, but they should be written carefully to keep SQL safe, readable, and maintainable.

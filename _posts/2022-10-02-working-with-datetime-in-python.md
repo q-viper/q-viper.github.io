@@ -1,1085 +1,949 @@
 ---
-title:  Working with datetime in Python
-date:   2022-10-02 01:29:17 +0545
+layout: single
+title: "Working with Datetime in Python: datetime, timedelta, Timezones, zoneinfo, pytz, Pendulum, and pandas"
+date: 2022-10-02 01:29:17 +0545
+last_modified_at: 2026-06-16
 categories:
-    - Python
-    - DateTime
+  - Python
+  - DateTime
+  - Tutorial
 tags:
-    - python
-    - datetime
+  - "Python"
+  - "datetime"
+  - "timedelta"
+  - "timezone"
+  - "zoneinfo"
+  - "pytz"
+  - "pendulum"
+  - "pandas"
+  - "date parsing"
+description: "A beginner-friendly guide to working with datetime in Python, including date parsing, formatting, timedelta, timezones, zoneinfo, pytz, pendulum, pandas, and real-world examples."
+excerpt: "Learn how to work with dates and times in Python using datetime, timedelta, strptime, strftime, timestamps, timezones, zoneinfo, pytz, pendulum, and pandas."
 header:
   teaser: assets/python/datetime.png
+  og_image: assets/python/datetime.png
+  image_description: "Python datetime tutorial cover image"
+toc: true
+toc_label: "Datetime in Python"
+toc_icon: "clock"
+toc_sticky: true
+read_time: true
+share: true
+related: true
+classes: wide
 ---
-Working with DateTime in Python can be a challenging job if we do not know the right module to do the right thing. Here we will explore some of the useful modules based on their purpose and application rather than exploring the module as a whole.
 
-## Using `datetime`
-Datetime in Python can be done using various ways and one of the popular is using the standard library [datetime](https://docs.python.org/3/library/datetime.html). In general, we can use datetime datatype as datetime object in Python. We start by importing the library.
+Working with **datetime in Python** can be confusing at first. Dates and times look simple, but real projects often involve different formats, timezones, timestamps, daylight saving time, scheduling, and data from multiple sources.
 
+In this tutorial, I will explain the most useful parts of working with datetime in Python. Instead of covering every function in the documentation, I will focus on practical examples.
 
+We will cover:
+
+- creating date and datetime objects
+- parsing strings into datetime
+- formatting datetime into strings
+- getting the current time
+- adding and subtracting time
+- comparing dates and times
+- working with timestamps
+- handling timezones
+- using `zoneinfo`, `pytz`, and `pendulum`
+- working with datetime in pandas
+- solving real-world datetime problems
+
+## Why Datetime Can Be Difficult
+
+Datetime becomes difficult because different systems store time differently.
+
+For example:
+
+- one API may return `2022-10-01`
+- another may return `10/01/2022`
+- another may return `2022-10-01T13:25:13Z`
+- one database may store UTC time
+- another may store local time
+- one country may use daylight saving time
+- another country may not
+
+Because of this, it is important to understand the basics clearly.
+
+## Import the datetime Module
+
+Python has a built-in module called `datetime`.
 
 ```python
 import datetime
 
-# what is it??
 print(datetime)
 ```
 
-    <module 'datetime' from '/usr/lib/python3.7/datetime.py'>
-    
+The `datetime` module includes useful classes such as:
 
+- `datetime.date`
+- `datetime.time`
+- `datetime.datetime`
+- `datetime.timedelta`
+- `datetime.timezone`
+
+The naming can be confusing because the module is called `datetime`, and one of the classes inside it is also called `datetime`.
+
+A common import style is:
 
 ```python
-
+from datetime import datetime, date, time, timedelta, timezone
 ```
 
-### Making a Datetime
-Before working with DateTime, we need to have one :). There are many ways to create DateTime and let's start with some.
+In this post, I will show both styles where useful.
 
+## Date, Time, and Datetime
 
-#### Integer to Datetime 
-We use `datetime.datetime`. We must pass year, month, and day to make datetime and hour, minute, and second optional to add time as well.
+Python separates date and time concepts.
 
+### Date Object
+
+A `date` object stores only year, month, and day.
 
 ```python
+from datetime import date
+
+my_date = date(2022, 10, 1)
+
+print(my_date)
+print(my_date.year)
+print(my_date.month)
+print(my_date.day)
+```
+
+Output:
+
+```text
+2022-10-01
+2022
+10
+1
+```
+
+### Time Object
+
+A `time` object stores time without a date.
+
+```python
+from datetime import time
+
+my_time = time(hour=13, minute=25, second=13)
+
+print(my_time)
+```
+
+Output:
+
+```text
+13:25:13
+```
+
+### Datetime Object
+
+A `datetime` object stores both date and time.
+
+```python
+from datetime import datetime
+
+my_datetime = datetime(
+    year=2022,
+    month=10,
+    day=1,
+    hour=13,
+    minute=25,
+    second=13,
+    microsecond=100
+)
+
+print(my_datetime)
+```
+
+Output:
+
+```text
+2022-10-01 13:25:13.000100
+```
+
+## Create a Datetime from Integers
+
+The simplest way to create a datetime is to pass year, month, and day.
+
+```python
+import datetime
+
 print(datetime.datetime(year=1990, month=12, day=11))
-print(datetime.datetime(year=2022, month=10, day=1, hour=13, minute=25, second=13, microsecond=100))
+print(
+    datetime.datetime(
+        year=2022,
+        month=10,
+        day=1,
+        hour=13,
+        minute=25,
+        second=13,
+        microsecond=100
+    )
+)
 ```
 
-    1990-12-11 00:00:00
-    2022-10-01 13:25:13.000100
-    
+Output:
 
-#### Using String to datetime
-
-We can use `datetime.strptime` which needs datetime in string and its format as the second parameter.
-
-
-```python
-# Date only but contains hour and minute as 0, 0
-datetime.datetime.strptime("2022-01-23", "%Y-%m-%d"), datetime.datetime.strptime("2022/01/23", "%Y/%m/%d")
-
+```text
+1990-12-11 00:00:00
+2022-10-01 13:25:13.000100
 ```
 
+The year, month, and day are required. Hour, minute, second, and microsecond are optional.
 
+## Parse String to Datetime with strptime
 
-
-    (datetime.datetime(2022, 1, 23, 0, 0), datetime.datetime(2022, 1, 23, 0, 0))
-
-
-
+Very often, dates come as strings. We can convert a string into a datetime object using `strptime`.
 
 ```python
-# passing time with seconds
-datetime.datetime.strptime("2022-01-23 12:23:30", "%Y-%m-%d %H:%M:%S")
+from datetime import datetime
 
+dt1 = datetime.strptime("2022-01-23", "%Y-%m-%d")
+dt2 = datetime.strptime("2022/01/23", "%Y/%m/%d")
+
+print(dt1)
+print(dt2)
 ```
 
+Output:
 
-
-
-    datetime.datetime(2022, 1, 23, 12, 23, 30)
-
-
-
-#### Using Timestamp
-
-We can get datetime from timestamp as well. But for that we need timestamp. We can get timestamp from datetime by simply calling `timestamp()` of datetime object. 
-
-
-```python
-ts = datetime.datetime.strptime("2022-01-23 12:23:30", "%Y-%m-%d %H:%M:%S").timestamp()
-print(ts)
-print(f"From ts: {datetime.datetime.fromtimestamp(ts)}")
-print(f"UTC From ts: {datetime.datetime.utcfromtimestamp(ts)}")
+```text
+2022-01-23 00:00:00
+2022-01-23 00:00:00
 ```
 
-    1642940610.0
-    From ts: 2022-01-23 12:23:30
-    UTC From ts: 2022-01-23 12:23:30
-    
+The second argument tells Python the format of the string.
 
-#### Current Time
-
+### Parse Date and Time
 
 ```python
-## Getting UTC datetime
-datetime.datetime.utcnow()
+dt = datetime.strptime("2022-01-23 12:23:30", "%Y-%m-%d %H:%M:%S")
+
+print(dt)
 ```
 
+Output:
 
-
-
-    datetime.datetime(2022, 11, 9, 20, 12, 15, 351996)
-
-
-
-
-```python
-# Getting current local datetime
-datetime.datetime.now()
+```text
+2022-01-23 12:23:30
 ```
 
+## Common Datetime Format Codes
 
+Here are some common format codes used with `strptime` and `strftime`.
 
+| Code | Meaning | Example |
+|---|---|---|
+| `%Y` | Four-digit year | `2022` |
+| `%y` | Two-digit year | `22` |
+| `%m` | Month number | `10` |
+| `%B` | Full month name | `October` |
+| `%b` | Short month name | `Oct` |
+| `%d` | Day of month | `09` |
+| `%A` | Full weekday name | `Sunday` |
+| `%a` | Short weekday name | `Sun` |
+| `%H` | Hour, 24-hour clock | `21` |
+| `%I` | Hour, 12-hour clock | `09` |
+| `%M` | Minute | `33` |
+| `%S` | Second | `01` |
+| `%p` | AM or PM | `PM` |
+| `%z` | UTC offset | `+0100` |
+| `%Z` | Timezone name | `CET` |
 
-    datetime.datetime(2022, 11, 9, 20, 12, 23, 759600)
+## Convert Datetime to String with strftime
 
-
-
-### Working with Datetime
-Lets try to work with datetime.
-
-#### Formatting Datetime
-There are many formats of datetime and some are:
-* YYYY-MM-DD
-* YYYY-DD-MM
-* DD/MM/YYYY
-
-And we can format from one to another.
-
+The `strftime` method converts a datetime object into a formatted string.
 
 ```python
-dt = datetime.datetime.now()
-print(f"DT: {dt}")
-print(f"DT1: {dt.strftime('%Y/%m/%d %H:%M:%S')}")
-print(f"DT1: {dt.strftime('%Y.%m.%d %H:%M:%S')}")
-print(f"DT1: {dt.strftime('%d/%m/%Y %H.%M.%S')}")
+from datetime import datetime
+
+dt = datetime.now()
+
+print(f"Original: {dt}")
+print(dt.strftime("%Y/%m/%d %H:%M:%S"))
+print(dt.strftime("%Y.%m.%d %H:%M:%S"))
+print(dt.strftime("%d/%m/%Y %H.%M.%S"))
 ```
 
-    DT: 2022-11-09 19:38:02.419127
-    DT1: 2022/11/09 19:38:02
-    DT1: 2022.11.09 19:38:02
-    DT1: 09/11/2022 19.38.02
-    
+Example output:
 
-Changing time from one to another has to be done when we are working with a different source of data and each has a different format.
-
-#### Getting date and time values
-We can get values of date, time, day, month, year, and so on.
-
-
-```python
-dt = datetime.datetime.now()
-print(f"DT: {dt}")
-
-print(f"Year: {dt.year}, Month: {dt.month}, Day: {dt.day}, Hour: {dt.hour}, Minute: {dt.minute}, Seconds: {dt.second}")
-print(f"Date: {dt.date()}, Time: {dt.time()}")
+```text
+Original: 2022-11-09 19:38:02.419127
+2022/11/09 19:38:02
+2022.11.09 19:38:02
+09/11/2022 19.38.02
 ```
 
-    DT: 2022-11-09 20:13:57.279373
-    Year: 2022, Month: 11, Day: 9, Hour: 20, Minute: 13, Seconds: 57
-    Date: 2022-11-09, Time: 20:13:57.279373
-    
+This is useful when different data sources or databases need different date formats.
 
-#### Adding/Subtracting datetime
-We can add or subtract any unit of time including year, month, day, hour, minute etc. But we can add/subtract from the day and below it only. For this, we can use `timedelta()`.
+## Get Current Date and Time
 
+There are different ways to get the current date and time.
 
 ```python
-print(f"DT: {dt}")
-print(f"Timedelta day: {datetime.timedelta(days=1)}")
-print(f"Added day: {dt+datetime.timedelta(days=1)}")
-print(f"Added Month: {dt+datetime.timedelta(days=30)}")
-print(f"Added Hour: {dt+datetime.timedelta(hours=1)}")
+from datetime import datetime
+
+print(datetime.now())
+print(datetime.utcnow())
 ```
 
-    DT: 2022-11-09 19:15:38.568075
-    Timedelta day: 1 day, 0:00:00
-    Added day: 2022-11-10 19:15:38.568075
-    Added Month: 2022-12-09 19:15:38.568075
-    Added Hour: 2022-11-09 20:15:38.568075
-    
+`datetime.now()` gives the current local datetime.
 
-#### Day in Words
-Simply using `strftime` we can get day in words. What if we want to send datetime but with day as word and month, like November 13 Sunday.
-
+`datetime.utcnow()` gives the current UTC datetime, but it returns a timezone-naive datetime. In modern Python code, it is usually better to use timezone-aware UTC time.
 
 ```python
-dt.strftime('%A')
+from datetime import datetime, timezone
+
+now_utc = datetime.now(timezone.utc)
+
+print(now_utc)
 ```
 
+## Naive vs Aware Datetime
 
+A datetime object can be **naive** or **aware**.
 
+### Naive Datetime
 
-    'Wednesday'
-
-
-
+A naive datetime has no timezone information.
 
 ```python
+from datetime import datetime
 
+dt = datetime.now()
+
+print(dt)
+print(dt.tzinfo)
 ```
 
+Output:
 
-
-
-    '2022-11-Wednesday'
-
-
-
-And to get it on datetime as well.
-
-
-```python
-dt.strftime("%Y-%B-%A"), dt.strftime("%Y-%m-%A")
+```text
+2022-11-09 20:13:57.279373
+None
 ```
 
+### Aware Datetime
 
-
-
-    ('2022-November-Wednesday', '2022-11-Wednesday')
-
-
-
-#### Finding Time Difference 
-
-Let's create a datetime of now and add 5.5 minutes then 40 seconds to it. We will be adding 5.5*60+40=370 seconds.
-
+An aware datetime has timezone information.
 
 ```python
-dt1 = datetime.datetime.now()
-dt2 = dt1+datetime.timedelta(minutes=5.5, seconds=40)
-print(f"DT1: {dt1} | DT2: {dt2}")
-print(f"Time diff: {dt2-dt1}")
-print(f"Diff in Secs: {(dt2-dt1).total_seconds()}")
+from datetime import datetime, timezone
 
+dt = datetime.now(timezone.utc)
+
+print(dt)
+print(dt.tzinfo)
 ```
 
-    DT1: 2022-11-09 19:34:40.199437 | DT2: 2022-11-09 19:40:50.199437
-    Time diff: 0:06:10
-    Diff in Secs: 370.0
-    
+Output:
 
-#### Boolean Operation
-We can do simple boolean operations within datetime too. One example can be: we need to find the data for the last 7 days only from the dataframe. Let's use date-times from the last example.
-
-
-```python
-dt1<dt2, dt1==dt2, dt1>dt2, dt1!=dt2
+```text
+2022-11-09 20:13:57.279373+00:00
+UTC
 ```
 
+In real applications, timezone-aware datetime is usually safer.
 
+## Get Date and Time Values
 
-
-    (True, False, False, True)
-
-
-
-### Working with Time Zones
-One of the difficult things while working with time-related data is timezone and in addition to that, daylight saving.
-
-The Default DateTime object will have no timezone info. We can add one using replace.
-
-
+We can extract values such as year, month, day, hour, minute, and second.
 
 ```python
-dt1.tzinfo
+from datetime import datetime
+
+dt = datetime.now()
+
+print(f"Year: {dt.year}")
+print(f"Month: {dt.month}")
+print(f"Day: {dt.day}")
+print(f"Hour: {dt.hour}")
+print(f"Minute: {dt.minute}")
+print(f"Second: {dt.second}")
+
+print(f"Date: {dt.date()}")
+print(f"Time: {dt.time()}")
 ```
 
-Working with timezone with a standard library is quite difficult but there is one package `pytz` which removes the complexity of it.
+## Add and Subtract Time with timedelta
 
-## Using `pytz` for timezones
-[`pytz`](https://pypi.org/project/pytz/) is a library that is great to work with timezones and it can be easily implemented on the standard library `datetime`. We can install it like the below.
-
+We can use `timedelta` to add or subtract time.
 
 ```python
-!pip install pytz
+from datetime import datetime, timedelta
+
+dt = datetime.now()
+
+print(f"Current datetime: {dt}")
+print(f"Add one day: {dt + timedelta(days=1)}")
+print(f"Subtract one day: {dt - timedelta(days=1)}")
+print(f"Add one hour: {dt + timedelta(hours=1)}")
+print(f"Add 30 minutes: {dt + timedelta(minutes=30)}")
 ```
 
-    Looking in indexes: https://pypi.org/simple, https://us-python.pkg.dev/colab-wheels/public/simple/
-    Requirement already satisfied: pytz in /usr/local/lib/python3.7/dist-packages (2022.6)
-    
+Output:
 
-### Getting Timezones
-Let's see available time zones. It has a lot of time zones.
+```text
+Current datetime: 2022-11-09 19:15:38.568075
+Add one day: 2022-11-10 19:15:38.568075
+Subtract one day: 2022-11-08 19:15:38.568075
+Add one hour: 2022-11-09 20:15:38.568075
+Add 30 minutes: 2022-11-09 19:45:38.568075
+```
 
+### Important Note About Months
+
+`timedelta(days=30)` is not the same as adding one calendar month.
+
+Months have different lengths:
+
+- February can have 28 or 29 days
+- April has 30 days
+- May has 31 days
+
+For calendar month operations, use packages such as `dateutil` or `pendulum`.
+
+## Get Day and Month Names
+
+We can use `strftime` to get day and month names.
 
 ```python
+from datetime import datetime
+
+dt = datetime.now()
+
+print(dt.strftime("%A"))
+print(dt.strftime("%B"))
+print(dt.strftime("%Y-%B-%A"))
+print(dt.strftime("%Y-%m-%A"))
+```
+
+Example output:
+
+```text
+Wednesday
+November
+2022-November-Wednesday
+2022-11-Wednesday
+```
+
+This is useful when writing reports, emails, dashboards, or logs.
+
+## Find Time Difference
+
+To find the difference between two datetime values, subtract one from the other.
+
+```python
+from datetime import datetime, timedelta
+
+dt1 = datetime.now()
+dt2 = dt1 + timedelta(minutes=5.5, seconds=40)
+
+difference = dt2 - dt1
+
+print(f"DT1: {dt1}")
+print(f"DT2: {dt2}")
+print(f"Time difference: {difference}")
+print(f"Difference in seconds: {difference.total_seconds()}")
+```
+
+Output:
+
+```text
+Time difference: 0:06:10
+Difference in seconds: 370.0
+```
+
+## Compare Datetime Objects
+
+Datetime objects support comparison operators.
+
+```python
+dt1 < dt2
+dt1 == dt2
+dt1 > dt2
+dt1 != dt2
+```
+
+Example result:
+
+```text
+(True, False, False, True)
+```
+
+This is useful for filtering data, checking deadlines, scheduling tasks, and comparing events.
+
+## Work with Timestamps
+
+A timestamp usually represents seconds since the Unix epoch:
+
+```text
+1970-01-01 00:00:00 UTC
+```
+
+We can convert datetime to timestamp.
+
+```python
+from datetime import datetime
+
+dt = datetime.strptime("2022-01-23 12:23:30", "%Y-%m-%d %H:%M:%S")
+
+timestamp = dt.timestamp()
+
+print(timestamp)
+```
+
+We can also convert a timestamp back to datetime.
+
+```python
+print(datetime.fromtimestamp(timestamp))
+print(datetime.utcfromtimestamp(timestamp))
+```
+
+For timezone-aware code, prefer:
+
+```python
+from datetime import datetime, timezone
+
+dt_utc = datetime.fromtimestamp(timestamp, tz=timezone.utc)
+
+print(dt_utc)
+```
+
+## Working with Timezones
+
+Timezones are one of the most difficult parts of datetime work.
+
+A common mistake is to use `replace(tzinfo=...)` incorrectly. Replacing timezone does not convert the actual time. It only attaches timezone information to the datetime object.
+
+For timezone conversion, use `astimezone()`.
+
+## Using zoneinfo for Timezones
+
+For modern Python versions, `zoneinfo` is the standard library way to work with IANA timezones.
+
+```python
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
+
+now_utc = datetime.now(timezone.utc)
+
+berlin_time = now_utc.astimezone(ZoneInfo("Europe/Berlin"))
+kathmandu_time = now_utc.astimezone(ZoneInfo("Asia/Kathmandu"))
+
+print(f"UTC: {now_utc}")
+print(f"Berlin: {berlin_time}")
+print(f"Kathmandu: {kathmandu_time}")
+```
+
+This correctly handles timezone offsets and daylight saving time where applicable.
+
+## Adding Timezone to a Naive Datetime
+
+If you already have a naive datetime that represents local Berlin time, you can attach the timezone like this:
+
+```python
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+naive_berlin_time = datetime(2022, 11, 9, 21, 2, 46)
+
+aware_berlin_time = naive_berlin_time.replace(
+    tzinfo=ZoneInfo("Europe/Berlin")
+)
+
+print(aware_berlin_time)
+```
+
+But be careful. This does not convert time. It only says, "this datetime should be interpreted as Berlin time."
+
+## Convert Between Timezones
+
+If you have an aware datetime, use `astimezone()` to convert it.
+
+```python
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
+
+now_utc = datetime.now(timezone.utc)
+
+berlin_time = now_utc.astimezone(ZoneInfo("Europe/Berlin"))
+kathmandu_time = berlin_time.astimezone(ZoneInfo("Asia/Kathmandu"))
+
+print(berlin_time)
+print(kathmandu_time)
+```
+
+Nepal does not use daylight saving time, so its offset is usually `+05:45`.
+
+## Using pytz for Timezones
+
+Older Python projects often use `pytz`.
+
+Install it with:
+
+```bash
+pip install pytz
+```
+
+Import it:
+
+```python
+import datetime
 import pytz
 ```
 
+### Get a Timezone
 
 ```python
-pytz.all_timezones
+berlin = pytz.timezone("Europe/Berlin")
+kathmandu = pytz.timezone("Asia/Kathmandu")
 ```
 
+### Localize a Naive Datetime with pytz
 
-
-
-    ['Africa/Abidjan',
-     'Africa/Accra',
-     'Africa/Addis_Ababa',
-     'Africa/Algiers',
-     'Africa/Asmara',
-     'Africa/Asmera',
-     'Africa/Bamako',
-     'Africa/Bangui',
-     'Africa/Banjul',
-     'Africa/Bissau',
-     'Africa/Blantyre',
-     'Africa/Brazzaville',
-     'Africa/Bujumbura',
-     'Africa/Cairo',
-     'Africa/Casablanca',
-     'Africa/Ceuta',
-     'Africa/Conakry',
-     'Africa/Dakar',
-     'Africa/Dar_es_Salaam',
-     'Africa/Djibouti',
-     'Africa/Douala',
-     'Africa/El_Aaiun',
-     'Africa/Freetown',
-     'Africa/Gaborone',
-     'Africa/Harare',
-     'Africa/Johannesburg',
-     'Africa/Juba',
-     'Africa/Kampala',
-     'Africa/Khartoum',
-     'Africa/Kigali',
-     'Africa/Kinshasa',
-     'Africa/Lagos',
-     'Africa/Libreville',
-     'Africa/Lome',
-     'Africa/Luanda',
-     'Africa/Lubumbashi',
-     'Africa/Lusaka',
-     'Africa/Malabo',
-     'Africa/Maputo',
-     'Africa/Maseru',
-     'Africa/Mbabane',
-     'Africa/Mogadishu',
-     'Africa/Monrovia',
-     'Africa/Nairobi',
-     'Africa/Ndjamena',
-     'Africa/Niamey',
-     'Africa/Nouakchott',
-     'Africa/Ouagadougou',
-     'Africa/Porto-Novo',
-     'Africa/Sao_Tome',
-     'Africa/Timbuktu',
-     'Africa/Tripoli',
-     'Africa/Tunis',
-     'Africa/Windhoek',
-     'America/Adak',
-     'America/Anchorage',
-     'America/Anguilla',
-     'America/Antigua',
-     'America/Araguaina',
-     'America/Argentina/Buenos_Aires',
-     'America/Argentina/Catamarca',
-     'America/Argentina/ComodRivadavia',
-     'America/Argentina/Cordoba',
-     'America/Argentina/Jujuy',
-     'America/Argentina/La_Rioja',
-     'America/Argentina/Mendoza',
-     'America/Argentina/Rio_Gallegos',
-     'America/Argentina/Salta',
-     'America/Argentina/San_Juan',
-     'America/Argentina/San_Luis',
-     'America/Argentina/Tucuman',
-     'America/Argentina/Ushuaia',
-     'America/Aruba',
-     'America/Asuncion',
-     'America/Atikokan',
-     'America/Atka',
-     'America/Bahia',
-     'America/Bahia_Banderas',
-     'America/Barbados',
-     'America/Belem',
-     'America/Belize',
-     'America/Blanc-Sablon',
-     'America/Boa_Vista',
-     'America/Bogota',
-     'America/Boise',
-     'America/Buenos_Aires',
-     'America/Cambridge_Bay',
-     'America/Campo_Grande',
-     'America/Cancun',
-     'America/Caracas',
-     'America/Catamarca',
-     'America/Cayenne',
-     'America/Cayman',
-     'America/Chicago',
-     'America/Chihuahua',
-     'America/Coral_Harbour',
-     'America/Cordoba',
-     'America/Costa_Rica',
-     'America/Creston',
-     'America/Cuiaba',
-     'America/Curacao',
-     'America/Danmarkshavn',
-     'America/Dawson',
-     'America/Dawson_Creek',
-     'America/Denver',
-     'America/Detroit',
-     'America/Dominica',
-     'America/Edmonton',
-     'America/Eirunepe',
-     'America/El_Salvador',
-     'America/Ensenada',
-     'America/Fort_Nelson',
-     'America/Fort_Wayne',
-     'America/Fortaleza',
-     'America/Glace_Bay',
-     'America/Godthab',
-     'America/Goose_Bay',
-     'America/Grand_Turk',
-     'America/Grenada',
-     'America/Guadeloupe',
-     'America/Guatemala',
-     'America/Guayaquil',
-     'America/Guyana',
-     'America/Halifax',
-     'America/Havana',
-     'America/Hermosillo',
-     'America/Indiana/Indianapolis',
-     'America/Indiana/Knox',
-     'America/Indiana/Marengo',
-     'America/Indiana/Petersburg',
-     'America/Indiana/Tell_City',
-     'America/Indiana/Vevay',
-     'America/Indiana/Vincennes',
-     'America/Indiana/Winamac',
-     'America/Indianapolis',
-     'America/Inuvik',
-     'America/Iqaluit',
-     'America/Jamaica',
-     'America/Jujuy',
-     'America/Juneau',
-     'America/Kentucky/Louisville',
-     'America/Kentucky/Monticello',
-     'America/Knox_IN',
-     'America/Kralendijk',
-     'America/La_Paz',
-     'America/Lima',
-     'America/Los_Angeles',
-     'America/Louisville',
-     'America/Lower_Princes',
-     'America/Maceio',
-     'America/Managua',
-     'America/Manaus',
-     'America/Marigot',
-     'America/Martinique',
-     'America/Matamoros',
-     'America/Mazatlan',
-     'America/Mendoza',
-     'America/Menominee',
-     'America/Merida',
-     'America/Metlakatla',
-     'America/Mexico_City',
-     'America/Miquelon',
-     'America/Moncton',
-     'America/Monterrey',
-     'America/Montevideo',
-     'America/Montreal',
-     'America/Montserrat',
-     'America/Nassau',
-     'America/New_York',
-     'America/Nipigon',
-     'America/Nome',
-     'America/Noronha',
-     'America/North_Dakota/Beulah',
-     'America/North_Dakota/Center',
-     'America/North_Dakota/New_Salem',
-     'America/Nuuk',
-     'America/Ojinaga',
-     'America/Panama',
-     'America/Pangnirtung',
-     'America/Paramaribo',
-     'America/Phoenix',
-     'America/Port-au-Prince',
-     'America/Port_of_Spain',
-     'America/Porto_Acre',
-     'America/Porto_Velho',
-     'America/Puerto_Rico',
-     'America/Punta_Arenas',
-     'America/Rainy_River',
-     'America/Rankin_Inlet',
-     'America/Recife',
-     'America/Regina',
-     'America/Resolute',
-     'America/Rio_Branco',
-     'America/Rosario',
-     'America/Santa_Isabel',
-     'America/Santarem',
-     'America/Santiago',
-     'America/Santo_Domingo',
-     'America/Sao_Paulo',
-     'America/Scoresbysund',
-     'America/Shiprock',
-     'America/Sitka',
-     'America/St_Barthelemy',
-     'America/St_Johns',
-     'America/St_Kitts',
-     'America/St_Lucia',
-     'America/St_Thomas',
-     'America/St_Vincent',
-     'America/Swift_Current',
-     'America/Tegucigalpa',
-     'America/Thule',
-     'America/Thunder_Bay',
-     'America/Tijuana',
-     'America/Toronto',
-     'America/Tortola',
-     'America/Vancouver',
-     'America/Virgin',
-     'America/Whitehorse',
-     'America/Winnipeg',
-     'America/Yakutat',
-     'America/Yellowknife',
-     'Antarctica/Casey',
-     'Antarctica/Davis',
-     'Antarctica/DumontDUrville',
-     'Antarctica/Macquarie',
-     'Antarctica/Mawson',
-     'Antarctica/McMurdo',
-     'Antarctica/Palmer',
-     'Antarctica/Rothera',
-     'Antarctica/South_Pole',
-     'Antarctica/Syowa',
-     'Antarctica/Troll',
-     'Antarctica/Vostok',
-     'Arctic/Longyearbyen',
-     'Asia/Aden',
-     'Asia/Almaty',
-     'Asia/Amman',
-     'Asia/Anadyr',
-     'Asia/Aqtau',
-     'Asia/Aqtobe',
-     'Asia/Ashgabat',
-     'Asia/Ashkhabad',
-     'Asia/Atyrau',
-     'Asia/Baghdad',
-     'Asia/Bahrain',
-     'Asia/Baku',
-     'Asia/Bangkok',
-     'Asia/Barnaul',
-     'Asia/Beirut',
-     'Asia/Bishkek',
-     'Asia/Brunei',
-     'Asia/Calcutta',
-     'Asia/Chita',
-     'Asia/Choibalsan',
-     'Asia/Chongqing',
-     'Asia/Chungking',
-     'Asia/Colombo',
-     'Asia/Dacca',
-     'Asia/Damascus',
-     'Asia/Dhaka',
-     'Asia/Dili',
-     'Asia/Dubai',
-     'Asia/Dushanbe',
-     'Asia/Famagusta',
-     'Asia/Gaza',
-     'Asia/Harbin',
-     'Asia/Hebron',
-     'Asia/Ho_Chi_Minh',
-     'Asia/Hong_Kong',
-     'Asia/Hovd',
-     'Asia/Irkutsk',
-     'Asia/Istanbul',
-     'Asia/Jakarta',
-     'Asia/Jayapura',
-     'Asia/Jerusalem',
-     'Asia/Kabul',
-     'Asia/Kamchatka',
-     'Asia/Karachi',
-     'Asia/Kashgar',
-     'Asia/Kathmandu',
-     'Asia/Katmandu',
-     'Asia/Khandyga',
-     'Asia/Kolkata',
-     'Asia/Krasnoyarsk',
-     'Asia/Kuala_Lumpur',
-     'Asia/Kuching',
-     'Asia/Kuwait',
-     'Asia/Macao',
-     'Asia/Macau',
-     'Asia/Magadan',
-     'Asia/Makassar',
-     'Asia/Manila',
-     'Asia/Muscat',
-     'Asia/Nicosia',
-     'Asia/Novokuznetsk',
-     'Asia/Novosibirsk',
-     'Asia/Omsk',
-     'Asia/Oral',
-     'Asia/Phnom_Penh',
-     'Asia/Pontianak',
-     'Asia/Pyongyang',
-     'Asia/Qatar',
-     'Asia/Qostanay',
-     'Asia/Qyzylorda',
-     'Asia/Rangoon',
-     'Asia/Riyadh',
-     'Asia/Saigon',
-     'Asia/Sakhalin',
-     'Asia/Samarkand',
-     'Asia/Seoul',
-     'Asia/Shanghai',
-     'Asia/Singapore',
-     'Asia/Srednekolymsk',
-     'Asia/Taipei',
-     'Asia/Tashkent',
-     'Asia/Tbilisi',
-     'Asia/Tehran',
-     'Asia/Tel_Aviv',
-     'Asia/Thimbu',
-     'Asia/Thimphu',
-     'Asia/Tokyo',
-     'Asia/Tomsk',
-     'Asia/Ujung_Pandang',
-     'Asia/Ulaanbaatar',
-     'Asia/Ulan_Bator',
-     'Asia/Urumqi',
-     'Asia/Ust-Nera',
-     'Asia/Vientiane',
-     'Asia/Vladivostok',
-     'Asia/Yakutsk',
-     'Asia/Yangon',
-     'Asia/Yekaterinburg',
-     'Asia/Yerevan',
-     'Atlantic/Azores',
-     'Atlantic/Bermuda',
-     'Atlantic/Canary',
-     'Atlantic/Cape_Verde',
-     'Atlantic/Faeroe',
-     'Atlantic/Faroe',
-     'Atlantic/Jan_Mayen',
-     'Atlantic/Madeira',
-     'Atlantic/Reykjavik',
-     'Atlantic/South_Georgia',
-     'Atlantic/St_Helena',
-     'Atlantic/Stanley',
-     'Australia/ACT',
-     'Australia/Adelaide',
-     'Australia/Brisbane',
-     'Australia/Broken_Hill',
-     'Australia/Canberra',
-     'Australia/Currie',
-     'Australia/Darwin',
-     'Australia/Eucla',
-     'Australia/Hobart',
-     'Australia/LHI',
-     'Australia/Lindeman',
-     'Australia/Lord_Howe',
-     'Australia/Melbourne',
-     'Australia/NSW',
-     'Australia/North',
-     'Australia/Perth',
-     'Australia/Queensland',
-     'Australia/South',
-     'Australia/Sydney',
-     'Australia/Tasmania',
-     'Australia/Victoria',
-     'Australia/West',
-     'Australia/Yancowinna',
-     'Brazil/Acre',
-     'Brazil/DeNoronha',
-     'Brazil/East',
-     'Brazil/West',
-     'CET',
-     'CST6CDT',
-     'Canada/Atlantic',
-     'Canada/Central',
-     'Canada/Eastern',
-     'Canada/Mountain',
-     'Canada/Newfoundland',
-     'Canada/Pacific',
-     'Canada/Saskatchewan',
-     'Canada/Yukon',
-     'Chile/Continental',
-     'Chile/EasterIsland',
-     'Cuba',
-     'EET',
-     'EST',
-     'EST5EDT',
-     'Egypt',
-     'Eire',
-     'Etc/GMT',
-     'Etc/GMT+0',
-     'Etc/GMT+1',
-     'Etc/GMT+10',
-     'Etc/GMT+11',
-     'Etc/GMT+12',
-     'Etc/GMT+2',
-     'Etc/GMT+3',
-     'Etc/GMT+4',
-     'Etc/GMT+5',
-     'Etc/GMT+6',
-     'Etc/GMT+7',
-     'Etc/GMT+8',
-     'Etc/GMT+9',
-     'Etc/GMT-0',
-     'Etc/GMT-1',
-     'Etc/GMT-10',
-     'Etc/GMT-11',
-     'Etc/GMT-12',
-     'Etc/GMT-13',
-     'Etc/GMT-14',
-     'Etc/GMT-2',
-     'Etc/GMT-3',
-     'Etc/GMT-4',
-     'Etc/GMT-5',
-     'Etc/GMT-6',
-     'Etc/GMT-7',
-     'Etc/GMT-8',
-     'Etc/GMT-9',
-     'Etc/GMT0',
-     'Etc/Greenwich',
-     'Etc/UCT',
-     'Etc/UTC',
-     'Etc/Universal',
-     'Etc/Zulu',
-     'Europe/Amsterdam',
-     'Europe/Andorra',
-     'Europe/Astrakhan',
-     'Europe/Athens',
-     'Europe/Belfast',
-     'Europe/Belgrade',
-     'Europe/Berlin',
-     'Europe/Bratislava',
-     'Europe/Brussels',
-     'Europe/Bucharest',
-     'Europe/Budapest',
-     'Europe/Busingen',
-     'Europe/Chisinau',
-     'Europe/Copenhagen',
-     'Europe/Dublin',
-     'Europe/Gibraltar',
-     'Europe/Guernsey',
-     'Europe/Helsinki',
-     'Europe/Isle_of_Man',
-     'Europe/Istanbul',
-     'Europe/Jersey',
-     'Europe/Kaliningrad',
-     'Europe/Kiev',
-     'Europe/Kirov',
-     'Europe/Kyiv',
-     'Europe/Lisbon',
-     'Europe/Ljubljana',
-     'Europe/London',
-     'Europe/Luxembourg',
-     'Europe/Madrid',
-     'Europe/Malta',
-     'Europe/Mariehamn',
-     'Europe/Minsk',
-     'Europe/Monaco',
-     'Europe/Moscow',
-     'Europe/Nicosia',
-     'Europe/Oslo',
-     'Europe/Paris',
-     'Europe/Podgorica',
-     'Europe/Prague',
-     'Europe/Riga',
-     'Europe/Rome',
-     'Europe/Samara',
-     'Europe/San_Marino',
-     'Europe/Sarajevo',
-     'Europe/Saratov',
-     'Europe/Simferopol',
-     'Europe/Skopje',
-     'Europe/Sofia',
-     'Europe/Stockholm',
-     'Europe/Tallinn',
-     'Europe/Tirane',
-     'Europe/Tiraspol',
-     'Europe/Ulyanovsk',
-     'Europe/Uzhgorod',
-     'Europe/Vaduz',
-     'Europe/Vatican',
-     'Europe/Vienna',
-     'Europe/Vilnius',
-     'Europe/Volgograd',
-     'Europe/Warsaw',
-     'Europe/Zagreb',
-     'Europe/Zaporozhye',
-     'Europe/Zurich',
-     'GB',
-     'GB-Eire',
-     'GMT',
-     'GMT+0',
-     'GMT-0',
-     'GMT0',
-     'Greenwich',
-     'HST',
-     'Hongkong',
-     'Iceland',
-     'Indian/Antananarivo',
-     'Indian/Chagos',
-     'Indian/Christmas',
-     'Indian/Cocos',
-     'Indian/Comoro',
-     'Indian/Kerguelen',
-     'Indian/Mahe',
-     'Indian/Maldives',
-     'Indian/Mauritius',
-     'Indian/Mayotte',
-     'Indian/Reunion',
-     'Iran',
-     'Israel',
-     'Jamaica',
-     'Japan',
-     'Kwajalein',
-     'Libya',
-     'MET',
-     'MST',
-     'MST7MDT',
-     'Mexico/BajaNorte',
-     'Mexico/BajaSur',
-     'Mexico/General',
-     'NZ',
-     'NZ-CHAT',
-     'Navajo',
-     'PRC',
-     'PST8PDT',
-     'Pacific/Apia',
-     'Pacific/Auckland',
-     'Pacific/Bougainville',
-     'Pacific/Chatham',
-     'Pacific/Chuuk',
-     'Pacific/Easter',
-     'Pacific/Efate',
-     'Pacific/Enderbury',
-     'Pacific/Fakaofo',
-     'Pacific/Fiji',
-     'Pacific/Funafuti',
-     'Pacific/Galapagos',
-     'Pacific/Gambier',
-     'Pacific/Guadalcanal',
-     'Pacific/Guam',
-     'Pacific/Honolulu',
-     'Pacific/Johnston',
-     'Pacific/Kanton',
-     'Pacific/Kiritimati',
-     'Pacific/Kosrae',
-     'Pacific/Kwajalein',
-     'Pacific/Majuro',
-     'Pacific/Marquesas',
-     'Pacific/Midway',
-     'Pacific/Nauru',
-     'Pacific/Niue',
-     'Pacific/Norfolk',
-     'Pacific/Noumea',
-     'Pacific/Pago_Pago',
-     'Pacific/Palau',
-     'Pacific/Pitcairn',
-     'Pacific/Pohnpei',
-     'Pacific/Ponape',
-     'Pacific/Port_Moresby',
-     'Pacific/Rarotonga',
-     'Pacific/Saipan',
-     'Pacific/Samoa',
-     'Pacific/Tahiti',
-     'Pacific/Tarawa',
-     'Pacific/Tongatapu',
-     'Pacific/Truk',
-     'Pacific/Wake',
-     'Pacific/Wallis',
-     'Pacific/Yap',
-     'Poland',
-     'Portugal',
-     'ROC',
-     'ROK',
-     'Singapore',
-     'Turkey',
-     'UCT',
-     'US/Alaska',
-     'US/Aleutian',
-     'US/Arizona',
-     'US/Central',
-     'US/East-Indiana',
-     'US/Eastern',
-     'US/Hawaii',
-     'US/Indiana-Starke',
-     'US/Michigan',
-     'US/Mountain',
-     'US/Pacific',
-     'US/Samoa',
-     'UTC',
-     'Universal',
-     'W-SU',
-     'WET',
-     'Zulu']
-
-
-
-### Adding timezone
-It seems like `pytz` uses standard datetime library under the hood as well.
-
+With `pytz`, use `localize()` instead of directly using `replace()`.
 
 ```python
-now = pytz.datetime.datetime.now()
-print(f"Now: {now}")
-print(f"Now added Berlin Time Zone: {now.replace(tzinfo=pytz.timezone('Europe/Berlin'))}")
-print(f"Now Changed to Berlin Time: {now.astimezone(pytz.timezone('Europe/Berlin'))}")
+naive_dt = datetime.datetime(2022, 11, 9, 21, 2, 46)
 
+berlin_dt = berlin.localize(naive_dt)
+
+print(berlin_dt)
 ```
 
-    Now: 2022-11-09 20:02:46.248376
-    Now added Berlin Time Zone: 2022-11-09 20:02:46.248376+00:53
-    Now Changed to Berlin Time: 2022-11-09 21:02:46.248376+01:00
-    
-
-In the above example, the first time is the local time printed by Python. And we replaced its timezone with Europe/Berlin which added the +00:53 on the last of time. Then we changed the actual time to Europe/Berlin time which added one hour and can be seen on the +01:00 as well. Looking into the now time in the first line, it's 20:02:46 but the current time is 21:02:46 here in Germany so daylight saving is not working properly. Then on the last line, we can see that daylight saving is working properly. Now I want to see what time is it in Kathmandu because Nepal does not follow daylight savings.
-
+### Convert Timezone with pytz
 
 ```python
-print(f"Now Changed to Kathmandu Time: {now.astimezone(pytz.timezone('Asia/Kathmandu'))}")
+kathmandu_dt = berlin_dt.astimezone(kathmandu)
+
+print(kathmandu_dt)
 ```
 
-    Now Changed to Kathmandu Time: 2022-11-10 01:47:46.248376+05:45
-    
+### Why Not Use replace with pytz?
 
-It's the correct time but what if we changed it from the Berlin time which is daylight saving?
-
+This can produce strange historical offsets such as `+00:53` for Berlin:
 
 ```python
-print(f"Now Changed to Kathmandu Time from Berlin: {now.astimezone(pytz.timezone('Europe/Berlin')).astimezone(pytz.timezone('Asia/Kathmandu'))}")
+bad_dt = naive_dt.replace(tzinfo=pytz.timezone("Europe/Berlin"))
+
+print(bad_dt)
 ```
 
-    Now Changed to Kathmandu Time from Berlin: 2022-11-10 01:47:46.248376+05:45
-    
+This is why `pytz.localize()` is recommended for naive datetime objects.
 
-It is being handled. How ironic!!
+For new projects, I prefer `zoneinfo` when possible because it is part of the Python standard library.
 
-After adding the timezone, datetime object will be little different.
+## Using Pendulum for Easier Datetime Work
 
+[`pendulum`](https://pypi.org/project/pendulum/) is a third-party datetime library that makes many datetime operations easier.
 
-```python
-now.replace(tzinfo=pytz.timezone('Europe/Berlin'))
+Install it with:
+
+```bash
+pip install pendulum
 ```
 
-
-
-
-    datetime.datetime(2022, 11, 9, 20, 2, 46, 248376, tzinfo=<DstTzInfo 'Europe/Berlin' LMT+0:53:00 STD>)
-
-
-
-
-```python
-# UTC time
-now.replace(tzinfo=pytz.timezone('UTC'))
-```
-
-
-
-
-    datetime.datetime(2022, 11, 9, 20, 2, 46, 248376, tzinfo=<UTC>)
-
-
-
-## Using `pendulum` for clever works
-If we need to do more datetime operations then we can use [`pendulum`](https://pypi.org/project/pendulum/). We can install it simply by `pip install pendulum`.
-
-
-```python
-!pip install pendulum
-
-```
-
-    Looking in indexes: https://pypi.org/simple, https://us-python.pkg.dev/colab-wheels/public/simple/
-    Collecting pendulum
-      Downloading pendulum-2.1.2-cp37-cp37m-manylinux1_x86_64.whl (155 kB)
-    [K     |████████████████████████████████| 155 kB 5.1 MB/s 
-    [?25hCollecting pytzdata>=2020.1
-      Downloading pytzdata-2020.1-py2.py3-none-any.whl (489 kB)
-    [K     |████████████████████████████████| 489 kB 44.8 MB/s 
-    [?25hRequirement already satisfied: python-dateutil<3.0,>=2.6 in /usr/local/lib/python3.7/dist-packages (from pendulum) (2.8.2)
-    Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.7/dist-packages (from python-dateutil<3.0,>=2.6->pendulum) (1.15.0)
-    Installing collected packages: pytzdata, pendulum
-    Successfully installed pendulum-2.1.2 pytzdata-2020.1
-    
-
+Import it:
 
 ```python
 import pendulum
+```
+
+Get the current time:
+
+```python
 now = pendulum.now()
+
 print(now)
 ```
 
-    2022-11-09T20:19:39.486885+00:00
-    
-
-### When will next Friday be?
-The pendulum tells us this with a simple call.
-
+Get current time in a specific timezone:
 
 ```python
-now.next(pendulum.FRIDAY)
+berlin_now = pendulum.now("Europe/Berlin")
+kathmandu_now = pendulum.now("Asia/Kathmandu")
+
+print(berlin_now)
+print(kathmandu_now)
 ```
 
+## Find the Next Friday with Pendulum
 
-
-
-    DateTime(2022, 11, 11, 0, 0, 0, tzinfo=Timezone('Etc/UTC'))
-
-
-
-## Problem Answers
-Here I will write about some cases where I had to use datetime above-mentioned packages on real-world.
-
-### 1. Run stock backtesting every Saturday.
-
-* We can use Asyncio to sleep the system.
-* Run everything in a never-ending loop and check the current day. If the current day is Saturday then perform backtesting.
-* If the current day is not Friday then sleep until Saturday.
-
-
+Pendulum makes date navigation simple.
 
 ```python
-import datetime, pytz, pendulum
-curr_time = datetime.datetime.now().astimezone(pytz.timezone('Europe/Berlin'))
-day = curr_time.strftime('%A').upper()
-print(f"Curr Time: {curr_time}, Day: {day}")
-if day!='SATURDAY':
-  pnow = pendulum.now()
-  next_sat = pnow.astimezone(pytz.timezone('Europe/Berlin')).next(pendulum.SATURDAY)
-  print(f"Next SAT: {next_sat}")
-  sleep_till = (next_sat-pnow).total_seconds()
-  print(f"Sleep until: {sleep_till}secs.")
-  # await asyncio.sleep(sleep_till)
+import pendulum
+
+now = pendulum.now()
+
+next_friday = now.next(pendulum.FRIDAY)
+
+print(next_friday)
+```
+
+This is useful for scheduling tasks.
+
+## Add Months with Pendulum
+
+`timedelta` does not handle calendar months directly, but Pendulum can.
+
+```python
+import pendulum
+
+dt = pendulum.datetime(2022, 1, 31)
+
+print(dt.add(months=1))
+print(dt.add(months=2))
+```
+
+Pendulum understands calendar-aware operations better than simple day-based addition.
+
+## Human-Friendly Time Difference with Pendulum
+
+Pendulum can also show differences in a human-readable way.
+
+```python
+import pendulum
+
+past = pendulum.now().subtract(days=3)
+now = pendulum.now()
+
+print(past.diff_for_humans(now))
+```
+
+Example:
+
+```text
+3 days before
+```
+
+## Working with Datetime in pandas
+
+In data science and analytics, datetime often appears in pandas DataFrames.
+
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "created_at": [
+        "2022-10-01 10:00:00",
+        "2022-10-02 15:30:00",
+        "2022-10-03 21:45:00"
+    ]
+})
+
+df["created_at"] = pd.to_datetime(df["created_at"])
+
+print(df)
+```
+
+## Extract Date Parts in pandas
+
+```python
+df["date"] = df["created_at"].dt.date
+df["year"] = df["created_at"].dt.year
+df["month"] = df["created_at"].dt.month
+df["day"] = df["created_at"].dt.day
+df["hour"] = df["created_at"].dt.hour
+
+print(df)
+```
+
+This is useful for grouping, filtering, and plotting time-based data.
+
+## Filter Last 7 Days in pandas
+
+```python
+now = pd.Timestamp.now()
+
+last_7_days = df[df["created_at"] >= now - pd.Timedelta(days=7)]
+
+print(last_7_days)
+```
+
+For timezone-aware data, make sure both sides of the comparison use compatible timezones.
+
+## Real-World Example 1: Run a Task Every Saturday
+
+Suppose we want to run stock backtesting every Saturday.
+
+A simple scheduling idea is:
+
+- get the current time
+- check the current day
+- if today is Saturday, run the task
+- otherwise calculate seconds until next Saturday
+
+```python
+import datetime
+import pendulum
+from zoneinfo import ZoneInfo
+
+current_time = datetime.datetime.now(ZoneInfo("Europe/Berlin"))
+day = current_time.strftime("%A").upper()
+
+print(f"Current time: {current_time}")
+print(f"Day: {day}")
+
+if day != "SATURDAY":
+    now = pendulum.now("Europe/Berlin")
+    next_saturday = now.next(pendulum.SATURDAY)
+
+    sleep_till = (next_saturday - now).total_seconds()
+
+    print(f"Next Saturday: {next_saturday}")
+    print(f"Sleep for: {sleep_till} seconds")
+
+    # await asyncio.sleep(sleep_till)
 else:
-  pass
-  # perform backtesting here
+    # perform backtesting here
+    pass
 ```
 
-    Curr Time: 2022-11-09 21:33:01.985186+01:00, Day: WEDNESDAY
-    Next SAT: 2022-11-12T00:00:00+01:00
-    Sleep until: 181618.014127secs.
-    
+For production, I would usually use a scheduler such as cron, APScheduler, Celery Beat, GitHub Actions, or a cloud scheduler instead of writing a never-ending loop manually.
 
-### 2. Email customers that they will be charged a fee on the last day of the month.
-Let's say there is a platform where subscribed customers will be charged every month's end regardless of days in a month. And we will mail them a week before the end of the month. This is a quite tricky and fun thing to do.
+## Real-World Example 2: Email Customers Before Month End
 
+Suppose customers are charged on the last day of every month, and we want to email them one week before that.
+
+We can calculate the last day of the current month.
 
 ```python
-next_month = datetime.datetime(year=curr_time.year, month=curr_time.month+1, day=1)
-print(f"Curr Time: {curr_time}, Next Month: {next_month}")
-last_month_day = next_month-datetime.timedelta(days=1)
-print(f"Last Month Day: {last_month_day}")
+import datetime
 
-if curr_time.date()==last_month_day.date():
-  print("Send emails.")
+today = datetime.date.today()
 
+if today.month == 12:
+    first_day_next_month = datetime.date(today.year + 1, 1, 1)
+else:
+    first_day_next_month = datetime.date(today.year, today.month + 1, 1)
 
+last_day_current_month = first_day_next_month - datetime.timedelta(days=1)
+email_day = last_day_current_month - datetime.timedelta(days=7)
+
+print(f"Last day of current month: {last_day_current_month}")
+print(f"Email customers on: {email_day}")
+
+if today == email_day:
+    print("Send email reminder.")
 ```
 
-    Curr Time: 2022-11-09 21:33:01.985186+01:00, Next Month: 2022-12-01 00:00:00
-    Last Month Day: 2022-11-30 00:00:00
-    
+This handles different month lengths.
 
-### 3. Store datetime from multiple sources in a central database
-Here datetime format and timezones could be different for different sources. And there will not be a quiet solution for this problem because there is not any information about what are the formats of datetime in different sources. But what we can do is:
-* Prepare config for datetime formats from each source. Assuming that format won't change once set. Example
+## Real-World Example 3: Store Datetime from Multiple Sources
+
+Suppose we collect datetime values from multiple sources. Each source may use a different format and timezone.
+
+A good approach is:
+
+1. define the expected datetime format for each source
+2. define the timezone for each source
+3. parse the datetime
+4. convert it to UTC
+5. store UTC in the database
+6. convert to local timezone only when displaying to users
+
+Example configuration:
+
 ```python
-source_datetime_format = {"source1":"%Y-%m-%d", "source2":"%m-%d-%Y %H.%M.%S", "source2":"%m-%d-%Y %H:%M:%S"}
-destination_datetime_format = "%m/%d/%Y %H:%M:%S"
+source_datetime_format = {
+    "source1": "%Y-%m-%d",
+    "source2": "%m-%d-%Y %H.%M.%S",
+    "source3": "%m-%d-%Y %H:%M:%S",
+}
+
+source_timezone = {
+    "source1": "Europe/Berlin",
+    "source2": "Asia/Kathmandu",
+    "source3": "UTC",
+}
 ```
-* Prepare config of timezone for each source's DateTime.
+
+Example parser:
+
+```python
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
 
+def parse_source_datetime(source_name, datetime_text):
+    dt_format = source_datetime_format[source_name]
+    tz_name = source_timezone[source_name]
 
-## Conclusion
-Here I tried to use some of datetime packages in Python and did some examples as well there are a lot more to come. Stay tuned :)
+    naive_dt = datetime.strptime(datetime_text, dt_format)
+
+    aware_dt = naive_dt.replace(tzinfo=ZoneInfo(tz_name))
+
+    return aware_dt.astimezone(timezone.utc)
+```
+
+Then:
+
+```python
+utc_dt = parse_source_datetime("source1", "2022-10-01")
+
+print(utc_dt)
+```
+
+For serious systems, always test timezone assumptions carefully.
+
+## Best Practices for Datetime in Python
+
+Here are some useful rules:
+
+- Store datetime in UTC in databases.
+- Convert to user timezone only for display.
+- Prefer timezone-aware datetime for real applications.
+- Use `zoneinfo` for modern Python timezone handling.
+- Avoid mixing naive and aware datetime objects.
+- Do not use `timedelta(days=30)` as a calendar month.
+- Be careful with daylight saving time.
+- Use `pd.to_datetime()` when working with pandas.
+- Use clear datetime formats when parsing strings.
+- Do not assume all APIs return the same timezone.
+
+## Common Mistakes
+
+Some common datetime mistakes are:
+
+- comparing naive and aware datetime objects
+- using `replace(tzinfo=...)` when conversion is needed
+- forgetting daylight saving time
+- storing local time in a database without timezone
+- using inconsistent formats across sources
+- assuming every month has 30 days
+- ignoring UTC offsets in API responses
+- using string comparison instead of datetime comparison
+- parsing dates without knowing the source format
+
+## datetime vs pytz vs zoneinfo vs pendulum vs pandas
+
+| Tool | Best For |
+|---|---|
+| `datetime` | Basic date and time work |
+| `timedelta` | Adding or subtracting days, seconds, minutes, hours |
+| `zoneinfo` | Modern timezone handling in standard Python |
+| `pytz` | Older projects that already use pytz |
+| `pendulum` | Easier human-friendly datetime operations |
+| `pandas` | Datetime columns in datasets and time series |
+
+For normal Python applications, I usually start with `datetime` and `zoneinfo`.
+
+For data analysis, I use pandas.
+
+For cleaner scheduling or calendar operations, Pendulum can be helpful.
+
+## Final Thoughts
+
+In this post, we explored how to work with **datetime in Python**. We created datetime objects, parsed strings, formatted dates, calculated time differences, compared datetime values, worked with timestamps, and handled timezones.
+
+The most important lesson is to be careful with timezones. If your application receives datetime values from different sources, convert them to a common timezone such as UTC before storing them. Then convert to local time only when showing the result to users.
+
+Datetime work can be tricky, but once you understand parsing, formatting, timezone awareness, and conversion, it becomes much easier to manage real-world time data in Python.

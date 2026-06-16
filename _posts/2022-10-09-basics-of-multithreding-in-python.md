@@ -1,346 +1,689 @@
 ---
-title:  Basics of Multi-threading in Python
-date:   2022-10-09 01:29:17 +0545
+layout: single
+title: "Basics of Multithreading in Python: Threading, ThreadPoolExecutor, Locks, Queues, and Joblib"
+date: 2022-10-09 01:29:17 +0545
+last_modified_at: 2026-06-16
 categories:
-    - Python
-    - Multi Threading
+  - Python
+  - Multithreading
+  - Concurrency
 tags:
-    - python
-    - joblib
-    - multiprocess
+  - "Python"
+  - "Multithreading"
+  - "Threading"
+  - "ThreadPoolExecutor"
+  - "Joblib"
+  - "Parallel processing"
+  - "Concurrency"
+  - "I/O bound"
+  - "Multiprocessing"
+description: "A beginner-friendly tutorial on multithreading in Python using threading, ThreadPoolExecutor, locks, queues, and Joblib, with examples for I/O-bound tasks."
+excerpt: "Learn the basics of multithreading in Python, when to use threads, how the threading module works, how to use locks and queues, and how Joblib can simplify parallel tasks."
 header:
   teaser: assets/python/threading.png
+  og_image: assets/python/threading.png
+  image_description: "Python threading illustration for a multithreading tutorial"
+toc: true
+toc_label: "Multithreading in Python"
+toc_icon: "code-branch"
+toc_sticky: true
+read_time: true
+share: true
+related: true
+classes: wide
 ---
-Multi-threading in Python is often used when there are tasks related to I/O bound. But before going further, let's take a few examples where multi-threading could be used:
 
-1. Downloading images from the web and doing image processing-related tasks. It takes some time to download the image and some time to process it too but these two sub-tasks can be run either sequentially or parallelly. Running sequentially has some flaws when our system has multi-threading as our resources will not be using what is available. And another is image processing could take a long time and the download will be paused when processing is going on. But we could run these two tasks in independent threads. One thread will download images from the web and another will process that downloaded image.
-2. While doing machine learning tasks, we have to work with multiple data and process a lot before sending them to modeling. We could run multiple threads that our CPU supports and then perform pre-processing on them.
-3. Another application I recently did was for making a back-testing bot. Users will make different alerts with rules based on technical indicators and they will try to check if this alert will fire at this time of the day. One can run this test for a long period of time and the data is not related to each other. While testing sequentially, it was quite slow and was not running at the full capacity of the system. But when I made different threads and ran clusters of different dates, it was surprisingly fast.
-4. Another I built is also for a trading bot. There will be an API listening to the user's request to buy stock options based on the strike price, symbol, and expiry date. Also, we had to use [bracket order](https://www.investopedia.com/terms/b/bracketedbuyorder.asp). I had to keep a track of these orders. So I ran distinct threads in distinct order until they were filled. This way one order runs independently of another.
- 
-## Using `threading`
-Multi-threading in Python can be done using builtin module too. `threading` is one of the standard python libraries to do thread-based multiprocessing. Please follow the [documentation](https://docs.python.org/3/library/threading.html) for modules.
- 
-### Simple Example
-Let's create a simple example of multi-threading in Python where we will print even numbers in one and odds in another function. Even will sleep for 2 seconds after printing one and odd will sleep for 1 second. There should not be any blocking of time from even functioning while it is sleeping.
- 
- 
+**Multithreading in Python** is useful when a program has tasks that spend time waiting. These are usually called **I/O-bound tasks**. Examples include downloading files, reading and writing files, calling APIs, waiting for a database, or listening for user requests.
+
+If a program is waiting for one task to finish, another thread can continue doing other work. This can make the program feel faster and more responsive.
+
+In this post, I will explain the basics of multithreading in Python using:
+
+- the built-in `threading` module
+- `threading.Thread`
+- custom thread classes
+- locks for shared resources
+- queues for safer communication between threads
+- `ThreadPoolExecutor`
+- `joblib` for simple parallel execution
+
+This is a beginner-friendly tutorial, so the examples are simple and practical.
+
+## When Should You Use Multithreading?
+
+Multithreading is useful when tasks are mostly waiting for something outside the CPU.
+
+Good examples are:
+
+1. **Downloading images from the web**
+
+   One thread can download images while another thread processes already downloaded images.
+
+2. **Reading and writing files**
+
+   One thread can write data to a file while another checks the file or processes previous data.
+
+3. **Calling APIs**
+
+   A trading bot, weather bot, or data pipeline may need to call many APIs. Threads can help send multiple requests without waiting for each one sequentially.
+
+4. **Monitoring background tasks**
+
+   For example, one thread can listen for user input while another checks order status or system events.
+
+5. **Backtesting independent date ranges**
+
+   If different chunks of historical data are independent, they can sometimes be processed in parallel.
+
+6. **Keeping an application responsive**
+
+   In desktop or server applications, background threads can keep long-running tasks away from the main program flow.
+
+## Multithreading vs Multiprocessing vs Asyncio
+
+Before writing code, it is useful to understand the difference between three common Python concurrency approaches.
+
+| Approach | Best For | Main Idea |
+|---|---|---|
+| `threading` | I/O-bound tasks | Run multiple threads in one process |
+| `multiprocessing` | CPU-bound tasks | Run multiple Python processes |
+| `asyncio` | Many I/O tasks | Use one thread with an event loop |
+| `joblib` | Easy parallel loops | Use threads or processes with a simple API |
+
+For pure Python CPU-heavy work, multithreading may not speed things up much because of the **Global Interpreter Lock**, also called the **GIL**. For CPU-bound tasks, multiprocessing is often better.
+
+For I/O-bound tasks, multithreading is still useful because threads can work while other threads are waiting.
+
+## What Is the Python GIL?
+
+The **Global Interpreter Lock** is a mechanism in CPython that allows only one thread to execute Python bytecode at a time.
+
+This means:
+
+- Python threads are good for I/O-bound work.
+- Python threads are not always good for CPU-heavy pure Python loops.
+- CPU-heavy work may need `multiprocessing`, vectorized NumPy code, or compiled extensions.
+
+This does not mean Python threading is useless. It only means we should use it for the right type of task.
+
+## Using the `threading` Module
+
+Python has a built-in module called `threading`. We do not need to install anything.
+
 ```python
 import threading
 import time
- 
-def even(x):
-    n=0
-    while x>n:
-        print(f"EVEN: {n}")
-        n+=2
-        time.sleep(2)
- 
-def odd(x):
-    n=1
-    while x>n:
-        print(f"ODD: {n}")
-        n+=2
-        time.sleep(1)
- 
-th1 = threading.Thread(target=even, args=[10])
-th2 = threading.Thread(target=odd, args=[10])
- 
-th1.start()
-th2.start()
- 
-th1.join()
-th2.join()
 ```
- 
-    5
-    EVEN: 0
-    ODD: 17
-    
-    ODD: 3
-    EVEN: 2
-    ODD: 5
-    ODD: 7
-    EVEN: 4ODD: 9
-    
-    EVEN: 6
-    EVEN: 8
-    5
-    
- 
-`threading.Thread()` creates a thread object and we start the thread by calling the `start` method of it. Then we join to wait for the thread to complete.
-As we can see in the above example that both functions are running independently of each other without altering the order of another. The above process can also be achieved with Asyncio but Asyncio doesn't use multi-threading.
- 
-Lets try another example where one function writes data to a file and another will read that from another thread.
- 
- 
+
+The most common way to create a thread is:
+
 ```python
-def writer(x):
-    n=0
- 
-    with open(f"{x}.txt", "w") as fp:
+thread = threading.Thread(target=function_name, args=(arg1, arg2))
+thread.start()
+thread.join()
+```
+
+Here:
+
+- `target` is the function the thread will run
+- `args` contains the function arguments
+- `start()` begins the thread
+- `join()` waits for the thread to finish
+
+## Simple Multithreading Example
+
+Let's create two functions:
+
+- one prints even numbers
+- one prints odd numbers
+
+The even function sleeps for two seconds. The odd function sleeps for one second. If they run in separate threads, one function does not fully block the other.
+
+```python
+import threading
+import time
+
+
+def even(limit):
+    number = 0
+
+    while number < limit:
+        print(f"EVEN: {number}")
+        number += 2
+        time.sleep(2)
+
+
+def odd(limit):
+    number = 1
+
+    while number < limit:
+        print(f"ODD: {number}")
+        number += 2
+        time.sleep(1)
+
+
+thread_1 = threading.Thread(target=even, args=(10,))
+thread_2 = threading.Thread(target=odd, args=(10,))
+
+thread_1.start()
+thread_2.start()
+
+thread_1.join()
+thread_2.join()
+```
+
+Example output:
+
+```text
+EVEN: 0
+ODD: 1
+ODD: 3
+EVEN: 2
+ODD: 5
+ODD: 7
+EVEN: 4
+ODD: 9
+EVEN: 6
+EVEN: 8
+```
+
+The exact output order can change because thread scheduling is handled by the operating system.
+
+## Why Output Order Can Look Strange
+
+When multiple threads print at the same time, the output can look mixed.
+
+For example, you may see two lines printed together. This happens because both threads are writing to the console at almost the same time.
+
+This is normal in multithreaded programs. If output order matters, you need synchronization.
+
+## Using `join()`
+
+The `join()` method tells the main program to wait until a thread is finished.
+
+```python
+thread_1.join()
+thread_2.join()
+```
+
+Without `join()`, the main program may continue running before the threads are done.
+
+## File Writer and Reader Example
+
+Now let's try a simple example where one thread writes to a file and another thread reads from it.
+
+```python
+import threading
+import time
+
+
+def writer(file_id):
+    file_name = f"{file_id}.txt"
+
+    with open(file_name, "w") as fp:
         fp.write("")
-    
-    while x>n:
-        with open(f"{x}.txt", "a") as fp:
-            fp.write(f"{n}")
-            print(f"Writer N: {n} | Wrote Line: {n}")
-        n+=1
+
+    number = 0
+
+    while number < file_id:
+        with open(file_name, "a") as fp:
+            fp.write(f"{number}")
+            print(f"Writer N: {number} | Wrote: {number}")
+
+        number += 1
         time.sleep(1)
- 
-def reader(x):
-    n=0
-    while x>n:
-        with open(f"{x}.txt", "r") as fp:
-            lines = fp.read()
-            print(f"Reader N: {n} | Read Lines: {lines}")
-        n+=1
+
+
+def reader(file_id):
+    file_name = f"{file_id}.txt"
+
+    number = 0
+
+    while number < file_id:
+        with open(file_name, "r") as fp:
+            content = fp.read()
+            print(f"Reader N: {number} | Read: {content}")
+
+        number += 1
         time.sleep(2)
- 
-th1 = threading.Thread(target=writer, args=[10])
-th2 = threading.Thread(target=reader, args=[10])
- 
-th1.start()
-th2.start()
- 
-th1.join()
-th2.join()
+
+
+thread_1 = threading.Thread(target=writer, args=(10,))
+thread_2 = threading.Thread(target=reader, args=(10,))
+
+thread_1.start()
+thread_2.start()
+
+thread_1.join()
+thread_2.join()
 ```
- 
-    Writer N: 0 | Wrote Line: 0
-    Reader N: 0 | Read Lines: 0
-    Writer N: 1 | Wrote Line: 1
-    Reader N: 1 | Read Lines: 01
-    Writer N: 2 | Wrote Line: 2
-    Writer N: 3 | Wrote Line: 3
-    Reader N: 2 | Read Lines: 0123
-    Writer N: 4 | Wrote Line: 4
-    Writer N: 5 | Wrote Line: 5
-    Reader N: 3 | Read Lines: 012345
-    Writer N: 6 | Wrote Line: 6
-    Writer N: 7 | Wrote Line: 7
-    Reader N: 4 | Read Lines: 01234567
-    Writer N: 8 | Wrote Line: 8
-    Writer N: 9 | Wrote Line: 9
-    Reader N: 5 | Read Lines: 0123456789
-    Reader N: 6 | Read Lines: 0123456789
-    Reader N: 7 | Read Lines: 0123456789
-    Reader N: 8 | Read Lines: 0123456789
-    Reader N: 9 | Read Lines: 0123456789
-    
- 
-In the above example, the first file is created and then data is written on it. Another process is trying to read it. We changed the order of the above thread execution.
- 
- 
+
+In this example, the writer first creates the file. Then it keeps appending numbers. The reader reads the file every two seconds.
+
+## A Common Threading Problem
+
+What happens if the reader starts before the writer creates the file?
+
 ```python
- 
-th1 = threading.Thread(target=writer, args=[15])
-th2 = threading.Thread(target=reader, args=[15])
- 
-th2.start()
-th1.start()
- 
-th1.join()
-th2.join()
+thread_1 = threading.Thread(target=writer, args=(15,))
+thread_2 = threading.Thread(target=reader, args=(15,))
+
+thread_2.start()
+thread_1.start()
+
+thread_1.join()
+thread_2.join()
 ```
- 
-    Exception in thread Thread-42:
-    Traceback (most recent call last):
-      File "C:\ProgramData\Anaconda3\lib\threading.py", line 932, in _bootstrap_inner
-        self.run()
-      File "C:\ProgramData\Anaconda3\lib\threading.py", line 870, in run
-        self._target(*self._args, **self._kwargs)
-      File "<ipython-input-17-fd5c9a147b0e>", line 17, in reader
-    FileNotFoundError: [Errno 2] No such file or directory: '15.txt'
-    
- 
-    Writer N: 0 | Wrote Line: 0
-    Writer N: 1 | Wrote Line: 1
-    Writer N: 2 | Wrote Line: 2
-    Writer N: 3 | Wrote Line: 3
-    Writer N: 4 | Wrote Line: 4
-    Writer N: 5 | Wrote Line: 5
-    Writer N: 6 | Wrote Line: 6
-    Writer N: 7 | Wrote Line: 7
-    Writer N: 8 | Wrote Line: 8
-    Writer N: 9 | Wrote Line: 9
-    Writer N: 10 | Wrote Line: 10
-    Writer N: 11 | Wrote Line: 11
-    Writer N: 12 | Wrote Line: 12
-    Writer N: 13 | Wrote Line: 13
-    Writer N: 14 | Wrote Line: 14
-    
- 
-Error happens! Why? Because the file `15.txt` was supposed to be created by the write function which is started later than the reader function. The reader function tries to read the file which is not been created yet. 
- 
-### Using `threading.Thread` Class
-We can create a multi-threading in Python by by creating a child class of `threadin.Thread`. This way we can do thread stuff as well as write our own version of operations inside it.
- 
- 
+
+This can cause an error like:
+
+```text
+FileNotFoundError: [Errno 2] No such file or directory: '15.txt'
+```
+
+The reader tries to read the file before it exists.
+
+This is one of the most important lessons in multithreading:
+
+> When threads share resources, timing matters.
+
+To avoid such problems, we can use synchronization tools such as locks, events, and queues.
+
+## Using a Lock in Python Threads
+
+A `Lock` makes sure that only one thread can access a shared resource at a time.
+
+This is useful when multiple threads write to the same file, update the same variable, or print logs.
+
 ```python
+import threading
+
+counter = 0
+lock = threading.Lock()
+
+
+def increase_counter():
+    global counter
+
+    for _ in range(100000):
+        with lock:
+            counter += 1
+
+
+thread_1 = threading.Thread(target=increase_counter)
+thread_2 = threading.Thread(target=increase_counter)
+
+thread_1.start()
+thread_2.start()
+
+thread_1.join()
+thread_2.join()
+
+print(counter)
+```
+
+The `with lock:` block makes the update safer.
+
+Without a lock, two threads may try to update the same variable at the same time and cause incorrect results.
+
+## Using an Event to Signal Between Threads
+
+An `Event` can be used when one thread needs to wait until another thread gives a signal.
+
+For example, the reader should wait until the writer creates the file.
+
+```python
+import threading
+import time
+
+file_ready = threading.Event()
+
+
+def writer_with_event(file_name):
+    with open(file_name, "w") as fp:
+        fp.write("")
+
+    file_ready.set()
+
+    for number in range(5):
+        with open(file_name, "a") as fp:
+            fp.write(str(number))
+
+        print(f"Writer wrote: {number}")
+        time.sleep(1)
+
+
+def reader_with_event(file_name):
+    file_ready.wait()
+
+    for _ in range(5):
+        with open(file_name, "r") as fp:
+            print("Reader read:", fp.read())
+
+        time.sleep(1)
+
+
+thread_1 = threading.Thread(target=writer_with_event, args=("demo.txt",))
+thread_2 = threading.Thread(target=reader_with_event, args=("demo.txt",))
+
+thread_2.start()
+thread_1.start()
+
+thread_1.join()
+thread_2.join()
+```
+
+Here:
+
+- `file_ready.wait()` blocks the reader
+- `file_ready.set()` tells the reader that the file is ready
+
+## Using Queue for Safer Thread Communication
+
+A `queue.Queue` is one of the safest ways to pass data between threads.
+
+One thread can produce data, and another thread can consume it.
+
+```python
+import queue
+import threading
+import time
+
+task_queue = queue.Queue()
+
+
+def producer():
+    for number in range(5):
+        print(f"Producing: {number}")
+        task_queue.put(number)
+        time.sleep(1)
+
+    task_queue.put(None)
+
+
+def consumer():
+    while True:
+        item = task_queue.get()
+
+        if item is None:
+            break
+
+        print(f"Consuming: {item}")
+        task_queue.task_done()
+
+
+thread_1 = threading.Thread(target=producer)
+thread_2 = threading.Thread(target=consumer)
+
+thread_1.start()
+thread_2.start()
+
+thread_1.join()
+thread_2.join()
+```
+
+This pattern is useful for many real applications, such as:
+
+- downloading files in one thread and processing them in another
+- reading messages from an API and processing them
+- sending tasks to background workers
+- building simple pipelines
+
+## Creating a Custom Thread Class
+
+We can also create a custom class by inheriting from `threading.Thread`.
+
+```python
+import threading
+import time
+
+
 class ThreadClass(threading.Thread):
-    """
-    ## ThreadClass
-    """
-    def run(self,*args,**kwargs):
+    def run(self):
         while True:
-            # operations goes here
+            # Put thread work here
             time.sleep(2)
             break
-        print(f"Run ended.")
- 
-t = ThreadClass()
-t.daemon=False         
- 
-t.start()
-t.join()
- 
+
+        print("Run ended.")
+
+
+thread = ThreadClass()
+thread.daemon = False
+
+thread.start()
+thread.join()
 ```
- 
-    Run ended.
-    
- 
-## Using Joblib
- Another option to do multi-threading in Python is using Joblib.
-[Joblib](https://joblib.readthedocs.io/en/latest/) is a Python library that provides an easy way to perform parallelization. We need to install joblib before using it. We can do so by `pip install joblib`.
- 
- 
+
+Output:
+
+```text
+Run ended.
+```
+
+A custom thread class is useful when the thread has its own state or repeated behavior.
+
+## Daemon Threads
+
+A daemon thread runs in the background and does not block the program from exiting.
+
 ```python
+thread.daemon = True
+```
+
+Use daemon threads carefully. If the main program exits, daemon threads are stopped. This may interrupt file writing, logging, or cleanup operations.
+
+For important tasks, use non-daemon threads and call `join()`.
+
+## ThreadPoolExecutor: A Cleaner Way to Use Threads
+
+For many tasks, using `ThreadPoolExecutor` is cleaner than manually creating threads.
+
+```python
+from concurrent.futures import ThreadPoolExecutor
 import time
-```
- 
-Let's take a simple example where we pass a number to a function and it sleeps after printing its square root.
- 
- 
-```python
-def root_printer(x):
-    root=x**0.5
+
+
+def root_printer(number):
+    root = number ** 0.5
     print(f"Printer: {root}")
     time.sleep(root)
     return root
-    
- 
-st = time.perf_counter()
-res = list(map(root_printer,range(10,1,-1)))
-et = time.perf_counter()
-print(f"Time: {et-st}")
-print(res)
- 
-```
- 
-    Printer: 3.1622776601683795
-    Printer: 3.0
-    Printer: 2.8284271247461903
-    Printer: 2.6457513110645907
-    Printer: 2.449489742783178
-    Printer: 2.23606797749979
-    Printer: 2.0
-    Printer: 1.7320508075688772
-    Printer: 1.4142135623730951
-    Time: 21.6052624999993
-    [3.1622776601683795, 3.0, 2.8284271247461903, 2.6457513110645907, 2.449489742783178, 2.23606797749979, 2.0, 1.7320508075688772, 1.4142135623730951]
-    
- 
-If we were to do sequential programming which is the above way, it would take us a long time. That is 21.16 secs. What if we ran the above code in parallel?
- 
- 
-```python
-st = time.perf_counter()
-result = Parallel(n_jobs=2)(delayed(root_printer)(i) for i in range(10,1,-1))
-et = time.perf_counter()
-print(f"Time: {et-st}")
-print(result)
-```
- 
-    Time: 13.476816299999882
-    [3.1622776601683795, 3.0, 2.8284271247461903, 2.6457513110645907, 2.449489742783178, 2.23606797749979, 2.0, 1.7320508075688772, 1.4142135623730951]
-    
- 
-With parallel execution using Joblib and 2 jobs, it took us only 13 seconds to complete the same task. What if we increased jobs?
- 
- 
-```python
-st = time.perf_counter()
-result = Parallel(n_jobs=4)(delayed(root_printer)(i) for i in range(10,1,-1))
-et = time.perf_counter()
-print(f"Time: {et-st}")
-print(result)
-```
- 
-    Time: 8.8883737999995
-    [3.1622776601683795, 3.0, 2.8284271247461903, 2.6457513110645907, 2.449489742783178, 2.23606797749979, 2.0, 1.7320508075688772, 1.4142135623730951]
-    
- 
-It is faster than using only 2 jobs. In the above example, delayed is sending us delayed results.
- 
-Using joblib, we can run processes in different back-ends. Following is the docstring of `Parallel`.
- 
-```
-backend: str, ParallelBackendBase instance or None, default: 'loky'
-    Specify the parallelization backend implementation.
-    Supported backends are:
- 
-    - "loky" used by default, can induce some
-      communication and memory overhead when exchanging input and
-      output data with the worker Python processes.
-    - "multiprocessing" previous process-based backend based on
-      `multiprocessing.Pool`. Less robust than `loky`.
-    - "threading" is a very low-overhead backend but it suffers
-      from the Python Global Interpreter Lock if the called function
-      relies a lot on Python objects. "threading" is mostly useful
-      when the execution bottleneck is a compiled extension that
-      explicitly releases the GIL (for instance a Cython loop wrapped
-      in a "with nogil" block or an expensive call to a library such
-      as NumPy).
-    - finally, you can register backends by calling
-      register_parallel_backend. This will allow you to implement
-      a backend of your liking.
- 
-    It is not recommended to hard-code the backend name in a call to
-    Parallel in a library. Instead, it is recommended to set soft hints
-    (prefer) or hard constraints (require) so as to make it possible
-    for library users to change the backend from the outside using the
-    parallel_backend context manager.
-prefer: str in {'processes', 'threads'} or None, default: None
-    Soft hint to choose the default backend if no specific backend
-    was selected with the parallel_backend context manager. The
-    default process-based backend is 'loky' and the default
-    thread-based backend is 'threading'. Ignored if the ``backend``
-    parameter is specified.
-```
- 
-Which means that we can use threading or multiprocessing using Joblib which is even better. 
- 
-Let's use threading as the backend.
- 
- 
-```python
-st = time.perf_counter()
-result = Parallel(n_jobs=4, backend="threading")(delayed(root_printer)(i) for i in range(10,1,-1))
-et = time.perf_counter()
-print(f"Time: {et-st}")
-print(result)
-```
- 
-    Printer: 3.1622776601683795Printer: 3.0
-    Printer: 2.8284271247461903
-    Printer: 2.6457513110645907
-    
-    Printer: 2.449489742783178
-    Printer: 2.23606797749979
-    Printer: 2.0
-    Printer: 1.7320508075688772
-    Printer: 1.4142135623730951
-    Time: 6.438640599999417
-    [3.1622776601683795, 3.0, 2.8284271247461903, 2.6457513110645907, 2.449489742783178, 2.23606797749979, 2.0, 1.7320508075688772, 1.4142135623730951]
-    
- 
-It seems to be faster than loky.
- 
- 
-This blog was a simple example of different options of multi-threading in Python and there is more to it! [Please stay tuned for more!](https://dataqoil.com/newsletter/)
 
-## References
-* [JobLib Documentation](https://joblib.readthedocs.io/en/latest/index.html)
-* [Threading](https://docs.python.org/3/library/threading.html)
 
+numbers = range(10, 1, -1)
+
+with ThreadPoolExecutor(max_workers=4) as executor:
+    results = list(executor.map(root_printer, numbers))
+
+print(results)
+```
+
+This is useful when you want to run the same function on many inputs.
+
+## Sequential Execution Example
+
+Before using parallel execution, let's run the same function sequentially.
+
+```python
+import time
+
+
+def root_printer(number):
+    root = number ** 0.5
+    print(f"Printer: {root}")
+    time.sleep(root)
+    return root
+
+
+start_time = time.perf_counter()
+
+result = list(map(root_printer, range(10, 1, -1)))
+
+end_time = time.perf_counter()
+
+print(f"Time: {end_time - start_time}")
+print(result)
+```
+
+In the original example, this took around 21 seconds.
+
+This is slow because each task waits for the previous task to finish.
+
+## Using Joblib for Parallel Execution
+
+Another option for parallel execution in Python is [Joblib](https://joblib.readthedocs.io/en/latest/).
+
+Joblib is useful when we want to run the same function many times with different inputs.
+
+Install it with:
+
+```bash
+pip install joblib
+```
+
+Import `Parallel` and `delayed`.
+
+```python
+from joblib import Parallel, delayed
+```
+
+Now run the same function with two jobs.
+
+```python
+start_time = time.perf_counter()
+
+result = Parallel(n_jobs=2)(
+    delayed(root_printer)(number)
+    for number in range(10, 1, -1)
+)
+
+end_time = time.perf_counter()
+
+print(f"Time: {end_time - start_time}")
+print(result)
+```
+
+In the original experiment, this took around 13 seconds.
+
+## Increasing Joblib Workers
+
+Now let's use four jobs.
+
+```python
+start_time = time.perf_counter()
+
+result = Parallel(n_jobs=4)(
+    delayed(root_printer)(number)
+    for number in range(10, 1, -1)
+)
+
+end_time = time.perf_counter()
+
+print(f"Time: {end_time - start_time}")
+print(result)
+```
+
+In the original experiment, this took around 8 seconds.
+
+More workers can make the task faster, but only up to a point. Too many workers can also add overhead.
+
+## Joblib Backends
+
+Joblib supports different backends.
+
+Common backends are:
+
+- `loky`
+- `multiprocessing`
+- `threading`
+
+The default backend is usually `loky`, which uses separate processes.
+
+For I/O-bound tasks, we can use the `threading` backend.
+
+```python
+start_time = time.perf_counter()
+
+result = Parallel(n_jobs=4, backend="threading")(
+    delayed(root_printer)(number)
+    for number in range(10, 1, -1)
+)
+
+end_time = time.perf_counter()
+
+print(f"Time: {end_time - start_time}")
+print(result)
+```
+
+In the original experiment, the threading backend was faster for this sleep-based example.
+
+This makes sense because `time.sleep()` is waiting, not doing heavy CPU work.
+
+## When to Use Joblib
+
+Joblib is useful when:
+
+- you have a function
+- you need to call it many times
+- each call is independent
+- you want simple parallel execution
+
+Examples:
+
+- processing many files
+- resizing many images
+- running many independent experiments
+- feature extraction
+- model evaluation
+- parameter search
+- independent backtesting chunks
+
+## Threading vs Joblib
+
+| Feature | `threading` | `ThreadPoolExecutor` | `joblib` |
+|---|---|---|---|
+| Built-in | Yes | Yes | No |
+| Easy for many tasks | Medium | Easy | Easy |
+| Good for I/O-bound work | Yes | Yes | Yes |
+| Good for CPU-bound work | Limited | Limited | Better with process backend |
+| Best use case | Custom thread logic | Simple thread pools | Parallel loops |
+
+For most simple parallel loops, I prefer `ThreadPoolExecutor` or Joblib. For lower-level control, I use `threading`.
+
+## Best Practices for Python Multithreading
+
+Here are some useful tips:
+
+- Use threads mainly for I/O-bound tasks.
+- Use `join()` when the main program should wait.
+- Use `Lock` when multiple threads modify shared data.
+- Use `Queue` to pass data between threads safely.
+- Avoid writing to the same file from many threads without control.
+- Do not assume threads will run in the same order every time.
+- Keep thread functions small and clear.
+- Handle exceptions inside thread functions.
+- Do not create too many threads.
+- Use `ThreadPoolExecutor` for simple repeated tasks.
+
+## Common Mistakes
+
+Some common beginner mistakes are:
+
+- expecting threads to speed up CPU-heavy Python code
+- forgetting to call `join()`
+- sharing variables without locks
+- reading a file before another thread creates it
+- assuming print order is deterministic
+- creating too many threads
+- ignoring exceptions inside threads
+- confusing multithreading with multiprocessing
+- using daemon threads for important work
+
+## Final Thoughts
+
+In this post, we learned the basics of **multithreading in Python**. We started with the built-in `threading` module, created simple threads, looked at file reading and writing problems, and then introduced locks, events, queues, `ThreadPoolExecutor`, and Joblib.
+
+The main lesson is that multithreading is powerful when used for the right tasks. It is especially useful for I/O-bound work, such as file handling, API calls, downloads, and background monitoring. For CPU-heavy work, multiprocessing or process-based Joblib backends are usually better.
+
+This was a beginner-level introduction, and there is much more to learn about concurrency in Python.
