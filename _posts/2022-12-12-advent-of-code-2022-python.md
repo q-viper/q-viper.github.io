@@ -1,376 +1,466 @@
+````markdown
 ---
-title:  "Advent of Code 2022 with Python"
-date:   2022-12-12 09:29:17
+layout: single
+title: "Advent of Code 2022 Python Solutions: Days 1–4"
+date: 2022-12-12 09:29:17 +0100
+last_modified_at: 2026-06-16
 categories:
-    - Python
-    - Challenge
+  - Python
+  - Challenge
 tags:
-    - Advent of Code
-    - DSA
+  - "Advent of Code"
+  - "Advent of Code 2022"
+  - "Python"
+  - "Python solutions"
+  - "DSA"
+  - "Programming challenge"
+description: "My Advent of Code 2022 Python solutions for Days 1 to 4, with input handling, clean explanations, and beginner-friendly code."
+excerpt: "A beginner-friendly walkthrough of my Advent of Code 2022 Python solutions for Days 1 to 4, including data preparation, input parsing, and clean Python code."
 header:
-  teaser: assets/advent_of_code/stars.png
+  teaser: /assets/advent_of_code/stars.png
+  og_image: /assets/advent_of_code/stars.png
+  image_description: "Advent of Code stars used as a teaser image for Python solutions"
+toc: true
+toc_label: "Advent of Code 2022 Python Guide"
+toc_icon: "code"
+toc_sticky: true
+read_time: true
+share: true
+related: true
+classes: wide
 ---
-The advent of Code is a yearly festival for programmers like me where we try to solve different stories to gain stars. I love these challenge because its fun and takes us slowly from beginner level to harder level. I am really weak in competitive programming and DSA stuff but still, I like to try Advent of Code. Last year I was only able to complete up to day 16 and I had to take help from some sources like Reddit too. This year I forgot the start date and it's already December 3. I will not be in the rank but this is really a fun and great challenge. Let's start from Day 1.
 
-The input data will be in two parts, the first part will be the test given on the site and the second part is the personalized input. There will be a special line `Split from here` which separates these parts. 
+Advent of Code is a yearly programming challenge where we solve small story-based problems and collect stars. I enjoy it because the problems usually start simple and slowly become harder. It is also a nice way to practice Python, problem solving, data structures, and algorithms.
 
-After I copy the data from the challenge page to the respective text file of a challenge i.e. day1.txt for the day 1 challenge, I write a solution for the test first and if it matches the answer then I run it on my input. Mostly it works.
+I am not very strong in competitive programming, but I still like trying Advent of Code because it helps me improve step by step. In 2021, I reached Day 16 and sometimes checked hints from places like Reddit when I got stuck. For Advent of Code 2022, I started a little late, but I still wanted to solve the problems and document my approach.
 
-As usual, my solutions are in [repository](https://github.com/q-viper/Adevent-Of-Code.git) as well.
+This post contains my **Advent of Code 2022 Python solutions for Days 1 to 4**. I explain how I prepare input files, how I read the data, and how I solve each part.
 
-## Preparation and Pushing Solution
+My full code is also available in my GitHub repository: [Advent of Code solutions](https://github.com/q-viper/Adevent-Of-Code.git).
 
-### Data Files
-No need to run this again.
+## How I Organize Advent of Code Inputs
 
+For each day, I keep one text file inside the `data` directory. The file contains two parts:
 
+1. the sample test input from the Advent of Code problem page
+2. my personal puzzle input
 
+I separate both parts using this line:
+
+```text
+Split From Here
+````
+
+For example, the file for Day 1 is saved as:
+
+```text
+data/day1.txt
+```
+
+The same pattern is used for the other days:
+
+```text
+data/day2.txt
+data/day3.txt
+data/day4.txt
+```
+
+This makes it easy to first test the solution on the sample input. If the sample answer is correct, I run the same code on my actual puzzle input.
+
+## Creating Empty Data Files
+
+I used the small script below to create empty input files for the remaining days.
 
 ```python
 for i in range(2, 26):
-    with open(f"data/day{i}.txt","w") as fp:
+    with open(f"data/day{i}.txt", "w") as fp:
         fp.writelines("Split From Here")
-    
 ```
 
-### Pushing Solution
+This only needs to be done once. After that, I copy the sample input and actual input into the correct file.
 
+## Reader Function for Advent of Code Inputs
 
-```python
-! git add .
-! git commit -m"added day 2,3,4 solution"
-! git push origin master
-```
-
-    warning: LF will be replaced by CRLF in 2022/2022.ipynb.
-    The file will have its original line endings in your working directory
-    warning: LF will be replaced by CRLF in 2022/data/day2.txt.
-    The file will have its original line endings in your working directory
-    warning: LF will be replaced by CRLF in 2022/data/day3.txt.
-    The file will have its original line endings in your working directory
-    warning: LF will be replaced by CRLF in 2022/data/day4.txt.
-    The file will have its original line endings in your working directory
-    warning: LF will be replaced by CRLF in 2022/data/day1.txt.
-    The file will have its original line endings in your working directory
-    
-
-    [master f672c05] added day 2,3,4 solution
-     5 files changed, 4231 insertions(+), 72 deletions(-)
-     rename 2022/data/{1.txt => day1.txt} (100%)
-     rewrite 2022/data/day2.txt (100%)
-     rewrite 2022/data/day3.txt (100%)
-     rewrite 2022/data/day4.txt (100%)
-    
-
-    To https://github.com/q-viper/Adevent-Of-Code.git
-       3bd91b4..f672c05  master -> master
-    
-
-## Reader Function
-
-This is the same as the previous year's function. I copy the input into a file inside the `data` directory and it will be read from here.
-
-
+This is the helper function I use to read the input for each day.
 
 ```python
-import numpy as np
-```
-
-
-```python
-
 def get_data(day=1):
-    """
-    Returns test and real data in list format.
-    Raw data should be maintained as:
-        [test data]
+    """Return sample and real Advent of Code input as lists.
+
+    The input file should be written as:
+
+        [sample input]
         Split From Here
-        [actual data]
+        [actual input]
+
+    Parameters
+    ----------
+    day : int
+        Advent of Code day number.
+
+    Returns
+    -------
+    list[list[str]]
+        A list with two elements:
+        - data[0] is the sample input
+        - data[1] is the real puzzle input
     """
     file_name = f"data/day{day}.txt"
-    
+
     with open(file_name) as fp:
         data = fp.read().strip().split("Split From Here")
         data = [d.strip().split("\n") for d in data]
         return data
-# get_data()
 ```
 
-## Day 1
-Problem [link](https://adventofcode.com/2022/day/1).
+I use `data[0]` for the sample input and `data[1]` for the real input.
 
+## Day 1: Calorie Counting
 
-```python
-data=get_data()[1]
-data[0]
-```
+Problem link: [Advent of Code 2022 Day 1](https://adventofcode.com/2022/day/1)
 
+Day 1 is about finding how many calories each Elf is carrying. Each Elf has a group of numbers, and empty lines separate the groups.
 
+### Day 1 Part 1
 
-
-    '18313'
-
-
-
-### Part 1
-
->Find the Elf carrying the most Calories. How many total Calories is that Elf carrying?
-
+**Question:** Find the Elf carrying the most Calories. How many total Calories is that Elf carrying?
 
 ```python
-data[0]
-```
+import numpy as np
 
+data = get_data(day=1)[1]
 
-
-
-    '18313'
-
-
-
-
-```python
 ndata = np.array(data)
-indx = np.where(ndata=='')[0]
-calories = np.split(ndata, indx)
-calories = np.array([np.delete(nd, np.where(nd == '')[0]).astype(int).sum() for nd in calories])
-calories.max()
+split_indexes = np.where(ndata == "")[0]
+
+calorie_groups = np.split(ndata, split_indexes)
+
+calories = np.array([
+    np.delete(group, np.where(group == "")[0]).astype(int).sum()
+    for group in calorie_groups
+])
+
+answer_part_1 = calories.max()
+print(answer_part_1)
 ```
 
+Answer:
 
-
-
-    71924
-
-
-
-
-```python
-
+```text
+71924
 ```
 
-### Part 2
+The idea is simple:
 
+* split the input wherever there is an empty line
+* convert each group to integers
+* calculate the sum for each Elf
+* find the maximum sum
+
+### Day 1 Part 2
+
+**Question:** Find the total Calories carried by the top three Elves.
 
 ```python
-ncalories = calories.copy() 
-ncalories.sort()
-ncalories[-3:].sum()
+sorted_calories = calories.copy()
+sorted_calories.sort()
+
+answer_part_2 = sorted_calories[-3:].sum()
+print(answer_part_2)
 ```
 
+Answer:
 
-
-
-    210406
-
-
-
-## Day 2
-Problem [link](https://adventofcode.com/2022/day/2).
-
-### Part 1
-
-
-```python
-data = get_data(2)
-data[0]
+```text
+210406
 ```
 
+Here, I sort all calorie sums and then add the last three values.
 
+## Day 2: Rock Paper Scissors
 
+Problem link: [Advent of Code 2022 Day 2](https://adventofcode.com/2022/day/2)
 
-    ['A Y', 'B X', 'C Z']
+Day 2 is based on Rock Paper Scissors. The first column is the opponent's move, and the second column has a different meaning depending on the part.
 
+For Part 1:
 
+* `A` means Rock
+* `B` means Paper
+* `C` means Scissors
+* `X` means Rock
+* `Y` means Paper
+* `Z` means Scissors
 
+### Day 2 Part 1
 
 ```python
-# Response X for Rock, Y for Paper, and Z for Scissors
-# Elf A for Rock, B for Paper, and C for Scissors
-rvalue = {'X':1, 'Y':2, 'Z':3}
-rps1 = "ABC"
-rps2 = 'XYZ'
-win = [f"{r1} {r2}" for r1,r2 in zip(rps1, rps2[1:]+rps2[:1])]
-loss = [f"{r1} {r2}" for r1,r2 in zip(rps1, rps2[-1:] +rps2[:-1])]
+data = get_data(day=2)
+
+# Response scores:
+# X = Rock, Y = Paper, Z = Scissors
+response_value = {
+    "X": 1,
+    "Y": 2,
+    "Z": 3,
+}
+
+elf_moves = "ABC"
+my_moves = "XYZ"
+
+winning_games = [
+    f"{elf} {me}"
+    for elf, me in zip(elf_moves, my_moves[1:] + my_moves[:1])
+]
+
+losing_games = [
+    f"{elf} {me}"
+    for elf, me in zip(elf_moves, my_moves[-1:] + my_moves[:-1])
+]
 
 score = 0
+
 for game in data[1]:
-    score+=rvalue[game[-1]]
-    if game in win:
-        score+=6
-    elif game in loss:
-        score+= 0
+    score += response_value[game[-1]]
+
+    if game in winning_games:
+        score += 6
+    elif game in losing_games:
+        score += 0
     else:
-        score+=3
-    # print(score)
-score   
-```
+        score += 3
 
-
-
-
-    10816
-
-
-
-
-```python
-
-```
-
-### Part 2
-
-
-```python
-score = 0
-avalue = {i:j+1 for j,i in enumerate(rps1)}
-for game in data[1]: 
-    # print(game)
-    if game[-1] == 'Z':
-        v = [k for k in win if game[0] in k][0][-1]
-        score+=6
-    elif game[-1] =='X':
-        v = [k for k in loss if game[0] in k][0][-1]
-        score+= 0
-    else:
-        v = rps2[rps1.index(game[0])]
-        score+=3
-    score+=rvalue[v]
 print(score)
 ```
 
-    11657
-    
+Answer:
 
-
-```python
-
+```text
+10816
 ```
 
-## Day 3
+In this part, I first add the score for my selected shape. Then I add:
 
-Problem [link](https://adventofcode.com/2022/day/2).
+* `6` points for a win
+* `3` points for a draw
+* `0` points for a loss
 
-### Part 1
+### Day 2 Part 2
 
+In Part 2, the second column does not directly represent my move. Instead:
 
-
+* `X` means I need to lose
+* `Y` means I need to draw
+* `Z` means I need to win
 
 ```python
-data = get_data(3)
+score = 0
+
+for game in data[1]:
+    opponent_move = game[0]
+    expected_result = game[-1]
+
+    if expected_result == "Z":
+        my_move = [k for k in winning_games if opponent_move in k][0][-1]
+        score += 6
+
+    elif expected_result == "X":
+        my_move = [k for k in losing_games if opponent_move in k][0][-1]
+        score += 0
+
+    else:
+        my_move = my_moves[elf_moves.index(opponent_move)]
+        score += 3
+
+    score += response_value[my_move]
+
+print(score)
 ```
 
-Let's use string and set to solve this problem. We need to find what is the common letter in both halves and Python's `set.intersection` does it.
+Answer:
 
+```text
+11657
+```
+
+This time, I first decide which move I should play to get the required result. Then I calculate the score in the same way as Part 1.
+
+## Day 3: Rucksack Reorganization
+
+Problem link: [Advent of Code 2022 Day 3](https://adventofcode.com/2022/day/3)
+
+Day 3 is about finding common item types in rucksacks. Lowercase and uppercase letters have different priorities.
+
+The priority list is:
 
 ```python
 import string
-items = string.ascii_lowercase+string.ascii_uppercase
 
-score=0
-for ruck in data[1]:
-    hi = len(ruck)//2
-    h1 = ruck[:hi]
-    h2 = ruck[hi:]
-    rep = list(set(h1).intersection(set(h2)))
-    score+=sum([items.index(v)+1 for v in rep ])
+items = string.ascii_lowercase + string.ascii_uppercase
+```
+
+So:
+
+* `a` has priority `1`
+* `z` has priority `26`
+* `A` has priority `27`
+* `Z` has priority `52`
+
+### Day 3 Part 1
+
+Each rucksack has two compartments. We need to find the item type that appears in both compartments.
+
+```python
+data = get_data(day=3)
+
+score = 0
+
+for rucksack in data[1]:
+    half_index = len(rucksack) // 2
+
+    first_half = rucksack[:half_index]
+    second_half = rucksack[half_index:]
+
+    repeated_items = set(first_half).intersection(set(second_half))
+
+    score += sum(items.index(item) + 1 for item in repeated_items)
+
 print(score)
 ```
 
-    8240
-    
+Answer:
 
-### Part 2
+```text
+8240
+```
 
-There are 3 groups and we need to find the common letter among these three. Again using NumPy to splitting array and set intersection to find the common.
+I used Python sets here because `set.intersection()` makes it easy to find common letters.
 
+### Day 3 Part 2
+
+In Part 2, the rucksacks are divided into groups of three. We need to find the common item type in each group.
 
 ```python
-darr = np.array(data[1])
-darr = np.split(darr, np.arange(3, len(darr), 3))
+rucksacks = np.array(data[1])
+groups = np.split(rucksacks, np.arange(3, len(rucksacks), 3))
 
 score = 0
-for arr in darr:
-    cv = set(arr[0]).intersection(set(arr[1])).intersection(set(arr[2]))
-    score+=sum([items.index(v)+1 for v in cv ])
+
+for group in groups:
+    common_items = (
+        set(group[0])
+        .intersection(set(group[1]))
+        .intersection(set(group[2]))
+    )
+
+    score += sum(items.index(item) + 1 for item in common_items)
+
 print(score)
-    
 ```
 
-    2587
-    
+Answer:
 
+```text
+2587
+```
+
+Again, sets make the solution short and readable.
+
+## Day 4: Camp Cleanup
+
+Problem link: [Advent of Code 2022 Day 4](https://adventofcode.com/2022/day/4)
+
+Day 4 is about pairs of section ranges. We need to check whether one range fully contains another range, and later whether the two ranges overlap at all.
+
+The input looks like this:
+
+```text
+2-4,6-8
+2-3,4-5
+5-7,7-9
+2-8,3-7
+6-6,4-6
+2-6,4-8
+```
+
+### Day 4 Part 1
+
+**Question:** In how many assignment pairs does one range fully contain the other?
 
 ```python
+data = get_data(day=4)
 
+score = 0
+
+for group in data[1]:
+    first_range, second_range = group.split(",")
+
+    first_start, first_end = map(int, first_range.split("-"))
+    second_start, second_end = map(int, second_range.split("-"))
+
+    first_sections = set(range(first_start, first_end + 1))
+    second_sections = set(range(second_start, second_end + 1))
+
+    if first_sections.issubset(second_sections) or second_sections.issubset(first_sections):
+        score += 1
+
+print(score)
 ```
 
-## Day 4
+Answer:
 
-### Part 1
-
-
-```python
-data = get_data(4)
+```text
+602
 ```
 
+Here, I convert both ranges into sets. Then I check if one set is a subset of the other.
 
-```python
-data[0]
-```
+### Day 4 Part 2
 
-
-
-
-    ['2-4,6-8', '2-3,4-5', '5-7,7-9', '2-8,3-7', '6-6,4-6', '2-6,4-8']
-
-
-
-Again, using the set seems to be the best idea. If the difference between two sets results in empty sets then the first set really is a subset of the second set.
-
+**Question:** In how many assignment pairs do the ranges overlap at all?
 
 ```python
 score = 0
-for grp in data[1]:
-    g1 = list(map(int, grp.split(',')[0].split("-")))
-    g2 = list(map(int,grp.split(',')[1].split("-")))
-    
-    g1 = set(range(g1[0], g1[1]+1))
-    g2 = set(range(g2[0], g2[1]+1))
-    
-    if g1-g2 == set() or g2-g1==set():
-        score+=1
-    
-print(score)    
+
+for group in data[1]:
+    first_range, second_range = group.split(",")
+
+    first_start, first_end = map(int, first_range.split("-"))
+    second_start, second_end = map(int, second_range.split("-"))
+
+    first_sections = set(range(first_start, first_end + 1))
+    second_sections = set(range(second_start, second_end + 1))
+
+    if first_sections.intersection(second_sections):
+        score += 1
+
+print(score)
 ```
 
-    602
-    
+Answer:
 
-### Part 2
-
-Now let's find if the intersection is empty or not. If it not then some overlapping has occurred.
-
-
-```python
-score = 0
-for grp in data[1]:
-    g1 = list(map(int, grp.split(',')[0].split("-")))
-    g2 = list(map(int,grp.split(',')[1].split("-")))
-    
-    g1 = set(range(g1[0], g1[1]+1))
-    g2 = set(range(g2[0], g2[1]+1))
-    
-    if g1.intersection(g2) != set():
-        score+=1
-    
-print(score)    
+```text
+891
 ```
 
-    891
-    
+For this part, I only need to check whether the intersection between both sets is empty or not.
 
+## What I Learned
 
-```python
+These first four days are a good warm-up for Advent of Code 2022. The main ideas I used were:
 
+* reading and splitting text input
+* using lists and NumPy arrays
+* sorting values
+* working with dictionaries
+* using Python sets for intersections and subset checks
+
+The most useful part for me was using sets. They made Day 3 and Day 4 much easier to write and understand.
+
+## Final Notes
+
+This post is part of my Advent of Code 2022 Python solutions series. I use these challenges to practice Python and improve my problem-solving skills. Even if I do not finish every day, documenting the process helps me understand the solutions better.
+
+```
+::: ​​
 ```
