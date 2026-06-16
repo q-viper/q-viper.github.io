@@ -9,200 +9,144 @@ tags:
     - Computer Vision
 header:
   teaser: assets/cnn/aeout.png
+description: "A practical, beginner-friendly walkthrough implementing an auto-encoder from scratch in Python using a custom neural-network module and MNIST data."
 ---
  
-Auto-encoders from scratch will be done over the concept of Neural Network from Scratch that I already did. You can find it on my following blogs.
+Auto-encoders from scratch build on the same neural network fundamentals I covered earlier. If you haven't already, see these prerequisite posts:
 * [Feed Forward Neural Network from Scratch](https://q-viper.github.io/2020/05/29/writing-a-deep-neural-network-from-scratch-on-python/)
 * [Convolutional Neural Network from Scratch](https://q-viper.github.io/2020/06/05/convolutional-neural-networks-from-scratch-on-python/)
- 
-I also have written [Run Length Encoding from Scratch](https://q-viper.github.io/2021/05/24/coding-run-length-encoding-in-python/) and you can give it a try if you'd like to.
- 
-I started to write this blog in May 2020 but since I already wrote the above two blogs, I felt that why bother training another model from scratch. But in November 2022, I got the following email from a reader and I thought that could be helpful to someone.
- 
+
+I also wrote about data encoding techniques such as [Run Length Encoding from Scratch](https://q-viper.github.io/2021/05/24/coding-run-length-encoding-in-python/).
+
+I started drafting this post in May 2020 but paused after completing the neural-network tutorials. In November 2022 I received a helpful reader email that motivated me to finish it.
+
 ![]({{site.url}}/assets/cnn/aemail.png)
- 
-I really feel grateful that the blogs I wrote after failing an interview question `Working mechanism of Convolutional Neural Network` are helpful. **If I have to write Neural Networks from Scratch again then I would have written it with easier and smaller codes.** I feel that there are many things I have written in a horrible way 😜.
- 
-## Introduction
-Before going into auto-encoders from scratch, let me write something fundamental about it.
-* Auto-encoders are nothing but a sequence of neural networks which basically has the same output as the input.
-* Auto-encoders are trained to reach one thing that Deep Learning engineers hate, i.e. over-fitting.
- 
-Why do we call it encoder? Well it's because it turns our data into some weird form and then could turn that weird form into a somewhat original form. In Cryptography, we use plain text with some key to cipher the data to receive data in a non-readable format to protect it from unwanted readers. And we use some key to decipher that text to its original form. An Auto-encoder also has that ability (or concept only). In Cryptography, we can have two parts, one Encoder and another is Decoder. One part encodes data and another part decodes data from encoded data to give original data. Similarly, Auto-encoder is made up of two logical parts, Encoder and Decoder. Encoder is a small part of this whole network which receives inputs and processes and gives encoded form of input. Then another part Decoder receives that encoded form of input and processes to return the original form. The right question here will be where is the encryption key? There is not any. The encryption key in this model is the weight or parameters of a model.
- 
-In normal ML training, we do not want a model to be over-fitted or under-fitted. But in Auto-encoder, it's better to be over-fitted. Because we want our neural network to remember some information.
- 
-## Applications
-I am no expert to write a lot about the possible application of over-fitting but let me write some based upon my experience in real examples:
-* Auto-encoders are powerful (kind of) to encode data and thus could be use to encrypt information. But it will be applicable only if there is a powerful decoder as well.
-* What if we have a powerful auto-encoder that was trained on a series of our images? The overall size of images is huge because they were all captured with a really high quality camera. We can train an auto-encoder with many parameters and over-fit them to learn every image possible. Now we can have a very small output of the encoder and save that into the simple CSV file and delete the images. What is important here is storing the parameters and architecture of the model. If we want to view some image, we could simply pass a few bytes of encoded data to decoder and view the original image. Just my thoughts though!
-* [Conversion of Grayscale to RGB can be also done using Auto-encoders and you can find one that I did too](https://q-viper.github.io/2021/03/10/messing-up-with-cnn-auto-encoder-for-gray-to-rgb-image/).
- 
-## Coding Part
-Since auto-encoders are made up of a sequence of neural networks, auto-encoders from scratch simply means neural networks from scratch and here my coding goal will be to use my already created Neural Network module from scratch. Please find the codes in my GitHub repository below:
-* [Quark](https://github.com/q-viper/ML-from-Basics/tree/master/quark)
- 
-### Importing Packages
-I named my package `Quark`. Fancy isn't it? We need to import layers and Sequential form `Stackker`.
- 
- 
+
+## What is an auto-encoder?
+
+An auto-encoder is a neural network trained to reconstruct its input. It has two logical parts:
+* Encoder — compresses the input into a lower-dimensional representation (the bottleneck or latent vector).
+* Decoder — reconstructs the original input from that compressed representation.
+
+The network learns an implicit "key" in its weights (the parameters) that maps inputs to compressed representations and back.
+
+Unlike typical supervised learning, auto-encoders are often intentionally driven to overfit training data in order to learn detailed reconstructions. However, depending on the use case (denoising, compression, anomaly detection) you may want to regularize or constrain the latent space.
+
+## Applications and intuition
+
+Auto-encoders are useful for several tasks:
+* Dimensionality reduction and compression (store a small latent vector instead of the original data).
+* Denoising (train the model to remove noise from inputs).
+* Anomaly detection (anomalous inputs typically reconstruct poorly, producing higher loss).
+* Colorization or modality translation (e.g., grayscale → RGB using encoder/decoder pairs).
+
+A conceptual example: train an auto-encoder on a collection of high-resolution images so the encoder produces a compact code you can store and the decoder can later reconstruct the image. The model weights and architecture become critical — you must persist them to reconstruct images later.
+
+## Code (from my Quark library)
+
+The implementation below uses my custom package `Quark`. You can find the project on GitHub:
+* [Quark (ML-from-Basics)](https://github.com/q-viper/ML-from-Basics/tree/master/quark)
+
+### Imports
+
 ```python
 from quark.layers import *
 from quark.Stackker import Sequential
 import pandas as pd
 import matplotlib.pyplot as plt
 ```
- 
-### Getting Data
-To get the minst data, we are going to use Keras. I feel it is easy.
- 
- 
+
+### Load MNIST
+
+Note: corrected spelling from "minst" to "MNIST".
+
 ```python
 from keras.datasets import mnist
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 ```
- 
-### Pre-process Data
- 
-Let's preprocess data by reshaping and normalizing.
- 
- 
+
+### Preprocess
+
+Flatten and normalize pixel values to [0,1]. For this auto-encoder the target is the input itself.
+
 ```python
-x = x_train.reshape(-1, 28 * 28) /255
-# x = (x-x.mean(axis=1).reshape(-1, 1))/x.std(axis=1).reshape(-1, 1)
-y = pd.get_dummies(y_train).to_numpy()
-xt = x_test.reshape(-1, 28 * 28) /255
-# xt = (xt-xt.mean(axis=1).reshape(-1, 1))/xt.std(axis=1).reshape(-1, 1)
-yt = pd.get_dummies(y_test).to_numpy()
+x = x_train.reshape(-1, 28 * 28) / 255.0
+xt = x_test.reshape(-1, 28 * 28) / 255.0
 ```
- 
-### Create and Train a Model
-We will create a model with 3 layers. One will be input and then there will be a second layer and the final output layer. For us the first two layers could be the encoder and the last one could be decoder. But it is not necessary to divide like that. We will train for only 10 epochs with below hyper-parameters.
- 
- 
+
+### Build and train a simple auto-encoder
+
+This example uses three fully connected layers: an encoder layer, a small hidden layer, and a decoder that reconstructs the input.
+
 ```python
 m = Sequential()
 m.add(FFL(784, 10, activation='sigmoid'))
-m.add(FFL(10, 10, activation="relu"))
+m.add(FFL(10, 10, activation='relu'))
 m.add(FFL(10, 784, activation='sigmoid'))
 m.compile_model(lr=0.001, opt="adam", loss="mse")
 m.summary()
-m.train(x[:], x[:], epochs=10, batch_size=32, val_x=xt[:], val_y = xt[:])
+m.train(x, x, epochs=10, batch_size=32, val_x=xt, val_y=xt)
 ```
- 
-                    Input  Output Shape Activation  Bias  Parameters
-    Layer Name                                                      
-    Input Layer       784            10    sigmoid  True        7850
-    FFL1               10            10       relu  True         110
-    Out Layer(FFL)     10           784    sigmoid  True        8624
+
+A typical model summary and training output looks like this:
+
+    Input  Output Shape Activation  Bias  Parameters
+    ...
     Total Parameters: 16584
-   
+
     Validation data found.
-   
-   
     Total 60000 samples.
     Training samples: 60000 Validation samples: 10000.
-    Total 1875 batches, most batch has 32 samples.
-   
+
     Epoch: 0:
     Time: 97.376sec
     Train Loss: 0.0674 Train Accuracy: 0.1443%
     Val Loss: 0.0675 Val Accuracy: 0.1441%
-   
-    Epoch: 1:
-    Time: 92.235sec
-    Train Loss: 0.0641 Train Accuracy: 0.1905%
-    Val Loss: 0.0642 Val Accuracy: 0.1887%
-   
-    Epoch: 2:
-    Time: 83.891sec
-    Train Loss: 0.0611 Train Accuracy: 0.4515%
-    Val Loss: 0.0611 Val Accuracy: 0.4463%
-   
-    Epoch: 3:
-    Time: 78.168sec
-    Train Loss: 0.0597 Train Accuracy: 0.6552%
-    Val Loss: 0.0595 Val Accuracy: 0.674%
-   
-   
- 
-    F:\Desktop\Algorithms\quark\functions.py:23: RuntimeWarning: overflow encountered in exp
-      return 1 / (1+np.exp(-x))
-   
- 
-    Epoch: 4:
-    Time: 253.916sec
-    Train Loss: 0.0593 Train Accuracy: 0.7657%
-    Val Loss: 0.059 Val Accuracy: 0.7764%
-   
-    Epoch: 5:
-    Time: 170.761sec
-    Train Loss: 0.0589 Train Accuracy: 0.7747%
-    Val Loss: 0.0586 Val Accuracy: 0.7738%
-   
-    Epoch: 6:
-    Time: 166.393sec
-    Train Loss: 0.0582 Train Accuracy: 0.7798%
-    Val Loss: 0.058 Val Accuracy: 0.7837%
-   
-    Epoch: 7:
-    Time: 149.165sec
-    Train Loss: 0.0576 Train Accuracy: 0.8639%
-    Val Loss: 0.0573 Val Accuracy: 0.8647%
-   
-    Epoch: 8:
-    Time: 176.71sec
-    Train Loss: 0.0571 Train Accuracy: 0.9385%
-    Val Loss: 0.0568 Val Accuracy: 0.936%
-   
-    Epoch: 9:
-    Time: 147.613sec
-    Train Loss: 0.0566 Train Accuracy: 0.9673%
-    Val Loss: 0.0564 Val Accuracy: 0.9618%
-   
-   
- 
-It took my machine 23min to complete the above code and maybe this machine is old as well as my code. The accuracy was low but it doesn't matter much in Auto-encoders. Only thing that matters is loss and loss is decreasing slowly.
- 
-## Input vs Output
-We trained a model but was it strong enough to predict? Let's figure it out.
- 
- 
+
+    ...
+
+Note: accuracy in an auto-encoder is not a meaningful metric for pixel-wise reconstruction — focus on reconstruction loss (MSE) instead. You may also see a RuntimeWarning from the sigmoid implementation if very large inputs are passed to the exponential; proper weight initialization or using ReLU in hidden layers typically prevents extreme values.
+
+Training on my machine took ~23 minutes for 10 epochs. The loss decreased steadily even though the "accuracy" numbers remain low; that is expected for this task.
+
+## Visualize reconstructions
+
 ```python
 fig, axes = plt.subplots(nrows=2, ncols=10, sharex=True, sharey=True, figsize=(20,4))
 in_imgs = xt[:10]
- 
 reconstructed = m.predict(in_imgs)
- 
 for images, row in zip([in_imgs, reconstructed], axes):
     for img, ax in zip(images, row):
         ax.imshow(img.reshape((28, 28)), cmap='Greys_r')
         ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
- 
 fig.tight_layout(pad=0.1)
 ```
- 
- 
-   
+
 ![png]({{site.url}}/assets/cnn/output_11_0.png)
-   
- 
- 
- 
-```python
- 
-```
- 
-It seems that our model was able to predict what we can guess but it still is not okay! Maybe it could do better after training for more epochs but I would like to conclude it here.
- 
+
+The reconstructed images resemble the inputs, but they are not perfect. Training longer, changing the architecture, or using convolutional layers would likely improve visual quality.
+
+## Notes, improvements and next steps
+
+* Use convolutional auto-encoders (Conv-AEs) for image tasks — they preserve spatial structure and generally produce better reconstructions.
+* Add a bottleneck with fewer neurons to force a more compact latent representation.
+* Try different loss functions (e.g., binary cross-entropy for normalized pixels) or perceptual losses for visually better reconstructions.
+* Implement denoising auto-encoders by adding noise to inputs and training the model to predict the clean images.
+* Save and version model weights and architecture when relying on reconstructed outputs as compressed storage.
+
 ## Conclusion
-We were able to train a simple Autoencoder from Scratch and see the results and I hope you found this to be useful.
- 
- 
+
+We implemented and trained a simple auto-encoder from scratch using a custom neural-network package and MNIST. This post demonstrates the basic idea and provides directions for improving the model (convolutions, bottlenecking, denoising, and different losses). I hope you find it useful.
+
+If you'd like, I can:
+* Replace the fully connected model with a convolutional auto-encoder example.
+* Add code to save/load model weights and demonstrate compression ratio calculations.
+* Show a denoising auto-encoder variant with example noisy inputs.
+
 ```python
- 
+
 ```
- 
+
 
 

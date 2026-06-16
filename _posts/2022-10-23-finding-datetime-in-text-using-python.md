@@ -11,339 +11,142 @@ tags:
     - DateTime
 header:
   teaser: assets/python/date_parser.png
+description: "Techniques and Python libraries to extract date and time expressions from free-form text, with practical examples and recommendations."
 ---
 
-Why do we need to find DateTime in the text? In the field of data science, we often have to deal with various kinds of data and one of the common is Text data but sometimes datetime in the text has to be extracted. Before jumping into a topic let's first start with a problem I recently encountered. I was given a task to extract sent and received email messages from a long thread of multipart emails. The email I used to get would be something like the below:
- 
- 
- 
- 
- 
+Why extract datetime values from text? In data processing and analysis you often need to identify timestamps embedded in emails, logs, or user messages. Textual date/time formats vary widely, so relying on simple string matching is brittle. This post shows practical approaches with regular expressions and dedicated Python libraries to robustly find datetimes in free-form text.
+
+Below is a sample (simplified) email thread I used for testing:
+
 ```python
- 
 eml = """Re: Documents Received
- 
- 
- 
+
 John Doe <john@doe.org>
 Wed, Jun 1, 2011, 9:39 PM
 to Emma, Don, Bucky
- 
- 
- 
+
 Lorem
 Ipsum
 Dorem
- 
- 
+
 On 01/06/2011, at 7:57 PM, "Emma" <emma@thompson.com> wrote:
- 
- 
+
 Lorem Ipsum?
- 
+
 Thanks John
- 
+
 On 1 June 2011 13:43, Bucky Hallam <bucky@barnes.com> wrote:
- 
- 
+
 Lorem Ipsum is Dorem.
- 
- 
- 
+
 Thanks Emma"""
- 
 ```
- 
-The above text is modified from an original multipart email. My goal was to separate received and sent emails from one another. I have written a blog about how to retrieve emails as well, please give it a try if you are interested. I split the entire text by `wrote:` and then have to split parts again using `On sent date`. The first part was easy but due to different variants of dates, the second part got terribly hard. Some of the first emails  I worked on had dates like `On Sun 11, 2022`, and I created a list like below
- 
- 
-```python
-[f'On {d},' for d in ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']]
-```
- 
- 
- 
- 
-    ['On Sun,', 'On Mon,', 'On Tue,', 'On Wed,', 'On Thu,', 'On Fri,', 'On Sat,']
- 
- 
- 
-It worked for some but when sent dates were in a different format based on mail servers, this failed. Now there is a number of ways one could do it. But all are based on finding the pattern of DateTime in the text. Usually, DateTime in the text has patterns like YYYY/MM/DD HH:MM:SS, DD/MM/YYYY HH:MM:SS and so on we could prepare regex for that and find where it matched.
- 
- 
+
+The thread contains dates in different formats:
+* Wed, Jun 1, 2011, 9:39 PM
+* 01/06/2011, at 7:57 PM (ambiguous: mm/dd vs dd/mm)
+* 1 June 2011 13:43
+
+First, a quick demonstration of why naive regexes become tedious.
+
+## Using regular expressions
+
+You can craft regex patterns for specific formats. For example, YYYY/MM/DD:
+
 ```python
 import re
-```
- 
-## Finding Date Using Regex
- 
-### Format 1
-Let's try to find the datetime in the text from the format YYYY/MM/DD without any time.
- 
- 
-```python
-pattern = r'\d{4}/\d{2}/\d{2}'
+pattern = r"\d{4}/\d{2}/\d{2}"
 txt = "This is 2022/11/11 and we are waiting for 2022/11/12."
-print(re.findall(pattern, txt, re.DOTALL))
+print(re.findall(pattern, txt))
+# ['2022/11/11', '2022/11/12']
 ```
- 
-    ['2022/11/11', '2022/11/12']
-   
- 
-This works well but not in the case when another format like `-` is used instead of `/`.
- 
- 
+
+To accept both `-` and `/` separators use alternation:
+
 ```python
-pattern = r'\d{4}/\d{2}/\d{2}'
-txt = "This is 2022-11-11 and we are waiting for 2022/11/12."
-print(re.findall(pattern, txt, re.DOTALL))
+pattern = r"(\d{4}-\d{2}-\d{2}|\d{4}/\d{2}/\d{2})"
 ```
- 
-    ['2022/11/12']
-   
- 
-It missed date here. We can simply use the or operator to add another format there.
- 
- 
-```python
-pattern = r'(\d{4}-\d{2}-\d{2}|\d{4}/\d{2}/\d{2})'
-txt = "This is 2022-11-11 and we are waiting for 2022/11/12."
-print(re.findall(pattern, txt, re.DOTALL))
-```
- 
-    ['2022-11-11', '2022/11/12']
-   
- 
-### Format 2
- 
-Let's use time too.
- 
- 
-```python
-pattern = r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}|\d{4}/\d{2}/\d{2})'
-txt = "This is 2022-11-11 14:23:19 and we are waiting for 2022/11/12."
-print(re.findall(pattern, txt, re.DOTALL))
-```
- 
-    ['2022-11-11 14:23:19', '2022/11/12']
-   
- 
-It worked but not much in the cases as we have in email. But we can split our text based on a found date too and it's very useful above.
- 
- 
-```python
-pattern = r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}|\d{4}/\d{2}/\d{2})'
-txt = "This is 2022-11-11 14:23:19 and we are waiting for 2022/11/12."
-print(re.split(pattern, txt, re.DOTALL))
-```
- 
-    ['This is ', '2022-11-11 14:23:19', ' and we are waiting for ', '2022/11/12', '.']
-   
- 
-## Our Email
- 
-There are different formats of datetime in the text in our above email.
-* Wed, Jun 1, 2011, 9:39 PM
-* 01/06/2011, at 7:57 PM
-* 1 June 2011 13:43
- 
-And all of the above 3 requires different pattern as well so it's little tricky and more hard work to find them.
- 
-### For Jun 1, 2011, 9:39 PM
- 
- 
- 
-```python
-pattern = r'([0-3]?[0-9], \d{4}, [0-2]?[0-9]:[0-5][0-9] [AaPp][Mm])'
-txt = 'This is Wed, Jun 1, 2011, 9:29 AM and Wed, Jun 1, 2011, 19:39 PM'
-print(re.findall(pattern, txt, re.DOTALL))
- 
-```
- 
-    ['1, 2011, 9:29 AM', '1, 2011, 19:39 PM']
-   
- 
-### For 01/06/2011, at 7:57 PM
- 
- 
-```python
-pattern = r'([0-1]?[0-2]/[0-3]?[0-9]/\d{4}, at [0-2]?[0-9]:[0-5][0-9] [AaPp][Mm])'
-txt = 'This is 01/06/2011, at 7:57 PM and 01/06/2011, at 19:57 PM'
-print(re.findall(pattern, txt, re.DOTALL))
- 
-```
- 
-    ['01/06/2011, at 7:57 PM', '01/06/2011, at 19:57 PM']
-   
- 
-### For 1 June 2011 13:43
- 
- 
-```python
-pattern = r'([0-1]?[0-2] \w{3,} \d{4} [0-2]?[0-9]:[0-5][0-9])'
-txt = 'This is 1 June 2011 13:43'
-print(re.findall(pattern, txt, re.DOTALL))
- 
-```
- 
-    ['1 June 2011 13:43']
-   
- 
-But finding the pattern for each format is not a good solution. And there is not a golden pattern either. However, there are some Python packages that can help us in these cases.
- 
-## Using `dateutil`
-If this package is not installed, please do it by `pip install dateutil`.
- 
- 
- 
+
+Including time parts increases complexity. You can keep adding patterns, but maintaining many variants quickly becomes hard. Also, locale-specific formats (day-first vs month-first) and verbose formats like `Wed, Jun 1, 2011, 9:39 PM` are painful to cover exhaustively with regex alone.
+
+## Use a library: python-dateutil
+
+python-dateutil provides a flexible parser. Install with:
+
+    pip install python-dateutil
+
+Example:
+
 ```python
 from dateutil.parser import parse
+parse('1 June 2011 13:43', fuzzy_with_tokens=True)
+# (datetime.datetime(2011, 6, 1, 13, 43), ('', ''))
 ```
- 
-By simply calling the parse method, we can get datetime.
- 
- 
-```python
-parse('This is 1 June 2011 13:43', fuzzy_with_tokens=True)
-```
- 
- 
- 
- 
-    (datetime.datetime(2011, 6, 1, 13, 43), ('This is ', ' '))
- 
- 
- 
-But this doesn't work always.
- 
- 
-```python
-parse('This is Wed, Jun 1, 2011, 9:29 AM and Wed, Jun 1, 2011, 19:39 PM', fuzzy_with_tokens=True)
-```
- 
- 
-    ---------------------------------------------------------------------------
- 
-    ParserError                               Traceback (most recent call last)
- 
-    <ipython-input-147-1f921311ad5f> in <module>
-    ----> 1 parse('This is Wed, Jun 1, 2011, 9:29 AM and Wed, Jun 1, 2011, 19:39 PM', fuzzy_with_tokens=True)
-   
- 
-    C:\ProgramData\Anaconda3\lib\site-packages\dateutil\parser\_parser.py in parse(timestr, parserinfo, **kwargs)
-       1372         return parser(parserinfo).parse(timestr, **kwargs)
-       1373     else:
-    -> 1374         return DEFAULTPARSER.parse(timestr, **kwargs)
-       1375
-       1376
-   
- 
-    C:\ProgramData\Anaconda3\lib\site-packages\dateutil\parser\_parser.py in parse(self, timestr, default, ignoretz, tzinfos, **kwargs)
-        647
-        648         if res is None:
-    --> 649             raise ParserError("Unknown string format: %s", timestr)
-        650
-        651         if len(res) == 0:
-   
- 
-    ParserError: Unknown string format: This is Wed, Jun 1, 2011, 9:29 AM and Wed, Jun 1, 2011, 19:39 PM
- 
- 
- 
-```python
-parse('This is 01/06/2011, at 7:57 PM and 01/06/2011, at 19:57 PM', fuzzy_with_tokens=True)
-```
- 
- 
-    ---------------------------------------------------------------------------
- 
-    ParserError                               Traceback (most recent call last)
- 
-    <ipython-input-146-f7324a8c6b10> in <module>
-    ----> 1 parse('This is 01/06/2011, at 7:57 PM and 01/06/2011, at 19:57 PM')
-   
- 
-    C:\ProgramData\Anaconda3\lib\site-packages\dateutil\parser\_parser.py in parse(timestr, parserinfo, **kwargs)
-       1372         return parser(parserinfo).parse(timestr, **kwargs)
-       1373     else:
-    -> 1374         return DEFAULTPARSER.parse(timestr, **kwargs)
-       1375
-       1376
-   
- 
-    C:\ProgramData\Anaconda3\lib\site-packages\dateutil\parser\_parser.py in parse(self, timestr, default, ignoretz, tzinfos, **kwargs)
-        647
-        648         if res is None:
-    --> 649             raise ParserError("Unknown string format: %s", timestr)
-        650
-        651         if len(res) == 0:
-   
- 
-    ParserError: Unknown string format: This is 01/06/2011, at 7:57 PM and 01/06/2011, at 19:57 PM
- 
- 
-## Using `dateparser`
- 
-I found this package to be more effective than `dateutil`. Please install it using `pip install dateparser`.
- 
- 
+
+dateutil is powerful, but it may fail on very noisy strings or on multiple dates in the same input. It is best when you pass a single candidate substring rather than a whole document containing many dates.
+
+## Use a library: dateparser
+
+dateparser is excellent at handling noisy, human-written date/time expressions and supports settings for languages and day-first vs month-first interpretation. Install with:
+
+    pip install dateparser
+
+Example (searching for dates inside text):
+
 ```python
 from dateparser.search import search_dates
- 
 search_dates(eml)
+# [('Wed, Jun 1, 2011, 9:39 PM', datetime.datetime(2011, 6, 1, 21, 39)),
+#  ('On 01/06/2011, at 7:57 PM', datetime.datetime(2011, 1, 6, 19, 57)),
+#  ('On 1 June 2011 13:43', datetime.datetime(2011, 6, 1, 13, 43))]
 ```
- 
- 
- 
- 
-    [('Wed, Jun 1, 2011, 9:39 PM', datetime.datetime(2011, 6, 1, 21, 39)),
-     ('On 01/06/2011, at 7:57 PM', datetime.datetime(2011, 1, 6, 19, 57)),
-     ('On 1 June 2011 13:43', datetime.datetime(2011, 6, 1, 13, 43))]
- 
- 
- 
-We can see that it found all the date times. And it also returns in the native python DateTime object. Isn't it awesome?
- 
-## Using `datefinder`
- 
-This is another package that can find dates from the text. Please install it using `pip install datefinder`
- 
- 
+
+Note: `dateparser` interpreted `01/06/2011` as month/day by default in this example. Use settings to disambiguate:
+
 ```python
-!pip install datefinder
+from dateparser.search import search_dates
+from dateparser import parse
+# Force day-first
+search_dates(eml, settings={'DATE_ORDER': 'DMY'})
 ```
- 
-    Collecting datefinder
-      Downloading datefinder-0.7.3-py2.py3-none-any.whl (10 kB)
-    Requirement already satisfied: pytz in c:\programdata\anaconda3\lib\site-packages (from datefinder) (2020.1)
-    Requirement already satisfied: python-dateutil>=2.4.2 in c:\programdata\anaconda3\lib\site-packages (from datefinder) (2.8.1)
-    Requirement already satisfied: regex>=2017.02.08 in c:\programdata\anaconda3\lib\site-packages (from datefinder) (2020.10.15)
-    Requirement already satisfied: six>=1.5 in c:\programdata\anaconda3\lib\site-packages (from python-dateutil>=2.4.2->datefinder) (1.15.0)
-    Installing collected packages: datefinder
-    Successfully installed datefinder-0.7.3
-   
- 
- 
+
+dateparser returns both the matched substring and a Python datetime object, which makes it practical for splitting text into segments based on the original text.
+
+## Use a library: datefinder
+
+datefinder is another option that yields datetime objects for many common patterns.
+
+    pip install datefinder
+
+Example:
+
 ```python
 from datefinder import find_dates
- 
 list(find_dates(eml))
+# [datetime.datetime(2011, 6, 1, 21, 39),
+#  datetime.datetime(2011, 1, 6, 19, 57),
+#  datetime.datetime(2011, 6, 1, 13, 43)]
 ```
- 
- 
- 
- 
-    [datetime.datetime(2011, 6, 1, 21, 39),
-     datetime.datetime(2011, 1, 6, 19, 57),
-     datetime.datetime(2011, 6, 1, 13, 43)]
- 
- 
- 
-This also gets our job done but we are more concerned about the original date format.
- 
-That's all for now and for my use case, I found `date parser` to be best. What is yours?
 
-For more content like this one, please stay exploring our site or signup for the [newsletter](https://dataqoil.com/newsletter/).
+datefinder is handy when you only need datetime objects and are less concerned about preserving the exact matched text format.
+
+## Which tool to choose?
+
+* If you need a robust search over noisy text and want the original matched substring + datetime object: use dateparser.search.search_dates and configure settings (language, DATE_ORDER).
+* If you already have a candidate substring or a consistent format: python-dateutil.parse is reliable and fast.
+* If you only need datetime objects and accept some ambiguity: datefinder can be convenient.
+
+## Practical tips
+* Be aware of ambiguous numeric formats (01/06/2011). Explicitly set DATE_ORDER or try to detect locale first.
+* Use the library's settings to control time zones and languages when applicable.
+* When processing large documents, first narrow down candidate regions with lightweight regexes (e.g., lines containing month names or numbers and AM/PM) and then pass candidates to a parser.
+* Persist both the parsed datetime and the original matched substring if you need to preserve the original text for display or auditing.
+
+## Conclusion
+
+For my use case (parsing email threads) `dateparser` performed best because it finds multiple date expressions in noisy, conversational text and returns Python datetime objects along with the original substrings. Try small samples from your own data and compare results from multiple libraries before committing to one.
+
+For more posts like this, explore the site or subscribe to the [newsletter](https://dataqoil.com/newsletter/).
 
 
 

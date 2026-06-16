@@ -1,1287 +1,502 @@
 ---
-title:  Basics of Stock Backtesting in Python
-date:   2022-10-16 01:29:17 +0545
+layout: single
+title: "Stock Backtesting in Python: Beginner Guide with Backtesting.py, yfinance, SMA, EMA, and PPO"
+date: 2022-10-16 01:29:17 +0545
+last_modified_at: 2026-06-16
 categories:
-    - Python
-    - Stock
-    - Backtesting
+  - Python
+  - Stock
+  - Backtesting
+  - Finance
 tags:
-    - python
-    - stock
-    - backtesting
+  - "Stock backtesting"
+  - "Python"
+  - "Backtesting.py"
+  - "yfinance"
+  - "SMA crossover"
+  - "EMA crossover"
+  - "PPO indicator"
+  - "Algorithmic trading"
+  - "Trading strategy"
+description: "A beginner-friendly tutorial on stock backtesting in Python using yfinance and Backtesting.py, including SMA crossover, EMA crossover, stop loss, take profit, and PPO strategies."
+excerpt: "Learn the basics of stock backtesting in Python with yfinance, pandas, Backtesting.py, SMA crossover, EMA crossover, stop loss, take profit, and PPO examples."
 header:
   teaser: assets/backtesting/bt14.png
+  og_image: assets/backtesting/bt14.png
+  image_description: "Backtesting.py result chart for a stock trading strategy in Python"
+toc: true
+toc_label: "Stock Backtesting in Python"
+toc_icon: "chart-line"
+toc_sticky: true
+read_time: true
+share: true
+related: true
+classes: wide
 ---
-Stock Backtesting in Python is way of testing our strategy in a historical data to see if our strategy makes any money or not. Let's start with a simple story.
 
-John and Joe are two best friends. They both earned some money from their hard working corporate job and wanted to invest it in a stock market. Unlike Joe, John is clever and does not fall for any influence of stock's price increasing and decreasing. They studied some Statistics and Probability along with Economics in college and and they love their money. Joe followed trend and bought some stock of X and felt glad that his stock's price increased by some % in few days. John was calm person and thought that John's stock position is increased but he is not earning any money and only way to earn is by selling it. John wanted to get back in time and questioned himself what will happen if I try to buy some stock of X and sell it if price increased by 10% or decrease by 5%. Then I will buy as much stock as possible from the amount I have. How much would have I earned today? Well he did not know but what he tried to do is a simple stock backtesting example.
+**Stock backtesting in Python** is a way to test a trading idea on historical market data. Instead of risking real money directly, we first ask a simple question:
 
-Here in this stock backtesting blog, we will start with our very simple strategy and then try to use of the most popular stock backtesting Python package [`Backtesting.py`](https://kernc.github.io/backtesting.py/doc/backtesting/#manuals). But first, let's install it. 
+> If I had followed this strategy in the past, what would have happened?
 
+Backtesting does not guarantee future profit. A strategy that worked well in the past can still fail in the future. But backtesting is useful because it helps us understand how a strategy behaves, how often it trades, how much drawdown it has, and whether the idea is worth studying further.
+
+In this post, I will explain the basics of stock backtesting using Python. We will start with a simple moving average crossover idea, first manually with pandas and then using the popular [`Backtesting.py`](https://kernc.github.io/backtesting.py/doc/backtesting/#manuals) package.
+
+We will cover:
+
+- what stock backtesting means
+- how to download stock data with `yfinance`
+- how to calculate simple moving averages
+- how to create a simple SMA crossover strategy
+- how to backtest the same strategy with `Backtesting.py`
+- how to use take profit and stop loss
+- how to test EMA crossover and PPO strategies
+- why backtesting results should be treated carefully
+
+> This post is for learning and educational purposes only. It is not financial advice.
+
+## A Simple Story About Backtesting
+
+Imagine two friends, John and Joe. They both earned some money from their jobs and wanted to invest in the stock market.
+
+Joe followed the market trend. He bought a stock because he saw the price going up. After a few days, the stock price increased, and he felt happy.
+
+John was calmer. He knew that a position increasing in value does not mean real profit until the stock is sold. He asked a different question:
+
+> What if I had bought this stock whenever my strategy gave a buy signal and sold it whenever my strategy gave a sell signal? How much money would I have today?
+
+That question is the beginning of backtesting.
+
+In this blog, we will use a simple strategy:
+
+- buy when a short moving average crosses above a long moving average
+- sell when the short moving average crosses below the long moving average
+
+This is not a perfect strategy. It is only a simple example to learn the workflow.
+
+## What Is Stock Backtesting?
+
+Stock backtesting means testing a trading strategy using historical price data.
+
+A backtest usually needs:
+
+- historical price data
+- a trading rule
+- starting cash
+- position sizing logic
+- entry rules
+- exit rules
+- trading costs or commission
+- performance metrics
+
+For example, a simple trading rule can be:
+
+```text
+Buy when SMA 20 crosses above SMA 40.
+Sell when SMA 20 crosses below SMA 40.
+```
+
+Backtesting helps us answer questions such as:
+
+- How much return did the strategy make?
+- How many trades did it take?
+- What was the maximum drawdown?
+- How many trades were profitable?
+- Did the strategy beat buy and hold?
+- Did commissions reduce profit?
+- Was the strategy too risky?
+
+## Install Required Python Packages
+
+We will use `backtesting`, `yfinance`, `pandas`, and later `pandas_ta`.
+
+```bash
+pip install backtesting yfinance pandas pandas-ta
+```
+
+In a notebook, you can run:
 
 ```python
 !pip install backtesting
+!pip install yfinance
+!pip install pandas-ta
 ```
 
-    Requirement already satisfied: backtesting in c:\programdata\anaconda3\lib\site-packages (0.3.3)
-    Requirement already satisfied: numpy>=1.17.0 in c:\programdata\anaconda3\lib\site-packages (from backtesting) (1.19.2)
-    Requirement already satisfied: pandas!=0.25.0,>=0.25.0 in c:\users\viper\appdata\roaming\python\python38\site-packages (from backtesting) (1.3.5)
-    Requirement already satisfied: bokeh>=1.4.0 in c:\users\viper\appdata\roaming\python\python38\site-packages (from backtesting) (2.4.3)
-    Requirement already satisfied: python-dateutil>=2.7.3 in c:\programdata\anaconda3\lib\site-packages (from pandas!=0.25.0,>=0.25.0->backtesting) (2.8.1)
-    Requirement already satisfied: pytz>=2017.3 in c:\programdata\anaconda3\lib\site-packages (from pandas!=0.25.0,>=0.25.0->backtesting) (2020.1)
-    Requirement already satisfied: Jinja2>=2.9 in c:\programdata\anaconda3\lib\site-packages (from bokeh>=1.4.0->backtesting) (2.11.2)
-    Requirement already satisfied: tornado>=5.1 in c:\programdata\anaconda3\lib\site-packages (from bokeh>=1.4.0->backtesting) (6.0.4)
-    Requirement already satisfied: packaging>=16.8 in c:\programdata\anaconda3\lib\site-packages (from bokeh>=1.4.0->backtesting) (20.4)
-    Requirement already satisfied: typing-extensions>=3.10.0 in c:\users\viper\appdata\roaming\python\python38\site-packages (from bokeh>=1.4.0->backtesting) (4.3.0)
-    Requirement already satisfied: pillow>=7.1.0 in c:\programdata\anaconda3\lib\site-packages (from bokeh>=1.4.0->backtesting) (8.0.1)
-    Requirement already satisfied: PyYAML>=3.10 in c:\users\viper\appdata\roaming\python\python38\site-packages (from bokeh>=1.4.0->backtesting) (6.0)
-    Requirement already satisfied: six>=1.5 in c:\programdata\anaconda3\lib\site-packages (from python-dateutil>=2.7.3->pandas!=0.25.0,>=0.25.0->backtesting) (1.15.0)
-    Requirement already satisfied: MarkupSafe>=0.23 in c:\programdata\anaconda3\lib\site-packages (from Jinja2>=2.9->bokeh>=1.4.0->backtesting) (1.1.1)
-    Requirement already satisfied: pyparsing>=2.0.2 in c:\users\viper\appdata\roaming\python\python38\site-packages (from packaging>=16.8->bokeh>=1.4.0->backtesting) (3.0.9)
-    
+I removed the long installation output from this post because it is not useful for readers.
 
-Before going into stock backtesting, lets choose the data of any stock. We will choose data of AAPL from `yfinance`. If it is not installed, we can do so by `pip install yfinance`.
-
-
-```python
-!pip install yfinance --user
-```
-
-    Requirement already satisfied: yfinance in c:\users\viper\appdata\roaming\python\python38\site-packages (0.1.87)
-    Requirement already satisfied: requests>=2.26 in c:\users\viper\appdata\roaming\python\python38\site-packages (from yfinance) (2.28.1)
-    Requirement already satisfied: pandas>=0.24.0 in c:\users\viper\appdata\roaming\python\python38\site-packages (from yfinance) (1.3.5)
-    Requirement already satisfied: multitasking>=0.0.7 in c:\users\viper\appdata\roaming\python\python38\site-packages (from yfinance) (0.0.11)
-    Requirement already satisfied: appdirs>=1.4.4 in c:\programdata\anaconda3\lib\site-packages (from yfinance) (1.4.4)
-    Requirement already satisfied: lxml>=4.5.1 in c:\programdata\anaconda3\lib\site-packages (from yfinance) (4.6.1)
-    Requirement already satisfied: numpy>=1.15 in c:\programdata\anaconda3\lib\site-packages (from yfinance) (1.19.2)
-    Requirement already satisfied: charset-normalizer<3,>=2 in c:\users\viper\appdata\roaming\python\python38\site-packages (from requests>=2.26->yfinance) (2.1.0)
-    Requirement already satisfied: urllib3<1.27,>=1.21.1 in c:\users\viper\appdata\roaming\python\python38\site-packages (from requests>=2.26->yfinance) (1.25.11)
-    Requirement already satisfied: certifi>=2017.4.17 in c:\programdata\anaconda3\lib\site-packages (from requests>=2.26->yfinance) (2020.6.20)
-    Requirement already satisfied: idna<4,>=2.5 in c:\programdata\anaconda3\lib\site-packages (from requests>=2.26->yfinance) (2.10)
-    Requirement already satisfied: pytz>=2017.3 in c:\programdata\anaconda3\lib\site-packages (from pandas>=0.24.0->yfinance) (2020.1)
-    Requirement already satisfied: python-dateutil>=2.7.3 in c:\programdata\anaconda3\lib\site-packages (from pandas>=0.24.0->yfinance) (2.8.1)
-    Requirement already satisfied: six>=1.5 in c:\programdata\anaconda3\lib\site-packages (from python-dateutil>=2.7.3->pandas>=0.24.0->yfinance) (1.15.0)
-    
-
+## Import Python Packages
 
 ```python
 import pandas as pd
 import yfinance as yf
 ```
 
-Next is to download data. We can download data as following.
+We will use:
 
+- `pandas` for data handling
+- `yfinance` for downloading stock price data
+- `Backtesting.py` for strategy testing
+
+## Download Stock Data with yfinance
+
+For this tutorial, we will use Apple stock data.
 
 ```python
 data = yf.download("AAPL", start="2015-01-01", end="2022-04-30")
-del data['Adj Close']
-del data['Volume']
-data
+
+data = data.drop(columns=["Adj Close", "Volume"])
+data.head()
 ```
 
-    [*********************100%***********************]  1 of 1 completed
-    
+The data contains four important columns:
 
+```text
+Open
+High
+Low
+Close
+```
 
+For `Backtesting.py`, the column names should follow the OHLC format:
 
+- `Open`
+- `High`
+- `Low`
+- `Close`
+- `Volume` if available
 
+In this example, I removed `Adj Close` and `Volume` to keep the tutorial simple.
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Open</th>
-      <th>High</th>
-      <th>Low</th>
-      <th>Close</th>
-    </tr>
-    <tr>
-      <th>Date</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>2015-01-02</th>
-      <td>27.847500</td>
-      <td>27.860001</td>
-      <td>26.837500</td>
-      <td>27.332500</td>
-    </tr>
-    <tr>
-      <th>2015-01-05</th>
-      <td>27.072500</td>
-      <td>27.162500</td>
-      <td>26.352501</td>
-      <td>26.562500</td>
-    </tr>
-    <tr>
-      <th>2015-01-06</th>
-      <td>26.635000</td>
-      <td>26.857500</td>
-      <td>26.157499</td>
-      <td>26.565001</td>
-    </tr>
-    <tr>
-      <th>2015-01-07</th>
-      <td>26.799999</td>
-      <td>27.049999</td>
-      <td>26.674999</td>
-      <td>26.937500</td>
-    </tr>
-    <tr>
-      <th>2015-01-08</th>
-      <td>27.307501</td>
-      <td>28.037500</td>
-      <td>27.174999</td>
-      <td>27.972500</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>2022-04-25</th>
-      <td>161.119995</td>
-      <td>163.169998</td>
-      <td>158.460007</td>
-      <td>162.880005</td>
-    </tr>
-    <tr>
-      <th>2022-04-26</th>
-      <td>162.250000</td>
-      <td>162.339996</td>
-      <td>156.720001</td>
-      <td>156.800003</td>
-    </tr>
-    <tr>
-      <th>2022-04-27</th>
-      <td>155.910004</td>
-      <td>159.789993</td>
-      <td>155.380005</td>
-      <td>156.570007</td>
-    </tr>
-    <tr>
-      <th>2022-04-28</th>
-      <td>159.250000</td>
-      <td>164.520004</td>
-      <td>158.929993</td>
-      <td>163.639999</td>
-    </tr>
-    <tr>
-      <th>2022-04-29</th>
-      <td>161.839996</td>
-      <td>166.199997</td>
-      <td>157.250000</td>
-      <td>157.649994</td>
-    </tr>
-  </tbody>
-</table>
-<p>1845 rows × 4 columns</p>
+## Using Built-in Sample Data from Backtesting.py
 
-
-
-Our data will be daily floorsheet data and we will make stock backtesting strategy on it. Alternatively we could get data for testing from backtesting.py too but it only allows GOOG.
-
+`Backtesting.py` also provides sample data. For example:
 
 ```python
 import backtesting.test as btest
+
+btest.GOOG.head()
 ```
 
+This gives sample Google price data. But in this post, we will mainly use AAPL data downloaded from `yfinance`.
+
+## What Is a Simple Moving Average?
+
+A **Simple Moving Average**, or **SMA**, is the average price over a fixed number of previous periods.
+
+For example:
+
+- SMA 20 means the average closing price of the last 20 trading days
+- SMA 40 means the average closing price of the last 40 trading days
+
+A moving average helps smooth noisy price movement.
+
+A common trading idea is:
+
+- when the short SMA goes above the long SMA, momentum may be positive
+- when the short SMA goes below the long SMA, momentum may be negative
+
+This is called a moving average crossover strategy.
+
+## Calculate SMA in pandas
+
+Let's calculate SMA 20 and SMA 40.
 
 ```python
-btest.GOOG
-```
-
-
-
-
-
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Open</th>
-      <th>High</th>
-      <th>Low</th>
-      <th>Close</th>
-      <th>Volume</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>2004-08-19</th>
-      <td>100.00</td>
-      <td>104.06</td>
-      <td>95.96</td>
-      <td>100.34</td>
-      <td>22351900</td>
-    </tr>
-    <tr>
-      <th>2004-08-20</th>
-      <td>101.01</td>
-      <td>109.08</td>
-      <td>100.50</td>
-      <td>108.31</td>
-      <td>11428600</td>
-    </tr>
-    <tr>
-      <th>2004-08-23</th>
-      <td>110.75</td>
-      <td>113.48</td>
-      <td>109.05</td>
-      <td>109.40</td>
-      <td>9137200</td>
-    </tr>
-    <tr>
-      <th>2004-08-24</th>
-      <td>111.24</td>
-      <td>111.60</td>
-      <td>103.57</td>
-      <td>104.87</td>
-      <td>7631300</td>
-    </tr>
-    <tr>
-      <th>2004-08-25</th>
-      <td>104.96</td>
-      <td>108.00</td>
-      <td>103.88</td>
-      <td>106.00</td>
-      <td>4598900</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>2013-02-25</th>
-      <td>802.30</td>
-      <td>808.41</td>
-      <td>790.49</td>
-      <td>790.77</td>
-      <td>2303900</td>
-    </tr>
-    <tr>
-      <th>2013-02-26</th>
-      <td>795.00</td>
-      <td>795.95</td>
-      <td>784.40</td>
-      <td>790.13</td>
-      <td>2202500</td>
-    </tr>
-    <tr>
-      <th>2013-02-27</th>
-      <td>794.80</td>
-      <td>804.75</td>
-      <td>791.11</td>
-      <td>799.78</td>
-      <td>2026100</td>
-    </tr>
-    <tr>
-      <th>2013-02-28</th>
-      <td>801.10</td>
-      <td>806.99</td>
-      <td>801.03</td>
-      <td>801.20</td>
-      <td>2265800</td>
-    </tr>
-    <tr>
-      <th>2013-03-01</th>
-      <td>797.80</td>
-      <td>807.14</td>
-      <td>796.15</td>
-      <td>806.19</td>
-      <td>2175400</td>
-    </tr>
-  </tbody>
-</table>
-<p>2148 rows × 5 columns</p>
-
-
-
-
-## Preparing SMA
-
-
-We will work on our data from yfinance next. There is a good availability of classes and modules for stock backtesting and lets use them instead of writing our own indicators. But I have written many indicators from scratch and [you can find them here]({{site.url}}/2022/03/20/python-for-stock-market-analysis-technical-indicators/). Here, SMA stands for Simple Moving Average.
-
-
-We start by making a class that inherits `Strategy` class inside backtesting and we do not need anything at all at this time but lets use `crossover` and `SMA` too. But this will be covered later. First lets take a look into our data and try to plot SMA of two periods, one longer and one shorter. One SMA of 20 days and another of 40 days. Our simple stock backtesting strategy will be to buy when small SMA crosses over bigger SMA. 
-
-
-```python
-n1,n2=20,40
+n1, n2 = 20, 40
 
 ndata = data.copy()
 
-ndata[f'SMA_{n1}'] = ndata.Close.rolling(n1).mean()
-ndata[f'SMA_{n2}'] = ndata.Close.rolling(n2).mean()
+ndata[f"SMA_{n1}"] = ndata["Close"].rolling(n1).mean()
+ndata[f"SMA_{n2}"] = ndata["Close"].rolling(n2).mean()
 
-ndata[[f'SMA_{n1}', f'SMA_{n2}']].plot(figsize=(15,10))
+ndata[[f"SMA_{n1}", f"SMA_{n2}"]].plot(figsize=(15, 10))
 ```
 
-
-
-
-    <AxesSubplot:xlabel='Date'>
-
-
-
-
-    
 ![png]({{site.url}}/assets/backtesting/output_11_1.png)
-    
 
+The two moving averages cross each other multiple times. These crossover points can be used as possible buy and sell signals.
 
-We can see that SMA_20 and SMA_40 are crossing over each other in multiple times. But the plot looks little huge so lets take data of last 200 days only.
+## Plot Only the Last 200 Days
 
+The full chart can look too large, so let's look at only the last 200 days.
 
 ```python
 last = 200
-n1,n2=20,40
+n1, n2 = 20, 40
 
 tdata = data.copy().tail(last)
 
-tdata[f'SMA_{n1}'] = tdata.Close.rolling(n1).mean()
-tdata[f'SMA_{n2}'] = tdata.Close.rolling(n2).mean()
+tdata[f"SMA_{n1}"] = tdata["Close"].rolling(n1).mean()
+tdata[f"SMA_{n2}"] = tdata["Close"].rolling(n2).mean()
 
-tdata[[f'SMA_{n1}', f'SMA_{n2}']].plot(figsize=(15,10))
+tdata[[f"SMA_{n1}", f"SMA_{n2}"]].plot(figsize=(15, 10))
 ```
 
-
-
-
-    <AxesSubplot:xlabel='Date'>
-
-
-
-
-    
 ![png]({{site.url}}/assets/backtesting/output_13_1.png)
-    
 
+Now the crossover points are easier to see.
 
-## Our Simple Strategy
+## Define a Simple SMA Crossover Strategy
 
-Now let's make our stock backtesting strategy. If the short SMA crosses over large SMA, we buy and hold positions because we saw that it has increased the value of price recently and could increase in future too. But if short SMA crosses below large SMA, we sell our holding positions because there has been recent price drops. In above example we will do trades whenever crossover happens. A simple way to find a crossover is by comparing difference between current price and previous. If the difference was positive in past and negative now then we do trade and vice versa. Note that we buy on the Open price of next day.
+The strategy is:
 
+- Buy when SMA 20 crosses above SMA 40.
+- Sell when SMA 20 crosses below SMA 40.
+- Use the next day's open price for trade execution.
+- Start with `$10,000`.
+- Buy as many shares as possible.
+- Sell all shares when the sell signal appears.
 
-```python
-tdata['sma1_gt_sma2'] = tdata[f'SMA_{n1}']>tdata[f'SMA_{n2}']
-tdata['crossed'] = (tdata.sma1_gt_sma2!=tdata.sma1_gt_sma2.shift(1))
-print(f"Num Corssed: {tdata.crossed.sum()-1}")
-tdata
+This is a very simple strategy. It does not include taxes, slippage, spread, or realistic order execution.
 
-```
+## Find SMA Crossover Points
 
-    Num Corssed: 7
-    
-
-
-
-
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Open</th>
-      <th>High</th>
-      <th>Low</th>
-      <th>Close</th>
-      <th>SMA_20</th>
-      <th>SMA_40</th>
-      <th>sma1_gt_sma2</th>
-      <th>crossed</th>
-    </tr>
-    <tr>
-      <th>Date</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>2021-07-16</th>
-      <td>148.460007</td>
-      <td>149.759995</td>
-      <td>145.880005</td>
-      <td>146.389999</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>True</td>
-    </tr>
-    <tr>
-      <th>2021-07-19</th>
-      <td>143.750000</td>
-      <td>144.070007</td>
-      <td>141.669998</td>
-      <td>142.449997</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>2021-07-20</th>
-      <td>143.460007</td>
-      <td>147.100006</td>
-      <td>142.960007</td>
-      <td>146.149994</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>2021-07-21</th>
-      <td>145.529999</td>
-      <td>146.130005</td>
-      <td>144.630005</td>
-      <td>145.399994</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>2021-07-22</th>
-      <td>145.940002</td>
-      <td>148.199997</td>
-      <td>145.809998</td>
-      <td>146.800003</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>2022-04-25</th>
-      <td>161.119995</td>
-      <td>163.169998</td>
-      <td>158.460007</td>
-      <td>162.880005</td>
-      <td>170.435000</td>
-      <td>166.72550</td>
-      <td>True</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>2022-04-26</th>
-      <td>162.250000</td>
-      <td>162.339996</td>
-      <td>156.720001</td>
-      <td>156.800003</td>
-      <td>169.495000</td>
-      <td>166.51750</td>
-      <td>True</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>2022-04-27</th>
-      <td>155.910004</td>
-      <td>159.789993</td>
-      <td>155.380005</td>
-      <td>156.570007</td>
-      <td>168.375500</td>
-      <td>166.35175</td>
-      <td>True</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>2022-04-28</th>
-      <td>159.250000</td>
-      <td>164.520004</td>
-      <td>158.929993</td>
-      <td>163.639999</td>
-      <td>167.668999</td>
-      <td>166.27875</td>
-      <td>True</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>2022-04-29</th>
-      <td>161.839996</td>
-      <td>166.199997</td>
-      <td>157.250000</td>
-      <td>157.649994</td>
-      <td>166.820999</td>
-      <td>166.06425</td>
-      <td>True</td>
-      <td>False</td>
-    </tr>
-  </tbody>
-</table>
-<p>200 rows × 8 columns</p>
-
-
-
+First, we check whether SMA 20 is greater than SMA 40.
 
 ```python
-
+tdata["sma1_gt_sma2"] = tdata[f"SMA_{n1}"] > tdata[f"SMA_{n2}"]
 ```
 
-In above code, we made new column where we checked if SMA1 is higher than SMA2 or not and in next crossed column we checked if the status of SMA1>SMA2 still holds same from the previous time. And when it is false, we do trade. We should ignore the first one because it will give us NaN value on shift. Let's assume that we have USD 10000 in cash and want to do trade. Since we have SMA1>SMA2 column, we buy only when there is `crossed` True and `sma1_gt_sma2` True as well. And we sell only when there is `crossed` True and `sma1_gt_sma2` is False.
+Then we check when this condition changes.
 
-### Trading Result
-To find stock backtesting trades data, we loop through the data and if yesterday's SMA1>SMA2 then we buy on today's Open price and selling happens on same way.
+```python
+tdata["crossed"] = tdata["sma1_gt_sma2"] != tdata["sma1_gt_sma2"].shift(1)
 
-* If crossed and SMA1>SMA2: buy positions based on remaining amount and add positions.
-* If crossed and SMA1<SMA2: sell available positions and add remaining amount.
-* On last day sell all positions and add remaining amount.
+print(f"Number of crosses: {tdata['crossed'].sum() - 1}")
+```
 
+The first cross is ignored because it comes from the shifted missing value.
+
+## Manual Backtesting Logic
+
+Now, let's manually backtest this crossover strategy.
 
 ```python
 ntdata = tdata.reset_index().copy()
-ntdata['crossed']=ntdata.crossed.shift(1)
-ntdata['sma1_gt_sma2']=ntdata.sma1_gt_sma2.shift(1)
+
+# Use yesterday's signal to trade at today's open
+ntdata["crossed"] = ntdata["crossed"].shift(1)
+ntdata["sma1_gt_sma2"] = ntdata["sma1_gt_sma2"].shift(1)
 
 positions = 0
-rem_amt=10000
-lr = len(ntdata)-1
+remaining_amount = 10000
+last_row = len(ntdata) - 1
+
 trades = []
-tinfo=[]
+trade_info = []
 
 for i, row in ntdata.iterrows():
-    if i!=0:
+    if i != 0:
+        # Buy signal
         if row.crossed and row.sma1_gt_sma2:
-            positions=int(rem_amt/row.Open)
-            rem_amt= rem_amt-row.Open*positions
-            tinfo.append(positions)
-            tinfo.append(row.Open)
-            tinfo.append(row.Date)
-            
-        if row.crossed==True and row.sma1_gt_sma2==False and positions>0:
-            rem_amt = rem_amt+row.Open*positions
-            tinfo.append(row.Date)
-            tinfo.append(row.Open)
-            trades.append(tinfo)
-            tinfo=[]
-            positions = 0
-    
-    if i==lr and positions>0:
-        rem_amt=rem_amt + positions*row.Open
-        
-        tinfo.append(row.Date)
-        tinfo.append(row.Open)
-        trades.append(tinfo)
-        
-        positions = 0
-        ntdata.loc[i, 'positions'] = positions
-        ntdata.loc[i, 'rem_amount'] = rem_amt
+            positions = int(remaining_amount / row.Open)
+            remaining_amount = remaining_amount - row.Open * positions
 
-    
-trades = pd.DataFrame(trades, columns=['Positions', 'Buy', 'Entry', 'Exit', 'Sell'])
-trades['return']=((trades['Sell']-trades['Buy'])*trades.Positions).cumsum()
+            trade_info.append(positions)
+            trade_info.append(row.Open)
+            trade_info.append(row.Date)
+
+        # Sell signal
+        if row.crossed and row.sma1_gt_sma2 == False and positions > 0:
+            remaining_amount = remaining_amount + row.Open * positions
+
+            trade_info.append(row.Date)
+            trade_info.append(row.Open)
+
+            trades.append(trade_info)
+
+            trade_info = []
+            positions = 0
+
+    # Sell remaining position on last day
+    if i == last_row and positions > 0:
+        remaining_amount = remaining_amount + positions * row.Open
+
+        trade_info.append(row.Date)
+        trade_info.append(row.Open)
+
+        trades.append(trade_info)
+
+        positions = 0
+
+trades = pd.DataFrame(
+    trades,
+    columns=["Positions", "Buy", "Entry", "Exit", "Sell"]
+)
+
+trades["return"] = ((trades["Sell"] - trades["Buy"]) * trades["Positions"]).cumsum()
 
 trades
 ```
 
+In the last 200 days, this strategy ended with an overall loss of around `$457`.
 
+This is a useful lesson: a strategy can look reasonable but still lose money over a particular period.
 
+## Test the Same Strategy on a Larger Period
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Positions</th>
-      <th>Buy</th>
-      <th>Entry</th>
-      <th>Exit</th>
-      <th>Sell</th>
-      <th>return</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>66</td>
-      <td>150.630005</td>
-      <td>2021-09-13</td>
-      <td>2021-10-01</td>
-      <td>141.899994</td>
-      <td>-576.180725</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>62</td>
-      <td>150.389999</td>
-      <td>2021-11-03</td>
-      <td>2022-01-27</td>
-      <td>162.449997</td>
-      <td>171.539124</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>61</td>
-      <td>164.699997</td>
-      <td>2022-03-01</td>
-      <td>2022-03-02</td>
-      <td>164.389999</td>
-      <td>152.629272</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>58</td>
-      <td>172.360001</td>
-      <td>2022-04-06</td>
-      <td>2022-04-29</td>
-      <td>161.839996</td>
-      <td>-457.530975</td>
-    </tr>
-  </tbody>
-</table>
-
-
-
-Looking over the above table, in return column, we are in 457 loss overall. What if we did this testing with larger period of data?
-
-## Our Strategy in a Larger Period
-
-Lets start from the last 1000 day and forth.
-
+Now let's test the same strategy on the last 1000 trading days.
 
 ```python
-n1,n2=20,40
+n1, n2 = 20, 40
 last = 1000
 
 tdata = data.copy().tail(last)
 
-tdata[f'SMA_{n1}'] = tdata.Close.rolling(n1).mean()
-tdata[f'SMA_{n2}'] = tdata.Close.rolling(n2).mean()
+tdata[f"SMA_{n1}"] = tdata["Close"].rolling(n1).mean()
+tdata[f"SMA_{n2}"] = tdata["Close"].rolling(n2).mean()
 
-tdata['sma1_gt_sma2'] = tdata[f'SMA_{n1}']>tdata[f'SMA_{n2}']
-tdata['crossed'] = (tdata.sma1_gt_sma2!=tdata.sma1_gt_sma2.shift(1))
-print(f"Num Corssed: {tdata.crossed.sum()-1}")
+tdata["sma1_gt_sma2"] = tdata[f"SMA_{n1}"] > tdata[f"SMA_{n2}"]
+tdata["crossed"] = tdata["sma1_gt_sma2"] != tdata["sma1_gt_sma2"].shift(1)
 
-ntdata = tdata.reset_index().copy()
-ntdata['crossed']=ntdata.crossed.shift(1)
-ntdata['sma1_gt_sma2']=ntdata.sma1_gt_sma2.shift(1)
-
-positions = 0
-rem_amt=10000
-lr = len(ntdata)-1
-trades = []
-tinfo=[]
-
-for i, row in ntdata.iterrows():
-    if i!=0:
-        if row.crossed and row.sma1_gt_sma2:
-            positions=int(rem_amt/row.Open)
-            rem_amt= rem_amt-row.Open*positions
-            tinfo.append(positions)
-            tinfo.append(row.Open)
-            tinfo.append(row.Date)
-            
-        if row.crossed==True and row.sma1_gt_sma2==False and positions>0:
-            rem_amt = rem_amt+row.Open*positions
-            tinfo.append(row.Date)
-            tinfo.append(row.Open)
-            trades.append(tinfo)
-            tinfo=[]
-            positions = 0
-    
-    if i==lr and positions>0:
-        rem_amt=rem_amt + positions*row.Open
-        
-        tinfo.append(row.Date)
-        tinfo.append(row.Open)
-        trades.append(tinfo)
-        
-        positions = 0
-        ntdata.loc[i, 'positions'] = positions
-        ntdata.loc[i, 'rem_amount'] = rem_amt
-
-    
-trades = pd.DataFrame(trades, columns=['Positions', 'Buy', 'Entry', 'Exit', 'Sell'])
-trades['return']=((trades['Sell']-trades['Buy'])*trades.Positions).cumsum()
-
-trades
+print(f"Number of crosses: {tdata['crossed'].sum() - 1}")
 ```
 
-    Num Corssed: 23
-    
+Using the larger period, the strategy made money in this AAPL example.
 
+This is another important lesson: backtest results depend heavily on the selected time period. A strategy can lose money in one period and make money in another.
 
+## Manual Backtesting vs Backtesting.py
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Positions</th>
-      <th>Buy</th>
-      <th>Entry</th>
-      <th>Exit</th>
-      <th>Sell</th>
-      <th>return</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>205</td>
-      <td>48.652500</td>
-      <td>2018-07-26</td>
-      <td>2018-10-26</td>
-      <td>53.974998</td>
-      <td>1091.112156</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>257</td>
-      <td>43.099998</td>
-      <td>2019-02-07</td>
-      <td>2019-05-23</td>
-      <td>44.950001</td>
-      <td>1566.562744</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>232</td>
-      <td>49.669998</td>
-      <td>2019-06-28</td>
-      <td>2019-08-28</td>
-      <td>51.025002</td>
-      <td>1880.923523</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>228</td>
-      <td>52.097500</td>
-      <td>2019-09-04</td>
-      <td>2020-03-02</td>
-      <td>70.570000</td>
-      <td>6092.653488</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>232</td>
-      <td>69.300003</td>
-      <td>2020-04-24</td>
-      <td>2020-09-29</td>
-      <td>114.550003</td>
-      <td>16590.653488</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>233</td>
-      <td>114.010002</td>
-      <td>2020-10-26</td>
-      <td>2020-11-18</td>
-      <td>118.610001</td>
-      <td>17662.453133</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>228</td>
-      <td>121.010002</td>
-      <td>2020-12-01</td>
-      <td>2021-02-26</td>
-      <td>122.589996</td>
-      <td>18022.691811</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>207</td>
-      <td>134.940002</td>
-      <td>2021-04-14</td>
-      <td>2021-05-24</td>
-      <td>126.010002</td>
-      <td>16174.181747</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>194</td>
-      <td>134.449997</td>
-      <td>2021-06-24</td>
-      <td>2021-10-01</td>
-      <td>141.899994</td>
-      <td>17619.481155</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>183</td>
-      <td>150.389999</td>
-      <td>2021-11-03</td>
-      <td>2022-01-27</td>
-      <td>162.449997</td>
-      <td>19826.460709</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>181</td>
-      <td>164.699997</td>
-      <td>2022-03-01</td>
-      <td>2022-03-02</td>
-      <td>164.389999</td>
-      <td>19770.351151</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>172</td>
-      <td>172.360001</td>
-      <td>2022-04-06</td>
-      <td>2022-04-29</td>
-      <td>161.839996</td>
-      <td>17960.910416</td>
-    </tr>
-  </tbody>
-</table>
+Until now, we wrote our own backtesting logic. This is useful for learning, but it becomes difficult when we want to handle:
 
+- multiple trades
+- commissions
+- short selling
+- stop loss
+- take profit
+- position sizing
+- equity curve
+- drawdown
+- performance metrics
+- strategy plots
 
+That is why packages like `Backtesting.py` are useful.
 
+## SMA Crossover Strategy with Backtesting.py
 
-It looks like we actually made some money while testing on larger period.
-
-## Strategy with Backtesting
-Until now we designed a very simple strategy and did trading and to do so, we had to write too many codes but why do we need to struggle that hard while there is already one open source package available which handles our struggles? Following is a modified version of our strategy and it is modified from the [Quick Start page](https://kernc.github.io/backtesting.py/doc/examples/Quick%20Start%20User%20Guide.html).
-
+The following strategy is modified from the `Backtesting.py` quick start example.
 
 ```python
 from backtesting import Strategy
 from backtesting.lib import crossover
 from backtesting.test import SMA
 
+
 class SmaCross(Strategy):
-    # Define the two MA lags as *class variables*
-    # for later optimization
+    # Moving average periods
     n1 = 20
     n2 = 40
-    
+
     def init(self):
-        # Precompute the two moving averages
+        # Precompute moving averages
         self.sma1 = self.I(SMA, self.data.Close, self.n1)
         self.sma2 = self.I(SMA, self.data.Close, self.n2)
-    
+
     def next(self):
-        # If sma1 crosses above sma2, close any existing
-        # short trades, and buy the asset
+        # Buy when SMA 20 crosses above SMA 40
         if crossover(self.sma1, self.sma2):
             self.position.close()
             self.buy()
 
-        # Else, if sma1 crosses below sma2, close any existing
-        # long trades, and sell the asset
+        # Sell when SMA 40 crosses above SMA 20
         elif crossover(self.sma2, self.sma1):
             self.position.close()
             self.sell()
-            
-
 ```
 
-
-
+Now run the backtest.
 
 ```python
 from backtesting import Backtest
 
-bt = Backtest(data.tail(last), SmaCross, cash=10000, commission=0)
+bt = Backtest(
+    data.tail(last),
+    SmaCross,
+    cash=10000,
+    commission=0
+)
+
 stats = bt.run()
 stats
 ```
 
+The backtest result from the original experiment was:
 
+| Metric | Value |
+|---|---:|
+| Final Equity | `$21,836.20` |
+| Return | `118.36%` |
+| Buy & Hold Return | `234.38%` |
+| Max Drawdown | `-38.69%` |
+| Number of Trades | `23` |
+| Win Rate | `52.17%` |
+| Profit Factor | `2.83` |
 
+The strategy made money, but it did not beat buy and hold in this AAPL period.
 
-    Start                     2018-05-11 00:00:00
-    End                       2022-04-29 00:00:00
-    Duration                   1449 days 00:00:00
-    Exposure Time [%]                        94.8
-    Equity Final [$]                 21836.199413
-    Equity Peak [$]                  34464.403912
-    Return [%]                         118.361994
-    Buy & Hold Return [%]              234.376153
-    Return (Ann.) [%]                   21.751022
-    Volatility (Ann.) [%]               38.394298
-    Sharpe Ratio                         0.566517
-    Sortino Ratio                        1.031964
-    Calmar Ratio                         0.562183
-    Max. Drawdown [%]                  -38.690305
-    Avg. Drawdown [%]                   -5.507696
-    Max. Drawdown Duration      458 days 00:00:00
-    Avg. Drawdown Duration       34 days 00:00:00
-    # Trades                                   23
-    Win Rate [%]                        52.173913
-    Best Trade [%]                      65.295812
-    Worst Trade [%]                     -10.50055
-    Avg. Trade [%]                       3.457111
-    Max. Trade Duration         180 days 00:00:00
-    Avg. Trade Duration          60 days 00:00:00
-    Profit Factor                        2.831255
-    Expectancy [%]                       4.500417
-    SQN                                  0.873935
-    _strategy                            SmaCross
-    _equity_curve                             ...
-    _trades                       Size  EntryB...
-    dtype: object
+That is important. A profitable strategy is not always a good strategy if simply holding the stock would have performed better.
 
+## Understanding Backtesting.py Metrics
 
+`Backtesting.py` returns many metrics. Some important ones are:
 
-We start by importing necessary classes and methods. We create a new class for our own strategy which inherits Strategy. We initialize variables and then SMA.  When doing `run()`,  the `next()` method loops through the data rows and perform checks inside it. We can pass commission percent to calculate how much commission do we have to pay to our broker.
+### Equity Final
 
-### Trades
-The trades table using backtesting is different than ours.
+The final account value after all trades.
 
+### Return
+
+The percentage gain or loss from the starting cash.
+
+### Buy & Hold Return
+
+The return from simply buying the stock at the beginning and holding it until the end.
+
+### Exposure Time
+
+The percentage of time the strategy had an open position.
+
+### Max Drawdown
+
+The largest percentage drop from an equity peak to a later low.
+
+### Win Rate
+
+The percentage of trades that were profitable.
+
+### Profit Factor
+
+Gross profit divided by gross loss. A value above 1 means total profit is greater than total loss.
+
+### Sharpe Ratio
+
+A risk-adjusted return metric. Higher is generally better, but it should not be the only metric used.
+
+## View Individual Trades
+
+The trade table can be accessed from the stats object.
 
 ```python
-stats['_trades']  # Contains individual trade data
+stats["_trades"]
 ```
 
+This table contains information such as:
 
+- trade size
+- entry price
+- exit price
+- profit and loss
+- return percentage
+- entry date
+- exit date
+- trade duration
 
+This is useful for analyzing how each trade performed.
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Size</th>
-      <th>EntryBar</th>
-      <th>ExitBar</th>
-      <th>EntryPrice</th>
-      <th>ExitPrice</th>
-      <th>PnL</th>
-      <th>ReturnPct</th>
-      <th>EntryTime</th>
-      <th>ExitTime</th>
-      <th>Duration</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>205</td>
-      <td>52</td>
-      <td>117</td>
-      <td>48.652500</td>
-      <td>53.974998</td>
-      <td>1091.112156</td>
-      <td>0.109398</td>
-      <td>2018-07-26</td>
-      <td>2018-10-26</td>
-      <td>92 days</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>-205</td>
-      <td>117</td>
-      <td>186</td>
-      <td>53.974998</td>
-      <td>43.099998</td>
-      <td>2229.375000</td>
-      <td>0.201482</td>
-      <td>2018-10-26</td>
-      <td>2019-02-07</td>
-      <td>104 days</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>309</td>
-      <td>186</td>
-      <td>259</td>
-      <td>43.099998</td>
-      <td>44.950001</td>
-      <td>571.650707</td>
-      <td>0.042923</td>
-      <td>2019-02-07</td>
-      <td>2019-05-23</td>
-      <td>105 days</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>-309</td>
-      <td>259</td>
-      <td>284</td>
-      <td>44.950001</td>
-      <td>49.669998</td>
-      <td>-1458.479198</td>
-      <td>-0.105006</td>
-      <td>2019-05-23</td>
-      <td>2019-06-28</td>
-      <td>36 days</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>250</td>
-      <td>284</td>
-      <td>326</td>
-      <td>49.669998</td>
-      <td>51.025002</td>
-      <td>338.750839</td>
-      <td>0.027280</td>
-      <td>2019-06-28</td>
-      <td>2019-08-28</td>
-      <td>61 days</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>-250</td>
-      <td>326</td>
-      <td>330</td>
-      <td>51.025002</td>
-      <td>52.097500</td>
-      <td>-268.124580</td>
-      <td>-0.021019</td>
-      <td>2019-08-28</td>
-      <td>2019-09-04</td>
-      <td>7 days</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>240</td>
-      <td>330</td>
-      <td>453</td>
-      <td>52.097500</td>
-      <td>70.570000</td>
-      <td>4433.399963</td>
-      <td>0.354576</td>
-      <td>2019-09-04</td>
-      <td>2020-03-02</td>
-      <td>180 days</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>-240</td>
-      <td>453</td>
-      <td>491</td>
-      <td>70.570000</td>
-      <td>69.300003</td>
-      <td>304.799194</td>
-      <td>0.017996</td>
-      <td>2020-03-02</td>
-      <td>2020-04-24</td>
-      <td>53 days</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>248</td>
-      <td>491</td>
-      <td>600</td>
-      <td>69.300003</td>
-      <td>114.550003</td>
-      <td>11222.000000</td>
-      <td>0.652958</td>
-      <td>2020-04-24</td>
-      <td>2020-09-29</td>
-      <td>158 days</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>-248</td>
-      <td>600</td>
-      <td>619</td>
-      <td>114.550003</td>
-      <td>114.010002</td>
-      <td>133.920227</td>
-      <td>0.004714</td>
-      <td>2020-09-29</td>
-      <td>2020-10-26</td>
-      <td>27 days</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>250</td>
-      <td>619</td>
-      <td>636</td>
-      <td>114.010002</td>
-      <td>118.610001</td>
-      <td>1149.999619</td>
-      <td>0.040347</td>
-      <td>2020-10-26</td>
-      <td>2020-11-18</td>
-      <td>23 days</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>-250</td>
-      <td>636</td>
-      <td>644</td>
-      <td>118.610001</td>
-      <td>121.010002</td>
-      <td>-600.000381</td>
-      <td>-0.020234</td>
-      <td>2020-11-18</td>
-      <td>2020-12-01</td>
-      <td>13 days</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>240</td>
-      <td>644</td>
-      <td>703</td>
-      <td>121.010002</td>
-      <td>122.589996</td>
-      <td>379.198608</td>
-      <td>0.013057</td>
-      <td>2020-12-01</td>
-      <td>2021-02-26</td>
-      <td>87 days</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>-240</td>
-      <td>703</td>
-      <td>735</td>
-      <td>122.589996</td>
-      <td>134.940002</td>
-      <td>-2964.001465</td>
-      <td>-0.100742</td>
-      <td>2021-02-26</td>
-      <td>2021-04-14</td>
-      <td>47 days</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>196</td>
-      <td>735</td>
-      <td>763</td>
-      <td>134.940002</td>
-      <td>126.010002</td>
-      <td>-1750.280060</td>
-      <td>-0.066178</td>
-      <td>2021-04-14</td>
-      <td>2021-05-24</td>
-      <td>40 days</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>-196</td>
-      <td>763</td>
-      <td>785</td>
-      <td>126.010002</td>
-      <td>134.449997</td>
-      <td>-1654.238983</td>
-      <td>-0.066979</td>
-      <td>2021-05-24</td>
-      <td>2021-06-24</td>
-      <td>31 days</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>172</td>
-      <td>785</td>
-      <td>854</td>
-      <td>134.449997</td>
-      <td>141.899994</td>
-      <td>1281.399475</td>
-      <td>0.055411</td>
-      <td>2021-06-24</td>
-      <td>2021-10-01</td>
-      <td>99 days</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>-172</td>
-      <td>854</td>
-      <td>877</td>
-      <td>141.899994</td>
-      <td>150.389999</td>
-      <td>-1460.280945</td>
-      <td>-0.059831</td>
-      <td>2021-10-01</td>
-      <td>2021-11-03</td>
-      <td>33 days</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>152</td>
-      <td>877</td>
-      <td>935</td>
-      <td>150.389999</td>
-      <td>162.449997</td>
-      <td>1833.119629</td>
-      <td>0.080191</td>
-      <td>2021-11-03</td>
-      <td>2022-01-27</td>
-      <td>85 days</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>-152</td>
-      <td>935</td>
-      <td>957</td>
-      <td>162.449997</td>
-      <td>164.699997</td>
-      <td>-342.000000</td>
-      <td>-0.013850</td>
-      <td>2022-01-27</td>
-      <td>2022-03-01</td>
-      <td>33 days</td>
-    </tr>
-    <tr>
-      <th>20</th>
-      <td>148</td>
-      <td>957</td>
-      <td>958</td>
-      <td>164.699997</td>
-      <td>164.389999</td>
-      <td>-45.879639</td>
-      <td>-0.001882</td>
-      <td>2022-03-01</td>
-      <td>2022-03-02</td>
-      <td>1 days</td>
-    </tr>
-    <tr>
-      <th>21</th>
-      <td>-148</td>
-      <td>958</td>
-      <td>983</td>
-      <td>164.389999</td>
-      <td>172.360001</td>
-      <td>-1179.560181</td>
-      <td>-0.048482</td>
-      <td>2022-03-02</td>
-      <td>2022-04-06</td>
-      <td>35 days</td>
-    </tr>
-    <tr>
-      <th>22</th>
-      <td>134</td>
-      <td>983</td>
-      <td>999</td>
-      <td>172.360001</td>
-      <td>161.839996</td>
-      <td>-1409.680573</td>
-      <td>-0.061035</td>
-      <td>2022-04-06</td>
-      <td>2022-04-29</td>
-      <td>23 days</td>
-    </tr>
-  </tbody>
-</table>
+## Plot the Backtest Result
 
-
-
-### Plotting
-
-We can even plot our trading with bokeh plot. It is interactive just like plotly
-
+`Backtesting.py` can generate an interactive Bokeh plot.
 
 ```python
 bt.plot()
@@ -1291,98 +506,87 @@ bt.plot()
 ![png]({{site.url}}/assets/backtesting/bt2.png)
 ![png]({{site.url}}/assets/backtesting/bt3.png)
 
+These plots help us inspect trades, equity curve, drawdown, and price movement.
 
+## Add Take Profit and Stop Loss
 
-### Stop Profit and Stop Loss
-Profit and stop loss are often used to stay in the safe side. We exit from the trade when there is increase in price and take a profit but reversely, we exit from the trade when there is decrease in price and realize loss.
+Take profit and stop loss are used to exit trades automatically.
 
+- **Take profit** exits when the trade reaches a target profit.
+- **Stop loss** exits when the trade reaches a maximum allowed loss.
+
+In this example:
+
+- take profit is set at `20%` above the current close price
+- stop loss is set at `5%` below the current close price
 
 ```python
 from backtesting import Strategy
 from backtesting.lib import crossover
 from backtesting.test import SMA
 
-class SmaCross(Strategy):
-    # Define the two MA lags as *class variables*
-    # for later optimization
+
+class SmaCrossWithTPSL(Strategy):
     n1 = 20
     n2 = 40
-    
+
     def init(self):
-        # Precompute the two moving averages
         self.sma1 = self.I(SMA, self.data.Close, self.n1)
         self.sma2 = self.I(SMA, self.data.Close, self.n2)
-    
-    def next(self):
-        # If sma1 crosses above sma2, close any existing
-        # short trades, and buy the asset
-        if crossover(self.sma1, self.sma2):
-#             self.position.close()
-            self.buy(tp=self.data.Close[-1]*1.2, sl=self.data.Close[-1]*0.95)
 
-        # Else, if sma1 crosses below sma2, close any existing
-        # long trades, and sell the asset
+    def next(self):
+        if crossover(self.sma1, self.sma2):
+            self.buy(
+                tp=self.data.Close[-1] * 1.20,
+                sl=self.data.Close[-1] * 0.95
+            )
+
         elif crossover(self.sma2, self.sma1):
             self.position.close()
-#             self.sell()
-            
-
-from backtesting import Backtest
-
-bt = Backtest(data.tail(last), SmaCross, cash=10000, commission=0)
-stats = bt.run()
-stats         
 ```
 
+Run the backtest:
 
+```python
+bt = Backtest(
+    data.tail(last),
+    SmaCrossWithTPSL,
+    cash=10000,
+    commission=0
+)
 
+stats = bt.run()
+stats
+```
 
-    Start                     2018-05-11 00:00:00
-    End                       2022-04-29 00:00:00
-    Duration                   1449 days 00:00:00
-    Exposure Time [%]                        39.7
-    Equity Final [$]                 25715.433767
-    Equity Peak [$]                  26697.815822
-    Return [%]                         157.154338
-    Buy & Hold Return [%]              234.376153
-    Return (Ann.) [%]                   26.872895
-    Volatility (Ann.) [%]               19.883748
-    Sharpe Ratio                         1.351501
-    Sortino Ratio                        2.733988
-    Calmar Ratio                         2.457561
-    Max. Drawdown [%]                  -10.934783
-    Avg. Drawdown [%]                   -2.628023
-    Max. Drawdown Duration      163 days 00:00:00
-    Avg. Drawdown Duration       20 days 00:00:00
-    # Trades                                   12
-    Win Rate [%]                        66.666667
-    Best Trade [%]                      21.740146
-    Worst Trade [%]                     -5.359055
-    Avg. Trade [%]                        8.20145
-    Max. Trade Duration          99 days 00:00:00
-    Avg. Trade Duration          47 days 00:00:00
-    Profit Factor                        8.893546
-    Expectancy [%]                       8.683464
-    SQN                                  2.395319
-    _strategy                            SmaCross
-    _equity_curve                             ...
-    _trades                       Size  EntryB...
-    dtype: object
+The original result was:
 
+| Metric | Value |
+|---|---:|
+| Final Equity | `$25,715.43` |
+| Return | `157.15%` |
+| Buy & Hold Return | `234.38%` |
+| Max Drawdown | `-10.93%` |
+| Number of Trades | `12` |
+| Win Rate | `66.67%` |
+| Profit Factor | `8.89` |
 
+The strategy improved compared to the previous SMA strategy, especially in drawdown. But it still did not beat buy and hold in that period.
 
-In above example, we exit the trade once price increases by 20% or decreases by 5%. Doing so we made some profit as well.
+## EMA Crossover Strategy
 
-## Our Own Strategy in Backtesting
+Now let's try another strategy using Exponential Moving Averages, or EMA.
 
-Lets make our own strategy here and implement it on backtesting.
-I want to do something like below:
-* If EMA 9 > EMA 20 or EMA 50 > EMA 100 then buy.
-* If EMA 9 < EMA 20 or EMA 50 < EMA 100 then close positions.
+An EMA gives more weight to recent prices. This makes it react faster than SMA.
 
-For calculation of EMA, we can use `pandas_ta`. We can install it like `pip install pandas-ta`.
+The strategy idea is:
 
+- Buy if EMA 9 crosses above EMA 20.
+- Also buy if EMA 50 crosses above EMA 100.
+- Close positions if EMA 9 crosses below EMA 20.
+- Also close positions if EMA 50 crosses below EMA 100.
 
+We can calculate EMA using `pandas_ta`.
 
 ```python
 import pandas_ta as ta
@@ -1391,25 +595,35 @@ from backtesting import Backtest
 from backtesting import Strategy
 from backtesting.lib import crossover
 
+
 class EmaCross(Strategy):
     def init(self):
         self.ema9 = self.I(ta.ema, pd.Series(self.data.Close), 9)
         self.ema20 = self.I(ta.ema, pd.Series(self.data.Close), 20)
         self.ema50 = self.I(ta.ema, pd.Series(self.data.Close), 50)
         self.ema100 = self.I(ta.ema, pd.Series(self.data.Close), 100)
-    
+
     def next(self):
         if crossover(self.ema9, self.ema20) or crossover(self.ema50, self.ema100):
             self.buy()
 
         elif crossover(self.ema20, self.ema9) or crossover(self.ema100, self.ema50):
             self.position.close()
-            # self.sell()
-    
-            
-bt = Backtest(data, EmaCross, cash=10000, commission=0.02)
+```
+
+Run the strategy:
+
+```python
+bt = Backtest(
+    data,
+    EmaCross,
+    cash=10000,
+    commission=0.02
+)
+
 stats = bt.run()
 bt.plot()
+
 stats
 ```
 
@@ -1417,173 +631,80 @@ stats
 ![png]({{site.url}}/assets/backtesting/bt5.png)
 ![png]({{site.url}}/assets/backtesting/bt6.png)
 
+The original result was:
 
+| Metric | Value |
+|---|---:|
+| Final Equity | `$24,777.30` |
+| Return | `147.77%` |
+| Buy & Hold Return | `476.79%` |
+| Max Drawdown | `-28.46%` |
+| Number of Trades | `30` |
+| Win Rate | `46.67%` |
+| Profit Factor | `2.58` |
 
+This strategy made money, but it performed much worse than buy and hold for AAPL over the full period.
 
+This is why we should always compare a strategy with a simple benchmark.
 
+## Percentage Price Oscillator Strategy
 
-    Start                     2015-01-02 00:00:00
-    End                       2022-04-29 00:00:00
-    Duration                   2674 days 00:00:00
-    Exposure Time [%]                   63.631436
-    Equity Final [$]                 24777.296183
-    Equity Peak [$]                  30443.052752
-    Return [%]                         147.772962
-    Buy & Hold Return [%]              476.785846
-    Return (Ann.) [%]                   13.193633
-    Volatility (Ann.) [%]                21.81465
-    Sharpe Ratio                         0.604806
-    Sortino Ratio                         1.02413
-    Calmar Ratio                         0.463525
-    Max. Drawdown [%]                  -28.463721
-    Avg. Drawdown [%]                   -4.544362
-    Max. Drawdown Duration      776 days 00:00:00
-    Avg. Drawdown Duration       53 days 00:00:00
-    # Trades                                   30
-    Win Rate [%]                        46.666667
-    Best Trade [%]                      60.672271
-    Worst Trade [%]                      -7.85946
-    Avg. Trade [%]                       3.077886
-    Max. Trade Duration         190 days 00:00:00
-    Avg. Trade Duration          56 days 00:00:00
-    Profit Factor                        2.584764
-    Expectancy [%]                       3.953845
-    SQN                                  1.328035
-    _strategy                            EmaCross
-    _equity_curve                             ...
-    _trades                       Size  EntryB...
-    dtype: object
+The **Percentage Price Oscillator**, or **PPO**, is a momentum indicator.
 
+It is similar to MACD, but it expresses the difference between moving averages as a percentage.
 
+The PPO usually contains:
 
-Looks like we made some money. But this is just another bad strategy we tested.
+- PPO line
+- signal line
+- histogram
 
-### Testing Percentage Price Oscillator
-Following is taken from my another [blog]({{site.url}}/2022/03/20/python-for-stock-market-analysis-technical-indicators/). 
-* This is a momentum indicator (determines the strength or weakness of a value). But we can view the volatility too.
-* Two EMAs, 26 period and 12 periods are used to calculate PPO.
-* It contains 2 lines, PPO line and signal line. Signal line is an EMA of the 9 Period PPO, so it moves slower than PPO.
-* When PPO line crosses the signal line, it is the time for rise/fall of the price or stock.
-* When PPO line crosses over the signal line from below, then it is a buy signal. Reversely, it is a sell signal when PPO line crosses belo the signal line from above.
-* When PPO line is below the 0, the short term average is below the longer-term average average, which helps indicate a fall of price.
-* Conversely, when PPO line is above 0, the short term average is above the long term average, which helps indicate rise of price.
+A common idea is:
 
-`pandas_ta` has PPO too so we do not have to write our own code for it.
+- buy when the PPO line crosses above the signal line
+- sell or close when the PPO line crosses below the signal line
 
+I explained technical indicators in another blog:
 
+- [Python for Stock Market Analysis: Technical Indicators]({{site.url}}/2022/03/20/python-for-stock-market-analysis-technical-indicators/)
+
+`pandas_ta` already provides PPO, so we do not need to write it from scratch.
 
 ```python
 ta.ppo(data.Close)
 ```
 
-
-
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>PPO_12_26_9</th>
-      <th>PPOh_12_26_9</th>
-      <th>PPOs_12_26_9</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>2015-01-02</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2015-01-05</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2015-01-06</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2015-01-07</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2015-01-08</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>2022-04-25</th>
-      <td>-1.987252</td>
-      <td>-2.241286</td>
-      <td>0.254034</td>
-    </tr>
-    <tr>
-      <th>2022-04-26</th>
-      <td>-2.580172</td>
-      <td>-2.267365</td>
-      <td>-0.312807</td>
-    </tr>
-    <tr>
-      <th>2022-04-27</th>
-      <td>-3.049812</td>
-      <td>-2.189604</td>
-      <td>-0.860208</td>
-    </tr>
-    <tr>
-      <th>2022-04-28</th>
-      <td>-3.039588</td>
-      <td>-1.743504</td>
-      <td>-1.296084</td>
-    </tr>
-    <tr>
-      <th>2022-04-29</th>
-      <td>-3.256113</td>
-      <td>-1.568023</td>
-      <td>-1.688090</td>
-    </tr>
-  </tbody>
-</table>
-<p>1845 rows × 3 columns</p>
-
-
-
-
+Now create the PPO strategy.
 
 ```python
 class PPO(Strategy):
     def init(self):
         self.ppo = self.I(ta.ppo, pd.Series(self.data.Close))
-        
+
     def next(self):
+        # PPO line crosses above signal line
         if crossover(self.ppo[0], self.ppo[2]):
-        # if crossover(self.ppo[1], 0):
-            # self.position.close()
             self.buy()
 
+        # Signal line crosses above PPO line
         elif crossover(self.ppo[2], self.ppo[0]):
-        #if crossover(0,self.ppo[1]):
             self.position.close()
-            # self.sell()
-            
-bt = Backtest(data, PPO, cash=10000, commission=0.02)
+```
+
+Run the strategy on AAPL.
+
+```python
+bt = Backtest(
+    data,
+    PPO,
+    cash=10000,
+    commission=0.02
+)
+
 stats = bt.run()
 bt.plot()
+
 print(stats)
-
-
 ```
 
 ![png]({{site.url}}/assets/backtesting/bt7.png)
@@ -1591,108 +712,130 @@ print(stats)
 ![png]({{site.url}}/assets/backtesting/bt9.png)
 ![png]({{site.url}}/assets/backtesting/bt10.png)
 
+The original AAPL PPO result was:
 
+| Metric | Value |
+|---|---:|
+| Final Equity | `$12,163.35` |
+| Return | `21.63%` |
+| Buy & Hold Return | `476.79%` |
+| Max Drawdown | `-40.43%` |
+| Number of Trades | `56` |
+| Win Rate | `44.64%` |
+| Profit Factor | `1.24` |
 
+This strategy made a small profit, but it performed very poorly compared to buy and hold.
 
-    Start                     2015-01-02 00:00:00
-    End                       2022-04-29 00:00:00
-    Duration                   2674 days 00:00:00
-    Exposure Time [%]                    51.00271
-    Equity Final [$]                 12163.349445
-    Equity Peak [$]                  14453.298656
-    Return [%]                          21.633494
-    Buy & Hold Return [%]              476.785846
-    Return (Ann.) [%]                    2.711015
-    Volatility (Ann.) [%]                18.61385
-    Sharpe Ratio                         0.145645
-    Sortino Ratio                         0.22052
-    Calmar Ratio                         0.067051
-    Max. Drawdown [%]                  -40.432272
-    Avg. Drawdown [%]                   -7.414292
-    Max. Drawdown Duration     1942 days 00:00:00
-    Avg. Drawdown Duration      169 days 00:00:00
-    # Trades                                   56
-    Win Rate [%]                        44.642857
-    Best Trade [%]                      17.890366
-    Worst Trade [%]                    -15.387924
-    Avg. Trade [%]                       0.353242
-    Max. Trade Duration          70 days 00:00:00
-    Avg. Trade Duration          23 days 00:00:00
-    Profit Factor                        1.242225
-    Expectancy [%]                       0.592473
-    SQN                                  0.433939
-    _strategy                                 PPO
-    _equity_curve                             ...
-    _trades                       Size  EntryB...
-    dtype: object
-    
+## Test PPO on BABA
 
-Looks like we again made some money. There is not a golden rule that will make a money, its kind of hit and trial.
-
-### PPO on BABA
-
+A strategy that makes money on one stock can fail badly on another stock. To test this, let's run PPO on BABA.
 
 ```python
-
 bdata = yf.download("BABA", start="2015-01-01", end="2022-11-30")
-del bdata['Adj Close']
-del bdata['Volume']
 
-bt = Backtest(bdata, PPO, cash=10000, commission=0.02)
+bdata = bdata.drop(columns=["Adj Close", "Volume"])
+
+bt = Backtest(
+    bdata,
+    PPO,
+    cash=10000,
+    commission=0.02
+)
+
 stats = bt.run()
 bt.plot()
+
 print(stats)
-
 ```
-
-    [*********************100%***********************]  1 of 1 completed
-    
 
 ![png]({{site.url}}/assets/backtesting/bt11.png)
 ![png]({{site.url}}/assets/backtesting/bt12.png)
 ![png]({{site.url}}/assets/backtesting/bt13.png)
 ![png]({{site.url}}/assets/backtesting/bt14.png)
 
+The original BABA PPO result was:
 
+| Metric | Value |
+|---|---:|
+| Final Equity | `$1,485.46` |
+| Return | `-85.15%` |
+| Buy & Hold Return | `-22.32%` |
+| Max Drawdown | `-88.92%` |
+| Number of Trades | `71` |
+| Win Rate | `26.76%` |
+| Profit Factor | `0.50` |
 
+This is a very bad result. It shows that a strategy that looks acceptable on AAPL can completely fail on BABA.
 
+## Lessons from These Backtests
 
+The examples above show some important lessons.
 
+### A Profitable Strategy Is Not Always a Good Strategy
 
+The strategy may make money but still underperform buy and hold.
 
-    Start                     2015-01-02 00:00:00
-    End                       2022-11-18 00:00:00
-    Duration                   2877 days 00:00:00
-    Exposure Time [%]                   52.265861
-    Equity Final [$]                  1485.461341
-    Equity Peak [$]                  11330.885306
-    Return [%]                         -85.145387
-    Buy & Hold Return [%]              -22.316598
-    Return (Ann.) [%]                  -21.491087
-    Volatility (Ann.) [%]               21.490062
-    Sharpe Ratio                              0.0
-    Sortino Ratio                             0.0
-    Calmar Ratio                              0.0
-    Max. Drawdown [%]                  -88.917088
-    Avg. Drawdown [%]                  -28.010671
-    Max. Drawdown Duration     2571 days 00:00:00
-    Avg. Drawdown Duration      705 days 00:00:00
-    # Trades                                   71
-    Win Rate [%]                        26.760563
-    Best Trade [%]                      26.501533
-    Worst Trade [%]                    -22.092189
-    Avg. Trade [%]                       -2.73311
-    Max. Trade Duration          56 days 00:00:00
-    Avg. Trade Duration          20 days 00:00:00
-    Profit Factor                        0.496783
-    Expectancy [%]                      -2.346556
-    SQN                                 -2.054515
-    _strategy                                 PPO
-    _equity_curve                             ...
-    _trades                       Size  EntryB...
-    dtype: object
-    
+### Time Period Matters
 
-In first PPO strategy, we tested with AAPL and in second we tested with BABA. In BABA, we lost money but in AAPL we made some.
+A strategy may perform well in one period and fail in another.
 
-There are many features and stock backtesting strategy to try on stock backtesting using Backtesting.py and those will be covered in next part. Thank you :)
+### One Stock Is Not Enough
+
+Testing only on one stock can be misleading.
+
+### Commissions Matter
+
+Even small commissions can reduce returns, especially for strategies that trade often.
+
+### Drawdown Is Important
+
+A strategy with high return but huge drawdown may be hard to follow in real life.
+
+### Overfitting Is Dangerous
+
+If you keep changing parameters until the backtest looks good, the strategy may only be fitted to the past.
+
+## Common Backtesting Mistakes
+
+Here are common mistakes beginners should avoid:
+
+- using future data accidentally
+- ignoring trading fees
+- ignoring slippage
+- testing on only one stock
+- testing on only one time period
+- optimizing too many parameters
+- not comparing with buy and hold
+- ignoring drawdown
+- assuming backtest profit means future profit
+- using unrealistic position sizing
+- forgetting that real market orders may not fill at the expected price
+
+Backtesting is useful, but it is not magic.
+
+## Simple Checklist Before Trusting a Backtest
+
+Before trusting a strategy, ask:
+
+- Did I include commission?
+- Did I avoid future leakage?
+- Did I compare with buy and hold?
+- Did I test multiple stocks?
+- Did I test different time periods?
+- Did I check max drawdown?
+- Did I inspect individual trades?
+- Did I avoid over-optimizing parameters?
+- Is the strategy logic simple and explainable?
+- Would I still follow it during a losing period?
+
+If the answer is no to many of these questions, the strategy needs more testing.
+
+## Final Thoughts
+
+In this post, we learned the basics of **stock backtesting in Python**. We started with a manual SMA crossover backtest using pandas, then used `Backtesting.py` to test SMA, EMA, and PPO strategies.
+
+The main lesson is that backtesting helps us study trading ideas, but it does not guarantee profit. Some strategies may look good on one stock and fail on another. Some may make money but still lose against buy and hold.
+
+A good next step would be to test more strategies, add realistic costs, compare multiple assets, and evaluate risk more carefully.
+
+There are many features in `Backtesting.py`, and I will cover more advanced backtesting ideas in the next part.
