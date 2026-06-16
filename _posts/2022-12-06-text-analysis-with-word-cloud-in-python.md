@@ -1,355 +1,290 @@
 ---
-title:  "Text Analysis with WordCloud in Python"
-date:   2022-12-06 09:29:17
+layout: single
+title: "WordCloud in Python: Text Analysis and Twitter Data Visualization"
+date: 2022-12-06 09:29:17 +0100
+last_modified_at: 2026-06-16
 categories:
-    - Project
+  - Python
+  - Project
+  - Data Visualization
 tags:
-    - sentiment analysis
-    - python
-    - WordCloud
+  - "WordCloud"
+  - "Python"
+  - "Text analysis"
+  - "Twitter data"
+  - "Data visualization"
+  - "NLP"
+  - "Sentiment analysis"
+description: "Learn how to create WordCloud visualizations in Python using tweet text and user bios, including text cleaning, noise removal, and custom WordCloud plots."
+excerpt: "A beginner-friendly guide to creating WordCloud visualizations in Python from Twitter data, with text cleaning, tweet analysis, and user bio analysis."
 header:
-  teaser: assets/twitter_bot/output_21_0.png
+  teaser: /assets/twitter_bot/output_21_0.png
+  og_image: /assets/twitter_bot/output_21_0.png
+  image_description: "WordCloud generated from World Cup related tweet text using Python"
+toc: true
+toc_label: "WordCloud Python Tutorial"
+toc_icon: "cloud"
+toc_sticky: true
+read_time: true
+share: true
+related: true
+classes: wide
 ---
-WordCloud in Python can be done in different ways but one of the most popular and easier ones is using the package `wordcloud`. We can install it using the following way.
 
+A **WordCloud in Python** is a simple and useful way to visualize the most frequent words in a text dataset. The more often a word appears, the larger it becomes in the image. This makes WordClouds helpful for quick text analysis, social media analysis, tweet analysis, and exploratory NLP projects.
+
+In this post, I will create WordCloud visualizations from Twitter data related to the World Cup. The tweets were collected using keywords such as:
+
+```python
+["worldcup", "world cup", "wcup", "football", "qatar worldcup prediction"]
+````
+
+I will show how to:
+
+* install and import the `wordcloud` package
+* read tweet data from a CSV file
+* create a simple WordCloud
+* generate a WordCloud from Twitter user bios
+* clean noisy text such as URLs and mentions
+* create a WordCloud from tweet text
+
+You can also read my earlier posts about [scraping tweets with Tweepy](https://dataqoil.com/2022/06/05/scraping-tweets-with-tweepy/) and [World Cup tweet sentiment analysis in Python](https://dataqoil.com/2022/11/29/worldcup-tweet-sentiment-analysis-in-python/).
+
+## What Is a WordCloud?
+
+A WordCloud is an image where words are shown with different sizes. Usually, the most frequent words are shown larger, while less frequent words are shown smaller.
+
+For example, if the word `football` appears many times in a tweet dataset, it will be larger in the WordCloud. This gives us a quick visual summary of the most common words in the text.
+
+WordClouds are not a complete text analysis method, but they are useful for quick exploration and presentation.
+
+## Install WordCloud in Python
+
+The easiest way to create a WordCloud in Python is to use the `wordcloud` package.
+
+You can install it with pip:
 
 ```python
 !pip install wordcloud
 ```
 
-    Requirement already satisfied: wordcloud in c:\programdata\anaconda3\lib\site-packages (1.8.1)
-    Requirement already satisfied: pillow in c:\programdata\anaconda3\lib\site-packages (from wordcloud) (8.0.1)
-    Requirement already satisfied: numpy>=1.6.1 in c:\programdata\anaconda3\lib\site-packages (from wordcloud) (1.19.2)
-    Requirement already satisfied: matplotlib in c:\users\viper\appdata\roaming\python\python38\site-packages (from wordcloud) (3.5.3)
-    Requirement already satisfied: pyparsing>=2.2.1 in c:\users\viper\appdata\roaming\python\python38\site-packages (from matplotlib->wordcloud) (3.0.9)
-    Requirement already satisfied: fonttools>=4.22.0 in c:\programdata\anaconda3\lib\site-packages (from matplotlib->wordcloud) (4.37.1)
-    Requirement already satisfied: cycler>=0.10 in c:\programdata\anaconda3\lib\site-packages (from matplotlib->wordcloud) (0.10.0)
-    Requirement already satisfied: python-dateutil>=2.7 in c:\programdata\anaconda3\lib\site-packages (from matplotlib->wordcloud) (2.8.1)
-    Requirement already satisfied: kiwisolver>=1.0.1 in c:\programdata\anaconda3\lib\site-packages (from matplotlib->wordcloud) (1.3.0)
-    Requirement already satisfied: packaging>=20.0 in c:\programdata\anaconda3\lib\site-packages (from matplotlib->wordcloud) (20.4)
-    Requirement already satisfied: six in c:\programdata\anaconda3\lib\site-packages (from cycler>=0.10->matplotlib->wordcloud) (1.15.0)
-    
+For a normal Python environment, you can also run:
 
-WordCloud simply is the words scattered in an image and the word's size differs based on different properties. Here in this blog, I will plot a word cloud for based on a tweet created with keywords `['worldcup', 'world cup', 'wcup', 'football', 'qatar worldcup prediction']`. You can read about [how to scrape tweets from this blog](https://dataqoil.com/2022/06/05/scraping-tweets-with-tweepy/) and [how to perform sentiment analysis from this blog](https://dataqoil.com/2022/11/29/worldcup-tweet-sentiment-analysis-in-python/).
+```bash
+pip install wordcloud
+```
 
-## Importing Packages
+## Import Required Packages
 
+First, import the required Python packages.
 
 ```python
+import re
+
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from wordcloud import WordCloud
-import re
+from wordcloud import WordCloud, STOPWORDS
+
 sns.set()
 ```
 
-## Reading CSV File
-Let's read our CSV file containing tweets.
+## Read the Tweet CSV File
 
+Now, let's read the CSV file that contains the tweet data.
 
 ```python
-df = pd.read_csv('en1670670038.8448372.csv')
+df = pd.read_csv("en1670670038.8448372.csv")
 df.head()
 ```
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>id</th>
-      <th>tweet_created_at</th>
-      <th>text</th>
-      <th>user</th>
-      <th>bio</th>
-      <th>location</th>
-      <th>hashtags</th>
-      <th>user_mentions</th>
-      <th>in_reply</th>
-      <th>protected</th>
-      <th>...</th>
-      <th>verified</th>
-      <th>statuses_count</th>
-      <th>coordinates</th>
-      <th>is_quote_status</th>
-      <th>retweet_count</th>
-      <th>retweeted</th>
-      <th>lang</th>
-      <th>source</th>
-      <th>place</th>
-      <th>kwd</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1601532325241950209</td>
-      <td>2022-12-10 11:00:36+00:00</td>
-      <td>@mcbenwell @TheTotallyShow Unsurprisingly, thi...</td>
-      <td>DrLouiseClare1</td>
-      <td>Historian looking at Argentine, British and US...</td>
-      <td>NaN</td>
-      <td>[]</td>
-      <td>2</td>
-      <td>1.601523e+18</td>
-      <td>False</td>
-      <td>...</td>
-      <td>False</td>
-      <td>1187</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>0</td>
-      <td>False</td>
-      <td>en</td>
-      <td>Twitter for iPhone</td>
-      <td>NaN</td>
-      <td>w</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1601532314613334018</td>
-      <td>2022-12-10 11:00:33+00:00</td>
-      <td>All the best to England playing in the quarter...</td>
-      <td>bookajet</td>
-      <td>Enjoy freedom without responsibility and let y...</td>
-      <td>Farnborough Airport</td>
-      <td>[{'text': 'worldcup', 'indices': [61, 70]}, {'...</td>
-      <td>0</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>...</td>
-      <td>False</td>
-      <td>959</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>0</td>
-      <td>False</td>
-      <td>en</td>
-      <td>Hootsuite Inc.</td>
-      <td>NaN</td>
-      <td>w</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1601532312696811520</td>
-      <td>2022-12-10 11:00:33+00:00</td>
-      <td>1/It's Matchday⚽️\r\n\r\nShow support to your ...</td>
-      <td>0xNeverWinn</td>
-      <td>@GaHunter688 suspended</td>
-      <td>NaN</td>
-      <td>[{'text': 'worldcup', 'indices': [61, 70]}, {'...</td>
-      <td>1</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>...</td>
-      <td>False</td>
-      <td>8442</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>4472</td>
-      <td>False</td>
-      <td>en</td>
-      <td>Twitter Web App</td>
-      <td>NaN</td>
-      <td>w</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1601532303762677762</td>
-      <td>2022-12-10 11:00:30+00:00</td>
-      <td>Good Luck England ⚽⚽⚽\r\n #Itscominghome #Worl...</td>
-      <td>3LionsOnMaShirt</td>
-      <td>Sharing the latest #ThreeLions news and fan ta...</td>
-      <td>Manchester, England</td>
-      <td>[{'text': 'Itscominghome', 'indices': [40, 54]...</td>
-      <td>1</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>...</td>
-      <td>False</td>
-      <td>157</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>1</td>
-      <td>False</td>
-      <td>en</td>
-      <td>VillaBotMan</td>
-      <td>NaN</td>
-      <td>w</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1601532286507552768</td>
-      <td>2022-12-10 11:00:26+00:00</td>
-      <td>Guess the Quarter Final Winners ⚽️🥂\r\n\r\nThe...</td>
-      <td>EdehRonald</td>
-      <td>crypto enthusiast/trader</td>
-      <td>NaN</td>
-      <td>[{'text': 'WorldcupQatar2022', 'indices': [64,...</td>
-      <td>1</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>...</td>
-      <td>False</td>
-      <td>92</td>
-      <td>NaN</td>
-      <td>False</td>
-      <td>24</td>
-      <td>False</td>
-      <td>en</td>
-      <td>Twitter for Android</td>
-      <td>NaN</td>
-      <td>w</td>
-    </tr>
-  </tbody>
-</table>
-<p>5 rows × 26 columns</p>
-
-
-
-Two columns, text and bio can be used to plot a word cloud.
-
-## Simple WordCloud
-Let's plot a simple WordCloud of the following text:
-
+For this WordCloud tutorial, I mainly use two columns:
 
 ```python
-txt = """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fringilla ex nec massa sollicitudin, et condimentum mi vehicula. Integer enim urna, pellentesque a augue sed, malesuada ornare enim. Integer at ullamcorper tellus. Cras condimentum orci ac enim egestas, nec elementum dolor varius. Vestibulum molestie magna vel sapien tristique dictum. Nam auctor vitae enim vitae lacinia. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus mollis in est vitae dictum. Duis et mauris dui. Etiam aliquam in leo vitae placerat. Cras tincidunt neque id lectus tincidunt accumsan. Donec ut dignissim mi, at consequat elit.
+df[["text", "bio"]].head()
+```
 
-Suspendisse vel vestibulum lorem, vel aliquam justo. Praesent hendrerit, est et lobortis condimentum, elit augue bibendum velit, sed volutpat purus tortor maximus nisi. In sed volutpat lectus. Aenean at turpis vel nisl egestas mollis at sit amet dolor. Nullam semper dapibus orci, facilisis tempor nisl volutpat consectetur. Curabitur elit est, vehicula venenatis interdum at, suscipit et magna. Vestibulum a pretium felis. Curabitur tristique euismod laoreet. Aliquam erat volutpat. Sed luctus nulla sed posuere mattis. Vivamus ligula turpis, sollicitudin non rutrum non, consequat sodales diam. Donec dapibus nec ligula eu tincidunt. Maecenas risus massa, malesuada eu lorem a, fringilla imperdiet leo.
+The `text` column contains the tweet text. The `bio` column contains the user profile bio.
+
+## Create a Simple WordCloud in Python
+
+Before using the tweet dataset, let's create a simple WordCloud from sample text.
+
+```python
+txt = """
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fringilla ex nec massa
+sollicitudin, et condimentum mi vehicula. Integer enim urna, pellentesque a augue sed,
+malesuada ornare enim. Integer at ullamcorper tellus. Cras condimentum orci ac enim
+egestas, nec elementum dolor varius.
+
+Suspendisse vel vestibulum lorem, vel aliquam justo. Praesent hendrerit, est et
+lobortis condimentum, elit augue bibendum velit, sed volutpat purus tortor maximus nisi.
 """
-wc = WordCloud(max_words=500, width=1000, height=500)
-wcimg=wc.generate(txt)
-plt.figure(figsize=(15,10))
+
+wc = WordCloud(
+    max_words=500,
+    width=1000,
+    height=500
+)
+
+wcimg = wc.generate(txt)
+
+plt.figure(figsize=(15, 10))
 plt.imshow(wcimg)
-plt.title('WordCloud Test')
+plt.axis("off")
+plt.title("WordCloud Test")
 plt.show()
 ```
 
+![Simple WordCloud example created in Python]({{ site.url }}/assets/twitter_bot/output_9_0.png)
 
-    
-![png]({{site.url}}/assets/twitter_bot/output_9_0.png)
-    
+## Customize WordCloud Background Color
 
-
-WordCloud accepts some parameters which can be found in docstring as well.
-
+The `WordCloud` class accepts many parameters. For example, we can change the background color.
 
 ```python
-txt = """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fringilla ex nec massa sollicitudin, et condimentum mi vehicula. Integer enim urna, pellentesque a augue sed, malesuada ornare enim. Integer at ullamcorper tellus. Cras condimentum orci ac enim egestas, nec elementum dolor varius. Vestibulum molestie magna vel sapien tristique dictum. Nam auctor vitae enim vitae lacinia. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus mollis in est vitae dictum. Duis et mauris dui. Etiam aliquam in leo vitae placerat. Cras tincidunt neque id lectus tincidunt accumsan. Donec ut dignissim mi, at consequat elit.
+wc = WordCloud(
+    max_words=500,
+    width=1000,
+    height=500,
+    background_color="red"
+)
 
-Suspendisse vel vestibulum lorem, vel aliquam justo. Praesent hendrerit, est et lobortis condimentum, elit augue bibendum velit, sed volutpat purus tortor maximus nisi. In sed volutpat lectus. Aenean at turpis vel nisl egestas mollis at sit amet dolor. Nullam semper dapibus orci, facilisis tempor nisl volutpat consectetur. Curabitur elit est, vehicula venenatis interdum at, suscipit et magna. Vestibulum a pretium felis. Curabitur tristique euismod laoreet. Aliquam erat volutpat. Sed luctus nulla sed posuere mattis. Vivamus ligula turpis, sollicitudin non rutrum non, consequat sodales diam. Donec dapibus nec ligula eu tincidunt. Maecenas risus massa, malesuada eu lorem a, fringilla imperdiet leo.
-"""
-wc = WordCloud(max_words=500, width=1000, height=500, background_color='red')
-wcimg=wc.generate(txt)
-plt.figure(figsize=(15,10))
+wcimg = wc.generate(txt)
+
+plt.figure(figsize=(15, 10))
 plt.imshow(wcimg)
-plt.title('WordCloud Test')
+plt.axis("off")
+plt.title("WordCloud with Red Background")
 plt.show()
 ```
 
+![WordCloud with red background color in Python]({{ site.url }}/assets/twitter_bot/output_11_0.png)
 
-    
-![png]({{site.url}}/assets/twitter_bot/output_11_0.png)
-    
+## WordCloud from Twitter User Bios
 
-
-## WordCloud of Bio
-
-We will plot WordCloud of only those bios where there is actually a text!
-
+Now, let's create a WordCloud from the `bio` column of the Twitter dataset.
 
 ```python
-wc = WordCloud(max_words = 1000 , width = 1600 , height = 800,
-                            collocations=False).generate(" ".join(df[df.bio.isna()==False].bio))
+bio_text = " ".join(df[df.bio.isna() == False].bio)
 
-plt.figure(figsize=(15,10))
+wc = WordCloud(
+    max_words=1000,
+    width=1600,
+    height=800,
+    collocations=False
+).generate(bio_text)
+
+plt.figure(figsize=(15, 10))
 plt.imshow(wc)
-plt.title('WordCloud of Bio')
+plt.axis("off")
+plt.title("WordCloud of Twitter User Bios")
 plt.show()
-    
 ```
 
+![WordCloud generated from Twitter user bios]({{ site.url }}/assets/twitter_bot/output_13_0.png)
 
-    
-![png]({{site.url}}/assets/twitter_bot/output_13_0.png)
-    
+## Clean Text Before Creating a WordCloud
 
-
-Looking over the above WordCloud, we can see that the word `https` is also there, it is a noise and we need to clear it.
-
-## Clearing Noise
-
+Text from social media usually contains noise such as URLs, mentions, hashtags, emojis, punctuation, and extra spaces.
 
 ```python
-def remove_noise(tweet):
-        '''
-        To remove noise
-        '''
-        return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
-    
-wc = WordCloud(max_words = 1000 , width = 1600 , height = 800,
-                            collocations=False).generate(" ".join(df[df.bio.isna()==False].bio.apply(remove_noise)))
+def remove_noise(text):
+    """Clean tweet text or user bio text."""
+    text = str(text)
 
-plt.figure(figsize=(15,10))
-plt.imshow(wc)
-plt.title('WordCloud of Bio')
-plt.show()
-       
+    text = re.sub(r"http\S+|www\S+|https\S+", " ", text)
+    text = re.sub(r"@\w+", " ", text)
+    text = re.sub(r"#", "", text)
+    text = re.sub(r"[^A-Za-z\s]", " ", text)
+    text = " ".join(text.split())
+
+    return text
 ```
 
-
-    
-![png]({{site.url}}/assets/twitter_bot/output_16_0.png)
-    
-
-
-It worked!
-
-## WordCloud of Tweet Text
-Let's plot WordCloud in Python for our tweet's text.
+## Cleaned WordCloud from Twitter User Bios
 
 ```python
-def remove_noise(tweet):
-        '''
-        To remove noise
-        '''
-        return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
-    
-wc = WordCloud(max_words = 1000 , width = 1600 , height = 800,
-                            collocations=False).generate(" ".join(df[df.text.isna()==False].text.apply(remove_noise)))
+custom_stopwords = STOPWORDS.union({
+    "https",
+    "http",
+    "co",
+    "amp",
+    "RT"
+})
 
-plt.figure(figsize=(15,10))
+clean_bio_text = " ".join(
+    df[df.bio.isna() == False].bio.apply(remove_noise)
+)
+
+wc = WordCloud(
+    max_words=1000,
+    width=1600,
+    height=800,
+    collocations=False,
+    stopwords=custom_stopwords,
+    background_color="white"
+).generate(clean_bio_text)
+
+plt.figure(figsize=(15, 10))
 plt.imshow(wc)
-plt.title('WordCloud of Text')
+plt.axis("off")
+plt.title("Cleaned WordCloud of Twitter User Bios")
 plt.show()
-       
 ```
 
+![Cleaned WordCloud generated from Twitter user bios]({{ site.url }}/assets/twitter_bot/output_16_0.png)
 
-    
-![png]({{site.url}}/assets/twitter_bot/output_19_0.png)
-    
+## WordCloud from Tweet Text
 
+Now, let's create a WordCloud from the actual tweet text.
 
-It's obvious that our most repeated word is the world cup!
+```python
+clean_tweet_text = " ".join(
+    df[df.text.isna() == False].text.apply(remove_noise)
+)
 
-And we could simply plot like below.
+wc = WordCloud(
+    max_words=1000,
+    width=1600,
+    height=800,
+    collocations=False,
+    stopwords=custom_stopwords,
+    background_color="white"
+).generate(clean_tweet_text)
 
+plt.figure(figsize=(15, 10))
+plt.imshow(wc)
+plt.axis("off")
+plt.title("WordCloud of Tweet Text")
+plt.show()
+```
+
+![WordCloud generated from World Cup tweet text using Python]({{ site.url }}/assets/twitter_bot/output_19_0.png)
+
+From the WordCloud, we can clearly see that World Cup related words appear very often. This makes sense because the tweets were collected using World Cup keywords.
+
+## Display WordCloud as an Image
+
+The generated WordCloud can also be shown directly as an image.
 
 ```python
 wc.to_image()
 ```
 
+![Final WordCloud image generated from tweet text]({{ site.url }}/assets/twitter_bot/output_21_0.png)
 
+## Optional: Save the WordCloud Image
 
+```python
+wc.to_file("worldcup_tweet_wordcloud.png")
+```
 
-    
-![png]({{site.url}}/assets/twitter_bot/output_21_0.png)
-    
+## Final Thoughts
 
+In this post, I showed how to create a **WordCloud in Python** using Twitter data. We created a simple WordCloud, generated WordClouds from Twitter bios and tweet text, and cleaned noisy text before visualization.
 
+The most important step is text cleaning. Without cleaning, words like `https`, `co`, and random symbols can dominate the WordCloud. After cleaning, the visualization becomes more useful and easier to understand.
 
-If we want to plot wordcloud in python but with different font of the text, we can pass the font file and plot as well.
-
+WordClouds are simple, but they are a good starting point for text analysis and NLP projects. They help us quickly see the most common words in a dataset before doing deeper analysis such as sentiment analysis, topic modeling, or classification.
 
