@@ -1,4 +1,3 @@
-````markdown
 ---
 layout: single
 title: "Advent of Code 2022 Python Solutions: Days 1–4"
@@ -461,6 +460,4 @@ The most useful part for me was using sets. They made Day 3 and Day 4 much easie
 
 This post is part of my Advent of Code 2022 Python solutions series. I use these challenges to practice Python and improve my problem-solving skills. Even if I do not finish every day, documenting the process helps me understand the solutions better.
 
-```
-::: ​​
-```
+
