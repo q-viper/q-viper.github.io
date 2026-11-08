@@ -1,1417 +1,494 @@
-<!-- ---
-layout: archive
----
-
-{{ content }}
-
-<h3 class="archive__subtitle">{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}</h3>
-
-{% if paginator %}
-  {% assign posts = paginator.posts %}
-{% else %}
-  {% assign posts = site.posts %}
-{% endif %}
-
-{% assign entries_layout = page.entries_layout | default: 'list' %}
-<div class="entries-{{ entries_layout }}">
-  {% for post in posts %}
-    {% include archive-single.html type=entries_layout %}
-  {% endfor %}
-</div>
-
-{% include paginator.html %} -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+  <script>
+    // Theme: follow system preference unless the visitor chose one (shared by home and portfolio pages)
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('theme'); } catch (e) { }
+      if (t !== 'light' && t !== 'dark') t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ramkrishna Acharya | PhD Researcher in AI &amp; Computer Vision</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Ramkrishna Acharya | Academic Profile</title>
+  <meta name="description"
+    content="Academic profile of Ramkrishna Acharya, PhD researcher in Bioscience Engineering at KU Leuven.">
   <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
-  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
+    :root {
+      --text: #1f2933;
+      --muted: #5f6b7a;
+      --accent: #1d4e89;
+      --rule: #d9dee5;
+      --bg: #ffffff;
+    }
+
+    html[data-theme="dark"] {
+      --text: #e5e7eb;
+      --muted: #9aa5b4;
+      --accent: #7db4f0;
+      --rule: #2d3440;
+      --bg: #11151b;
+    }
+
+    html {
+      color-scheme: light dark;
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+    }
+
+    #theme-toggle {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 100;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(128, 128, 128, 0.4);
+      background: rgba(128, 128, 128, 0.15);
+      backdrop-filter: blur(6px);
+      font-size: 1.2rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
     * {
-      margin: 0;
-      padding: 0;
       box-sizing: border-box;
     }
 
     body {
-      background: #0a0a0a;
-      color: #ffffff;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      overflow-x: hidden;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 17px;
+      line-height: 1.6;
     }
 
-    #smoke-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
+    a {
+      color: var(--accent);
+      text-decoration: none;
     }
 
-    .content {
-      position: relative;
-      z-index: 2;
+    a:hover {
+      text-decoration: underline;
     }
 
-    .particle {
-      position: absolute;
-      border-radius: 50%;
-      pointer-events: none;
-      animation: smokeRise 3s ease-out forwards;
+    .topbar {
+      border-bottom: 1px solid var(--rule);
+      font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 0.9rem;
     }
 
-    @keyframes smokeRise {
-      0% {
-        opacity: 0.8;
-        transform: scale(0.1) translateY(0px);
-      }
-
-      50% {
-        opacity: 0.4;
-        transform: scale(0.5) translateY(-50px);
-      }
-
-      100% {
-        opacity: 0;
-        transform: scale(1) translateY(-150px);
-      }
+    .topbar .inner,
+    main,
+    footer {
+      max-width: 820px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
     }
 
-    .project-card {
-      background: rgba(30, 30, 30, 0.8);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.3s ease;
+    .topbar .inner {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 14px;
+      padding-bottom: 14px;
     }
 
-    .project-card:hover {
-      background: rgba(40, 40, 40, 0.9);
-      border-color: rgba(59, 130, 246, 0.5);
-      transform: translateY(-5px);
+    .topbar nav a {
+      margin-left: 18px;
     }
 
-    .section-card {
-      background: rgba(20, 20, 20, 0.8);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .gradient-text {
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .nav-link {
-      transition: all 0.3s ease;
-    }
-
-    .nav-link:hover {
-      color: #3b82f6;
-      transform: translateY(-2px);
-    }
-
-    .github-stats {
-      display: inline-flex;
+    header.id {
+      padding: 48px 0 24px;
+      display: flex;
       align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 0.875rem;
+      gap: 28px;
     }
 
-    .timeline-item {
-      position: relative;
-      padding-left: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0.5rem;
-      width: 12px;
-      height: 12px;
-      background: #3b82f6;
+    header.id img {
+      width: 170px;
+      height: 170px;
+      object-fit: cover;
       border-radius: 50%;
-      border: 3px solid #0a0a0a;
+      border: 1px solid var(--rule);
+      flex-shrink: 0;
     }
 
-    .timeline-item::after {
-      content: '';
-      position: absolute;
-      left: 5px;
-      top: 1.5rem;
-      width: 2px;
-      height: calc(100% + 1rem);
-      background: rgba(59, 130, 246, 0.3);
+    h1 {
+      font-size: 2.2rem;
+      font-weight: normal;
+      margin: 0 0 4px;
     }
 
-    .timeline-item:last-child::after {
-      display: none;
+    .role {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin: 0 0 14px;
     }
 
-    .skill-tag {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      color: #e5e7eb;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      display: inline-block;
+    .contact {
+      font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 0.9rem;
+      color: var(--muted);
     }
 
-    .skill-tag:hover {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3));
-      border-color: rgba(59, 130, 246, 0.5);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    .contact a {
+      margin-right: 14px;
     }
 
-    .progress-bar {
-      width: 100%;
-      height: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      overflow: hidden;
+    h2 {
+      font-size: 1.25rem;
+      font-weight: normal;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 6px;
+      margin: 44px 0 18px;
+      color: var(--accent);
     }
 
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-      border-radius: 4px;
-      transition: width 2s ease-out;
+    .entry {
+      margin-bottom: 18px;
+    }
+
+    .entry .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .entry .title {
+      font-weight: bold;
+    }
+
+    .entry .date {
+      color: var(--muted);
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    .entry .sub {
+      color: var(--muted);
+    }
+
+    ul {
+      margin: 6px 0 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 3px;
+    }
+
+    ol.pubs {
+      padding-left: 0;
+      list-style: none;
+      counter-reset: pub;
+    }
+
+    ol.pubs li {
+      counter-increment: pub;
       position: relative;
+      padding-left: 38px;
+      margin-bottom: 18px;
     }
 
-    .progress-fill::after {
-      content: '';
+    ol.pubs li::before {
+      content: '[' counter(pub) ']';
       position: absolute;
-      top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      animation: shimmer 2s infinite;
+      color: var(--muted);
     }
 
-    @keyframes shimmer {
-      0% {
-        transform: translateX(-100%);
+    .links a {
+      font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 0.85rem;
+      margin-right: 10px;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: 1px 7px;
+    }
+
+    dl.skills {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 6px 16px;
+      margin: 0;
+    }
+
+    dl.skills dt {
+      font-weight: bold;
+    }
+
+    dl.skills dd {
+      margin: 0;
+    }
+
+    footer {
+      border-top: 1px solid var(--rule);
+      margin-top: 56px;
+      padding-top: 18px;
+      padding-bottom: 36px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    }
+
+    @media (max-width: 560px) {
+      header.id {
+        flex-direction: column;
+        text-align: center;
       }
 
-      100% {
-        transform: translateX(100%);
+      dl.skills {
+        grid-template-columns: 1fr;
+      }
+
+      .entry .date {
+        white-space: normal;
       }
     }
 
-    .expertise-item {
-      transition: transform 0.3s ease;
-    }
-
-    .expertise-item:hover {
-      transform: translateX(5px);
-    }
-
-    .achievement-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 1.5rem;
-      transition: all 0.3s ease;
-    }
-
-    .achievement-card:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(59, 130, 246, 0.3);
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    @media print {
+      .topbar {
+        display: none;
+      }
     }
   </style>
 </head>
 
 <body>
-  <!-- Smoke Canvas -->
-  <canvas id="smoke-canvas"></canvas>
-
-  <div class="content">
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-black/80 backdrop-blur-md z-50 border-b border-white/10">
-      <div class="max-w-6xl mx-auto px-6 py-4">
-        <div class="flex justify-between items-center">
-          <h1 class="text-2xl font-bold gradient-text">Ramkrishna Acharya</h1>
-          <div class="flex space-x-6">
-            <!-- <a href="https://q-viper.github.io" class="nav-link">Home</a> -->
-            <a href="#about" class="nav-link">About</a>
-            <a href="#projects" class="nav-link">Projects</a>
-            <a href="https://q-viper.github.io/posts/" class="nav-link">Blogs</a>
-            <a href="#skills" class="nav-link">Skills</a>
-            <a href="#research" class="nav-link">Research</a>
-            <a href="/" class="nav-link">Academic Home</a>
-            <a href="#education" class="nav-link">Education</a>
-            <a href="#experience" class="nav-link">Experience</a>
-            <a href="#contact" class="nav-link">Contact</a>
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="min-h-screen flex items-center justify-center px-6 pt-20">
-      <div class="text-center max-w-4xl">
-        <h1 class="text-6xl md:text-8xl font-bold mb-6 gradient-text">
-          PhD Researcher in AI &amp; Computer Vision
-        </h1>
-        <p class="text-lg md:text-xl text-blue-400 mb-6 font-medium">Data Scientist | Software Engineer</p>
-        <p class="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
-          Transforming pixels into insights. Researching AI-based agricultural insect monitoring at KU Leuven,
-          with a focus on applied machine learning, image processing, and computer vision.
-        </p>
-        <div class="flex justify-center space-x-6">
-          <a href="https://github.com/q-viper" target="_blank" class="text-3xl hover:text-blue-400 transition-colors">
-            <i class="fab fa-github"></i>
-          </a>
-          <a href="https://linkedin.com/in/qramkrishna" target="_blank"
-            class="text-3xl hover:text-blue-400 transition-colors">
-            <i class="fab fa-linkedin"></i>
-          </a>
-          <a href="https://kaggle.com/qramkrishna" target="_blank" class="text-3xl hover:text-blue-400 transition-colors">
-            <i class="fab fa-kaggle"></i>
-          </a>
-          <a href="https://medium.com/@qramkrishna" target="_blank" class="text-3xl hover:text-blue-400 transition-colors">
-            <i class="fab fa-medium"></i>
-          </a>
-          <a href="https://dev.to/qviper" target="_blank" class="text-3xl hover:text-blue-400 transition-colors">
-            <i class="fab fa-dev"></i>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-20 px-6">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-4xl font-bold mb-12 text-center gradient-text">About Me</h2>
-        <div class="section-card rounded-2xl p-8">
-          <p class="text-lg text-gray-300 leading-relaxed mb-6">
-            I'm a <b>PhD Researcher</b> in Bioscience Engineering at
-            <a href="https://www.kuleuven.be/english/" target="_blank" class="text-blue-400 hover:text-blue-300">KU Leuven</a>
-            (MeBioS Division), researching AI-based agricultural insect monitoring. I'm a graduate of the
-            <a href="https://www.fau.eu/degree-program/data-science-m-sc/" target="_blank" class="text-blue-400 hover:text-blue-300">Master's in Data Science</a>
-            at FAU Erlangen-Nürnberg, Germany, with expertise in deep learning, computer vision, cyber security,
-            and image processing.
-          </p>
-          <p class="text-lg text-gray-300 leading-relaxed mb-6">
-            I'm the creator of multiple open-source projects like SmokeSim, ImageBaker, TextBaker and Neural Template
-            Matching. I'm a former Top Rated freelancer on
-            <a href="https://www.upwork.com/freelancers/~0120b8c76dc85da315" target="_blank" class="text-blue-400 hover:text-blue-300">Upwork</a>
-            (currently not taking new clients), and I blog here and at
-            <a href="https://dataqoil.com" target="_blank" class="text-blue-400 hover:text-blue-300">dataqoil.com</a>.
-            I'm open to collaborating on open source and research projects. Ask me about Computer Vision, Deep Learning,
-            Data Science, and Biodiversity AI. 🎵 I enjoy listening to Symphonic Metal.
-          </p>
-          <p class="text-lg text-gray-300 leading-relaxed" align="center">
-            <a href="/assets/ramkrishna_cv.pdf" class="text-blue-400 underline">Download my CV</a> &middot; <a href="/" class="text-blue-400 underline">Academic profile</a>
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Research & Publications Section -->
-    <section id="research" class="py-20 px-6">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-4xl font-bold mb-12 text-center gradient-text">Research & Publications</h2>
-        <div class="section-card rounded-2xl p-8">
-          <p class="text-lg text-gray-300 leading-relaxed mb-6">
-            My research focuses on applied machine learning, computer vision, and cybersecurity. Here are some of my key
-            publications:
-          </p>
-          <div class="space-y-6">
-            <!-- Paper 1 -->
-            <div class="achievement-card">
-              <h3 class="text-xl font-bold mb-2">ADVIS-G: An Adversarially Defended Intrusion Detection System for Smart
-                Grids Using Deep Learning</h3>
-              <p class="text-blue-400 font-medium mb-2">Aug 2025</p>
-              <p class="text-gray-400 mb-4">
-                (Paper accepted in <a href="https://link.springer.com/journal/13218"
-                  class="text-blue-400 hover:text-blue-300" target="_blank">German Journal of Artificial
-                  Intelligence</a>.)
-              </p>
-              <ul class="text-gray-400 text-sm space-y-1 list-disc list-inside ml-4">
-                <li>Proposed an image-based IDS framework to defend smart grids against adversarial and cyberattacks
-                </li>
-                <li>Used MobileNet for attack classification and adversarial training, and U-Net for adversarial defence
-                </li>
-                <li><strong>Technologies:</strong> Python, PyTorch, ScaPy, Adversarial Robustness Toolbox</li>
-              </ul>
-              <a href="https://github.com/cs7org/ADVIS-G"
-                class="text-blue-400 hover:text-blue-300 transition-colors mt-4 inline-block" target="_blank">
-                View on GitHub →
-              </a>
-            </div>
-            <!-- Paper 2 -->
-            <div class="achievement-card">
-              <h3 class="text-xl font-bold mb-2">ROSAID-ST: Adversarially Robust Intrusion and Anomaly Detection in ROS
-                Networks via Student-Teacher Deep Learning</h3>
-              <p class="text-blue-400 font-medium mb-2">Mar 2026</p>
-              <p class="text-gray-400 mb-4">
-                (Paper submitted in <a href="https://journals.sagepub.com/home/ARX"
-                  class="text-blue-400 hover:text-blue-300" target="_blank">International Journal of Advanced Robotic
-                  Systems</a>.)
-              </p>
-              <ul class="text-gray-400 text-sm space-y-1 list-disc list-inside ml-4">
-                <li>Proposed a DL based IDS framework to defend against known and novel attacks</li>
-                <li>Used a custom CNN for attack detection and STFPM for novel attack detection</li>
-                <li><strong>Technologies:</strong> Python, PyTorch, ScaPy, Adversarial Robustness Toolbox</li>
-              </ul>
-              <a href="https://github.com/cs7org/ROSAID-ST"
-                class="text-blue-400 hover:text-blue-300 transition-colors mt-4 inline-block" target="_blank">
-                View on GitHub →
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="py-20 px-6">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-4xl font-bold mb-12 text-center gradient-text">Experience</h2>
-        <div class="section-card rounded-2xl p-8">
-          <div class="timeline-item">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold">PhD Researcher - Bioscience Engineering</h3>
-              <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">Present</span>
-            </div>
-            <p class="text-blue-400 font-medium mb-2"><a href="https://www.kuleuven.be/english" target="_blank" class="hover:text-blue-300 underline decoration-dotted">KU Leuven</a> (<a href="https://www.biw.kuleuven.be/biosyst/mebios/" target="_blank" class="hover:text-blue-300 underline decoration-dotted">MeBioS Division</a>)</p>
-            <p class="text-gray-400 mb-4">
-              Researching AI-based agricultural insect monitoring using computer vision and deep learning.
-            </p>
-          </div>
-
-          <div class="timeline-item">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold">Freelancer</h3>
-              <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">May 2026 - Present</span>
-            </div>
-            <p class="text-blue-400 font-medium mb-2"><a href="https://www.upwork.com/freelancers/~0120b8c76dc85da315" target="_blank" class="hover:text-blue-300 underline decoration-dotted">Upwork</a> <span class="text-gray-500 text-sm">(currently not taking new clients)</span></p>
-            <p class="text-gray-400 mb-4">
-              As a freelancer specialising in computer vision and machine learning, I help clients turn their computer
-              vision projects into life. <b><a href="https://www.upwork.com/freelancers/~0120b8c76dc85da315">View my
-                  profile.</a></b>
-
-            </p>
-            <ul class="text-gray-400 text-sm space-y-1">
-              <li>• I am building realtime deployable computer vision based surveillance systems that are deployable.
-              </li>
-              <li>• Technologies Using: Vast.ai, Python, PyTorch, OpenCV, Ultralytics, Django</li>
-            </ul>
-          </div>
-
-          <div class="timeline-item">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold">Student Assistant - Cybersecurity</h3>
-              <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">October 2025 - March 2026</span>
-            </div>
-            <p class="text-blue-400 font-medium mb-2"><a href="https://www.cs7.tf.fau.de/" target="_blank" class="hover:text-blue-300 underline decoration-dotted">Chair of Computer Science 7</a> - <a href="https://www.fau.de/" target="_blank" class="hover:text-blue-300 underline decoration-dotted">FAU Erlangen-Nuremberg</a></p>
-            <p class="text-gray-400 mb-4">
-              As a student assistant specialising in cybersecurity,
-              I am building exercise materials for the course <b>Introduction to Cybersecurity Fundamentals for
-                Networking</b>.
-            </p>
-            <ul class="text-gray-400 text-sm space-y-1">
-              <li>• I built exercise to mimic real-world cyber attacks, helping students understand attack vectors and
-                defense mechanisms.</li>
-              <li>• Technologies Using: Kali, Metasploit, Wireshark, Scapy, Burp Suite, TCPDump, VirtualBox</li>
-            </ul>
-          </div>
-
-          <div class="timeline-item">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold">Working Student - Applied Machine Learning</h3>
-              <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">May 2023 - March 2026</span>
-            </div>
-            <p class="text-blue-400 font-medium mb-2"><a href="https://www.primetals.com/" target="_blank" class="hover:text-blue-300 underline decoration-dotted">Primetals Technologies GmbH</a></p>
-            <p class="text-gray-400 mb-4">
-              As a working student specialising in machine learning, I focus on finding algorithms to detect anomaly
-              events to monitor
-              the metal production process using concepts like Instance Segmentation, Object Detection, Keypoint
-              Matching, and
-              Anomaly Detection.
-            </p>
-            <ul class="text-gray-400 text-sm space-y-1">
-              <li>• I built a web tool to evaluate a model’s performance by visualizing an event’s occurrence, which
-                allowed us to perform the
-                model’s evaluation on 100s of hours of videos in just a few minutes.</li>
-              <li>• I developed a novel algorithm to detect the vibration of a static camera based on the camera frames,
-                allowing our models
-                to predict events with high confidence.</li>
-              <li>• I built several synthetic data generator tools mimicking the real environment to train OCR,
-                segmentation models, and
-                detection models, which allowed us to generate rare event samples for training.</li>
-              <li>• Technologies Using: Python, OpenCV, PyTorch, ONNX, TensorRT, FastAPI, Streamlit, MySQL, Docker, and
-                Git</li>
-            </ul>
-          </div>
-
-          <div class="timeline-item">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold">Freelancer</h3>
-              <span class="text-sm bg-purple-600 px-3 py-1 rounded-full">2022 - 2022</span>
-            </div>
-            <p class="text-blue-400 font-medium mb-2"><a href="https://www.upwork.com/" target="_blank" class="hover:text-blue-300 underline decoration-dotted">Upwork</a></p>
-            <p class="text-gray-400 mb-4">
-              As a top-rated freelancer, I helped clients turn their data applications into life.
-            </p>
-            <ul class="text-gray-400 text-sm space-y-1">
-
-              <li>• I built a dynamic alert-based strategy back-testing platform and trading bots for options and stocks
-                using Polygon.ai,
-                Alpaca, and Interactive Brokers API.</li>
-              <li>• Technologies Used: Python, FastAPI, Streamlit, MySQL, Asyncio, Websockets, and Git</li>
-            </ul>
-          </div>
-
-          <div class="timeline-item">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold">Associate Data Scientist Engineer</h3>
-              <span class="text-sm bg-orange-600 px-3 py-1 rounded-full">2021 - 2022</span>
-            </div>
-            <p class="text-blue-400 font-medium mb-2"><a href="https://extensodata.com/" target="_blank" class="hover:text-blue-300 underline decoration-dotted">Extenso Data Pvt. Ltd.</a></p>
-            <p class="text-gray-400 mb-4">
-              As an Associate Data Scientist/Engineer working in a Fintech, I was responsible for building a data
-              pipeline to
-              collect, process, and analyze financial data from various sources.
-            </p>
-            <ul class="text-gray-400 text-sm space-y-1">
-              <li>• I built a backbone for an intelligent model to automate data pipelining, analysis, and reporting of
-                fintech data for business stakeholders to make timely customer decisions</li>
-              <li>• I built an Intelligence System to visualize the performance of loans and prospects for stakeholders
-                to make timely decisions.</li>
-              <li>• Technologies Used: Python, MySQL, Pentaho, Apache Airflow, Apache Superset, and Git
-              </li>
-            </ul>
-          </div>
-          <div class="timeline-item">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold">Junior Machine Learning Engineer</h3>
-              <span class="text-sm bg-orange-600 px-3 py-1 rounded-full">2021 - 2021</span>
-            </div>
-            <p class="text-blue-400 font-medium mb-2">Ensemble-Matrix</p>
-            <p class="text-gray-400 mb-4">
-              As a Junior ML Engineer, I did experiments to efficiently detect forged signatures and built an
-              Intelligence System.
-            </p>
-            <ul class="text-gray-400 text-sm space-y-1">
-              <li>• Using Siamese-type neural networks, I developed an algorithm to create a synthetic hand signature to
-                train a model to
-                detect forged signatures.</li>
-              <li>• Technologies Used: Python, Google Colab, OpenCV, Keras, Docker, and Git </li>
-            </ul>
-          </div>
-          <div class="timeline-item">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold">Unity 3D Intern</h3>
-              <span class="text-sm bg-orange-600 px-3 py-1 rounded-full">Nov 2020 - Mar 2021</span>
-            </div>
-            <p class="text-blue-400 font-medium mb-2"><a href="https://www.diyo.ai/" target="_blank" class="hover:text-blue-300 underline decoration-dotted">diyo.ai</a></p>
-            <p class="text-gray-400 mb-4">
-              As a Unity 3D Intern, I learned how to build AR applications.
-            </p>
-            <ul class="text-gray-400 text-sm space-y-1">
-              <li>• I designed and built a user flow for an application to improve clients’ jewelry business using
-                Google AR Core and Unity 3D.</li>
-              <li>• Technologies Used: Unity3D, and Git</li>
-            </ul>
-          </div>
-          <div class="timeline-item">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold">AI Developer Intern</h3>
-              <span class="text-sm bg-orange-600 px-3 py-1 rounded-full">Aug 2019 - Jan 2020</span>
-            </div>
-            <p class="text-blue-400 font-medium mb-2">MPercept Technology</p>
-            <p class="text-gray-400 mb-4">
-              As an AI Developer Intern, I learned how to build and deploy AI models, focusing on computer vision and
-              chatbots applications.
-            </p>
-            <ul class="text-gray-400 text-sm space-y-1">
-              <li>• Developed and maintained conversational agents for platforms like e-commerce, travel agency, and
-                academic consultancy.</li>
-              <li>• Technologies Used: Python, Rasa, OpenCV, Google Colab, AWS EC2, and Git
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="py-20 px-6">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-4xl font-bold mb-12 text-center gradient-text">Skills & Expertise</h2>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-          <!-- Core Expertise -->
-          <div class="section-card rounded-2xl p-8">
-            <h3 class="text-2xl font-bold mb-6 text-blue-400">
-              <i class="fas fa-brain mr-2"></i>Core Expertise
-            </h3>
-
-            <!-- Expertise with progress bars -->
-            <div class="space-y-6">
-              <div class="expertise-item">
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-gray-200 font-medium">Python</span>
-                  <span class="text-blue-400 text-sm">Expert</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width: 95%"></div>
-                </div>
-              </div>
-
-              <div class="expertise-item">
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-gray-200 font-medium">SQL</span>
-                  <span class="text-blue-400 text-sm">Expert</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width: 90%"></div>
-                </div>
-              </div>
-
-              <div class="expertise-item">
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-gray-200 font-medium">Computer Vision</span>
-                  <span class="text-blue-400 text-sm">Expert</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width: 80%"></div>
-                </div>
-              </div>
-
-              <div class="expertise-item">
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-gray-200 font-medium">Deep Learning</span>
-                  <span class="text-blue-400 text-sm">Advanced</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width: 85%"></div>
-                </div>
-              </div>
-
-              <div class="expertise-item">
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-gray-200 font-medium">Data Analysis</span>
-                  <span class="text-blue-400 text-sm">Advanced</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width: 90%"></div>
-                </div>
-              </div>
-
-              <div class="expertise-item">
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-gray-200 font-medium">Algorithm Design</span>
-                  <span class="text-blue-400 text-sm">Advanced</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width: 80%"></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Soft Skills -->
-            <div class="mt-8">
-              <h4 class="text-lg font-semibold mb-4 text-gray-200">
-                <i class="fas fa-users mr-2"></i>Professional Skills
-              </h4>
-              <div class="grid grid-cols-2 gap-4">
-                <div class="flex items-center">
-                  <i class="fas fa-check-circle text-green-400 mr-2"></i>
-                  <span class="text-gray-300">Problem Solving</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-check-circle text-green-400 mr-2"></i>
-                  <span class="text-gray-300">Team Collaboration</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-check-circle text-green-400 mr-2"></i>
-                  <span class="text-gray-300">Research & Development</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-check-circle text-green-400 mr-2"></i>
-                  <span class="text-gray-300">Technical Writing</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-check-circle text-green-400 mr-2"></i>
-                  <span class="text-gray-300">Project Management</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-check-circle text-green-400 mr-2"></i>
-                  <span class="text-gray-300">Agile Development</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Technical Skills -->
-          <div class="section-card rounded-2xl p-8">
-            <h3 class="text-2xl font-bold mb-6 text-blue-400">
-              <i class="fas fa-code mr-2"></i>Technical Skills
-            </h3>
-
-            <!-- Programming Languages -->
-            <div class="mb-6">
-              <h4 class="text-lg font-semibold mb-3 text-gray-200">Programming Languages</h4>
-              <div class="flex flex-wrap gap-2">
-                <span class="skill-tag">Python</span>
-                <span class="skill-tag">JavaScript</span>
-                <span class="skill-tag">C-Sharp</span>
-                <span class="skill-tag">SQL</span>
-              </div>
-            </div>
-
-            <!-- Computer Vision & ML -->
-            <div class="mb-6">
-              <h4 class="text-lg font-semibold mb-3 text-gray-200">Computer Vision & ML</h4>
-              <div class="flex flex-wrap gap-2">
-                <span class="skill-tag">OpenCV</span>
-                <span class="skill-tag">PyTorch</span>
-                <span class="skill-tag">TensorFlow</span>
-                <span class="skill-tag">Scikit-learn</span>
-                <span class="skill-tag">YOLO</span>
-                <span class="skill-tag">SAM</span>
-                <span class="skill-tag">ONNX</span>
-                <span class="skill-tag">TensorRT</span>
-              </div>
-            </div>
-
-            <!-- Data Science & Analytics -->
-            <div class="mb-6">
-              <h4 class="text-lg font-semibold mb-3 text-gray-200">Data Science & Analytics</h4>
-              <div class="flex flex-wrap gap-2">
-                <span class="skill-tag">Pandas</span>
-                <span class="skill-tag">NumPy</span>
-                <span class="skill-tag">Matplotlib</span>
-                <span class="skill-tag">Seaborn</span>
-                <span class="skill-tag">Plotly</span>
-              </div>
-            </div>
-
-            <!-- Tools & Technologies -->
-            <div>
-              <h4 class="text-lg font-semibold mb-3 text-gray-200">Tools & Technologies</h4>
-              <div class="flex flex-wrap gap-2">
-                <span class="skill-tag">Git</span>
-                <span class="skill-tag">Docker</span>
-                <span class="skill-tag">AWS</span>
-                <span class="skill-tag">Linux</span>
-                <span class="skill-tag">MLFlow</span>
-                <span class="skill-tag">FastAPI</span>
-                <span class="skill-tag">Streamlit</span>
-                <span class="skill-tag">Unity3D</span>
-              </div>
-            </div>
-          </div>
-
-
-        </div>
-
-        <!-- Certifications & Achievements -->
-        <!-- <div class="section-card rounded-2xl p-8 mt-8">
-                  <h3 class="text-2xl font-bold mb-6 text-blue-400 text-center">
-                      <i class="fas fa-trophy mr-2"></i>Certifications & Achievements
-                  </h3>
-                  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div class="achievement-card">
-                          <div class="text-center">
-                              <i class="fas fa-medal text-3xl text-yellow-400 mb-3"></i>
-                              <h4 class="font-semibold text-gray-200">Deep Learning Specialization</h4>
-                              <p class="text-sm text-gray-400 mt-1">Coursera - Stanford</p>
-                          </div>
-                      </div>
-                      <div class="achievement-card">
-                          <div class="text-center">
-                              <i class="fas fa-award text-3xl text-blue-400 mb-3"></i>
-                              <h4 class="font-semibold text-gray-200">Computer Vision Expert</h4>
-                              <p class="text-sm text-gray-400 mt-1">GitHub Community</p>
-                          </div>
-                      </div>
-                      <div class="achievement-card">
-                          <div class="text-center">
-                              <i class="fas fa-star text-3xl text-purple-400 mb-3"></i>
-                              <h4 class="font-semibold text-gray-200">Open Source Contributor</h4>
-                              <p class="text-sm text-gray-400 mt-1">100+ Repositories</p>
-                          </div>
-                      </div>
-                  </div>
-              </div> -->
-      </div>
-    </section>
-
-    <section id="skills" class="py-20 px-6">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-4xl font-bold mb-12 text-center gradient-text">GitHub Stats</h2>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-          <!-- Core Expertise -->
-          <div class="section-card rounded-2xl p-8">
-            <!-- <h3 class="text-2xl font-bold mb-6 text-blue-400">
-                          <i class="fas fa-brain mr-2"></i>Core Expertise
-                      </h3> -->
-
-            <img height="180em"
-              src="https://github-readme-stats.vercel.app/api?username=q-viper&theme=radical&show_icons=true&hide_border=false&count_private=true"
-              alt="Ramkrishna's GitHub Stats" />
-
-          </div>
-
-          <!-- Technical Skills -->
-          <div class="section-card rounded-2xl p-8">
-            <!-- <h3 class="text-2xl font-bold mb-6 text-blue-400">
-                          <i class="fas fa-code mr-2"></i>Technical Skills
-                      </h3> -->
-            <img height="180em"
-              src="https://github-readme-streak-stats.herokuapp.com/?user=q-viper&theme=radical&hide_border=false"
-              alt="Ramkrishna's Top Languages" />
-          </div>
-
-
-        </div>
-      </div>
-    </section>
-
-    <!-- <img height="180em" src="https://github-readme-stats.vercel.app/api?username=q-viper&show_icons=true&theme=radical" alt="Ramkrishna's GitHub Stats"/>
-        <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=q-viper&layout=compact&theme=radical" alt="Ramkrishna's Top Languages"/> -->
-
-
-    <!-- Projects Section -->
-    <section id="projects" class="py-20 px-6">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-4xl font-bold mb-12 text-center gradient-text">Featured Projects</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div class="project-card rounded-xl p-6">
-            <div class="flex justify-between items-start mb-4">
-              <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">2026</span>
-              <div class="flex space-x-2">
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-star text-yellow-400"></i> <span data-gh-repo="q-viper/session-feature-extractor" data-gh-field="stargazers_count">2</span>
-                </span>
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-code-branch text-green-400"></i> <span data-gh-repo="q-viper/session-feature-extractor" data-gh-field="forks_count">0</span>
-                </span>
-              </div>
-            </div>
-            <div class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
-              <img
-                src="https://github.com/q-viper/session-feature-extractor/raw/main/docs/assets/session_header_arrays.png"
-                alt="SFE Demo" class="h-full">
-            </div>
-            <h3 class="text-xl font-bold mb-2">Session Feature Extractor</h3>
-            <p class="text-gray-400 text-sm mb-4">
-              A PyPI tool for extracting and analyzing session data as images from network traffics.
-            </p>
-            <a href="https://github.com/q-viper/session-feature-extractor"
-              class="text-blue-400 hover:text-blue-300 transition-colors" target="_blank">
-              View Project →
-            </a>
-          </div>
-
-
-          <!-- Text Baker Project -->
-          <div class="project-card rounded-xl p-6">
-            <div class="flex justify-between items-start mb-4">
-              <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">2026</span>
-              <div class="flex space-x-2">
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-star text-yellow-400"></i> <span data-gh-repo="q-viper/text-baker" data-gh-field="stargazers_count">1</span>
-                </span>
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-code-branch text-green-400"></i> <span data-gh-repo="q-viper/text-baker" data-gh-field="forks_count">0</span>
-                </span>
-              </div>
-            </div>
-            <div class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
-              <img src="https://raw.githubusercontent.com/q-viper/text-baker/main/assets/icon.png" alt="Text Baker Demo"
-                class="h-full">
-            </div>
-            <h3 class="text-xl font-bold mb-2">Text Baker</h3>
-            <p class="text-gray-400 text-sm mb-4">
-              A tool for annotating and generating synthetic text datasets for OCR and NLP tasks. Supports custom font
-              rendering, augmentation, and export for training deep learning models.
-            </p>
-            <a href="https://github.com/q-viper/text-baker" class="text-blue-400 hover:text-blue-300 transition-colors"
-              target="_blank">
-              View Project →
-            </a>
-          </div>
-
-          <!-- 2025 Projects -->
-          <div class="project-card rounded-xl p-6">
-            <div class="flex justify-between items-start mb-4">
-              <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">2025</span>
-              <div class="flex space-x-2">
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-star text-yellow-400"></i> <span data-gh-repo="q-viper/Image-Baker" data-gh-field="stargazers_count">21</span>
-                </span>
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-code-branch text-green-400"></i> <span data-gh-repo="q-viper/Image-Baker" data-gh-field="forks_count">2</span>
-                </span>
-              </div>
-            </div>
-            <div class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
-              <!-- <i class="fas fa-image text-4xl text-gray-600"> -->
-              <img src="https://github.com/q-viper/image-baker/blob/main/assets/demo.gif?raw=true"
-                alt="Image Baker Demo" class="h-full">
-              <!-- </i> -->
-              <!-- <span class="ml-2 text-gray-600"><Demo Image/GIF></span> -->
-            </div>
-            <h3 class="text-xl font-bold mb-2">Image Baker</h3>
-            <p class="text-gray-400 text-sm mb-4">
-              A tool to annotate images backed by models like segmentation, detection and segment anything model (SAM).
-              It allows users to prepare labelled anomaly dataset based on few images.
-            </p>
-            <a href="https://github.com/q-viper/Image-Baker"
-              class="text-blue-400 hover:text-blue-300 transition-colors">
-              View Project →
-            </a>
-          </div>
-
-
-
-          <!-- 2024 Projects -->
-          <div class="project-card rounded-xl p-6">
-            <div class="flex justify-between items-start mb-4">
-              <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">2024</span>
-              <div class="flex space-x-2">
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-star text-yellow-400"></i> <span data-gh-repo="q-viper/SmokeSim" data-gh-field="stargazers_count">5</span>
-                </span>
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-code-branch text-green-400"></i> <span data-gh-repo="q-viper/SmokeSim" data-gh-field="forks_count">0</span>
-                </span>
-              </div>
-            </div>
-            <div class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
-              <!-- <i class="fas fa-cloud text-4xl text-gray-600"></i>
-                            <span class="ml-2 text-gray-600">Smoke Simulation</span> -->
-              <img src="https://github.com/q-viper/SmokeSim/blob/master/assets/demo.gif?raw=true"
-                alt="Smoke Simulation Demo" class="h-full">
-            </div>
-            <h3 class="text-xl font-bold mb-2">SmokeSim</h3>
-            <p class="text-gray-400 text-sm mb-4">
-              Real-time particle-based smoke simulation using Python and PyGame techniques with support for overlay and
-              augmentation.
-            </p>
-            <a href="https://github.com/q-viper/SmokeSim" class="text-blue-400 hover:text-blue-300 transition-colors">
-              View Project →
-            </a>
-          </div>
-
-          <div class="project-card rounded-xl p-6">
-            <div class="flex justify-between items-start mb-4">
-              <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">2024</span>
-              <div class="flex space-x-2">
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-star text-yellow-400"></i> <span data-gh-repo="q-viper/Neural-Template-Matching" data-gh-field="stargazers_count">7</span>
-                </span>
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-code-branch text-green-400"></i> <span data-gh-repo="q-viper/Neural-Template-Matching" data-gh-field="forks_count">0</span>
-                </span>
-              </div>
-            </div>
-            <div class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
-              <!-- <i class="fas fa-brain text-4xl text-gray-600"></i>
-                            <span class="ml-2 text-gray-600">Neural Network</span> -->
-              <img src="https://github.com/q-viper/Neural-Template-Matching/blob/main/assets/desk_out.gif?raw=true"
-                alt="Neural Template Matching Demo" class="h-full">
-            </div>
-            <h3 class="text-xl font-bold mb-2">Neural Template Matching</h3>
-            <p class="text-gray-400 text-sm mb-4">
-              An experiment in using neural networks for template matching tasks.
-            </p>
-            <a href="https://github.com/q-viper/Neural-Template-Matching"
-              class="text-blue-400 hover:text-blue-300 transition-colors">
-              View Project →
-            </a>
-          </div>
-
-          <div class="project-card rounded-xl p-6">
-            <div class="flex justify-between items-start mb-4">
-              <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">2024</span>
-              <div class="flex space-x-2">
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-star text-yellow-400"></i> <span data-gh-repo="q-viper/Orange-Segmentation-With-SAM" data-gh-field="stargazers_count">2</span>
-                </span>
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-code-branch text-green-400"></i> <span data-gh-repo="q-viper/Orange-Segmentation-With-SAM" data-gh-field="forks_count">0</span>
-                </span>
-              </div>
-            </div>
-            <div class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
-              <!-- <i class="fas fa-cut text-4xl text-gray-600"></i>
-                            <span class="ml-2 text-gray-600">SAM Segmentation</span> -->
-              <img
-                src="https://github.com/q-viper/Orange-Segmentation-With-SAM/blob/main/assets/sam_results.png?raw=true"
-                alt="Orange Segmentation with SAM Demo" class="h-full">
-            </div>
-            <h3 class="text-xl font-bold mb-2">Orange Segmentation with SAM</h3>
-            <p class="text-gray-400 text-sm mb-4">
-              Utilizing Segment Anything Model for precise orange fruit segmentation in agricultural applications.
-            </p>
-            <a href="https://github.com/q-viper/Orange-Segmentation-With-SAM"
-              class="text-blue-400 hover:text-blue-300 transition-colors">
-              View Project →
-            </a>
-          </div>
-
-          <!-- 2021 Projects -->
-          <div class="project-card rounded-xl p-6">
-            <div class="flex justify-between items-start mb-4">
-              <span class="text-sm bg-purple-600 px-3 py-1 rounded-full">2021</span>
-              <div class="flex space-x-2">
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-star text-yellow-400"></i> <span data-gh-repo="q-viper/7-Days-Of-Computer-Vision-Projects" data-gh-field="stargazers_count">8</span>
-                </span>
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-code-branch text-green-400"></i> <span data-gh-repo="q-viper/7-Days-Of-Computer-Vision-Projects" data-gh-field="forks_count">4</span>
-                </span>
-              </div>
-            </div>
-            <div class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
-              <!-- <i class="fas fa-calendar-week text-4xl text-gray-600"></i>
-                            <span class="ml-2 text-gray-600">7-Day Challenge</span> -->
-              <img
-                src="https://github.com/q-viper/7-Days-Of-Computer-Vision-Projects/blob/main/assets/7days_cv_demo.png?raw=true"
-                alt="7-Days Computer Vision Projects Demo" class="h-full">
-            </div>
-            <h3 class="text-xl font-bold mb-2">7-Days Computer Vision Projects</h3>
-            <p class="text-gray-400 text-sm mb-4">
-              Comprehensive collection of computer vision projects completed in one week challenge.
-            </p>
-            <a href="https://github.com/q-viper/7-Days-Of-Computer-Vision-Projects"
-              class="text-blue-400 hover:text-blue-300 transition-colors">
-              View Project →
-            </a>
-          </div>
-
-          <!-- 2020 Projects -->
-          <div class="project-card rounded-xl p-6">
-            <div class="flex justify-between items-start mb-4">
-              <span class="text-sm bg-green-600 px-3 py-1 rounded-full">2020</span>
-              <div class="flex space-x-2">
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-star text-yellow-400"></i> <span data-gh-repo="q-viper/Contour-Based-Writing" data-gh-field="stargazers_count">52</span>
-                </span>
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-code-branch text-green-400"></i> <span data-gh-repo="q-viper/Contour-Based-Writing" data-gh-field="forks_count">16</span>
-                </span>
-              </div>
-            </div>
-            <div class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
-              <!-- <i class="fas fa-pen-fancy text-4xl text-gray-600"></i>
-                            <span class="ml-2 text-gray-600">Contour Detection</span> -->
-              <video src="https://q-viper.github.io/assets/contour-writing/web%20app.mp4" autoplay loop muted
-                class="h-full rounded-lg"></video>
-
-            </div>
-            <h3 class="text-xl font-bold mb-2">Contour-Based Writing</h3>
-            <p class="text-gray-400 text-sm mb-4">
-              Innovative approach to air based writing using contour detection.
-            </p>
-            <a href="https://github.com/q-viper/Contour-Based-Writing"
-              class="text-blue-400 hover:text-blue-300 transition-colors">
-              View Project →
-            </a>
-          </div>
-
-          <!-- 2019 Projects -->
-          <div class="project-card rounded-xl p-6">
-            <div class="flex justify-between items-start mb-4">
-              <span class="text-sm bg-orange-600 px-3 py-1 rounded-full">2019</span>
-              <div class="flex space-x-2">
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-star text-yellow-400"></i> <span data-gh-repo="q-viper/final-devanagari-word-char-detector" data-gh-field="stargazers_count">20</span>
-                </span>
-                <span class="github-stats" title="Live from GitHub">
-                  <i class="fas fa-code-branch text-green-400"></i> <span data-gh-repo="q-viper/final-devanagari-word-char-detector" data-gh-field="forks_count">7</span>
-                </span>
-              </div>
-            </div>
-            <div class="w-full h-48 bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
-              <!-- <i class="fas fa-language text-4xl text-gray-600"></i>
-                            <span class="ml-2 text-gray-600">Character Detection</span> -->
-              <img
-                src="https://github.com/q-viper/final-devanagari-word-char-detector/blob/master/assests/detection.png?raw=true"
-                alt="Devanagari Character Detection Demo" class="h-full rounded-lg">
-            </div>
-            <h3 class="text-xl font-bold mb-2">Devanagari Character Detector</h3>
-            <p class="text-gray-400 text-sm mb-4">
-              Deep learning model for recognizing and classifying Devanagari script characters.
-            </p>
-            <a href="https://github.com/q-viper/final-devanagari-word-char-detector"
-              class="text-blue-400 hover:text-blue-300 transition-colors">
-              View Project →
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Education Section -->
-    <section id="education" class="py-20 px-6">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-4xl font-bold mb-12 text-center gradient-text">Education</h2>
-        <div class="section-card rounded-2xl p-8">
-          <div class="timeline-item">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold">PhD in Bioscience Engineering</h3>
-              <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">In progress</span>
-            </div>
-            <p class="text-blue-400 font-medium mb-2"><a href="https://www.kuleuven.be/english" target="_blank" class="hover:text-blue-300 underline decoration-dotted">KU Leuven</a>, Belgium (<a href="https://www.biw.kuleuven.be/biosyst/mebios/" target="_blank" class="hover:text-blue-300 underline decoration-dotted">MeBioS Division</a>)</p>
-            <ul class="list-disc list-inside mb-2 text-gray-400">
-              <li>Research on AI-based agricultural insect monitoring.</li>
-            </ul>
-          </div>
-
-          <div class="timeline-item">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold">Master of Science in Data Science</h3>
-              <span class="text-sm bg-blue-600 px-3 py-1 rounded-full">2022 - 2025</span>
-            </div>
-            <p class="text-blue-400 font-medium mb-2"><a href="https://www.fau.de/" target="_blank" class="hover:text-blue-300 underline decoration-dotted">Friedrich-Alexander-Universität Erlangen-Nürnberg</a>, Germany</p>
-            <p class="text-gray-400">
-            <ul class="list-disc list-inside mb-2">
-              <li>Advanced studies in machine learning, deep learning, computer vision, and statistical analysis.
-                Focus on practical applications of AI in real-world scenarios.</li>
-              <li>Thesis: Enhancing Smart Grid Security: A Deep Learning Approach to Adversarial Intrusion Detection
-              </li>
-
-            </ul>
-            </p>
-          </div>
-
-          <div class="timeline-item">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-xl font-bold">Bachelor of Science in Computer Science and Information Technology</h3>
-              <span class="text-sm bg-green-600 px-3 py-1 rounded-full">2015 - 2019</span>
-            </div>
-            <p class="text-blue-400 font-medium mb-2"><a href="https://tu.edu.np/" target="_blank" class="hover:text-blue-300 underline decoration-dotted">Tribhuvan University</a>, Nepal</p>
-            <p class="text-gray-400">
-            <ul class="list-disc list-inside mb-2">
-              <li>Foundation in computer science, mathematics, and programming and early exposure to
-                machine learning and software engineering concepts.</li>
-              <li>Academic Project: <a href="https://github.com/q-viper/final-devanagari-word-char-detector">Devanagari
-                  Word/Character Recognition</a></li>
-            </ul>
-
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 px-6">
-      <div class="max-w-6xl mx-auto text-center">
-        <h2 class="text-4xl font-bold mb-12 gradient-text">Get In Touch</h2>
-        <div class="section-card rounded-2xl p-8 max-w-2xl mx-auto">
-          <p class="text-lg text-gray-300 mb-8">
-            Open to collaborating on open source and research projects. Reach me at
-            qramkrishna-at-gmail.com. Let's connect!
-          </p>
-          <div class="flex justify-center space-x-8">
-            <a href="mailto:qramkrishna@gmail.com"
-              class="flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors">
-              <i class="fas fa-envelope text-xl"></i>
-              <span>Email</span>
-            </a>
-            <a href="https://github.com/q-viper" target="_blank"
-              class="flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors">
-              <i class="fab fa-github text-xl"></i>
-              <span>GitHub</span>
-            </a>
-            <a href="https://linkedin.com/in/qramkrishna" target="_blank"
-              class="flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors">
-              <i class="fab fa-linkedin text-xl"></i>
-              <span>LinkedIn</span>
-            </a>
-            <a href="https://kaggle.com/qramkrishna" target="_blank"
-              class="flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors">
-              <i class="fab fa-kaggle text-xl"></i>
-              <span>Kaggle</span>
-            </a>
-            <a href="https://medium.com/@qramkrishna" target="_blank"
-              class="flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors">
-              <i class="fab fa-medium text-xl"></i>
-              <span>Medium</span>
-            </a>
-            <a href="https://dev.to/qviper" target="_blank"
-              class="flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors">
-              <i class="fab fa-dev text-xl"></i>
-              <span>Dev.to</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="py-8 px-6 border-t border-white/10">
-      <div class="max-w-6xl mx-auto text-center text-gray-400">
-        <p>&copy; 2026 Ramkrishna Acharya. All rights reserved.</p>
-      </div>
-    </footer>
+  <button id="theme-toggle" type="button" aria-label="Toggle dark/light mode" title="Toggle dark/light mode"></button>
+  <div class="topbar">
+    <div class="inner">
+      <span>Ramkrishna Acharya</span>
+      <nav>
+        <a href="#education">Education</a>
+        <a href="#publications">Publications</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#hobbies">Hobbies</a>
+        <a href="/portfolio/">Portfolio</a>
+        <a href="/posts/">Blog</a>
+      </nav>
+    </div>
   </div>
 
+  <main>
+    <header class="id">
+      <img src="/assets/its_ramkrishna_small.jpg" alt="Ramkrishna Acharya">
+      <div>
+      <h1>Ramkrishna Acharya</h1>
+      <p class="role">PhD Researcher, Bioscience Engineering &middot; KU Leuven</p>
+      <p class="contact">
+        <a href="mailto:qramkrishna@gmail.com">qramkrishna@gmail.com</a>
+        <a href="https://scholar.google.com/citations?user=ZqVtZqsAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
+        <a href="https://orcid.org/0009-0009-5268-4380" target="_blank" rel="noopener">ORCID</a>
+        <a href="https://github.com/q-viper" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/qramkrishna" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://kaggle.com/qramkrishna" target="_blank" rel="noopener">Kaggle</a>
+        <a href="/assets/ramkrishna_cv.pdf">CV (PDF)</a>
+      </p>
+      </div>
+    </header>
+
+    <section id="about">
+      <h2>Research Interests</h2>
+      <p>
+        I am a PhD researcher at the
+        <a href="https://www.biw.kuleuven.be/biosyst/mebios/" target="_blank" rel="noopener">MeBioS Division</a> of
+        <a href="https://www.kuleuven.be/english" target="_blank" rel="noopener">KU Leuven</a>, working on
+        context-aware insect monitoring in agriculture using artificial intelligence. My broader interests include
+        computer vision, deep learning, anomaly detection, adversarial robustness and cyber-physical security.
+      </p>
+    </section>
+
+    <section id="education">
+      <h2>Education</h2>
+      <div class="entry">
+        <div class="row"><span class="title">PhD, Bioscience Engineering</span><span class="date">2026 &ndash;
+            present</span></div>
+        <div class="sub"><a href="https://www.kuleuven.be/english" target="_blank" rel="noopener">KU Leuven</a>,
+          Leuven, Belgium</div>
+        <ul>
+          <li>Topic: Context-aware insect monitoring in agriculture using AI</li>
+          <li>Promoter: Prof. Wouter Saeys</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="title">M.Sc., Data Science</span><span class="date">2022 &ndash; 2025</span>
+        </div>
+        <div class="sub"><a href="https://www.fau.de/" target="_blank" rel="noopener">Friedrich-Alexander-Universit&auml;t
+            Erlangen-N&uuml;rnberg</a>, Germany &middot; Grade: 1.8 (German scale)</div>
+        <ul>
+          <li>Thesis: <em>Enhancing Smart Grid Security: A Deep Learning Approach to Adversarial Intrusion
+              Detection</em></li>
+          <li>Supervisors: Dr.-Ing. Loui Al Sardy, Mamdouh Muhammad, M.Sc.</li>
+          <li>Focus: applied machine learning, deep learning, cyber-physical security</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="title">B.Sc., Computer Science and Information Technology</span><span
+            class="date">2015 &ndash; 2019</span></div>
+        <div class="sub"><a href="https://tu.edu.np/" target="_blank" rel="noopener">Tribhuvan University</a>,
+          Kathmandu, Nepal &middot; 72.07/100 (First Division)</div>
+        <ul>
+          <li>Research project: <a href="https://github.com/q-viper/final-devanagari-word-char-detector"
+              target="_blank" rel="noopener">Devanagari Handwritten Character Recognition</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="publications">
+      <h2>Publications</h2>
+      <ol class="pubs">
+        <li>
+          <strong>R. Acharya</strong>, L. Al Sardy, M. Muhammad, R. German.
+          <em>ADVIS-G: An Adversarially Defended Intrusion Detection System for Smart Grids Using Deep
+            Learning.</em>
+          <a href="https://link.springer.com/journal/13218" target="_blank" rel="noopener">KI &ndash; K&uuml;nstliche
+            Intelligenz</a>, 2026.
+          <div class="links" style="margin-top:6px">
+            <a href="https://github.com/cs7org/ADVIS-G" target="_blank" rel="noopener">Code</a>
+          </div>
+        </li>
+        <li>
+          <strong>R. Acharya</strong>, L. Al Sardy, M. Muhammad.
+          <em>ROSAID-ST: Adversarially Robust Intrusion and Anomaly Detection in ROS Networks via Student-Teacher Deep
+            Learning.</em>
+          <a href="https://journals.sagepub.com/home/ARX" target="_blank" rel="noopener">International Journal of
+            Advanced Robotic Systems</a>, under review, 2026.
+          <div class="links" style="margin-top:6px">
+            <a href="https://github.com/cs7org/ROSAID-ST" target="_blank" rel="noopener">Code</a>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="experience">
+      <h2>Research &amp; Professional Experience</h2>
+      <div class="entry">
+        <div class="row"><span class="title">Master's Thesis Researcher and HiWi</span><span class="date">Apr 2025
+            &ndash; Mar 2026</span></div>
+        <div class="sub"><a href="https://www.cs7.tf.fau.de/" target="_blank" rel="noopener">Chair for Computer
+            Science 7</a>, FAU Erlangen-N&uuml;rnberg</div>
+        <ul>
+          <li>Developed ROSAID-ST and ADVIS-G, adversarially defended intrusion detection systems for smart-grid
+            communication data.</li>
+          <li>Prepared exercises and tutored students in <em>Cybersecurity Fundamentals in Networking</em>.</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="title">Working Student, Computer Vision</span><span class="date">May 2023
+            &ndash; Mar 2026</span></div>
+        <div class="sub"><a href="https://www.primetals.com/" target="_blank" rel="noopener">Primetals Technologies
+            Germany GmbH</a>, Erlangen</div>
+        <ul>
+          <li>Engineered industrial vision pipelines for detection, segmentation, tracking and anomaly analysis.</li>
+          <li>Built synthetic data and annotation tools for OCR and segmentation in limited-data settings.</li>
+          <li>Developed FastAPI/SQL evaluation workflows, saving 100+ hours of manual video analysis.</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="title">Associate Data Scientist</span><span class="date">Aug 2021 &ndash; Aug
+            2022</span></div>
+        <div class="sub"><a href="https://extensodata.com/" target="_blank" rel="noopener">Extensodata Pvt.
+            Ltd.</a>, Kathmandu</div>
+        <ul>
+          <li>Led a team of 3 building a business intelligence tool and fintech data pipelines for loan-risk
+            analysis.</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="title">Freelancer</span><span class="date">2022; Mar 2026 &ndash; present</span>
+        </div>
+        <div class="sub"><a href="https://www.upwork.com/freelancers/~0120b8c76dc85da315" target="_blank"
+            rel="noopener">Upwork</a>, remote</div>
+        <ul>
+          <li>Built a real-time alert-based strategy backtesting platform; delivered full-stack AI and computer-vision
+            applications.</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="title">Additional experience</span></div>
+        <ul>
+          <li><a href="https://www.diyo.ai/" target="_blank" rel="noopener">diyo.ai</a>, Unity3D Development Intern
+            (Nov 2020 &ndash; Mar 2021)</li>
+          <li>MPercept Technology, AI Developer Intern (Aug 2019 &ndash; Jan 2020)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2>Selected Open-Source Projects</h2>
+      <ul>
+        <li><a href="https://github.com/q-viper/session-feature-extractor" target="_blank"
+            rel="noopener">Session Feature Extractor</a> (2026): PyPI tool for extracting image features from network
+          traffic data.</li>
+        <li><a href="https://github.com/q-viper/Image-Baker" target="_blank" rel="noopener">Image Baker</a> (2025):
+          annotation and synthetic data generation for anomaly detection.</li>
+        <li><a href="https://github.com/q-viper/SmokeSim" target="_blank" rel="noopener">SmokeSim</a> (2024): smoke
+          simulation, image augmentation and segmentation.</li>
+        <li><a href="https://github.com/q-viper/Neural-Template-Matching" target="_blank" rel="noopener">Neural
+            Template Matching</a> (2024): U-Net experiment for template matching on COCO.</li>
+      </ul>
+    </section>
+
+    <section id="skills">
+      <h2>Skills</h2>
+      <dl class="skills">
+        <dt>Programming</dt>
+        <dd>Python, SQL, Bash, JavaScript (basic), C# (basic)</dd>
+        <dt>Machine learning</dt>
+        <dd>PyTorch, TensorFlow, Scikit-learn, HuggingFace, MMEngine, OpenCV</dd>
+        <dt>ML systems</dt>
+        <dd>Docker, Git, MLflow, DVC, ONNX, TensorRT, Airflow, FastAPI, Flask, Streamlit, AWS EC2, CI/CD</dd>
+        <dt>Languages</dt>
+        <dd>English (C1), German (A2), Nepali (native)</dd>
+      </dl>
+    </section>
+
+    <section id="hobbies">
+      <h2>Beyond Research</h2>
+      <p>Writing poems and stories, reading, running, mushroom hunting, and listening to (symphonic) metal music,
+        among other things.</p>
+    </section>
+  </main>
+
+  <footer>
+    <a href="/portfolio/">Portfolio</a> &middot; <a href="/posts/">Blog</a> &middot;
+    <a href="/assets/ramkrishna_cv.pdf">Download CV</a>
+    <div>&copy; 2026 Ramkrishna Acharya</div>
+  </footer>
   <script>
-    // Smoke Simulation System
-    // Enhanced Smoke Simulation using SmokeMachine approach
-    class SmokeSimulation {
-      constructor() {
-        this.canvas = document.getElementById('smoke-canvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.mouse = { x: 0, y: 0 };
-        this.emitter = null;
-        this.mouseMoving = false;
-        this.lastTime = performance.now();
-
-        // Opacity array for smoke sprite
-        this.opacities = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, , 0, 0, 0, 0, 0, 0, 0, 0, 3, 5, 5, 7, 4, 4, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 17, 27, 41, 52, 56, 34, 23, 15, 11, 4, 9, 5, 1, 0, 0, 0, 0, 0, 0, 1, 45, 63, 57, 45, 78, 66, 52, 41, 34, 37, 23, 20, 0, 1, 0, 0, 0, 0, 1, 43, 62, 66, 64, 67, 115, 112, 114, 56, 58, 47, 33, 18, 12, 10, 0, 0, 0, 0, 39, 50, 63, 76, 87, 107, 105, 112, 128, 104, 69, 64, 29, 18, 21, 15, 0, 0, 0, 7, 42, 52, 85, 91, 103, 126, 153, 128, 124, 82, 57, 52, 52, 24, 1, 0, 0, 0, 2, 17, 41, 67, 84, 100, 122, 136, 159, 127, 78, 69, 60, 50, 47, 25, 7, 1, 0, 0, 0, 34, 33, 66, 82, 113, 138, 149, 168, 175, 82, 142, 133, 70, 62, 41, 25, 6, 0, 0, 0, 18, 39, 55, 113, 111, 137, 141, 139, 141, 128, 102, 130, 90, 96, 65, 37, 0, 0, 0, 2, 15, 27, 71, 104, 129, 129, 158, 140, 154, 146, 150, 131, 92, 100, 67, 26, 3, 0, 0, 0, 0, 46, 73, 104, 124, 145, 135, 122, 107, 120, 122, 101, 98, 96, 35, 38, 7, 2, 0, 0, 0, 50, 58, 91, 124, 127, 139, 118, 121, 177, 156, 88, 90, 88, 28, 43, 3, 0, 0, 0, 0, 30, 62, 68, 91, 83, 117, 89, 139, 139, 99, 105, 77, 32, 1, 1, 0, 0, 0, 0, 0, 16, 21, 8, 45, 101, 125, 118, 87, 110, 86, 64, 39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 28, 79, 79, 117, 122, 88, 84, 54, 46, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 6, 55, 61, 68, 71, 30, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 23, 25, 20, 12, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 12, 9, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0];
-
-        this.smokeSpriteSize = 20;
-        this.particles = [];
-        this.running = false;
-
-        this.init();
-        this.bindEvents();
-        this.createSmokeSprite();
-        this.start();
-
-        window.smokeSimInstance = this;
-      }
-
-      init() {
-        this.resize();
-        window.addEventListener('resize', () => this.resize());
-      }
-
-      resize() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-      }
-
-      // Create smoke sprite from opacity array
-      createSmokeSprite(color) {
-        color = color || [100, 150, 255]; // Blue smoke color
-        const smokeSprite = document.createElement('canvas');
-        const ctx = smokeSprite.getContext('2d');
-        const data = ctx.createImageData(this.smokeSpriteSize, this.smokeSpriteSize);
-        const d = data.data;
-
-        for (let i = 0; i < d.length; i += 4) {
-          // // random color from 10 to 256
-          // color = [
-          //     Math.floor(Math.random() * 10) + 150,
-          //     Math.floor(Math.random() * 10) + 150,
-          //     Math.floor(Math.random() * 146) + 100
-          // ];
-          d[i] = color[0];     // Red
-          d[i + 1] = color[1]; // Green  
-          d[i + 2] = color[2]; // Blue
-          d[i + 3] = this.opacities[i / 4];
-        }
-
-        smokeSprite.width = this.smokeSpriteSize;
-        smokeSprite.height = this.smokeSpriteSize;
-        ctx.putImageData(data, 0, 0);
-
-        this.smokeSprite = smokeSprite;
-      }
-
-      // Utility function for random float in range
-      floatInRange(start, end) {
-        return start + Math.random() * (end - start);
-      }
-
-      // Create individual particle
-      createParticle(x, y, options = {}) {
-        const particle = {
-          x: x,
-          y: y,
-          vx: this.floatInRange(options.minVx || -4 / 100, options.maxVx || 4 / 100),
-          startvy: this.floatInRange(options.minVy || -4 / 10, options.maxVy || -1 / 10),
-          scale: this.floatInRange(options.minScale || 0, options.maxScale || 0.2),
-          lifetime: this.floatInRange(options.minLifetime || 1000, options.maxLifetime || 10000),
-          age: 0,
-        };
-
-        particle.finalScale = this.floatInRange(
-          particle.scale + this.smokeSpriteSize * 0.9,
-          particle.scale + this.smokeSpriteSize
-        );
-        particle.vy = particle.startvy;
-
-        return particle;
-      }
-
-      // Update particle physics
-      updateParticle(particle, deltatime) {
-        particle.x += particle.vx * deltatime;
-        particle.y += particle.vy * deltatime;
-        const frac = Math.sqrt(particle.age / particle.lifetime);
-        particle.vy = (1 - frac) * particle.startvy;
-        particle.age += deltatime;
-        particle.scale = frac * particle.finalScale;
-      }
-
-      // Draw individual particle
-      drawParticle(particle) {
-        this.ctx.globalAlpha = (1 - Math.abs(1 - 2 * particle.age / particle.lifetime)) / 8;
-        const off = particle.scale * this.smokeSpriteSize / 2;
-        const xmin = particle.x - off;
-        const xmax = xmin + off * 2;
-        const ymin = particle.y - off;
-        const ymax = ymin + off * 2;
-
-        this.ctx.drawImage(this.smokeSprite, xmin, ymin, xmax - xmin, ymax - ymin);
-      }
-
-      // Add smoke particles
-      addSmoke(x, y, numParticles = 10, options = {}) {
-        if (numParticles < 1) {
-          if (Math.random() <= numParticles) {
-            this.particles.push(this.createParticle(x, y, options));
-          }
-          return;
-        }
-
-        for (let i = 0; i < numParticles; i++) {
-          this.particles.push(this.createParticle(x, y, options));
-        }
-      }
-
-      // Update and draw all particles
-      updateAndDrawParticles(deltatime) {
-        // Clear canvas
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // Update particles
-        this.particles.forEach(p => this.updateParticle(p, deltatime));
-
-        // Remove dead particles
-        this.particles = this.particles.filter(p => p.age < p.lifetime);
-
-        // Draw particles
-        this.particles.forEach(p => this.drawParticle(p));
-
-        // Reset global alpha
-        this.ctx.globalAlpha = 1;
-      }
-
-      bindEvents() {
-        // Set/move continuous emitter on click
-        // document.addEventListener('click', e => {
-        //     this.emitter = { x: e.clientX, y: e.clientY };
-        // });
-
-        // Add smoke on mouse move
-        document.addEventListener('mousemove', e => {
-          this.mouse.x = e.clientX;
-          this.mouse.y = e.clientY;
-          this.mouseMoving = true;
-          this.addSmoke(e.clientX, e.clientY, 2);
-        });
-
-        document.addEventListener('mouseleave', () => {
-          this.mouseMoving = false;
-        });
-      }
-
-      // Main animation loop
-      animate(time) {
-        if (!this.running) return;
-
-        const deltaTime = time - this.lastTime;
-        this.lastTime = time;
-
-        // Emit from click emitter
-        if (this.emitter) {
-          this.addSmoke(this.emitter.x, this.emitter.y, 3);
-        }
-
-        // Update and draw
-        this.updateAndDrawParticles(deltaTime);
-
-        requestAnimationFrame(t => this.animate(t));
-      }
-
-      start() {
-        this.running = true;
-        this.lastTime = performance.now();
-        requestAnimationFrame(t => this.animate(t));
-      }
-
-      stop() {
-        this.running = false;
-      }
-    }
-
-    // Instantiate smoke simulation
-    const smokeSim = new SmokeSimulation();
-
-    // For debugging: expose instance to window
-    window.smokeSim = smokeSim;
-  </script>
-  <script>
-    // Live GitHub stars/forks (cached 10 min in localStorage; falls back to static numbers on failure)
+    // Theme toggle
     (function () {
-      const KEY = 'gh_repos_q-viper', TTL = 10 * 60 * 1000;
-      function apply(repos) {
-        const map = {};
-        repos.forEach(r => { map[r.full_name.toLowerCase()] = r; });
-        document.querySelectorAll('[data-gh-repo]').forEach(el => {
-          const r = map[el.dataset.ghRepo.toLowerCase()];
-          if (r && typeof r[el.dataset.ghField] === 'number') el.textContent = r[el.dataset.ghField];
-        });
-      }
-      async function load() {
-        try {
-          const c = JSON.parse(localStorage.getItem(KEY) || 'null');
-          if (c && Date.now() - c.t < TTL) return apply(c.d);
-        } catch (e) { }
-        try {
-          let all = [];
-          for (let page = 1; page <= 5; page++) {
-            const res = await fetch('https://api.github.com/users/q-viper/repos?per_page=100&page=' + page);
-            if (!res.ok) throw new Error(res.status);
-            const d = await res.json();
-            all = all.concat(d);
-            if (d.length < 100) break;
-          }
-          const slim = all.map(r => ({ full_name: r.full_name, stargazers_count: r.stargazers_count, forks_count: r.forks_count }));
-          apply(slim);
-          try { localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), d: slim })); } catch (e) { }
-        } catch (e) { /* keep static values */ }
-      }
-      load();
-      setInterval(load, TTL);
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      var root = document.documentElement;
+      function paint() { btn.textContent = root.getAttribute('data-theme') === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19'; }
+      btn.addEventListener('click', function () {
+        var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) { }
+        paint();
+      });
+      paint();
     })();
   </script>
 </body>
