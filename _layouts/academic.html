@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ramkrishna Acharya | Academic Profile</title>
+  <meta name="description"
+    content="Academic profile of Ramkrishna Acharya, PhD researcher in Bioscience Engineering at KU Leuven.">
+  <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+  <style>
+    :root {
+      --text: #1f2933;
+      --muted: #5f6b7a;
+      --accent: #1d4e89;
+      --rule: #d9dee5;
+      --bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .topbar {
+      border-bottom: 1px solid var(--rule);
+      font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .topbar .inner,
+    main,
+    footer {
+      max-width: 820px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .topbar .inner {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+
+    .topbar nav a {
+      margin-left: 18px;
+    }
+
+    header.id {
+      padding: 48px 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    header.id img {
+      width: 170px;
+      height: 170px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 1px solid var(--rule);
+      flex-shrink: 0;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: normal;
+      margin: 0 0 4px;
+    }
+
+    .role {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin: 0 0 14px;
+    }
+
+    .contact {
+      font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .contact a {
+      margin-right: 14px;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: normal;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 6px;
+      margin: 44px 0 18px;
+      color: var(--accent);
+    }
+
+    .entry {
+      margin-bottom: 18px;
+    }
+
+    .entry .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .entry .title {
+      font-weight: bold;
+    }
+
+    .entry .date {
+      color: var(--muted);
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    .entry .sub {
+      color: var(--muted);
+    }
+
+    ul {
+      margin: 6px 0 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 3px;
+    }
+
+    ol.pubs {
+      padding-left: 0;
+      list-style: none;
+      counter-reset: pub;
+    }
+
+    ol.pubs li {
+      counter-increment: pub;
+      position: relative;
+      padding-left: 38px;
+      margin-bottom: 18px;
+    }
+
+    ol.pubs li::before {
+      content: '[' counter(pub) ']';
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+    }
+
+    .links a {
+      font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 0.85rem;
+      margin-right: 10px;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: 1px 7px;
+    }
+
+    dl.skills {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 6px 16px;
+      margin: 0;
+    }
+
+    dl.skills dt {
+      font-weight: bold;
+    }
+
+    dl.skills dd {
+      margin: 0;
+    }
+
+    footer {
+      border-top: 1px solid var(--rule);
+      margin-top: 56px;
+      padding-top: 18px;
+      padding-bottom: 36px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    }
+
+    @media (max-width: 560px) {
+      header.id {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      dl.skills {
+        grid-template-columns: 1fr;
+      }
+
+      .entry .date {
+        white-space: normal;
+      }
+    }
+
+    @media print {
+      .topbar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="inner">
+      <span>Ramkrishna Acharya</span>
+      <nav>
+        <a href="#education">Education</a>
+        <a href="#publications">Publications</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#hobbies">Hobbies</a>
+        <a href="/portfolio/">Portfolio</a>
+        <a href="/posts/">Blog</a>
+      </nav>
+    </div>
+  </div>
+
+  <main>
+    <header class="id">
+      <img src="/assets/its_ramkrishna_small.jpg" alt="Ramkrishna Acharya">
+      <div>
+      <h1>Ramkrishna Acharya</h1>
+      <p class="role">PhD Researcher, Bioscience Engineering &middot; KU Leuven</p>
+      <p class="contact">
+        <a href="mailto:qramkrishna@gmail.com">qramkrishna@gmail.com</a>
+        <a href="https://github.com/q-viper" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/qramkrishna" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://kaggle.com/qramkrishna" target="_blank" rel="noopener">Kaggle</a>
+        <a href="/assets/ramkrishna_cv.pdf">CV (PDF)</a>
+      </p>
+      </div>
+    </header>
+
+    <section id="about">
+      <h2>Research Interests</h2>
+      <p>
+        I am a PhD researcher at the
+        <a href="https://www.biw.kuleuven.be/biosyst/mebios/" target="_blank" rel="noopener">MeBioS Division</a> of
+        <a href="https://www.kuleuven.be/english" target="_blank" rel="noopener">KU Leuven</a>, working on
+        context-aware insect monitoring in agriculture using artificial intelligence. My broader interests include
+        computer vision, deep learning, anomaly detection, adversarial robustness and cyber-physical security.
+      </p>
+    </section>
+
+    <section id="education">
+      <h2>Education</h2>
+      <div class="entry">
+        <div class="row"><span class="title">PhD, Bioscience Engineering</span><span class="date">2026 &ndash;
+            present</span></div>
+        <div class="sub"><a href="https://www.kuleuven.be/english" target="_blank" rel="noopener">KU Leuven</a>,
+          Leuven, Belgium</div>
+        <ul>
+          <li>Topic: Context-aware insect monitoring in agriculture using AI</li>
+          <li>Promoter: Prof. Wouter Saeys</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="title">M.Sc., Data Science</span><span class="date">2022 &ndash; 2025</span>
+        </div>
+        <div class="sub"><a href="https://www.fau.de/" target="_blank" rel="noopener">Friedrich-Alexander-Universit&auml;t
+            Erlangen-N&uuml;rnberg</a>, Germany &middot; Grade: 1.8 (German scale)</div>
+        <ul>
+          <li>Thesis: <em>Enhancing Smart Grid Security: A Deep Learning Approach to Adversarial Intrusion
+              Detection</em></li>
+          <li>Supervisors: Dr.-Ing. Loui Al Sardy, Mamdouh Muhammad, M.Sc.</li>
+          <li>Focus: applied machine learning, deep learning, cyber-physical security</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="title">B.Sc., Computer Science and Information Technology</span><span
+            class="date">2015 &ndash; 2019</span></div>
+        <div class="sub"><a href="https://tu.edu.np/" target="_blank" rel="noopener">Tribhuvan University</a>,
+          Kathmandu, Nepal &middot; 72.07/100 (First Division)</div>
+        <ul>
+          <li>Research project: <a href="https://github.com/q-viper/final-devanagari-word-char-detector"
+              target="_blank" rel="noopener">Devanagari Handwritten Character Recognition</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="publications">
+      <h2>Publications</h2>
+      <ol class="pubs">
+        <li>
+          <strong>R. Acharya</strong>, L. Al Sardy, M. Muhammad, R. German.
+          <em>ADVIS-G: An Adversarially Defended Intrusion Detection System for Smart Grids Using Deep
+            Learning.</em>
+          <a href="https://link.springer.com/journal/13218" target="_blank" rel="noopener">KI &ndash; K&uuml;nstliche
+            Intelligenz</a>, 2026.
+          <div class="links" style="margin-top:6px">
+            <a href="https://github.com/cs7org/ADVIS-G" target="_blank" rel="noopener">Code</a>
+          </div>
+        </li>
+        <li>
+          <strong>R. Acharya</strong>, L. Al Sardy, M. Muhammad.
+          <em>ROSAID-ST: Adversarially Robust Intrusion and Anomaly Detection in ROS Networks via Student-Teacher Deep
+            Learning.</em>
+          <a href="https://journals.sagepub.com/home/ARX" target="_blank" rel="noopener">International Journal of
+            Advanced Robotic Systems</a>, under review, 2026.
+          <div class="links" style="margin-top:6px">
+            <a href="https://github.com/cs7org/ROSAID-ST" target="_blank" rel="noopener">Code</a>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="experience">
+      <h2>Research &amp; Professional Experience</h2>
+      <div class="entry">
+        <div class="row"><span class="title">Master's Thesis Researcher and HiWi</span><span class="date">Apr 2025
+            &ndash; Mar 2026</span></div>
+        <div class="sub"><a href="https://www.cs7.tf.fau.de/" target="_blank" rel="noopener">Chair for Computer
+            Science 7</a>, FAU Erlangen-N&uuml;rnberg</div>
+        <ul>
+          <li>Developed ROSAID-ST and ADVIS-G, adversarially defended intrusion detection systems for smart-grid
+            communication data.</li>
+          <li>Prepared exercises and tutored students in <em>Cybersecurity Fundamentals in Networking</em>.</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="title">Working Student, Computer Vision</span><span class="date">May 2023
+            &ndash; Mar 2026</span></div>
+        <div class="sub"><a href="https://www.primetals.com/" target="_blank" rel="noopener">Primetals Technologies
+            Germany GmbH</a>, Erlangen</div>
+        <ul>
+          <li>Engineered industrial vision pipelines for detection, segmentation, tracking and anomaly analysis.</li>
+          <li>Built synthetic data and annotation tools for OCR and segmentation in limited-data settings.</li>
+          <li>Developed FastAPI/SQL evaluation workflows, saving 100+ hours of manual video analysis.</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="title">Associate Data Scientist</span><span class="date">Aug 2021 &ndash; Aug
+            2022</span></div>
+        <div class="sub"><a href="https://extensodata.com/" target="_blank" rel="noopener">Extensodata Pvt.
+            Ltd.</a>, Kathmandu</div>
+        <ul>
+          <li>Led a team of 3 building a business intelligence tool and fintech data pipelines for loan-risk
+            analysis.</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="title">Freelancer</span><span class="date">2022; Mar 2026 &ndash; present</span>
+        </div>
+        <div class="sub"><a href="https://www.upwork.com/freelancers/~0120b8c76dc85da315" target="_blank"
+            rel="noopener">Upwork</a>, remote</div>
+        <ul>
+          <li>Built a real-time alert-based strategy backtesting platform; delivered full-stack AI and computer-vision
+            applications.</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="title">Additional experience</span></div>
+        <ul>
+          <li><a href="https://www.diyo.ai/" target="_blank" rel="noopener">diyo.ai</a>, Unity3D Development Intern
+            (Nov 2020 &ndash; Mar 2021)</li>
+          <li>MPercept Technology, AI Developer Intern (Aug 2019 &ndash; Jan 2020)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2>Selected Open-Source Projects</h2>
+      <ul>
+        <li><a href="https://github.com/q-viper/session-feature-extractor" target="_blank"
+            rel="noopener">Session Feature Extractor</a> (2026): PyPI tool for extracting image features from network
+          traffic data.</li>
+        <li><a href="https://github.com/q-viper/Image-Baker" target="_blank" rel="noopener">Image Baker</a> (2025):
+          annotation and synthetic data generation for anomaly detection.</li>
+        <li><a href="https://github.com/q-viper/SmokeSim" target="_blank" rel="noopener">SmokeSim</a> (2024): smoke
+          simulation, image augmentation and segmentation.</li>
+        <li><a href="https://github.com/q-viper/Neural-Template-Matching" target="_blank" rel="noopener">Neural
+            Template Matching</a> (2024): U-Net experiment for template matching on COCO.</li>
+      </ul>
+    </section>
+
+    <section id="skills">
+      <h2>Skills</h2>
+      <dl class="skills">
+        <dt>Programming</dt>
+        <dd>Python, SQL, Bash, JavaScript (basic), C# (basic)</dd>
+        <dt>Machine learning</dt>
+        <dd>PyTorch, TensorFlow, Scikit-learn, HuggingFace, MMEngine, OpenCV</dd>
+        <dt>ML systems</dt>
+        <dd>Docker, Git, MLflow, DVC, ONNX, TensorRT, Airflow, FastAPI, Flask, Streamlit, AWS EC2, CI/CD</dd>
+        <dt>Languages</dt>
+        <dd>English (C1), German (A2), Nepali (native)</dd>
+      </dl>
+    </section>
+
+    <section id="hobbies">
+      <h2>Beyond Research</h2>
+      <p>Writing poems and stories, reading, running, mushroom hunting, and listening to (symphonic) metal music,
+        among other things.</p>
+    </section>
+  </main>
+
+  <footer>
+    <a href="/portfolio/">Portfolio</a> &middot; <a href="/posts/">Blog</a> &middot;
+    <a href="/assets/ramkrishna_cv.pdf">Download CV</a>
+    <div>&copy; 2026 Ramkrishna Acharya</div>
+  </footer>
+</body>
+
+</html>
