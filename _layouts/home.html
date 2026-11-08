@@ -16,6 +16,7 @@
   <title>Ramkrishna Acharya | Academic Profile</title>
   <meta name="description"
     content="Academic profile of Ramkrishna Acharya, PhD researcher in Bioscience Engineering at KU Leuven.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
   <style>
     :root {
@@ -146,8 +147,40 @@
       color: var(--muted);
     }
 
-    .contact a {
-      margin-right: 14px;
+    .contact {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .contact-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .contact-links {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 1.15rem;
+    }
+
+    .contact-links a {
+      color: var(--muted);
+      transition: color 0.2s ease, transform 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .contact-links a:hover {
+      color: var(--accent);
+      transform: translateY(-1px);
+      text-decoration: none;
     }
 
     h2 {
@@ -295,15 +328,32 @@
       <div>
       <h1>Ramkrishna Acharya</h1>
       <p class="role">PhD Researcher, Bioscience Engineering &middot; KU Leuven</p>
-      <p class="contact">
-        <a href="mailto:qramkrishna@gmail.com">qramkrishna@gmail.com</a>
-        <a href="https://scholar.google.com/citations?user=ZqVtZqsAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
-        <a href="https://orcid.org/0009-0009-5268-4380" target="_blank" rel="noopener">ORCID</a>
-        <a href="https://github.com/q-viper" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://linkedin.com/in/qramkrishna" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://kaggle.com/qramkrishna" target="_blank" rel="noopener">Kaggle</a>
-        <a href="/assets/ramkrishna_cv.pdf">CV (PDF)</a>
-      </p>
+      <div class="contact">
+        <span class="contact-item" title="Email">
+          <i class="fas fa-envelope"></i>
+          <span>ramkrishna [dot] acharya &lt;at&gt; kuleuven [dot] be</span>
+        </span>
+        <div class="contact-links">
+          <a href="https://scholar.google.com/citations?user=ZqVtZqsAAAAJ&hl=en" target="_blank" rel="noopener" title="Google Scholar">
+            <i class="fas fa-graduation-cap"></i>
+          </a>
+          <a href="https://orcid.org/0009-0009-5268-4380" target="_blank" rel="noopener" title="ORCID">
+            <i class="fab fa-orcid"></i>
+          </a>
+          <a href="https://github.com/q-viper" target="_blank" rel="noopener" title="GitHub">
+            <i class="fab fa-github"></i>
+          </a>
+          <a href="https://linkedin.com/in/qramkrishna" target="_blank" rel="noopener" title="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="https://kaggle.com/qramkrishna" target="_blank" rel="noopener" title="Kaggle">
+            <i class="fab fa-kaggle"></i>
+          </a>
+          <a href="/assets/ramkrishna_cv.pdf" target="_blank" rel="noopener" title="Curriculum Vitae (PDF)">
+            <i class="fas fa-file-pdf"></i>
+          </a>
+        </div>
+      </div>
       </div>
     </header>
 
